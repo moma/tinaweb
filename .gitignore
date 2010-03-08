@@ -1,0 +1,15 @@
+.*
+*.pyc
+*.pyo
+.packaging
+src/data/*.gexf
+*.swp
+*.swo
+*~
+dist
+dist/*
+build/*
+*/build
+tinasoft-*.*
+*.tar.gz
+*.zip
