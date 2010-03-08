@@ -5,6 +5,7 @@
 build.sh
 upload.sh
 src/data/*.gexf
+src/*.gexf
 *.swp
 *.swo
 *~

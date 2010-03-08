@@ -15,8 +15,34 @@ function Tinaviz() {
         this.resized();
         
         this.log("loading default graph..");
-        this.toMacro();
+
         //this.loadRelativeGraph("macro","examples/tinaapptests-exportGraph.gexf");
+        
+        /*
+        function IOx(url) {
+            var request = !window.XMLHttpRequest ? new ActiveXObject('Microsoft.XMLHTTP') : new XMLHttpRequest;
+            request.open('GET', url, false);
+            request.setRequestHeader('Content-Type', 'text/xml')
+            request.send('');
+          return request.responseXML;
+        }*/
+         this.toMacro();
+         this.toggleEdges();
+         this.togglePause();
+
+         
+         $.ajax({
+            type: "GET",
+	        url: "100308-fetopen_8.gexf",
+	        //url: "cpan_final_may_2009.gexf",
+	        dataType: "text",
+	        success: function(xml) {
+                //loadFromString("macro",xml);
+                if (applet == null) return;
+                 applet.getSession().updateFromString("macro",xml);
+	        }
+        });
+
     },
     
     setup: function() {
@@ -87,7 +113,7 @@ function Tinaviz() {
     },
     
     // Public methods
-    loadFromURI: function(uri) {
+    loadFromURI: function(view,uri) {
         if (applet == null) return;
         applet.getSession().updateFromURI(view,uri);
     },
@@ -113,7 +139,10 @@ function Tinaviz() {
         if (applet == null) return;
         applet.getView().togglePause();
     },
-    
+    toggleHD: function() {
+        if (applet == null) return;
+        applet.getView().toggleHD();
+    },
     toMacro: function() {
         if (applet == null) return;
         applet.getSession().toMacroLevel();
