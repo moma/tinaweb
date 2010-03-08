@@ -1,95 +1,37 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xml:lang="en-GB" xmlns="http://www.w3.org/1999/xhtml">
-<head>
-    <title>example</title>
+    <head>
+        <title>example</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta name="description" content="example">
+        <meta name="keywords" content="example">
+        <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+            
+        <!-- JQUERY -->
+        <script type="text/javascript" src="js/jquery/jquery-1.3.js" language="javascript"></script>
 
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <meta name="description" content="example">
-    <meta name="keywords" content="example">
-    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+        <!-- UTILITIES -->
+        <script type="text/javascript" src="js/themelia/nalarium.trace.js" language="javascript"></script>
+        <script type="text/javascript" src="js/tenjin/shotenjin.js" language="javascript"></script>
         
-    <!-- JQUERY -->
-    <script type="text/javascript" src="js/jquery/jquery-1.3.js" language="javascript"></script>
+        <!-- JQUERY UI -->
+        <script type="text/javascript" src="js/jquery/jquery.ui.all.js" language="javascript"></script>
+        <link type="text/css" rel="stylesheet" href="css/eggplant/jquery-ui-1.7.2.custom.css"/>
 
-    <!-- UTILITIES -->
-    <script type="text/javascript" src="js/console.js" language="javascript"></script>
-    <script type="text/javascript" src="js/tenjin/shotenjin.js" language="javascript"></script>
-    
-    <!-- JQUERY UI -->
-    <script type="text/javascript" src="js/jquery/jquery.ui.all.js" language="javascript"></script>
-    <link type="text/css" rel="stylesheet" href="css/eggplant/jquery-ui-1.7.2.custom.css"/>
+        <!-- JQUERY UI ADD-ONS -->
+        <!--<script type="text/javascript"  src="js/jquery/jquery.rating.pack.js" language="javascript"></script> 
+        <link type="text/css" rel="stylesheet" href="js/jquery/jquery.rating.css"/> -->
 
-    <!-- JQUERY UI ADD-ONS -->
-    <script type="text/javascript"  src="js/jquery/jquery.rating.pack.js" language="javascript"></script> 
-    <link type="text/css" rel="stylesheet" href="js/jquery/jquery.rating.css"/> 
+        <!-- TINASOFT APP -->
+        <script type="text/javascript" src="example.js" language="javascript"></script> 
+        <link type="text/css" rel="stylesheet" href="example.css"/>
+    </head>
+    <body>
+            <h1>Hello</h1>
+            <p>This is an example</p>
 
-    <!-- TINASOFT APP -->
-    <script type="text/javascript" src="example.js" language="javascript"></script> 
-    <link type="text/css" rel="stylesheet" href="example.css"/>
+            <div><iframe id="vizframe" class="vizframe" allowtransparency="true" scrolling="no" frameborder="0" src="tinaviz/index.html"></iframe></div>
 
-</head>
-<body style="cursor: auto;">
-<script type="text/javascript"> 
-$(function(){
-
-	$('.hover-star').rating({
-		callback: function(value, link){
-			// TODO update the user db (sessions, votes, comments..) here
-		}
-	});
-        
-	// all hover and click logic for buttons
-	$(".fg-button:not(.ui-state-disabled)")
-		.hover(
-			function(){ 
-				$(this).addClass("ui-state-hover"); 
-			},
-			function(){ 
-				$(this).removeClass("ui-state-hover"); 
-			}
-		)
-		.mousedown(function(){
-				$(this).parents('.fg-buttonset-single:first').find(".fg-button.ui-state-active").removeClass("ui-state-active");
-				if( $(this).is('.ui-state-active.fg-button-toggleable, .fg-buttonset-multi .ui-state-active') ){ $(this).removeClass("ui-state-active"); }
-				else { $(this).addClass("ui-state-active"); }	
-		})
-		.mouseup(function(){
-			if(! $(this).is('.fg-button-toggleable, .fg-buttonset-single .fg-button,  .fg-buttonset-multi .fg-button') ){
-				$(this).removeClass("ui-state-active");
-			}
-	});
-	
-	
-    /* TODO replace by CSS query */
-    function computeAppletWidth() {
-        return getWidth() - 15;
-    }
-
-    /* TODO replace by CSS query */
-    function computeAppletHeight() {
-        return getHeight() - 140;
-    }
-
-
-});
-</script> 
-      <div id="container">
-        <iframe id="vizframe" class="vizframe" allowtransparency="true" scrolling="no"  frameborder="0" src="tinaviz/index.html"></iframe>
-      </div>
-      <div id="gui">
-
-          <div id="iframes">
-                <iframe id="vtoolbariframe" class="vtoolbariframe"></iframe>
-          </div>
-
-          <div id="toolbars">
-                <div id="vtoolbar" class="fg-toolbar ui-widget-vheader ui-corner-all ui-helper-clearfix vtoolbar">
-		        <input id="upperThresholdInput" class="thresholdInput upperThreshold" value="1.0" />
-			<div id="altslider" class="altslider"></div>
-		        <input id="lowerThresholdInput" class="thresholdInput lowerThreshold" value="0.0" />
-                </div>
-            </div> <!-- TOOLBARS-->
-        </div> <!-- GUI -->
     </body>
 </html>
 

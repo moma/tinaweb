@@ -1,18 +1,89 @@
 
+Nalarium.Trace.enable();
+
 function Tinaviz() {
   var wrapper = null;
   var applet = null;
-  var width = null;
-  var height = null;
   var categoryFilter = "keepCategoryFilter";
   var categoryFilterSwitch = "including";
   
+  return {
+     init: function() {
+        if (wrapper != null || applet != null) return;
+        wrapper = $('#vizframe').contents().find('#tinaviz')[0];
+        applet = wrapper.getSubApplet();
+        this.resized();
+        
+        this.log("loading default graph..");
+        this.toMacro();
+        //this.loadRelativeGraph("macro","examples/tinaapptests-exportGraph.gexf");
+    },
+    
+    setup: function() {
+
+        // TODO pass the ID to the elishowk API
+        var context = {
+         root:  {
+            uuid: id,
+         },
+         neighborhood: [
+            {
+             uuid: '432561326751248',
+             label: 'this is an ngram',
+             category: 'NGram'
+             },
+            {
+             uuid: '715643267560489',
+             label: 'PROJECT',
+             category: 'Document'
+             },
+         ]
+        };
+
+
+        var template = '<?xml version="1.0" encoding="UTF-8"?>\n\
+<gexf xmlns="http://www.gephi.org/gexf" xmlns:viz="http://www.gephi.org/gexf/viz">\n\
+        <meta lastmodifieddate="19-Feb-2010"><description>Generic Map/2002-2007</description></meta>\n\
+    <graph>\n\
+        <attributes class="node">\n\
+        </attributes>\n\
+        <tina>\n\
+        </tina>\n\
+        <nodes>\n\
+<?js for (var i = 0, n = neighborhood.length; i < n; i++) { ?>\
+            <node id="#{neighborhood[i].uuid}" label="#{neighborhood[i].label}">\n\
+                <attvalues>\n\
+                    <attvalue for="0" value="#{neighborhood[i].category}" />\n\
+                </attvalues>\n\
+            </node>\n\
+<?js } ?>\
+        </nodes>\n\
+        <edges>\n\
+<?js for (var i = 0, n = neighborhood.length; i < n; i++) { ?>\
+            <edge id="#{i}" source="#{root.uuid}" target="#{neighborhood[i].uuid}" weight="1.0" />\n\
+<?js } ?>\
+        </edges>\n\
+    </graph>\n\
+</gexf>';
+
+
+        /* call the template engine (tenjin is really fast!)*/
+        var output = Shotenjin.render(template, context);
+        
+        this.log(output);
+
+    },
+    
     resized: function() {
         if (applet == null) return;
-        wrapper.width = computeAppletWidth();
-        wrapper.height = computeAppletHeight();
-        // update the overlay layout (eg. recenter the toolbars)
-        $('.htoolbar').css('left', (  (wrapper.width - parseInt($('#htoolbariframe').css('width'))) / 2   ));
+        
+        // we update both the applet size and the frame size
+        
+        wrapper.width = this.getWidth();
+        wrapper.height = this.getHeight();
+        
+        $('#vizframe').css('width',""+ wrapper.width + "px");
+        $('#vizframe').css('height',"" + wrapper.height +"px");
     },
     
     // Public methods
@@ -67,55 +138,14 @@ function Tinaviz() {
         try {
             applet.getSession().clear();
         } catch (e) {
-            console.log("exception: "+e);
+            this.log("exception: "+e);
         
         }
     },
 
     nodeSelected: function(level,x,y,id,label,attr) {
         if (applet == null) return;
-        console.log("nodeSelected("+level+","+x+","+y+","+id+","+label+","+attr+") called!");
-    },
-
-    takePDFPicture: function () {
-        var outputFilePath = "graph.pdf";
-        var result;
-        try {
-            result = viz.takePDFPicture(outputFilePath);
-        } catch (e) {
-            console.log(e);
-            return;
-        }
-        console.log('Saving to '+outputFilePath+'</p>');
-        setTimeout("downloadFile('"+outputFilePath+"', 60)",2000);
-    },
-
-    takePicture: function() {
-        var outputFilePath = "graph.png";
-        var result;
-        try {
-            result = viz.takePicture(outputFilePath);
-        } catch (e) {
-             console.log(e);
-             return;
-        }
-        console.log('Saving to '+outputFilePath+'</p>');
-        setTimeout("downloadFile('"+outputFilePath+"', 60)",2000);
-    },
-
-    downloadFile: function(outputFilePath, timeout) {
-    },
- 
-    loadDataGraph: function(view,filename) {
-    },
-     // using string technique
-    loadRelativeGraph: function(view,filename) {
-    },
-     // using string technique
-    loadAbsoluteGraph: function(view,filename) {
-    },
-
-    loadAbsoluteGraphFromURI: function(filename) {
+        this.log("nodeSelected("+level+","+x+","+y+","+id+","+label+","+attr+") called!");
     },
 
     isEnabled: function() {
@@ -128,17 +158,35 @@ function Tinaviz() {
     setEnabled:  function(enabled) {
         if (applet == null) return;
         applet.setEnabled(enabled);
+    },
+    
+    error: function(msg) {
+        Nalarium.Trace.writeLine('Error: '+msg);
+    },
+    log: function(msg) {
+        Nalarium.Trace.writeLine('Log: '+msg);
+    },
+    debug: function(msg) {
+        Nalarium.Trace.writeLine('Debug: '+msg);
+    },
+
+    getWidth: function() {
+         return 800;
+    },
+    getHeight: function() {
+        return 800;
+    },
+    
+    switchedto: function(level) {
+       // TODO
     }
+   
   };
 }
 
 tinaviz = new Tinaviz();
 
-$(document).ready(function() {
-
-});
-
-function getWidth() {
+function getScreenWidth() {
     var x = 0;
     if (self.innerHeight) {
             x = self.innerWidth;
@@ -153,7 +201,7 @@ function getWidth() {
     return x;
 }
 
-function getHeight() {
+function getScreenHeight() {
     var y = 0;
     if (self.innerHeight) {
         y = self.innerHeight;
@@ -168,4 +216,29 @@ function getHeight() {
     return y;
 }
 
+ 
+$(document).ready(function() {
+   
+	// all hover and click logic for buttons
+	$(".fg-button:not(.ui-state-disabled)")
+		.hover(
+			function(){ 
+				$(this).addClass("ui-state-hover"); 
+			},
+			function(){ 
+				$(this).removeClass("ui-state-hover"); 
+			}
+		)
+		.mousedown(function(){
+				$(this).parents('.fg-buttonset-single:first').find(".fg-button.ui-state-active").removeClass("ui-state-active");
+				if( $(this).is('.ui-state-active.fg-button-toggleable, .fg-buttonset-multi .ui-state-active') ){ $(this).removeClass("ui-state-active"); }
+				else { $(this).addClass("ui-state-active"); }	
+		})
+		.mouseup(function(){
+			if(! $(this).is('.fg-button-toggleable, .fg-buttonset-single .fg-button,  .fg-buttonset-multi .fg-button') ){
+				$(this).removeClass("ui-state-active");
+			}
+	});
+	
+});
 

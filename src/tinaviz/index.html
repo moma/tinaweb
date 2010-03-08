@@ -12,10 +12,10 @@ body {
 		  background-color: #ffffff; 
 		  text-decoration: none; 
 		  font-weight: normal; 
-		  line-height: normal; 
+		  line-height: normal;
 }
 .container {
-   /*border: dashed 2px;*/
+  /* border: dashed 2px;*/
 			
 }
 /* ]]> */</style>
@@ -25,11 +25,12 @@ body {
 
 // called when the applet initialize, and need it's width/height values
 function getWidth() {
-    return parent.computeAppletWidth();
+
+    return parent.tinaviz.getWidth();
 }
          
 function getHeight() {
-   return parent.computeAppletHeight();
+   return parent.tinaviz.getHeight();
 }
 
 // called when the applet is ready to be shown
@@ -40,13 +41,13 @@ function appletInitialized() {
 
 // called by the applet to show some messages to the XULRunner console
 function consoleLog(msg) {
-    parent.console.log(msg);
+    parent.tinaviz.log(msg);
 }
 function consoleError(msg) {
-    parent.console.error(msg);
+    parent.tinaviz.error(msg);
 }
 function consoleDebug(msg) {
-    parent.console.debug(msg);
+    parent.tinaviz.debug(msg);
 }
 
 // called whenever a node is clicked
@@ -55,24 +56,23 @@ function nodeSelected(level,x,y,id,label,attributes) {
 }
 // called whenever the applet decide to switch to another level (eg. macro, meso..)
 function switchedTo(level) {
-   // here it is a bit tricky, we need to change the tabs, which are a bit far in the div/iframe tree...
-   return parent.parent.switchedTo(level);
+   return parent.tinaviz.switchedTo(level);
 }
 
 </script>
 	</head>
 	<body>
-		<div id="content">	 
-			<div id="container" class="container">	
+
+			<div id="content" class="content">	
 			<!--[if !IE]> -->
 				<object id="tinaviz"
 				        classid="java:com.sun.opengl.util.JOGLAppletLauncher.class" 
             			type="application/x-java-applet"
-            			archive="java/tinaviz.jar,java/opengl.jar,java/jogl.jar,java/gluegen-rt.jar,java/core.jar,java/itext.jar,java/pdf.jar"
-            			
+            			archive="tinaviz.jar,opengl.jar,jogl.jar,gluegen-rt.jar,core.jar,itext.jar,pdf.jar"
+            			width="1000" height="800"
             			standby="Loading visualization..." >
             			
-					<param name="archive" value="java/tinaviz.jar,java/opengl.jar,java/jogl.jar,java/gluegen-rt.jar,java/core.jar,java/itext.jar,java/pdf.jar" />
+					<param name="archive" value="tinaviz.jar,opengl.jar,jogl.jar,gluegen-rt.jar,core.jar,itext.jar,pdf.jar" />
 				
 					<param name="mayscript" value="true" />
 					<param name="scriptable" value="true" />
@@ -84,20 +84,21 @@ function switchedTo(level) {
 					
 					<param name="subapplet.classname" value="tinaviz.Main" /> 
 					<param name="subapplet.displayname" value="TinaViz" />
+					
 					<param name="jogl.silent.noddraw.check" value="true" />
-				    <param name="java_arguments" value="-Xmx512m -Dsun.java2d.noddraw=true"/>
-					<param name="engine" value="software" />
+				    <<param name="java_arguments" value="-Xmx256m -Dsun.java2d.noddraw=true"/>
+					<param name="engine" value="hardware" />
 								
 			<!--<![endif]-->
 				
 				<object id="tinaviz"
 				        classid="clsid:8AD9C840-044E-11D1-B3E9-00805F499D93" 
 						codebase="http://java.sun.com/update/1.5.0/jinstall-1_5_0_15-windows-i586.cab"
-						
+						width="1000" height="800"
 						standby="Loading visualization..."  >
 						
 					<param name="code" value="com.sun.opengl.util.JOGLAppletLauncher" />
-					<param name="archive" value="java/tinaviz.jar,java/opengl.jar,java/jogl.jar,java/gluegen-rt.jar,java/core.jar,java/itext.jar,java/pdf.jar" />
+					<param name="archive" value="tinaviz.jar,opengl.jar,jogl.jar,gluegen-rt.jar,core.jar,itext.jar,pdf.jar" />
 					
 					<param name="mayscript" value="true" />
 					<param name="scriptable" value="true" />
@@ -109,9 +110,10 @@ function switchedTo(level) {
 					
 					<param name="subapplet.classname" value="tinaviz.Main" /> 
 					<param name="subapplet.displayname" value="TinaViz" />
+					
 					<param name="jogl.silent.noddraw.check" value="true" />
-					<param name="java_arguments" value="-Xmx128m -Dsun.java2d.noddraw=true"/
-					<param name="engine" value="software" />
+					<param name="java_arguments" value="-Xmx256m -Dsun.java2d.noddraw=true"/>
+					<param name="engine" value="hardware" />
 
 					<p>
 						<strong>
@@ -130,6 +132,5 @@ function switchedTo(level) {
 			<!--<![endif]-->
 			
 			</div>
-		</div>
 	</body>
 </html>
