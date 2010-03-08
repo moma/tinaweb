@@ -1,0 +1,11 @@
+this directory contains an example html page (with its .js and .css documents attached)
+
+see example.html for more information
+
+the example has the following dependencies:
+
+  - css/     : contains CSS for JQuery-UI. You can remove it if you are doing your CSS from scratch
+  - js/      : contains JS for various stuff. You may wish to remove it, if you are an hard player
+
+  - tinaviz/ : the actual tinaviz library. you need this folder!
+               you may hack its content, but it is not recommended.
