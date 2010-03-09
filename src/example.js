@@ -23,9 +23,10 @@ function Tinaviz() {
 
          $.ajax({
             type: "GET",
-	         url: "celegans.gexf",
-		// url: "100308-fetopen_8.gexf",
-		//url: "WebAtlas_EuroSiS.gexf",
+	         //url: "celegans.gexf",
+	         //url: "cpan-authors-2.gexf",
+		     url: "100308-fetopen_8.gexf",
+		     //url: "WebAtlas_EuroSiS.gexf",
 	        dataType: "text",
 	        success: function(xml) {tinaviz.loadFromString("macro",xml);}
         });
