@@ -3,13 +3,14 @@ This is the pure-web version of the tinaviz applet
 
 see example.html to see how you can add it to you own blog, page, wiki, website..
 
-you can disable the OpenGL rendering mode by replacing:
-  
-   <param name="engine" value="hardware" />
+CONFIGURATION
 
-by
+You can select of these modes, in the iframe:
 
-   <param name="engine" value="software" />
- 
+ src="tinaviz/XXXXXX.html"
 
-in the tinaviz/index.html document. WARNING: be aware that this param is present twice in the index.html document (for browser compatibility..) so you may want to use a search & replace.
+replace XXXXXX by:
+
+  - software: will use processing's P2D mode
+  - hardware: will use processing's OPENGL mode
+/bin/bash: q: command not found
