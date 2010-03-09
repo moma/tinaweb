@@ -14,33 +14,18 @@ function Tinaviz() {
         applet = wrapper.getSubApplet();
         this.resized();
         
+
+         this.toMacro();
+         // this.toggleEdges();
+         // this.togglePause();
+
         this.log("loading default graph..");
 
-        //this.loadRelativeGraph("macro","examples/tinaapptests-exportGraph.gexf");
-        
-        /*
-        function IOx(url) {
-            var request = !window.XMLHttpRequest ? new ActiveXObject('Microsoft.XMLHTTP') : new XMLHttpRequest;
-            request.open('GET', url, false);
-            request.setRequestHeader('Content-Type', 'text/xml')
-            request.send('');
-          return request.responseXML;
-        }*/
-         this.toMacro();
-         this.toggleEdges();
-         this.togglePause();
-
-         
          $.ajax({
             type: "GET",
-	        url: "100308-fetopen_8.gexf",
-	        //url: "cpan_final_may_2009.gexf",
+	        url: "celegans.gexf",
 	        dataType: "text",
-	        success: function(xml) {
-                //loadFromString("macro",xml);
-                if (applet == null) return;
-                 applet.getSession().updateFromString("macro",xml);
-	        }
+	        success: function(xml) {tinaviz.loadFromString("macro",xml);}
         });
 
     },
