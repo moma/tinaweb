@@ -16,14 +16,16 @@ function Tinaviz() {
         
 
          this.toMacro();
-          this.toggleEdges();
-          this.togglePause();
+          //this.toggleEdges();
+         // this.togglePause();
 
         this.log("loading default graph..");
 
          $.ajax({
             type: "GET",
-	        url: "celegans.gexf",
+	         url: "celegans.gexf",
+		// url: "100308-fetopen_8.gexf",
+		//url: "WebAtlas_EuroSiS.gexf",
 	        dataType: "text",
 	        success: function(xml) {tinaviz.loadFromString("macro",xml);}
         });
