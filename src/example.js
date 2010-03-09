@@ -16,8 +16,8 @@ function Tinaviz() {
         
 
          this.toMacro();
-         // this.toggleEdges();
-         // this.togglePause();
+          this.toggleEdges();
+          this.togglePause();
 
         this.log("loading default graph..");
 
@@ -185,10 +185,10 @@ function Tinaviz() {
     },
 
     getWidth: function() {
-         return 800;
+         return 1000;
     },
     getHeight: function() {
-        return 800;
+        return 600;
     },
     
     switchedto: function(level) {
