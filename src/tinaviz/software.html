@@ -19,47 +19,6 @@ body {
 			
 }
 /* ]]> */</style>
-<script type="text/javascript">
-
-/* APPLET CALLBACKS */
-
-// called when the applet initialize, and need it's width/height values
-function getWidth() {
-
-    return parent.tinaviz.getWidth();
-}
-         
-function getHeight() {
-   return parent.tinaviz.getHeight();
-}
-
-// called when the applet is ready to be shown
-// we then call the tinaviz wrapper constructor (the init()' method, maybe this should be rewritten)
-function appletInitialized() {
-   return parent.tinaviz.init();
-}
-
-// called by the applet to show some messages to the XULRunner console
-function consoleLog(msg) {
-    parent.tinaviz.log(msg);
-}
-function consoleError(msg) {
-    parent.tinaviz.error(msg);
-}
-function consoleDebug(msg) {
-    parent.tinaviz.debug(msg);
-}
-
-// called whenever a node is clicked
-function nodeSelected(level,x,y,id,label,attributes) {
-   return parent.tinaviz.nodeSelected(level,x,y,id,label,attributes);
-}
-// called whenever the applet decide to switch to another level (eg. macro, meso..)
-function switchedTo(level) {
-   return parent.tinaviz.switchedTo(level);
-}
-
-</script>
 	</head>
 	<body>
 
@@ -69,7 +28,7 @@ function switchedTo(level) {
 				        classid="java:com.sun.opengl.util.JOGLAppletLauncher.class" 
             			type="application/x-java-applet"
             			archive="tinaviz.jar,opengl.jar,jogl.jar,gluegen-rt.jar,core.jar,itext.jar,pdf.jar"
-            			width="1000" height="600"
+            			width="200" height="200"
             			standby="Loading visualization..." >
             			
 					<param name="archive" value="tinaviz.jar,opengl.jar,jogl.jar,gluegen-rt.jar,core.jar,itext.jar,pdf.jar" />

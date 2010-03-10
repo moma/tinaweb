@@ -11,22 +11,188 @@
         <script type="text/javascript" src="js/jquery/jquery-1.3.js" language="javascript"></script>
 
         <!-- UTILITIES -->
-        <script type="text/javascript" src="js/themelia/nalarium.trace.js" language="javascript"></script>
-        <script type="text/javascript" src="js/tenjin/shotenjin.js" language="javascript"></script>
+        <!--<script type="text/javascript" src="js/themelia/nalarium.trace.js" language="javascript"></script>-->
+        <!--<script type="text/javascript" src="js/tenjin/shotenjin.js" language="javascript"></script>-->
         
         <!-- JQUERY UI -->
-        <script type="text/javascript" src="js/jquery/jquery.ui.all.js" language="javascript"></script>
-        <link type="text/css" rel="stylesheet" href="css/eggplant/jquery-ui-1.7.2.custom.css"/>
+        <!--<script type="text/javascript" src="js/jquery/jquery.ui.all.js" language="javascript"></script>-->
+        <!--<link type="text/css" rel="stylesheet" href="css/eggplant/jquery-ui-1.7.2.custom.css"/>-->
 
         <!-- JQUERY UI ADD-ONS -->
         <!--<script type="text/javascript"  src="js/jquery/jquery.rating.pack.js" language="javascript"></script> 
         <link type="text/css" rel="stylesheet" href="js/jquery/jquery.rating.css"/> -->
 
         <!-- TINASOFT APP -->
-        <script type="text/javascript" src="example.js" language="javascript"></script> 
         <link type="text/css" rel="stylesheet" href="example.css"/>
     </head>
     <body>
+  <script type="text/javascript"> 
+ 
+ /* VARIOUS UTILITIES FUNCTIONS */
+ 
+ /* useful for fullscreen mode */
+function getScreenWidth() {
+    var x = 0;
+    if (self.innerHeight) {
+            x = self.innerWidth;
+    }
+    else if (document.documentElement && document.documentElement.clientHeight) {
+            x = document.documentElement.clientWidth;
+    }
+    else if (document.body) {
+            x = document.body.clientWidth;
+    }
+    return x;
+}
+
+/* useful for fullscreen mode */
+function getScreenHeight() {
+    var y = 0;
+    if (self.innerHeight) {
+        y = self.innerHeight;
+    }
+    else if (document.documentElement && document.documentElement.clientHeight) {
+        y = document.documentElement.clientHeight;
+    }
+    else if (document.body) {
+        y = document.body.clientHeight;
+    }
+    return y;
+}
+
+
+function Tinaviz() {
+
+  var wrapper = null;
+  var applet = null;
+
+  return {
+  
+     // MAIN PROGRAM
+     main: function() {
+        
+        // SWITCH TO MACRO VIEW
+        this.setLevel("macro"); 
+        
+        // ASYNCHRONOUS GEXF LOAD
+        this.readGraph("macro", "celegans.gexf");
+        
+     },
+
+     // APPLET INITIALIZED CALLBACK
+     init: function() {
+        if (wrapper != null || applet != null) return;
+        wrapper = $('#vizframe').contents().find('#tinaviz')[0];
+        applet = wrapper.getSubApplet();
+        this.size(this.getWidth(), this.getHeight());
+        this.main();
+    },
+    
+    // RESIZE THE APPLET
+    size: function(width, height) {
+        wrapper.width = width;
+        wrapper.height = height;
+        $('#vizframe').css('width',""+ width + "px");
+        $('#vizframe').css('height',"" + height +"px");
+    },
+    
+    readGraph: function(view,graphURL) {
+        if (applet == null) return;
+        $.ajax({
+		    url: graphURL,
+		    type: "GET",
+	        dataType: "text",
+	        success: function(gexf) { 
+	           applet.getSession().updateFromString(view,gexf);
+	       } 
+        });
+        
+    },
+    
+    openGraph: function(view,relativePath) {
+        if (applet == null) return;
+	    applet.getSession().updateFromURI(view,path);
+    },
+
+    toggleLabels: function() {
+        if (applet == null) return;
+        return applet.getView().toggleLabels(); 
+    },
+    toggleNodes: function() {
+        if (applet == null) return;
+        return applet.getView().toggleNodes();
+    },
+    toggleEdges: function() {
+        if (applet == null) return;
+        return applet.getView().toggleLinks();
+    },
+    togglePause: function() {
+        if (applet == null) return;
+        return applet.getView().togglePause();
+    },
+    toggleHD: function() {
+        if (applet == null) return;
+        return applet.getView().toggleHD();
+    },
+    setLevel: function(level) {
+        if (applet == null) return;
+        applet.getSession().setLevel(level);
+    },
+
+    resetSelection: function() {
+        if (applet == null) return;
+        applet.resetSelection();
+    },
+    clear: function() {
+        if (applet == null) return;
+        try {
+            applet.getSession().clear();
+        } catch (e) {
+           //
+        }
+    },
+
+    nodeSelected: function(level,x,y,id,label,attr) {
+    },
+
+    enabled: function() {
+        if (applet == null) {
+            return false;
+        } else {
+            return applet.isEnabled();
+        }
+    },
+    enable:  function() {
+        if (applet == null) return;
+        applet.setEnabled(true);
+    },
+    
+    disable:  function() {
+        if (applet == null) return;
+        applet.setEnabled(false);
+    },
+    
+    logError: function(msg) {
+    },
+    logNormal: function(msg) {
+    },
+    logDebug: function(msg) {
+    },
+    switchedTo: function(level) {
+    },
+
+    getWidth: function() {
+       return 1000;
+    },
+    getHeight: function() {
+       return 600;
+    }
+  };
+}
+
+tinaviz = new Tinaviz();
+
+</script>
             <h1>Hello</h1>
             <p>This is an example</p>
 	    <!--<a href="" onclick="$('vizframe').src='tinaviz/software.html'">software</a> / <a href="" onclick="$('vizframe').src='tinaviz/hardware.html'">hardware</a>-->
