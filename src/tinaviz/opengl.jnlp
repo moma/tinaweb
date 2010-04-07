@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<jnlp>
+  <information>
+    <title>Processing OpenGL API</title>
+    <vendor>Processing</vendor>
+    <homepage href="http://jogl.dev.java.net/"/>
+    <description>Java Binding to the OpenGL API - JSR-231 Current Build</description>
+    <description kind="short">Java programming language binding to the OpenGL 3D graphics API. (Current build of JSR-231 APIs)</description>
+    <offline-allowed/>
+  </information>
+    <resources>
+      <jar href="opengl.jar" />
+    </resources>
+  <component-desc />
+</jnlp>

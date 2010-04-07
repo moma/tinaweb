@@ -15,83 +15,17 @@ body {
 		  line-height: normal;
 }
 .container {
-  /* border: dashed 2px;*/
+   border: dashed 2px;
 			
 }
 /* ]]> */</style>
 	</head>
 	<body>
-
 			<div id="content" class="content">	
-			<!--[if !IE]> -->
-				<object id="tinaviz"
-				        classid="java:com.sun.opengl.util.JOGLAppletLauncher.class" 
-            			type="application/x-java-applet"
-            			archive="tinaviz.jar,opengl.jar,jogl.jar,gluegen-rt.jar,core.jar,itext.jar,pdf.jar"
-            			width="200" height="200"
-            			standby="Loading visualization..." >
-            			
-					<param name="archive" value="tinaviz.jar,opengl.jar,jogl.jar,gluegen-rt.jar,core.jar,itext.jar,pdf.jar" />
-				
-					<param name="mayscript" value="true" />
-					<param name="scriptable" value="true" />
-				
-					<param name="image" value="data/appletLoading.gif" />
-					<param name="boxmessage" value="Loading visualization..." />
-					<param name="boxbgcolor" value="#FFFFFF" />
-					<param name="progressbar" value="true" />
-					
-					<param name="subapplet.classname" value="tinaviz.Main" /> 
-					<param name="subapplet.displayname" value="TinaViz" />
-					
-					<param name="jogl.silent.noddraw.check" value="true" />
-				        <param name="java_arguments" value="-Xmx300m -Dsun.java2d.noddraw=true"/>
-					<param name="separate_jvm" value="true" />
-					<param name="engine" value="software" />
-								
-			<!--<![endif]-->
-				
-				<object id="tinaviz"
-				        classid="clsid:8AD9C840-044E-11D1-B3E9-00805F499D93" 
-						codebase="http://java.sun.com/update/1.5.0/jinstall-1_5_0_15-windows-i586.cab"
-						width="1000" height="600"
-						standby="Loading visualization..."  >
-						
-					<param name="code" value="com.sun.opengl.util.JOGLAppletLauncher" />
-					<param name="archive" value="tinaviz.jar,opengl.jar,jogl.jar,gluegen-rt.jar,core.jar,itext.jar,pdf.jar" />
-					
-					<param name="mayscript" value="true" />
-					<param name="scriptable" value="true" />
-					
-					<param name="image" value="data/appletLoading.gif" />
-					<param name="boxmessage" value="Loading visualization..." />
-					<param name="boxbgcolor" value="#FFFFFF" />
-					<param name="progressbar" value="true" />
-					
-					<param name="subapplet.classname" value="tinaviz.Main" /> 
-					<param name="subapplet.displayname" value="TinaViz" />
-					
-					<param name="jogl.silent.noddraw.check" value="true" />
-					<param name="java_arguments" value="-Xmx300m -Dsun.java2d.noddraw=true"/>
-					<param name="separate_jvm" value="true" />
-					<param name="engine" value="software" />
-
-					<p>
-						<strong>
-							You need to install "Java" in order to visualize maps.
-							<br />
-							<a href="http://www.java.com/getjava" title="Download Java">
-								Get Java here.
-							</a>
-						</strong>
-					</p>
-				
-				</object>
-				
-			<!--[if !IE]> -->
-				</object>
-			<!--<![endif]-->
-			
+			 <applet id="tinaviz" name="tinaviz" code="Ignored" width="1024" height="768"> 
+                 <param name="jnlp_href" value="tinaviz.jnlp"> 
+                 <param name="draggable" value="false"> 
+              </applet>
 			</div>
 	</body>
 </html>

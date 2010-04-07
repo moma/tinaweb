@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<jnlp>
+  <information>
+    <title>Tinaviz Applet</title>
+    <vendor>CREA, CNRS</vendor>
+    <homepage href="https://jdk6.dev.java.net/plugin2/"/>
+    <description kind="short">A simple applet.</description>
+    <offline-allowed/>
+    <shortcut online="false">
+      <desktop />
+    </shortcut>
+    <!--<icon href="loading/2.jpg"/>-->
+    <icon kind="splash" href="loading.gif"/> 
+  </information>
+  <resources>
+    <j2se version="1.6+" href="http://java.sun.com/products/autodl/j2se" initial-heap-size="128m" max-heap-size="512m" />
+    <jar href="tinaviz.jar" main="true" />
+    <extension name="opengl" href="opengl.jnlp" />
+    <extension name="jogl" href="jogl.jnlp" />
+    <extension name="core" href="core.jnlp" />
+    <extension name="pdf" href="pdf.jnlp" />
+    <extension name="itext" href="itext.jnlp" />
+  </resources>
+  <applet-desc name="TinaViz" main-class="tinaviz.Main" width="1024" height="768">
+     <param name="engine" value="software"/>
+     <param name="jogl.silent.noddraw.check" value="true"/>
+  </applet-desc>
+</jnlp>

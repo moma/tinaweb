@@ -74,16 +74,20 @@ function Tinaviz() {
         // SWITCH TO MACRO VIEW
         this.setLevel("macro"); 
         
+	    this.dispatchProperty("category/value", "NGram");
+	    this.dispatchProperty("category/mode", "keep");
+		this.bindFilter("Category",             "category",           "macro");
+
         // ASYNCHRONOUS GEXF LOAD
-        this.readGraph("macro", "github-perl.gexf");
-        
+        //this.readGraph("macro", "data/jbilcke-facebook-2010.gexf");
+        this.readGraph("macro", "data/bipartite_graph_mixed_.gexf");
      },
 
      // APPLET INITIALIZED CALLBACK
      init: function() {
         if (wrapper != null || applet != null) return;
         wrapper = $('#vizframe').contents().find('#tinaviz')[0];
-        applet = wrapper.getSubApplet();
+        applet = wrapper;
         this.size(this.getWidth(), this.getHeight());
         this.main();
     },
@@ -137,6 +141,42 @@ function Tinaviz() {
         if (applet == null) return;
         applet.getSession().setLevel(level);
     },
+
+    
+    bindFilter: function(name, path, level) {
+        if (applet == null) return;
+        if (level == null) return applet.getSession().addFilter(name, path);
+        return applet.getView(level).addFilter(name, path);
+    },
+    
+      
+    dispatchProperty: function(key,value) {
+        if (applet == null) return;
+        return applet.getSession().setProperty(key,value);
+    },
+    
+    
+    setProperty: function(level,key,value) {
+        if (applet == null) return;
+        return applet.getView(level).setProperty(key,value);
+    },
+    
+    getProperty: function(level,key,value) {
+        if (applet == null) return;
+        return applet.getView(level).getProperty(key);
+    },
+    
+    touch: function(level) {
+        applet.getView(level).getGraph().touch();
+    },
+    
+    search: function(txt) {
+        this.logNormal("Searching is not implemented yet..");
+    },
+
+  selectNode: function(id) {
+    applet.selectFromId(id);
+  },
 
     resetSelection: function() {
         if (applet == null) return;
@@ -195,7 +235,7 @@ tinaviz = new Tinaviz();
             <h1>Hello</h1>
             <p>This is an example</p>
 	    <!--<a href="" onclick="$('vizframe').src='tinaviz/software.html'">software</a> / <a href="" onclick="$('vizframe').src='tinaviz/hardware.html'">hardware</a>-->
-            <div><iframe id="vizframe" class="vizframe" allowtransparency="true" scrolling="no" frameborder="0" src="tinaviz/software.html"></iframe></div>
+            <div><iframe id="vizframe" class="vizframe" allowtransparency="true" scrolling="no" frameborder="0" src="tinaviz/hardware.html"></iframe></div>
 
     </body>
 </html>
