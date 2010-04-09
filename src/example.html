@@ -27,9 +27,7 @@
     </head>
     <body>
   <script type="text/javascript"> 
- 
- /* VARIOUS UTILITIES FUNCTIONS */
- 
+  
  /* useful for fullscreen mode */
 function getScreenWidth() {
     var x = 0;
@@ -60,7 +58,6 @@ function getScreenHeight() {
     return y;
 }
 
-
 function Tinaviz() {
 
   var wrapper = null;
@@ -70,16 +67,14 @@ function Tinaviz() {
   
      // MAIN PROGRAM
      main: function() {
-        
-        // SWITCH TO MACRO VIEW
         this.setLevel("macro"); 
+        applet.setAntiAliasing(true);
         
-	    this.dispatchProperty("category/value", "NGram");
-	    this.dispatchProperty("category/mode", "keep");
-		this.bindFilter("Category",             "category",           "macro");
-
-        // ASYNCHRONOUS GEXF LOAD
-        //this.readGraph("macro", "data/jbilcke-facebook-2010.gexf");
+	    applet.dispatchProperty("category/value", "Document");
+	    applet.dispatchProperty("category/mode", "keep");
+	    
+		this.bindFilter("Category",  "category", "macro");
+		
         this.readGraph("macro", "data/bipartite_graph_mixed_.gexf");
      },
 
@@ -147,49 +142,12 @@ function Tinaviz() {
         if (applet == null) return;
         if (level == null) return applet.getSession().addFilter(name, path);
         return applet.getView(level).addFilter(name, path);
-    },
-    
-      
-    dispatchProperty: function(key,value) {
-        if (applet == null) return;
-        return applet.getSession().setProperty(key,value);
-    },
-    
-    
-    setProperty: function(level,key,value) {
-        if (applet == null) return;
-        return applet.getView(level).setProperty(key,value);
-    },
-    
-    getProperty: function(level,key,value) {
-        if (applet == null) return;
-        return applet.getView(level).getProperty(key);
-    },
-    
-    touch: function(level) {
-        applet.getView(level).getGraph().touch();
-    },
+    },  
     
     search: function(txt) {
         this.logNormal("Searching is not implemented yet..");
     },
 
-  selectNode: function(id) {
-    applet.selectFromId(id);
-  },
-
-    resetSelection: function() {
-        if (applet == null) return;
-        applet.resetSelection();
-    },
-    clear: function() {
-        if (applet == null) return;
-        try {
-            applet.getSession().clear();
-        } catch (e) {
-           //
-        }
-    },
 
     nodeSelected: function(level,x,y,id,label,attr) {
     },
