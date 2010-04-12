@@ -8,7 +8,11 @@
         <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
             
         <!-- JQUERY -->
-        <script type="text/javascript" src="js/jquery/jquery-1.3.js" language="javascript"></script>
+        <script type="text/javascript" src="js/jquery-1.4.2.min.js" language="javascript"></script>
+        <!-- JQUERY UI -->
+        <script type="text/javascript" src="js/jquery-ui-1.8.min.js" language="javascript"></script>
+        <!-- JQUERY UI CSS -->
+        <link type="text/css" rel="stylesheet" href="css/smoothness/jquery-ui-1.8.custom.css"/>
 
         <!-- UTILITIES -->
         <!--<script type="text/javascript" src="js/themelia/nalarium.trace.js" language="javascript"></script>-->
@@ -24,6 +28,9 @@
 
         <!-- TINASOFT APP -->
         <link type="text/css" rel="stylesheet" href="example.css"/>
+        
+        <link rel="stylesheet" type="text/css" href="css/reset-fonts-grids.css">
+        <link rel="stylesheet" type="text/css" href="css/base.css">
     </head>
     <body>
   <script type="text/javascript"> 
@@ -69,6 +76,7 @@ function Tinaviz() {
      main: function() {
         this.setLevel("macro"); 
         applet.setAntiAliasing(true);
+        //applet.setBezier(64); // 18: default   64: high quality
         
 	    applet.dispatchProperty("category/value", "Document");
 	    applet.dispatchProperty("category/mode", "keep");
@@ -76,6 +84,7 @@ function Tinaviz() {
 		this.bindFilter("Category",  "category", "macro");
 		
         this.readGraph("macro", "data/bipartite_graph_mixed_.gexf");
+        
      },
 
      // APPLET INITIALIZED CALLBACK
@@ -101,8 +110,11 @@ function Tinaviz() {
 		    url: graphURL,
 		    type: "GET",
 	        dataType: "text",
+	        beforeSend: function() { $('#loading').show(); },
+            error: function() { $('#loading').hide(); },
 	        success: function(gexf) { 
 	           applet.getSession().updateFromString(view,gexf);
+	           $('#loading').hide();
 	       } 
         });
     },
@@ -189,12 +201,126 @@ function Tinaviz() {
 
 tinaviz = new Tinaviz();
 
-</script>
-            <h1>Hello</h1>
-            <p>This is an example</p>
-	    <!--<a href="" onclick="$('vizframe').src='tinaviz/software.html'">software</a> / <a href="" onclick="$('vizframe').src='tinaviz/hardware.html'">hardware</a>-->
-            <div><iframe id="vizframe" class="vizframe" allowtransparency="true" scrolling="no" frameborder="0" src="tinaviz/hardware.html"></iframe></div>
+    $(function(){
 
+        $('#loading').hide();
+    
+         $('#toolbar input[type=file]').change(function(e){
+          tinaviz.clear();
+          tinaviz.loadAbsoluteGraph( $(this).val() );
+        });
+
+
+
+
+		$('#pause').button({
+			text: false,
+			icons: {
+				primary: 'ui-icon-pause'
+			}
+		});
+		/*
+		.click(function() {
+			var options;
+			if ($(this).text() == 'play') {
+				options = {
+					label: 'pause',
+					icons: {
+						primary: 'ui-icon-pause'
+					}
+				};
+			} else {
+				options = {
+					label: 'play',
+					icons: {
+						primary: 'ui-icon-play'
+					}
+				};
+			}
+			$(this).button('option', options);
+		});*/
+		/*
+		$('#stop').button({
+			text: false,
+			icons: {
+				primary: 'ui-icon-stop'
+			}
+		})
+		.click(function() {
+			$('#play').button('option', {
+				label: 'play',
+				icons: {
+					primary: 'ui-icon-play'
+				}
+			});
+		});*/
+		
+		$('#recenter').button({
+			text: false,
+			icons: {
+				primary: 'ui-icon-seek-next'
+			}
+		});
+
+		$("#shuffle").button();
+		$("#toggles").buttonset();
+    
+    });
+        </script>
+        
+        <div id="doc3" class="yui-t6">
+	        <div id="hd">
+	            <div id="hdt">
+                    <div class="hdl">
+                             <h1>FET Open : Project Explorer</h1>
+                             <p></p>
+                    </div>
+                    <div class="hdr">
+                             <img src="css/cordis/fet.png" />
+                             <img src="css/cordis/cordis.gif" />
+                    </div>
+                </div>
+                <div id="hdb">
+                    <div class="toolbardiv">
+	                    <span id="toolbar" class="ui-widget-header ui-corner-all">
+	                        <input id="inputgraph" type="file" size="2" style="height: 15px; opacity: 0; width: 10px;">Open</input>
+		                    <button id="pause">pause</button>
+		                    <button id="reset">reset view</button>
+		
+		                    <input type="checkbox" id="shuffle" /><label for="shuffle">Shuffle</label>
+		
+		                    <span id="toggles">
+			                    <input type="radio" id="nodes" name="nodes" checked="checked" /><label for="repeat0">nodes</label>
+			                    <input type="radio" id="labels" name="labels" /><label for="repeat1">labels</label>
+			                    <input type="radio" id="edges" name="edges" /><label for="repeatall">edges</label>
+		                    </span>
+	                    </span>
+                    </div>
+                </div>
+	        </div>
+	        <div id="bd">
+		        <div id="yui-main">
+			        <div class="yui-b">
+				        <!-- PUT MAIN COLUMN CODE HERE -->
+				        
+				        <div class="visualization">
+                            
+            <!--<a href="" onclick="$('vizframe').src='tinaviz/software.html'">software</a> / <a href="" onclick="$('vizframe').src='tinaviz/hardware.html'">hardware</a>-->
+
+                            <!--<div class="ui-widget ui-widget-content ui-corner-all formleft infodiv detailtext">-->
+                            <iframe id="vizframe" class="vizframe" allowtransparency="true" scrolling="no" frameborder="0" src="tinaviz/hardware.html"></iframe>
+                            <!--</div>-->
+                        </div><!-- end of visualization -->
+			        </div><!-- end of yui-b -->
+		        </div><!-- end of yui-main -->
+		        <div class="yui-b">
+			        <div id="loading"><img src="css/loading.gif" />Loading..</div>
+		        </div>
+	        </div>
+	        <div id="ft">
+		        <span>Copyright MOMA, CREA, CNRS - 2009, 2010, 2011.</span>
+	        </div>
+        </div>
     </body>
 </html>
 

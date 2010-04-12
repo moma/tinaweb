@@ -1,11 +1,94 @@
 
+body {
+	font-size: 12px;
+}
+
+body {
+	font-family: "Trebuchet MS", "Helvetica", "Arial",  "Verdana", "sans-serif";
+}
+
+.field {
+    width:100%;
+    overflow:auto;
+    margin:5px 0px;
+}
+
+.vizframe {
+    float:left;
+    width:0px;
+    height:0px;
+    border:0px;
+}
+.whitebox {/*
+    margin: 0;
+    padding: 2px;*/
+    width: 0px;
+    height: 0px;
+    background: #ffffff;
+}
+.invisiblebox {
+   position: absolute;
+   left: 30px;
+   top: 120px;
+}
+.infodiv {
+
+    float:left;
+    /*
+    top:130px;
+    right: 0px;*/
+    width: 0px;
+    height: 0px;
+    overflow:auto;
+    /*z-index:2;*/
+    /*background: #ffffff;*/
+}
+
+.nodeinfo {
+    height:100%;
+    overflow:auto;
+}
+
+.slider {
+    position: relative;
+    float:left;
+    width:180px; 
+    height:12px; 
+    margin: 15px;
+}
+
+.sliders {
+   position: absolute;
+   left: 550px;
+   top: 46px;
+   color: #ffffee;
+}
+
+.tabfiller {
+   height:500px; 
+}
+
+.detailtext {
+    color: #000000;
+}
+
 .vizframe {
 
-    width:400px;
-    height:400px;
+    width:0px;
+    height:0px;
     z-index:2;
     background-color: #ffffff;
     background: #ffffff;
 
+}
+
+
+.toolbardiv {
+	padding:12px;
+	font-family: "Trebuchet MS", "Arial", "Helvetica", "Verdana", "sans-serif";
+}
+
+#toolbar {
+	padding: 12px 6px;
 }
 
