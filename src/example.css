@@ -1,4 +1,14 @@
 
+.ui-icon-projects { background-position: -192px -144px; }
+.ui-icon-terms { background-position: -208px -144px; }
+.ui-icon-labels { background-position: -208px -80px; }
+.ui-icon-edges { background-position: -144px -176px; }
+.ui-icon-nodes { background-position: -128px -80px; }
+.ui-icon-pin { background-position: -208px -176px; }
+.ui-icon-thunder { background-position: -208px -160px; }
+.ui-icon-arrows { background-position: -96px -80px; }
+
+
 body {
 	font-size: 12px;
 }
@@ -85,10 +95,11 @@ body {
 
 .toolbardiv {
 	padding:12px;
-	font-family: "Trebuchet MS", "Arial", "Helvetica", "Verdana", "sans-serif";
+	width: 600px;
 }
 
 #toolbar {
-	padding: 12px 6px;
+	padding: 12px 3px;
+	font-family: "Trebuchet MS", "Arial", "Helvetica", "Verdana", "sans-serif";
 }
 

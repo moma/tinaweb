@@ -78,12 +78,13 @@ function Tinaviz() {
         applet.setAntiAliasing(true);
         //applet.setBezier(64); // 18: default   64: high quality
         
-	    applet.dispatchProperty("category/value", "Document");
+	    applet.dispatchProperty("category/value", "NGram");
 	    applet.dispatchProperty("category/mode", "keep");
 	    
 		this.bindFilter("Category",  "category", "macro");
 		
-        this.readGraph("macro", "data/bipartite_graph_mixed_.gexf");
+		// bipartite_graph_cooccurrences_.gexf
+        this.readGraph("macro", "data/bipartite_graph_cooccurrences_.gexf");
         
      },
 
@@ -148,19 +149,50 @@ function Tinaviz() {
         if (applet == null) return;
         applet.getSession().setLevel(level);
     },
-
-    
+/*
+    bindFilter: function(name, path, level) {
+        if (applet == null) return;
+        if (level == null) return applet.getSession().addFilter("tinaviz.filters."+name, path);
+        return applet.getView(level).addFilter("tinaviz.filters."+name, path);
+    },
+    */   
     bindFilter: function(name, path, level) {
         if (applet == null) return;
         if (level == null) return applet.getSession().addFilter(name, path);
         return applet.getView(level).addFilter(name, path);
-    },  
+    }, 
+     
+    dispatchProperty: function(key,value) {
+        if (applet == null) return;
+        return applet.getSession().setProperty(key,value);
+    },
+    
+    setProperty: function(level,key,value) {
+        if (applet == null) return;
+        return applet.getView(level).setProperty(key,value);
+    },
+    
+    getProperty: function(level,key,value) {
+        if (applet == null) return;
+        return applet.getView(level).getProperty(key);
+    },
     
     search: function(txt) {
         this.logNormal("Searching is not implemented yet..");
     },
 
 
+    unselect: function() {
+        if (applet != null)  applet.unselect();
+        this.setProperty("meso", "subgraph/item", "");
+        applet.clear("meso");
+    },
+    
+    recenter: function() {
+        if (applet == null) return false;
+        return applet.recenter();
+    },
+    
     nodeSelected: function(level,x,y,id,label,attr) {
     },
 
@@ -191,7 +223,7 @@ function Tinaviz() {
     },
 
     getWidth: function() {
-       return getScreenWidth() - 25;
+       return getScreenWidth() - 28;
     },
     getHeight: function() {
        return getScreenHeight() - 150;
@@ -260,11 +292,47 @@ tinaviz = new Tinaviz();
 			icons: {
 				primary: 'ui-icon-seek-next'
 			}
-		});
+		}).click(function() {
+		
+        });
 
-		$("#shuffle").button();
 		$("#toggles").buttonset();
-    
+		
+    	$('#nodes').button({
+			text: "nodes",
+			icons: {
+				primary: 'ui-icon-nodes'
+			}
+		}).click(function() {
+		    tinaviz.toggleNodes();
+        });
+    	$('#edges').button({
+			text: "edges",
+			icons: {
+				primary: 'ui-icon-edges'
+			}
+		}).click(function() {
+		    tinaviz.toggleEdges();
+        });
+    	$('#labels').button({
+			text: "labels",
+			icons: {
+				primary: 'ui-icon-labels'
+			}
+		}).click(function() {
+		    tinaviz.toggleLabels();
+        });
+		
+    	$('#reset').button({
+			text: "reset",
+			icons: {
+				primary: 'ui-icon-thunder'
+			}
+		}).click(function() {
+		    
+		    tinaviz.recenter();
+        });
+		
     });
         </script>
         
@@ -276,8 +344,7 @@ tinaviz = new Tinaviz();
                              <p></p>
                     </div>
                     <div class="hdr">
-                             <img src="css/cordis/fet.png" />
-                             <img src="css/cordis/cordis.gif" />
+                             <img src="css/partners.jpg" />
                     </div>
                 </div>
                 <div id="hdb">
@@ -285,14 +352,12 @@ tinaviz = new Tinaviz();
 	                    <span id="toolbar" class="ui-widget-header ui-corner-all">
 	                        <input id="inputgraph" type="file" size="2" style="height: 15px; opacity: 0; width: 10px;">Open</input>
 		                    <button id="pause">pause</button>
-		                    <button id="reset">reset view</button>
-		
-		                    <input type="checkbox" id="shuffle" /><label for="shuffle">Shuffle</label>
-		
+		                    <button id="reset">reset</button>
+
 		                    <span id="toggles">
-			                    <input type="radio" id="nodes" name="nodes" checked="checked" /><label for="repeat0">nodes</label>
-			                    <input type="radio" id="labels" name="labels" /><label for="repeat1">labels</label>
-			                    <input type="radio" id="edges" name="edges" /><label for="repeatall">edges</label>
+			                    <input type="checkbox"  id="nodes" name="nodes" checked="checked" /><label for="nodes">nodes</label>
+			                    <input type="checkbox"  id="labels" name="labels" /><label for="labels">labels</label>
+			                    <input type="checkbox"  id="edges" name="edges" /><label for="edges">edges</label>
 		                    </span>
 	                    </span>
                     </div>
