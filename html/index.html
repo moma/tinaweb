@@ -77,7 +77,13 @@ function Tinaviz() {
         this.setLevel("macro"); 
 	applet.dispatchProperty("category/value", "NGram");
 	applet.dispatchProperty("category/mode", "keep");
-        this.readGraph("macro", "current.gexf");
+        //this.readGraph("macro", "current.gexf");
+	// window.location.href
+	// window.location.pathname
+	var sPath = document.location.href;
+	var gexfURL = sPath.substring(0, sPath.lastIndexOf('/') + 1) + "current.gexf";
+	//alert(sPage);
+	applet.getSession().updateFromURI("macro",gexfURL);
      },
 
      init: function() {
@@ -386,7 +392,7 @@ tinaviz = new Tinaviz();
 	  <param name="mayscript" value="true" />
 	  <param name="scriptable" value="true" />
 	  
-	  <param name="image" value="css/branding/loading.gif" />
+	  <param name="image" value="css/branding/appletLoading.gif" />
 	    <param name="boxmessage" value="Loading TinaViz..." />
 	  <param name="boxbgcolor" value="#FFFFFF" />
 	  <param name="progressbar" value="true" />
@@ -396,7 +402,7 @@ tinaviz = new Tinaviz();
 	  <param name="subapplet.displayname" value="tinaviz.Main" />
 	  
 	    <param name="engine" value="auto" />
-	    <param name="js_context" value="" />
+	    <param name="js_context" value="window." />
 
 	  <!--<![endif]-->
 	  
@@ -414,7 +420,7 @@ tinaviz = new Tinaviz();
 	    <param name="mayscript" value="true" />
 	    <param name="scriptable" value="true" />
 	    
-	  <param name="image" value="css/branding/loading.gif" />
+	  <param name="image" value="css/branding/appletLoading.gif" />
 	    <param name="boxmessage" value="Loading TinaViz..." />
 	    <param name="boxbgcolor" value="#FFFFFF" />
 	    <param name="progressbar" value="true" />
@@ -424,7 +430,7 @@ tinaviz = new Tinaviz();
 	    <param name="subapplet.displayname" value="tinaviz.Main" />
 	    
 	    <param name="engine" value="auto" />
-	    <param name="js_context" value="" />
+	    <param name="js_context" value="window." />
 
 	    <p>
 	      <strong>
@@ -446,7 +452,7 @@ tinaviz = new Tinaviz();
 			        </div><!-- end of yui-b -->
 		        </div><!-- end of yui-main -->
 		        <div class="yui-b">
-			        <div id="loading"><img src="css/loading.gif" />Loading..</div>
+			        <div id="loading"><img src="css/branding/appletLoading.gif" />Loading..</div>
 		        </div>
 	        </div>
 	        <div id="ft">
