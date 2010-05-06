@@ -39,7 +39,7 @@ function Tinaviz() {
             this.setLevel("macro");
             applet.dispatchProperty("category/value", "NGram");
             applet.dispatchProperty("category/mode", "keep");
-            this.readGraph("macro", "current.gexf");
+            this.readGraphJava("macro", "current.gexf");
         }
         this.init= function() {
             if (wrapper != null || applet != null) return;
@@ -59,7 +59,17 @@ function Tinaviz() {
             $('#tinaviz').css('width',""+ width + "px");
             $('#tinaviz').css('height',"" + height +"px");
         }
-        this.readGraph= function(view,graphURL) {
+        
+        // TODO: use a cross-browser compatible way of getting the current URL
+        this.readGraphJava= function(view,graphURL) {
+            	// window.location.href
+	            // window.location.pathname
+	            var sPath = document.location.href;
+	            var gexfURL = sPath.substring(0, sPath.lastIndexOf('/') + 1) + graphURL;
+	            applet.getSession().updateFromURI(view,gexfURL);
+        }
+        
+        this.readGraphAJAX= function(view,graphURL) {
             if (applet == null) return;
             $.ajax({
                 url: graphURL,
@@ -73,6 +83,7 @@ function Tinaviz() {
                }
             });
         }
+        
         this.openGraph= function(view,relativePath) {
             if (applet == null) return;
             applet.getSession().updateFromURI(view,path);
