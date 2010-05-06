@@ -36,23 +36,23 @@ function Tinaviz() {
   return {
 
      // MAIN PROGRAM
-     main: function() {
+    main: function() {
         this.setLevel("macro");
-    applet.dispatchProperty("category/value", "NGram");
-    applet.dispatchProperty("category/mode", "keep");
+        applet.dispatchProperty("category/value", "NGram");
+        applet.dispatchProperty("category/mode", "keep");
         this.readGraph("macro", "current.gexf");
-     },
+    },
 
-     init: function() {
+    init: function() {
         if (wrapper != null || applet != null) return;
         wrapper = $('#tinaviz')[0];
-    if (wrapper == null) return;
+        if (wrapper == null) return;
 
-        applet = wrapper.getSubApplet();
-    if (applet == null) return;
+            applet = wrapper.getSubApplet();
+        if (applet == null) return;
 
-        this.size(this.getWidth(), this.getHeight());
-        this.main();
+            this.size(this.getWidth(), this.getHeight());
+            this.main();
     },
 
     // RESIZE THE APPLET
