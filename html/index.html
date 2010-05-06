@@ -78,13 +78,13 @@ function Tinaviz() {
         applet.setAntiAliasing(true);
         //applet.setBezier(64); // 18: default   64: high quality
         
-	    applet.dispatchProperty("category/value", "NGram");
-	    applet.dispatchProperty("category/mode", "keep");
+	applet.dispatchProperty("category/value", "NGram");
+        applet.dispatchProperty("category/mode", "keep");
 	    
-		this.bindFilter("Category",  "category", "macro");
+	//this.bindFilter("Category",  "category", "macro");
 		
-		// bipartite_graph_cooccurrences_.gexf
-        this.readGraph("macro", "data/bipartite_graph_cooccurrences_.gexf");
+	// bipartite_graph_cooccurrences_.gexf
+        this.readGraph("macro", "gexf/test.gexf");
         
      },
 
@@ -373,7 +373,7 @@ tinaviz = new Tinaviz();
             <!--<a href="" onclick="$('vizframe').src='tinaviz/software.html'">software</a> / <a href="" onclick="$('vizframe').src='tinaviz/hardware.html'">hardware</a>-->
 
                             <!--<div class="ui-widget ui-widget-content ui-corner-all formleft infodiv detailtext">-->
-                            <iframe id="vizframe" class="vizframe" allowtransparency="true" scrolling="no" frameborder="0" src="tinaviz/hardware.html"></iframe>
+                            <iframe id="vizframe" class="vizframe" allowtransparency="true" scrolling="no" frameborder="0" src="tinaviz/software.html"></iframe>
                             <!--</div>-->
                         </div><!-- end of visualization -->
 			        </div><!-- end of yui-b -->

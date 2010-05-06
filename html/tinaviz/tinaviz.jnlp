@@ -18,9 +18,11 @@
   </security>
   -->
   <resources>
-    <j2se version="1.6+" href="http://java.sun.com/products/autodl/j2se" initial-heap-size="128m" max-heap-size="512m" />
-    <property name="Prop1" value="100"/>
-    <property name="Prop2" value="ON"/>
+
+    <j2se version="1.6+" href="http://java.sun.com/products/autodl/j2se" />
+    <!--<j2se version="1.6+" href="http://java.sun.com/products/autodl/j2se" initial-heap-size="128m" max-heap-size="512m" />-->
+
+    <property name="prefix" value=""/>
     <jar href="tinaviz.jar" main="true" />
     <extension name="core" href="core.jnlp" />
     <extension name="pdf" href="pdf.jnlp" />
@@ -28,6 +30,7 @@
   </resources>
   <applet-desc name="TinaViz" main-class="tinaviz.Main" width="1024" height="768">
      <param name="engine" value="software"/>
+     <property name="prefix" value=""/>
      <param name="jogl.silent.noddraw.check" value="true"/>
   </applet-desc>
 </jnlp>
