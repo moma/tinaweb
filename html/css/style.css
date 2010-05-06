@@ -10,11 +10,11 @@
 
 
 body {
-	font-size: 12px;
+    font-size: 12px;
 }
 
 body {
-	font-family: "Trebuchet MS", "Helvetica", "Arial",  "Verdana", "sans-serif";
+    font-family: "Trebuchet MS", "Helvetica", "Arial",  "Verdana", "sans-serif";
 }
 
 .field {
@@ -62,8 +62,8 @@ body {
 .slider {
     position: relative;
     float:left;
-    width:180px; 
-    height:12px; 
+    width:180px;
+    height:12px;
     margin: 15px;
 }
 
@@ -75,7 +75,7 @@ body {
 }
 
 .tabfiller {
-   height:500px; 
+   height:500px;
 }
 
 .detailtext {
@@ -83,7 +83,6 @@ body {
 }
 
 .vizframe {
-
     width:0px;
     height:0px;
     z-index:2;
@@ -94,12 +93,12 @@ body {
 
 
 .toolbardiv {
-	padding:12px;
-	width: 600px;
+    padding:12px;
+    /*width: 600px;*/
 }
 
 #toolbar {
-	padding: 12px 3px;
-	font-family: "Trebuchet MS", "Arial", "Helvetica", "Verdana", "sans-serif";
+    padding: 12px 3px;
+    font-family: "Trebuchet MS", "Arial", "Helvetica", "Verdana", "sans-serif";
 }
 
