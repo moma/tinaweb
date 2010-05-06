@@ -1,0 +1,112 @@
+/* GLOBAL PARAMETER FOR THE SIZE */
+body {font-size:12px;}
+
+.corpora_table ol { list-style-type: none; margin: 0; padding: 0; }
+.corpora_table li { margin: 3px; padding: 0.4em; height: 18px; float:left; }
+/*#corpora_table .ui-selected { border: 1px solid #7e7783; background: #5f5964; font-weight: bold; color: #ffffff; outline: none; }
+*/
+
+.formleft {
+    float:left;
+    margin-right: 20px;
+    min-height: 300px;
+    padding:1em 1em;
+    background:#D0D0D0;
+}
+
+.formleft a {
+    color: #0000FF;
+}
+
+.import-form {
+    width: 410px;
+}
+.export-form {
+}
+
+label, input[type="text"]{
+    float:left;
+    display:block;
+}
+
+label {
+    margin-right: 5px;
+}
+
+.field {
+    width:100%;
+    overflow:auto;
+    margin:5px 0px;
+}
+
+.vizframe {
+    float:left;
+    width:0px;
+    height:0px;
+    border:0px;
+}
+.whitebox {/*
+    margin: 0;
+    padding: 2px;*/
+    width: 0px;
+    height: 0px;
+    background: #ffffff;
+}
+.invisiblebox {
+   position: absolute;
+   left: 30px;
+   top: 120px;
+}
+.infodiv {
+
+    float:right;
+    /*
+    top:130px;
+    right: 0px;*/
+    width: 0px;
+    height: 0px;
+    overflow:auto;
+    /*z-index:2;*/
+    /*background: #ffffff;*/
+}
+
+.nodeinfo {
+    height:100%;
+    overflow:auto;
+}
+
+.slider {
+    position: relative;
+    float:left;
+    width:180px;
+    height:12px;
+    margin: 15px;
+}
+
+.sliders {
+   position: absolute;
+   left: 550px;
+   top: 46px;
+   color: #ffffee;
+}
+
+.tabfiller {
+   height:500px;
+}
+
+.detailtext {
+   /* color: #000000;*/
+   font-size: 13px;
+}
+/*
+.htoolbar {
+    position:absolute;
+    position:absolute;
+    bottom:80px;
+    left:40px;
+}
+*/
+
+
+
+
