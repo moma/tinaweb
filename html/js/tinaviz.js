@@ -36,9 +36,43 @@ function Tinaviz() {
     //return {
         // MAIN PROGRAM
         this.main= function() {
-            this.setLevel("macro");
-            applet.dispatchProperty("category/value", "NGram");
-            applet.dispatchProperty("category/mode", "keep");
+        
+        this.setLevel("macro");
+        
+        this.dispatchProperty("edgeWeight/min", 0.0);
+	    this.dispatchProperty("edgeWeight/max", 1.0);
+	    
+	    this.dispatchProperty("nodeWeight/min", 0.0);
+	    this.dispatchProperty("nodeWeight/max", 1.0);
+	    
+	    this.dispatchProperty("radiusByWeight/max", 100.0/200.0);
+	    
+	    // we want to keep documents
+	    this.dispatchProperty("category/value", "NGram");
+	    this.dispatchProperty("category/mode", "keep");
+	        
+		this.dispatchProperty("radius/value",  25.0/200.0); // because we set default value to 25/200 in the GUI
+		
+		// we want to create a "batchviz's local exploration"-like behaviour?
+		//  it's trivial with the new architecture! use the "explorer" filter
+
+	    // create a new "Category()" filter instance, which use the "category" namespace, and attach it to the "macro" new
+	    // and YES, you can define filters or properties at any time, it's totally asynchronous ;)
+	    
+		this.bindFilter("Category",             "category",           "macro");
+
+		//this.bindFilter("NodeWeightRange",  "nodeWeight",         "macro");
+		
+		// filter by edge threshold
+		this.bindFilter("EdgeWeightRange",  "edgeWeight",         "macro");
+		
+	    this.bindFilter("NodeFunction",        "radiusByWeight",     "macro");
+		
+		
+		this.bindFilter("NodeRadius",           "radius",             "macro");  
+		this.bindFilter("WeightSize",           "weightSize",         "macro");
+        //this.bindFilter("Layout",           "layout",   "macro");
+            
             this.readGraphJava("macro", "current.gexf");
         }
         this.init= function() {
@@ -186,6 +220,42 @@ tinaviz = new Tinaviz();
 $(document).ready(function(){
 
     $('#loading').hide();
+
+
+
+ 
+
+
+         $('#htoolbar input[type=file]').change(function(e){
+          console.log("calling clear()");
+          tinaviz.clear();
+          console.log("loadAbsoluteGraph"+$(this).val());
+          tinaviz.loadAbsoluteGraph( $(this).val() );
+        });
+
+
+        //all hover and click logic for buttons
+        $(".fg-button:not(.ui-state-disabled)")
+        .hover(
+            function(){
+                $(this).addClass("ui-state-hover");
+            },
+            function(){
+                $(this).removeClass("ui-state-hover");
+            }
+        )
+        .mousedown(function(){
+                $(this).parents('.fg-buttonset-single:first').find(".fg-button.ui-state-active").removeClass("ui-state-active");
+                if( $(this).is('.ui-state-active.fg-button-toggleable, .fg-buttonset-multi .ui-state-active') ){ $(this).removeClass("ui-state-active"); }
+                else { $(this).addClass("ui-state-active"); }
+        })
+        .mouseup(function(){
+            if(! $(this).is('.fg-button-toggleable, .fg-buttonset-single .fg-button,  .fg-buttonset-multi .fg-button') ){
+                $(this).removeClass("ui-state-active");
+            }
+        });
+
+
 
     // SLIDERS INIT
     $.extend($.ui.slider.defaults, {
