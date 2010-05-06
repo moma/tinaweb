@@ -34,7 +34,6 @@ function Tinaviz() {
     var applet = null;
 
     //return {
-
         // MAIN PROGRAM
         this.main= function() {
             this.setLevel("macro");
@@ -42,7 +41,6 @@ function Tinaviz() {
             applet.dispatchProperty("category/mode", "keep");
             this.readGraph("macro", "current.gexf");
         }
-
         this.init= function() {
             if (wrapper != null || applet != null) return;
             wrapper = $('#tinaviz')[0];
@@ -54,7 +52,6 @@ function Tinaviz() {
                 this.size(this.getWidth(), this.getHeight());
                 this.main();
         }
-
         // RESIZE THE APPLET
         this.size= function(width, height) {
             wrapper.width = width;
@@ -62,7 +59,6 @@ function Tinaviz() {
             $('#tinaviz').css('width',""+ width + "px");
             $('#tinaviz').css('height',"" + height +"px");
         }
-
         this.readGraph= function(view,graphURL) {
             if (applet == null) return;
             $.ajax({
@@ -77,7 +73,6 @@ function Tinaviz() {
                }
             });
         }
-
         this.openGraph= function(view,relativePath) {
             if (applet == null) return;
             applet.getSession().updateFromURI(view,path);
@@ -118,41 +113,32 @@ function Tinaviz() {
             if (level == null) return applet.getSession().addFilter(name, path);
             return applet.getView(level).addFilter(name, path);
         }
-
         this.dispatchProperty= function(key,value) {
             if (applet == null) return;
             return applet.getSession().setProperty(key,value);
         }
-
         this.setProperty= function(level,key,value) {
             if (applet == null) return;
             return applet.getView(level).setProperty(key,value);
         }
-
         this.getProperty= function(level,key,value) {
             if (applet == null) return;
             return applet.getView(level).getProperty(key);
         }
-
         this.search= function(txt) {
             this.logNormal("Searching is not implemented yet..");
         }
-
-
         this.unselect= function() {
             if (applet != null)  applet.unselect();
             this.setProperty("meso", "subgraph/item", "");
             applet.clear("meso");
         }
-
         this.recenter= function() {
             if (applet == null) return false;
             return applet.recenter();
         }
-
         this.nodeSelected= function(level,x,y,id,label,attr) {
         }
-
         this.enabled= function() {
             if (applet == null) {
                 return false;
@@ -164,12 +150,10 @@ function Tinaviz() {
             if (applet == null) return;
             applet.setEnabled(true);
         }
-
         this.disable=  function() {
             if (applet == null) return;
             applet.setEnabled(false);
         }
-
         this.logError= function(msg) {
         }
         this.logNormal= function(msg) {
@@ -178,7 +162,6 @@ function Tinaviz() {
         }
         this.switchedTo= function(level) {
         }
-
         this.getWidth= function() {
            return getScreenWidth() - 28;
         }
@@ -187,7 +170,7 @@ function Tinaviz() {
         }
     //};
 }
-var tinaviz = new Tinaviz();
+tinaviz = new Tinaviz();
 
 $(document).ready(function(){
 
@@ -235,4 +218,22 @@ $(document).ready(function(){
             tinaviz.touch("macro");
         }}
     );
+    $("#toggle-labels-macro").click(function(event) {
+        tinaviz.toggleLabels();
+    });
+    $("#toggle-nodes-macro").click(function(event) {
+        tinaviz.toggleNodes();
+    });
+    $("#toggle-edges-macro").click(function(event) {
+        tinaviz.toggleEdges();
+    });
+    $("#toggle-pause-macro").click(function(event) {
+        tinaviz.togglePause();
+    });
+    $("#toggle-unselect-macro").click(function(event) {
+        tinaviz.unselect();
+    });
+    $("#toggle-recenter-macro").click(function(event) {
+        tinaviz.recenter();
+    });
 });
