@@ -3,9 +3,9 @@
     <head>
         <title>example</title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <meta name="description" content="example">
-        <meta name="keywords" content="example">
-        <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+        <meta name="description" content="TinaViz">
+        <meta name="keywords" content="TinaViz">
+        <link rel="shortcut icon" href="css/branding/favicon.ico" type="image/x-icon">
             
         <!-- JQUERY -->
         <script type="text/javascript" src="js/jquery-1.4.2.min.js" language="javascript"></script>
@@ -27,7 +27,7 @@
         <link type="text/css" rel="stylesheet" href="js/jquery/jquery.rating.css"/> -->
 
         <!-- TINASOFT APP -->
-        <link type="text/css" rel="stylesheet" href="example.css"/>
+        <link type="text/css" rel="stylesheet" href="css/style.css"/>
         
         <link rel="stylesheet" type="text/css" href="css/reset-fonts-grids.css">
         <link rel="stylesheet" type="text/css" href="css/base.css">
@@ -75,24 +75,19 @@ function Tinaviz() {
      // MAIN PROGRAM
      main: function() {
         this.setLevel("macro"); 
-        applet.setAntiAliasing(true);
-        //applet.setBezier(64); // 18: default   64: high quality
-        
 	applet.dispatchProperty("category/value", "NGram");
-        applet.dispatchProperty("category/mode", "keep");
-	    
-	//this.bindFilter("Category",  "category", "macro");
-		
-	// bipartite_graph_cooccurrences_.gexf
-        this.readGraph("macro", "gexf/test.gexf");
-        
+	applet.dispatchProperty("category/mode", "keep");
+        this.readGraph("macro", "current.gexf");
      },
 
-     // APPLET INITIALIZED CALLBACK
      init: function() {
         if (wrapper != null || applet != null) return;
-        wrapper = $('#vizframe').contents().find('#tinaviz')[0];
-        applet = wrapper;
+        wrapper = $('#tinaviz')[0];
+	if (wrapper == null) return;
+
+        applet = wrapper.getSubApplet();
+	if (applet == null) return;
+
         this.size(this.getWidth(), this.getHeight());
         this.main();
     },
@@ -101,8 +96,8 @@ function Tinaviz() {
     size: function(width, height) {
         wrapper.width = width;
         wrapper.height = height;
-        $('#vizframe').css('width',""+ width + "px");
-        $('#vizframe').css('height',"" + height +"px");
+        $('#tinaviz').css('width',""+ width + "px");
+        $('#tinaviz').css('height',"" + height +"px");
     },
     
     readGraph: function(view,graphURL) {
@@ -250,7 +245,9 @@ tinaviz = new Tinaviz();
 			icons: {
 				primary: 'ui-icon-pause'
 			}
-		});
+		}).click(function() {
+		    tinaviz.togglePause();
+        	});
 		/*
 		.click(function() {
 			var options;
@@ -373,7 +370,77 @@ tinaviz = new Tinaviz();
             <!--<a href="" onclick="$('vizframe').src='tinaviz/software.html'">software</a> / <a href="" onclick="$('vizframe').src='tinaviz/hardware.html'">hardware</a>-->
 
                             <!--<div class="ui-widget ui-widget-content ui-corner-all formleft infodiv detailtext">-->
-                            <iframe id="vizframe" class="vizframe" allowtransparency="true" scrolling="no" frameborder="0" src="tinaviz/software.html"></iframe>
+                            
+	<!--[if !IE]> -->
+	<object id="tinaviz"
+                classid="java:org.jdesktop.applet.util.JNLPAppletLauncher" 
+            	type="application/x-java-applet"
+            	archive="java/tinaviz.jar,java/opengl.jar,java/core.jar,java/itext.jar,java/mesh.jar,java/pdf.jar,java/quickhull3d.1.4.jar,http://download.java.net/media/applet-launcher/applet-launcher.jar,http://download.java.net/media/jogl/builds/archive/jsr-231-webstart-current/jogl.jar,http://download.java.net/media/gluegen/webstart/gluegen-rt.jar"
+            	width="10" height="10"
+            	standby="Loading Processing software..." >
+          
+	  <param name="archive" value="java/tinaviz.jar,java/opengl.jar,java/core.jar,java/itext.jar,java/mesh.jar,java/pdf.jar,java/quickhull3d.1.4.jar,http://download.java.net/media/applet-launcher/applet-launcher.jar,http://download.java.net/media/jogl/builds/archive/jsr-231-webstart-current/jogl.jar,http://download.java.net/media/gluegen/webstart/gluegen-rt.jar" />
+	  <param name="jnlpNumExtensions" value="1">
+	  <param name="jnlpExtension1" value="http://download.java.net/media/jogl/builds/archive/jsr-231-webstart-current/jogl.jnlp">
+
+	  <param name="mayscript" value="true" />
+	  <param name="scriptable" value="true" />
+	  
+	  <param name="image" value="css/branding/loading.gif" />
+	    <param name="boxmessage" value="Loading TinaViz..." />
+	  <param name="boxbgcolor" value="#FFFFFF" />
+	  <param name="progressbar" value="true" />
+	  <!--<param name="noddraw.check" value="true">-->
+	  
+	  <param name="subapplet.classname" value="tinaviz.Main" /> 
+	  <param name="subapplet.displayname" value="tinaviz.Main" />
+	  
+	    <param name="engine" value="auto" />
+	    <param name="js_context" value="" />
+
+	  <!--<![endif]-->
+	  
+	  <object id="tinaviz"
+                  classid="clsid:CAFEEFAC-0016-0000-FFFF-ABCDEFFEDCBA" 
+		  width="10" height="10"
+		  standby="Loading Processing software..."  >
+
+	    <param name="code" 
+		   value="org.jdesktop.applet.util.JNLPAppletLauncher" />
+	    <param name="archive" value="java/tinaviz.jar,java/opengl.jar,java/core.jar,java/itext.jar,java/mesh.jar,java/pdf.jar,java/quickhull3d.1.4.jar,http://download.java.net/media/applet-launcher/applet-launcher.jar,http://download.java.net/media/jogl/builds/archive/jsr-231-webstart-current/jogl.jar,http://download.java.net/media/gluegen/webstart/gluegen-rt.jar" />
+	    <param name="jnlpNumExtensions" value="1">
+	    <param name="jnlpExtension1" value="http://download.java.net/media/jogl/builds/archive/jsr-231-webstart-current/jogl.jnlp">
+	    
+	    <param name="mayscript" value="true" />
+	    <param name="scriptable" value="true" />
+	    
+	  <param name="image" value="css/branding/loading.gif" />
+	    <param name="boxmessage" value="Loading TinaViz..." />
+	    <param name="boxbgcolor" value="#FFFFFF" />
+	    <param name="progressbar" value="true" />
+	    <!--<param name="noddraw.check" value="true">-->
+
+	    <param name="subapplet.classname" value="tinaviz.Main" /> 
+	    <param name="subapplet.displayname" value="tinaviz.Main" />
+	    
+	    <param name="engine" value="auto" />
+	    <param name="js_context" value="" />
+
+	    <p>
+	      <strong>
+		This browser does not have a Java Plug-in.
+		<br />
+		<a href="http://www.java.com/getjava" title="Download Java Plug-in">
+		  Get the latest Java Plug-in here.
+		</a>
+	      </strong>
+	    </p>
+	    
+	  </object>
+	  
+	  <!--[if !IE]> -->
+	</object>
+	<!--<![endif]-->
                             <!--</div>-->
                         </div><!-- end of visualization -->
 			        </div><!-- end of yui-b -->
@@ -392,5 +459,4 @@ tinaviz = new Tinaviz();
 
 
 
-
-
+	
