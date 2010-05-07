@@ -48,7 +48,7 @@ function Tinaviz() {
         this.dispatchProperty("radiusByWeight/max", 100.0/200.0);
 
         // we want to keep documents
-        this.dispatchProperty("category/value", "NGram");
+        this.dispatchProperty("category/value", "Document");
         this.dispatchProperty("category/mode", "keep");
 
         this.dispatchProperty("radius/value",  25.0/200.0); // because we set default value to 25/200 in the GUI
@@ -59,17 +59,17 @@ function Tinaviz() {
         // create a new "Category()" filter instance, which use the "category" namespace, and attach it to the "macro" new
         // and YES, you can define filters or properties at any time, it's totally asynchronous ;)
 
-        this.bindFilter("Category",             "category",           "macro");
+        this.bindFilter("Category", "category", "macro");
 
         //this.bindFilter("NodeWeightRange",  "nodeWeight",         "macro");
 
         // filter by edge threshold
-        //this.bindFilter("EdgeWeightRange",  "edgeWeight",         "macro");
+        this.bindFilter("EdgeWeightRange", "edgeWeight", "macro");
 
-        this.bindFilter("NodeFunction",        "radiusByWeight",     "macro");
+        this.bindFilter("NodeFunction", "radiusByWeight", "macro");
 
 
-        this.bindFilter("NodeRadius",           "radius",             "macro");
+        this.bindFilter("NodeRadius", "radius", "macro");
         //this.bindFilter("WeightSize",           "weightSize",         "macro");
         //this.bindFilter("Layout",           "layout",   "macro");
 
@@ -78,6 +78,8 @@ function Tinaviz() {
         //this.readGraphJava("macro", "current.gexf");
         //this.readGraphJava("macro", "CSS_bipartite_graph.gexf");
         //this.readGraphJava("macro", "cpan-authors.gexf");
+        // this.readGraphJava("macro", "github-perl.gexf");
+        tinaviz.togglePause();
 
         }
         this.init= function() {
