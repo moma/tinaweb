@@ -73,7 +73,7 @@ function Tinaviz() {
 		this.bindFilter("WeightSize",           "weightSize",         "macro");
         //this.bindFilter("Layout",           "layout",   "macro");
             
-            this.readGraphJava("macro", "current.gexf");
+            this.readGraphJava("macro", "pubmed.gexf");
         }
         this.init= function() {
             if (wrapper != null || applet != null) return;
