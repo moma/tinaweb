@@ -73,10 +73,11 @@ function Tinaviz() {
         //this.bindFilter("WeightSize",           "weightSize",         "macro");
         //this.bindFilter("Layout",           "layout",   "macro");
 
-        //this.readGraphJava("macro", "CSSScholarsMay2010.gexf");
+        this.readGraphJava("macro", "CSSScholarsMay2010.gexf");
         //this.readGraphJava("macro", "pubmed.gexf");
         //this.readGraphJava("macro", "current.gexf");
-        this.readGraphJava("macro", "CSS_bipartite_graph.gexf");
+        //this.readGraphJava("macro", "CSS_bipartite_graph.gexf");
+        //this.readGraphJava("macro", "cpan-authors.gexf");
 
         }
         this.init= function() {
