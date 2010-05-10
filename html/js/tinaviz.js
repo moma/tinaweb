@@ -193,7 +193,7 @@ function Tinaviz() {
             if (applet == null) return false;
             return applet.recenter();
         }
-        this.nodeSelected= function(level,x,y,id,label,attr) {
+        this.nodeSelected= function(level,x,y,id,label,attr,mouse) {
         }
         this.enabled= function() {
             if (applet == null) {
