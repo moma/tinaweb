@@ -1,0 +1,116 @@
+
+/* Jquery toolbar icons */
+
+.ui-icon-projects { background-position: -192px -144px; }
+.ui-icon-terms { background-position: -208px -144px; }
+.ui-icon-labels { background-position: -208px -80px; }
+.ui-icon-edges { background-position: -144px -176px; }
+.ui-icon-nodes { background-position: -128px -80px; }
+.ui-icon-pin { background-position: -208px -176px; }
+.ui-icon-thunder { background-position: -208px -160px; }
+.ui-icon-arrows { background-position: -96px -80px; }
+
+/* Jquery customization */
+
+.fg-button { outline: 0; margin:0 4px 0 0; padding: .4em 1em; text-decoration:none !important; cursor:pointer; position: relative; text-align: center; zoom: 1; }
+.fg-button .ui-icon { position: absolute; top: 50%; margin-top: -8px; left: 50%; margin-left: -8px; }
+
+a.fg-button { float:left; }
+
+/* remove extra button width in IE */
+button.fg-button { width:auto; overflow:visible; }
+
+.fg-button-icon-left { padding-left: 2.1em; }
+.fg-button-icon-right { padding-right: 2.1em; }
+.fg-button-icon-left .ui-icon { right: auto; left: .2em; margin-left: 0; }
+.fg-button-icon-right .ui-icon { left: auto; right: .2em; margin-left: 0; }
+
+.fg-button-icon-solo { display:block; width:8px; text-indent: -9999px; }     /* solo icon buttons must have block properties for the text-indent to work */
+
+.fg-buttonset { float:left; }
+.fg-buttonset .fg-button { float: left; }
+.fg-buttonset-single .fg-button,
+.fg-buttonset-multi .fg-button { margin-right: -1px;}
+
+.fg-toolbar { padding: .5em; margin: 0;  }
+.fg-toolbar .fg-buttonset { margin-right:1.5em; padding-left: 1px; }
+.fg-toolbar .fg-button { font-size: 1em;  }
+
+
+
+body {
+    font-size: 12px;
+    font-family: "Trebuchet MS", "Helvetica", "Arial",  "Verdana", "sans-serif";
+}
+
+.field {
+    width:100%;
+    overflow:auto;
+    margin:5px 0px;
+}
+
+
+.whitebox {/*
+    margin: 0;
+    padding: 2px;*/
+    width: 0px;
+    height: 0px;
+    background: #ffffff;
+}
+
+
+.infodiv {
+
+    float:left;
+    /*
+    top:130px;
+    right: 0px;*/
+    width: 0px;
+    height: 0px;
+    overflow:auto;
+    /*z-index:2;*/
+    /*background: #ffffff;*/
+}
+
+.nodeinfo {
+    height:100%;
+    overflow:auto;
+}
+
+/* Parent sliders */
+.sliders {
+   position: relative;
+   /*left: 550px;*/
+   /*top: 100px;*/
+   color: #ffffee;
+}
+
+/* Each sliders positioned relatively to their parent */
+.slider {
+    position: relative;
+    float:left;
+    width:180px;
+    height:12px;
+    margin: 0 10px;
+}
+
+
+.tabfiller {
+   height:500px;
+}
+
+.detailtext {
+    color: #000000;
+}
+
+
+/*.toolbardiv {
+    padding:12px;
+    width: 600px;
+}
+
+#toolbar {
+    padding: 12px 3px;
+    font-family: "Trebuchet MS", "Arial", "Helvetica", "Verdana", "sans-serif";
+}*/
+
