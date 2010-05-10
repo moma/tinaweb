@@ -34,9 +34,8 @@ function getScreenHeight() {
  * displays the opposite category neighbourhood
  */
 function displayInfodivTagCloud( id ) {
-
+    nb = tinaviz.getNeighbourhood(id);
 }
-
 /*
  * updates the infodiv contents
  */
@@ -48,13 +47,13 @@ function displayInfodiv( level, id, label, attr, mouse ) {
     var neighbours = $( "#node_neighbourhood" );
     neighbours.empty();
     attr = $.getJSON( attr );
-    if ( attr.category == 'Ngram' ) {
+    if ( attr.category == 'NGram' ) {
         // do not display nothing
     }
     if ( attr.category == 'Document' ) {
         contents.html( "<p>"+ attr.content +"</p>" );
     }
-    return true:
+    return true;
 }
 
 function Tinaviz() {

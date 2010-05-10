@@ -47,6 +47,13 @@ body {
     overflow: auto;
 }
 
+#branding {
+    float: left;
+    background: none;
+
+
+}
+
 /*#vizdiv {
     overflow: auto;
 }*/
