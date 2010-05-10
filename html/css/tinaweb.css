@@ -43,49 +43,26 @@ body {
     font-family: "Trebuchet MS", "Helvetica", "Arial",  "Verdana", "sans-serif";
 }
 
-.field {
-    width:100%;
-    overflow:auto;
-    margin:5px 0px;
+#infodiv {
+    overflow: auto;
 }
 
-
-.whitebox {/*
-    margin: 0;
-    padding: 2px;*/
-    width: 0px;
-    height: 0px;
-    background: #ffffff;
-}
-
-
-.infodiv {
-
-    float:left;
-    /*
-    top:130px;
-    right: 0px;*/
-    width: 0px;
-    height: 0px;
-    overflow:auto;
-    /*z-index:2;*/
-    /*background: #ffffff;*/
-}
+/*#vizdiv {
+    overflow: auto;
+}*/
 
 .nodeinfo {
     height:100%;
     overflow:auto;
 }
 
-/* Parent sliders */
+/* slider's paretn div*/
 .sliders {
    position: relative;
-   /*left: 550px;*/
-   /*top: 100px;*/
    color: #ffffee;
 }
 
-/* Each sliders positioned relatively to their parent */
+/* each sliders positioned relatively to their parent */
 .slider {
     position: relative;
     float:left;

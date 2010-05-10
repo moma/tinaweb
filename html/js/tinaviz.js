@@ -32,69 +32,70 @@ function Tinaviz() {
 
     var wrapper = null;
     var applet = null;
+    var infodivSize = 400;
 
     //return {
         // MAIN PROGRAM
-        this.main= function() {
+        this.main = function() {
 
-        this.setLevel("macro");
+            this.setLevel("macro");
 
-        this.dispatchProperty("edgeWeight/min", 0.0);
-        this.dispatchProperty("edgeWeight/max", 1.0);
+            this.dispatchProperty("edgeWeight/min", 0.0);
+            this.dispatchProperty("edgeWeight/max", 1.0);
 
-        this.dispatchProperty("nodeWeight/min", 0.0);
-        this.dispatchProperty("nodeWeight/max", 1.0);
+            this.dispatchProperty("nodeWeight/min", 0.0);
+            this.dispatchProperty("nodeWeight/max", 1.0);
 
-        this.dispatchProperty("radiusByWeight/max", 100.0/200.0);
+            this.dispatchProperty("radiusByWeight/max", 100.0/200.0);
 
-        // we want to keep documents
-        this.dispatchProperty("category/value", "Document");
-        this.dispatchProperty("category/mode", "keep");
+            // we want to keep documents
+            this.dispatchProperty("category/value", "Document");
+            this.dispatchProperty("category/mode", "keep");
 
-        this.dispatchProperty("radius/value",  25.0/200.0); // because we set default value to 25/200 in the GUI
+            this.dispatchProperty("radius/value",  25.0/200.0); // because we set default value to 25/200 in the GUI
 
-        // we want to create a "batchviz's local exploration"-like behaviour?
-        //  it's trivial with the new architecture! use the "explorer" filter
+            // we want to create a "batchviz's local exploration"-like behaviour?
+            //  it's trivial with the new architecture! use the "explorer" filter
 
-        // create a new "Category()" filter instance, which use the "category" namespace, and attach it to the "macro" new
-        // and YES, you can define filters or properties at any time, it's totally asynchronous ;)
+            // create a new "Category()" filter instance, which use the "category" namespace, and attach it to the "macro" new
+            // and YES, you can define filters or properties at any time, it's totally asynchronous ;)
 
-        this.bindFilter("Category", "category", "macro");
+            this.bindFilter("Category", "category", "macro");
 
-        //this.bindFilter("NodeWeightRange",  "nodeWeight",         "macro");
+            //this.bindFilter("NodeWeightRange",  "nodeWeight",         "macro");
 
-        // filter by edge threshold
-        this.bindFilter("EdgeWeightRange", "edgeWeight", "macro");
+            // filter by edge threshold
+            this.bindFilter("EdgeWeightRange", "edgeWeight", "macro");
 
-        this.bindFilter("NodeFunction", "radiusByWeight", "macro");
+            this.bindFilter("NodeFunction", "radiusByWeight", "macro");
 
 
-        this.bindFilter("NodeRadius", "radius", "macro");
-        //this.bindFilter("WeightSize",           "weightSize",         "macro");
-        //this.bindFilter("Layout",           "layout",   "macro");
+            this.bindFilter("NodeRadius", "radius", "macro");
+            //this.bindFilter("WeightSize", "weightSize", "macro");
+            //this.bindFilter("Layout", "layout", "macro");
 
-        this.readGraphJava("macro", "CSSScholarsMay2010.gexf");
-        //this.readGraphJava("macro", "pubmed.gexf");
-        //this.readGraphJava("macro", "current.gexf");
-        //this.readGraphJava("macro", "CSS_bipartite_graph.gexf");
-        //this.readGraphJava("macro", "cpan-authors.gexf");
-        // this.readGraphJava("macro", "github-perl.gexf");
-        tinaviz.togglePause();
+            //this.readGraphJava("macro", "CSSScholarsMay2010.gexf");
+            //this.readGraphJava("macro", "pubmed.gexf");
+            this.readGraphJava("macro", "current.gexf");
+            //this.readGraphJava("macro", "CSS_bipartite_graph.gexf");
+            //this.readGraphJava("macro", "cpan-authors.gexf");
+            //this.readGraphJava("macro", "github-perl.gexf");
+            tinaviz.togglePause();
 
         }
         this.init= function() {
             if (wrapper != null || applet != null) return;
             wrapper = $('#tinaviz')[0];
             if (wrapper == null) return;
-
-                applet = wrapper.getSubApplet();
+            applet = wrapper.getSubApplet();
             if (applet == null) return;
-
-                this.size(this.getWidth(), this.getHeight());
-                this.main();
+            this.size(this.getWidth(), this.getHeight());
+            this.main();
         }
+
         // RESIZE THE APPLET
         this.size= function(width, height) {
+            if (wrapper == null || applet == null) return;
             wrapper.width = width;
             wrapper.height = height;
             $('#tinaviz').css('width',""+ width + "px");
@@ -219,21 +220,22 @@ function Tinaviz() {
         this.switchedTo= function(level) {
         }
         this.getWidth= function() {
-           return getScreenWidth() - 28;
+            return $("#vizdiv").width();
         }
         this.getHeight= function() {
-           return getScreenHeight() - 150;
+            return getScreenHeight() - $("#hd").height();
         }
     //};
 }
 tinaviz = new Tinaviz();
 
 $(document).ready(function(){
-
+    // updates applet size
+    //tinaviz.size(tinaviz.getWidth(), tinaviz.getHeight());
     $('#htoolbar input[type=file]').change(function(e){
-        console.log("calling clear()");
+        //console.log("calling clear()");
         tinaviz.clear();
-        console.log("loadAbsoluteGraph"+$(this).val());
+        //console.log("loadAbsoluteGraph"+$(this).val());
         tinaviz.loadAbsoluteGraph( $(this).val() );
     });
 
@@ -258,8 +260,6 @@ $(document).ready(function(){
             $(this).removeClass("ui-state-active");
         }
     });
-
-
 
     // SLIDERS INIT
     $.extend($.ui.slider.defaults, {
@@ -321,5 +321,4 @@ $(document).ready(function(){
     $("#toggle-recenter-macro").click(function(event) {
         tinaviz.recenter();
     });
-    $('#loading').hide();
 });

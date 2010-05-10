@@ -30,7 +30,7 @@
 
     </head>
     <body>
-        <div id="doc3" class="yui-t6">
+        <div id="doc3" class="yui-t7">
             <div id="hd">
                 <div id="hdt">
                     <div class="hdl">
@@ -94,8 +94,9 @@
             <div id="bd">
                 <div id="yui-main">
                     <div class="yui-b">
-                        <!-- PUT MAIN COLUMN CODE HERE -->
-                        <div class="visualization">
+                    <div class="yui-gc">
+                        <!-- LEFT MAIN COLUMN-->
+                        <div id="vizdiv" class="yui-u first">
                             <!--<a href="" onclick="$('vizframe').src='tinaviz/software.html'">software</a> / <a href="" onclick="$('vizframe').src='tinaviz/hardware.html'">hardware</a>-->
 
                             <!--<div class="ui-widget ui-widget-content ui-corner-all formleft infodiv detailtext">-->
@@ -157,10 +158,10 @@
                                 <p>
                                   <strong>
                                 This browser does not have a Java Plug-in.
-                                <br />
-                                <a href="http://www.java.com/getjava" title="Download Java Plug-in">
-                                  Get the latest Java Plug-in here.
-                                </a>
+                                    <br />
+                                    <a href="http://www.java.com/getjava" title="Download Java Plug-in">
+                                      Get the latest Java Plug-in here.
+                                    </a>
                                   </strong>
                                 </p>
 
@@ -171,18 +172,19 @@
                             <!--<![endif]-->
                             <!--</div>-->
                         </div><!-- end of visualization -->
-                        <div id="infodiv" class="ui-widget ui-widget-content ui-corner-all formleft infodiv detailtext">
-                            <h2>No element selected. <br/>To begin exploration, try clicking or double-clicking on nodes on the left!</h2>
-                            <div id="branding"><img src="applet/data/moma-crea-tiny-translucent.png" /></div>
+                        <!-- RIGHT MAIN COLUMN-->
+                        <div id="infodiv" class="yui-u detailtext">
+                            <h2>No element selected</h2><br/>
+                            <h4>To begin exploration, try clicking or double-clicking on nodes on the left!</h4>
+                            <div id="branding"><a href="http://moma.csregistry.org" target="_BLANK"><img src="css/branding/moma-crea.png"/></a><br/><span>Copyright MOMA, CREA, CNRS - 2009, 2010, 2011.</span></div>
                         </div><!-- / INFODIV -->
+                    </div><!-- end of yui-gc -->
                     </div><!-- end of yui-b -->
                 </div><!-- end of yui-main -->
-                <div class="yui-b">
-                    <div id="loading"><img src="css/branding/appletLoading.gif" />Loading..</div>
-                </div>
             </div>
             <div id="ft">
-                <a href="http://moma.csregistry.org" target="_BLANK"><img src="css/branding/moma-crea.png" style="margin: 0px 0px -12px 0px;"/></a> <span>Copyright MOMA, CREA, CNRS - 2009, 2010, 2011.</span>
+                <a href="http://tinasoft" target="_BLANK">Download Tinasoft desktop
+                </a>
             </div>
         </div>
     </body>
