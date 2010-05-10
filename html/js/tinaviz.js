@@ -32,7 +32,6 @@ function Tinaviz() {
 
     var wrapper = null;
     var applet = null;
-    var infodivSize = 400;
 
     //return {
         // MAIN PROGRAM
