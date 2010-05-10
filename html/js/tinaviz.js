@@ -268,14 +268,10 @@ tinaviz = new Tinaviz();
 
 $(document).ready(function(){
     // updates applet size
-    //tinaviz.size(tinaviz.getWidth(), tinaviz.getHeight());
     $('#htoolbar input[type=file]').change(function(e){
-        //console.log("calling clear()");
         tinaviz.clear();
-        //console.log("loadAbsoluteGraph"+$(this).val());
         tinaviz.loadAbsoluteGraph( $(this).val() );
     });
-
 
     //all hover and click logic for buttons
     $(".fg-button:not(.ui-state-disabled)")
