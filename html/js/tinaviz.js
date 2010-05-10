@@ -28,6 +28,35 @@ function getScreenHeight() {
     return y;
 }
 
+/*
+ * updates the infodiv tag cloud contents
+ * given a node id,
+ * displays the opposite category neighbourhood
+ */
+function displayInfodivTagCloud( id ) {
+
+}
+
+/*
+ * updates the infodiv contents
+ */
+function displayInfodiv( level, id, label, attr, mouse ) {
+    var nodelabel = $( "#node_label" );
+    nodelabel.empty().html( "<h2>"+label+"</h2>" );
+    var contents = $( "#node_contents" );
+    contents.empty();
+    var neighbours = $( "#node_neighbourhood" );
+    neighbours.empty();
+    attr = $.getJSON( attr );
+    if ( attr.category == 'Ngram' ) {
+        // do not display nothing
+    }
+    if ( attr.category == 'Document' ) {
+        contents.html( "<p>"+ attr.content +"</p>" );
+    }
+    return true:
+}
+
 function Tinaviz() {
 
     var wrapper = null;
@@ -193,7 +222,16 @@ function Tinaviz() {
             if (applet == null) return false;
             return applet.recenter();
         }
-        this.nodeSelected= function(level,x,y,id,label,attr) {
+        this.getNodeAttributes = function(id) {
+            if (applet == null) return;
+            return $.parseJSON( applet.getNodesAttributes(id) );
+        }
+        this.getNeighbourhood = function(id) {
+            if (applet == null) return;
+            return $.parseJSON( applet.getNeighbourhood(id) );
+        }
+        this.nodeSelected = function(level,x,y,id,label,attr,mouse) {
+            return displayInfodiv( level, id, label, attr, mouse );
         }
         this.enabled= function() {
             if (applet == null) {
