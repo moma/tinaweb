@@ -33,18 +33,22 @@ function getScreenHeight() {
  * given a node id,
  * displays the opposite category neighbourhood
  */
-function displayInfodivTagCloud( id ) {
+function displayInfodivTagCloud(level, id, label, attr) {
     var nb = tinaviz.getNeighbourhood(id);
-    var basesize=6;
+    var coef=20;
     var neighbours = $( "#node_neighbourhood" );
     neighbours.empty();
-    for(id in nb) {
-        neighbours.html(
-            "<p style=font-size="+basesize*nb[id]['label']+">"
-            + nb[id]['label']
-            +"</p>"
-        )
+    var tagcloud = $("<p></p>");
+    for(var nbid in nb) {
+        if (attr['category'] != nb[nbid]['category']) {
+            var tag = $("<span></span>")
+                .addClass('ui-widget-content')
+                .css('font-size', Math.floor( coef* Math.log( 1 + nb[nbid]['occurrences'] )))
+                .html( nb[nbid]['label'] );
+            tagcloud.append(tag);
+        }
     }
+    neighbours.append( tagcloud );
     return true;
 }
 /*
@@ -61,7 +65,7 @@ function displayInfodiv( level, id, label, attr ) {
     if ( attr.category == 'Document' ) {
         contents.html( "<p>"+ attr.content +"</p>" );
     }
-    return displayInfodivTagCloud(id);
+    return displayInfodivTagCloud(level, id, label, attr);
 }
 
 function Tinaviz() {
@@ -219,7 +223,7 @@ function Tinaviz() {
         }
         this.getNeighbourhood = function(id) {
             if (applet == null) return;
-            alert( applet.getNeighbourhood(id) );
+            //alert( applet.getNeighbourhood(id) );
             return $.parseJSON( applet.getNeighbourhood(id) );
         }
         this.nodeLeftClicked = function(level, x, y, id, label, attr) {
@@ -237,6 +241,7 @@ function Tinaviz() {
         }
         this.nodeSelected = function(level, x, y, id, label, attr, mouse) {
             if ( mouse == "left" ) {
+                alert( attr );
                 this.nodeLeftClicked(level,x,y,id,label,$.parseJSON(attr));
             } else if ( mouse == "right" ) {
                 this.nodeRightClicked(level,x,y,id,label,$.parseJSON(attr));
