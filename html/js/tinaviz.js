@@ -79,7 +79,7 @@ function Tinaviz() {
             this.dispatchProperty("category/value", "Document");
             this.dispatchProperty("category/mode", "keep");
 
-            this.dispatchProperty("radius/value",  25.0/200.0); // because we set default value to 25/200 in the GUI
+            this.dispatchProperty("radius/value",  100.0/200.0); // because we set default value to 25/200 in the GUI
 
             // we want to create a "batchviz's local exploration"-like behaviour?
             //  it's trivial with the new architecture! use the "explorer" filter
@@ -327,7 +327,7 @@ $(document).ready(function(){
     });
 
     $("#macroSlider_nodeSize").slider({
-        value: 25.0,
+        value: 50.0,
         max: 200.0,// precision/size
         animate: true,
         slide: function(event, ui) {
