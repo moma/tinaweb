@@ -34,26 +34,34 @@ function getScreenHeight() {
  * displays the opposite category neighbourhood
  */
 function displayInfodivTagCloud( id ) {
-    nb = tinaviz.getNeighbourhood(id);
+    var nb = tinaviz.getNeighbourhood(id);
+    var basesize=6;
+    var neighbours = $( "#node_neighbourhood" );
+    neighbours.empty();
+    for(id in nb) {
+        neighbours.html(
+            "<p style=font-size="+basesize*nb[id]['label']+">"
+            + nb[id]['label']
+            +"</p>"
+        )
+    }
+    return true;
 }
 /*
  * updates the infodiv contents
  */
-function displayInfodiv( level, id, label, attr, mouse ) {
+function displayInfodiv( level, id, label, attr ) {
     var nodelabel = $( "#node_label" );
     nodelabel.empty().html( "<h2>"+label+"</h2>" );
     var contents = $( "#node_contents" );
     contents.empty();
-    var neighbours = $( "#node_neighbourhood" );
-    neighbours.empty();
-    attr = $.getJSON( attr );
     if ( attr.category == 'NGram' ) {
         // do not display nothing
     }
     if ( attr.category == 'Document' ) {
         contents.html( "<p>"+ attr.content +"</p>" );
     }
-    return true;
+    return displayInfodivTagCloud(id);
 }
 
 function Tinaviz() {
@@ -82,13 +90,12 @@ function Tinaviz() {
             this.dispatchProperty("radius/value",  100.0/200.0); // because we set default value to 25/200 in the GUI
 
             this.bindFilter("Category", "category", "macro");
-            //this.bindFilter("NodeWeightRange",  "nodeWeight",         "macro");
-            
+            //this.bindFilter("NodeWeightRange",  "nodeWeight", "macro");
             // filter by edge threshold
             this.bindFilter("EdgeWeightRange", "edgeWeight", "macro");
             this.bindFilter("NodeFunction", "radiusByWeight", "macro");
-
             this.readGraphJava("macro", "FET60bipartite_graph_cooccurrences_.gexf");
+
             tinaviz.togglePause();
 
         }
@@ -191,8 +198,11 @@ function Tinaviz() {
             if (applet == null) return;
             return applet.getView(level).getProperty(key);
         }
-        this.search= function(txt) {
-            this.logNormal("Searching is not implemented yet..");
+        this.getNodesByLabel= function(label, search_type) {
+            if (applet == null || search_type != "equals" || search_type != "contains"|| search_type != "startsWith" || search_type != "endsWith" || search_type != "equalsIgnoreCase") {
+                return;
+            }
+            return applet.getNodesByLabel(label, search_type);
         }
         this.unselect= function() {
             if (applet != null)  applet.unselect();
@@ -209,23 +219,41 @@ function Tinaviz() {
         }
         this.getNeighbourhood = function(id) {
             if (applet == null) return;
+            alert( applet.getNeighbourhood(id) );
             return $.parseJSON( applet.getNeighbourhood(id) );
         }
-        this.nodeSelected = function(level,x,y,id,label,attr,mouse) {
-            return displayInfodiv( level, id, label, attr, mouse );
+        this.nodeLeftClicked = function(level, x, y, id, label, attr) {
+            if ( attr == null ) return;
+            return displayInfodiv( level, id, label, attr);
         }
-        this.enabled= function() {
+        this.nodeRightClicked = function(level, x, y, id, label, attr) {
+            if (applet == null) return;
+            var cat = this.getProperty(level, "category/value");
+            if (cat == "Document") newcategory = "NGram";
+            if (cat == "NGram") newcategory = "Document";
+            this.setProperty("macro", "category/value", newcategory);
+            this.touch(level);
+            this.recenter();
+        }
+        this.nodeSelected = function(level, x, y, id, label, attr, mouse) {
+            if ( mouse == "left" ) {
+                this.nodeLeftClicked(level,x,y,id,label,$.parseJSON(attr));
+            } else if ( mouse == "right" ) {
+                this.nodeRightClicked(level,x,y,id,label,$.parseJSON(attr));
+            }
+        }
+        this.enabled = function() {
             if (applet == null) {
                 return false;
             } else {
                 return applet.isEnabled();
             }
         }
-        this.enable=  function() {
+        this.enable =  function() {
             if (applet == null) return;
             applet.setEnabled(true);
         }
-        this.disable=  function() {
+        this.disable =  function() {
             if (applet == null) return;
             applet.setEnabled(false);
         }
