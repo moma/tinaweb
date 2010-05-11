@@ -241,7 +241,6 @@ function Tinaviz() {
         }
         this.nodeSelected = function(level, x, y, id, label, attr, mouse) {
             if ( mouse == "left" ) {
-                alert( attr );
                 this.nodeLeftClicked(level,x,y,id,label,$.parseJSON(attr));
             } else if ( mouse == "right" ) {
                 this.nodeRightClicked(level,x,y,id,label,$.parseJSON(attr));
