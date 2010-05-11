@@ -81,32 +81,14 @@ function Tinaviz() {
 
             this.dispatchProperty("radius/value",  100.0/200.0); // because we set default value to 25/200 in the GUI
 
-            // we want to create a "batchviz's local exploration"-like behaviour?
-            //  it's trivial with the new architecture! use the "explorer" filter
-
-            // create a new "Category()" filter instance, which use the "category" namespace, and attach it to the "macro" new
-            // and YES, you can define filters or properties at any time, it's totally asynchronous ;)
-
             this.bindFilter("Category", "category", "macro");
-
             //this.bindFilter("NodeWeightRange",  "nodeWeight",         "macro");
-
+            
             // filter by edge threshold
             this.bindFilter("EdgeWeightRange", "edgeWeight", "macro");
-
             this.bindFilter("NodeFunction", "radiusByWeight", "macro");
 
-
-            this.bindFilter("NodeRadius", "radius", "macro");
-            //this.bindFilter("WeightSize", "weightSize", "macro");
-            //this.bindFilter("Layout", "layout", "macro");
-
-            //this.readGraphJava("macro", "CSSScholarsMay2010.gexf");
-            //this.readGraphJava("macro", "pubmed.gexf");
-            this.readGraphJava("macro", "current.gexf");
-            //this.readGraphJava("macro", "CSS_bipartite_graph.gexf");
-            //this.readGraphJava("macro", "cpan-authors.gexf");
-            //this.readGraphJava("macro", "github-perl.gexf");
+            this.readGraphJava("macro", "FET60bipartite_graph_cooccurrences_.gexf");
             tinaviz.togglePause();
 
         }

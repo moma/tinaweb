@@ -5,10 +5,10 @@
 <graph type="static"> 
 <attributes class="node" type="static"> 
  <attribute id="0" title="category" type="string">  </attribute>  
- <attribute id="1" title="Occurrences" type="float">   </attribute>  
- <attribute id="2" title="Summary" type="string">   </attribute>  
- <attribute id="3" title="Keywords" type="string">   </attribute>  
- <attribute id="4" title="Genericity" type="float">   </attribute>  
+ <attribute id="1" title="occurrences" type="float">   </attribute>  
+ <attribute id="2" title="content" type="string">   </attribute>  
+ <attribute id="3" title="keywords" type="string">   </attribute>  
+ <attribute id="4" title="weight" type="float">   </attribute>  
 </attributes> 
 <attributes class="edge" type="float"> 
  <attribute id="0" title="cooc" type="float"> </attribute> 
@@ -6830,6 +6830,7 @@
 <attvalues> <attvalue for="0" value="1"/><attvalue for="1" value="nodes2"/></attvalues> 
 </edge><edge id="1674" source="168" target="261" weight="1">  
 <attvalues> <attvalue for="0" value="1"/><attvalue for="1" value="nodes2"/></attvalues> 
+
 </edge><edge id="1675" source="168" target="275" weight="1">  
 <attvalues> <attvalue for="0" value="1"/><attvalue for="1" value="nodes2"/></attvalues> 
 </edge><edge id="1676" source="168" target="277" weight="1">  
@@ -9172,6 +9173,7 @@
 <attvalues> <attvalue for="0" value="1"/><attvalue for="1" value="nodes2"/></attvalues> 
 </edge><edge id="2945" source="268" target="300" weight="1">  
 <attvalues> <attvalue for="0" value="1"/><attvalue for="1" value="nodes2"/></attvalues> 
+
 </edge><edge id="2946" source="268" target="430" weight="1">  
 <attvalues> <attvalue for="0" value="1"/><attvalue for="1" value="nodes2"/></attvalues> 
 </edge><edge id="2947" source="269" target="68" weight="1">  
@@ -13110,6 +13112,7 @@
 <attvalues> <attvalue for="0" value="1"/><attvalue for="1" value="nodes2"/></attvalues> 
 </edge><edge id="5097" source="452" target="89" weight="1">  
 <attvalues> <attvalue for="0" value="1"/><attvalue for="1" value="nodes2"/></attvalues> 
+
 </edge><edge id="5098" source="452" target="98" weight="1">  
 <attvalues> <attvalue for="0" value="1"/><attvalue for="1" value="nodes2"/></attvalues> 
 </edge><edge id="5099" source="452" target="118" weight="1">  
