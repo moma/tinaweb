@@ -34,7 +34,18 @@ function getScreenHeight() {
  * displays the opposite category neighbourhood
  */
 function displayInfodivTagCloud( id ) {
-    nb = tinaviz.getNeighbourhood(id);
+    var nb = tinaviz.getNeighbourhood(id);
+    var basesize=6;
+    var neighbours = $( "#node_neighbourhood" );
+    neighbours.empty();
+    for(id in nb) {
+        neighbours.html(
+            "<p style=font-size="+basesize*nb[id]['label']+">"
+            + nb[id]['label']
+            +"</p>"
+        )
+    }
+    return true;
 }
 /*
  * updates the infodiv contents
@@ -44,8 +55,6 @@ function displayInfodiv( level, id, label, attr, mouse ) {
     nodelabel.empty().html( "<h2>"+label+"</h2>" );
     var contents = $( "#node_contents" );
     contents.empty();
-    var neighbours = $( "#node_neighbourhood" );
-    neighbours.empty();
     attr = $.getJSON( attr );
     if ( attr.category == 'NGram' ) {
         // do not display nothing
@@ -53,7 +62,7 @@ function displayInfodiv( level, id, label, attr, mouse ) {
     if ( attr.category == 'Document' ) {
         contents.html( "<p>"+ attr.content +"</p>" );
     }
-    return true;
+    return displayInfodivTagCloud(id);
 }
 
 function Tinaviz() {
@@ -101,9 +110,9 @@ function Tinaviz() {
             //this.bindFilter("WeightSize", "weightSize", "macro");
             //this.bindFilter("Layout", "layout", "macro");
 
-            //this.readGraphJava("macro", "CSSScholarsMay2010.gexf");
+            this.readGraphJava("macro", "CSSScholarsMay2010.gexf");
             //this.readGraphJava("macro", "pubmed.gexf");
-            this.readGraphJava("macro", "current.gexf");
+            //this.readGraphJava("macro", "current.gexf");
             //this.readGraphJava("macro", "CSS_bipartite_graph.gexf");
             //this.readGraphJava("macro", "cpan-authors.gexf");
             //this.readGraphJava("macro", "github-perl.gexf");
@@ -227,10 +236,12 @@ function Tinaviz() {
         }
         this.getNeighbourhood = function(id) {
             if (applet == null) return;
+            alert( applet.getNeighbourhood(id) );
             return $.parseJSON( applet.getNeighbourhood(id) );
         }
         this.nodeSelected = function(level,x,y,id,label,attr,mouse) {
-            return displayInfodiv( level, id, label, attr, mouse );
+            if (mouse == "left")
+                return displayInfodiv( level, id, label, attr, mouse );
         }
         this.enabled= function() {
             if (applet == null) {
