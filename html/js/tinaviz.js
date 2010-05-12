@@ -147,11 +147,13 @@ function Tinaviz() {
             this.bindFilter("Category", "category", "macro");
             //this.bindFilter("NodeWeightRange",  "nodeWeight", "macro");
             // filter by edge threshold
-            this.bindFilter("EdgeWeightRange", "edgeWeight", "macro");
+            this.bindFilter("EdgeWeightRange", "edgeWeight",  "macro");
             this.bindFilter("NodeFunction", "radiusByWeight", "macro");
+            this.bindFilter("NodeRadius",   "radius",         "macro");  
+            
             this.readGraphJava("macro", "FET60bipartite_graph_cooccurrences_.gexf");
 
-            tinaviz.togglePause();
+            //tinaviz.togglePause();
 
         }
         this.init= function() {
