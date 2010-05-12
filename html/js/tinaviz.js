@@ -27,34 +27,51 @@ function getScreenHeight() {
     }
     return y;
 }
+/* useful utility modifying the Object prototype */
+Object.size = function(obj) {
+    var size = 0, key;
+    for (key in obj) {
+        if (obj.hasOwnProperty(key)) size++;
+    }
+    return size;
+};
+
 
 function InfoDiv() {
-    var attr = {};
-    var neighbours = {};
     return {
-
+    selection : {},
+    neighbours : {},
+    label : $( "#node_label" ),
+    contents : $( "#node_contents" ),
+    cloud : $( "#node_neighbourhood" ),
     /*
      * infodiv tag cloud contents
      * Unique node mode = uses the occurrences attr to set the size of the label
      * of the opposite type of a given node
      */
-    displayInfodivTagCloudOne: function(level, id, label, attr) {
-        var nb = tinaviz.getNeighbourhood(id);
-        var coef=20;
-        var neighbours = $( "#node_neighbourhood" );
-        neighbours.empty();
-        var tagcloud = $("<p></p>");
-        for(var nbid in nb) {
-            if (attr['category'] != nb[nbid]['category']) {
-                var tag = $("<span></span>")
-                    .addClass('ui-widget-content')
-                    .css('font-size', Math.floor( coef* Math.log( 1 + nb[nbid]['occurrences'] )))
-                    .html( nb[nbid]['label'] );
-                tagcloud.append(tag);
-                tagcloud.append(" ");
+    tagCloudOne: function() {
+        for (var nodeid in this.selection) {
+            var nb = tinaviz.getNeighbourhood(nodeid);
+            var ngsizecoef=20;
+            var tagcloud = $("<p></p>");
+            for(var nbid in nb) {
+                if (this.selection[nodeid]['category'] != nb[nbid]['category']) {
+                    var tag = $("<span></span>")
+                        .addClass('ui-widget-content')
+                        .html( nb[nbid]['label'] );
+                    if ( this.selection[nodeid]['category'] == 'NGram' ) {
+                        tag.css('font-size', 12)
+                    }
+                    else if ( this.selection[nodeid]['category'] == 'Document' ) {
+                        tag.css('font-size', Math.floor( ngsizecoef* Math.log( 1 + nb[nbid]['occurrences'] )))
+                    }
+                    tagcloud.append(tag);
+                    tagcloud.append(" ");
+                }
             }
+            this.cloud.append( tagcloud );
+            break;
         }
-        neighbours.append( tagcloud );
         return true;
     },
 
@@ -63,75 +80,92 @@ function InfoDiv() {
      * multiple mode = sums degrees to set the size of label
      * of the opposite type of a given node
      */
-    displayInfodivTagCloudMultiple: function(level, id, label, attr) {
-        //var nb = tinaviz.getNeighbourhood(id);
-        var coef=20;
-        var neighbours = $( "#node_neighbourhood" );
-        neighbours.empty();
-        var tagcloud = $("<p></p>");
-        for(var nbid in nb) {
-            if (attr['category'] != nb[nbid]['category']) {
-                var tag = $("<span></span>")
-                    .addClass('ui-widget-content')
-                    .css('font-size', Math.floor( coef* Math.log( 1 + nb[nbid]['occurrences'] )))
-                    .html( nb[nbid]['label'] );
-                tagcloud.append(tag);
-                tagcloud.append(" ");
+    tagCloudMultiple: function() {
+        var sizecoef=20;
+        var tempcloud = {};
+        /* builds tempcloud variable */
+        for (var nodeid in this.selection) {
+            var nb = tinaviz.getNeighbourhood(nodeid);
+            for(var nbid in nb) {
+                if (this.selection[nodeid]['category'] != nb[nbid]['category']) {
+                    if ( tempcloud[nbid] === undefined )
+                        tempcloud[nbid] = {
+                            'label' : nb[nbid]['label'],
+                            'occurrences' : 1
+                        };
+                    else
+                        tempcloud[nbid]['occurrences']++;
+                }
             }
         }
-        neighbours.append( tagcloud );
+        /* displaying tag cloud */
+        var tagcloud = $("<p></p>");
+        for (var tagid in tempcloud) {
+            var tag = $("<span></span>")
+                .addClass('ui-widget-content')
+                .css('font-size', Math.floor( sizecoef* Math.log( 1 + tempcloud[tagid]['occurrences'] )))
+                .html( tempcloud[tagid]['label'] );
+            tagcloud.append(tag);
+            tagcloud.append(" ");
+        }
+        this.cloud.append( tagcloud );
         return true;
     },
     /*
      * updates the tag cloud
      */
-    updateTagCloud: function(node, neighbours) {
-        alert( node );
+    updateTagCloud: function( ) {
+        this.cloud.empty();
+        if ( Object.size ( this.selection ) == 1 ) {
+            this.tagCloudOne();
+        }
+        else if ( Object.size ( this.selection ) > 1 ) {
+            this.tagCloudMultiple();
+        }
     },
     /*
      * updates the label and contents divs
      */
-    updateInfo: function( node, nodelabel, contents ) {
-        nodelabel.append( $("<h2></h2>").html(node.label) );
+    updateInfo: function( node ) {
+        this.label.append( $("<h2></h2>").html(node.label) );
         if ( node.category == 'NGram' ) {
             // no content to display
         }
         if ( node.category == 'Document' ) {
-            contents.append( $("<p></p>").html(node.content) );
+            this.contents.append( $("<h3></h3>").html(node.label) );
+            this.contents.append( $("<p></p>").html(node.content) );
         }
     },
     /*
      * updates the infodiv contents
      */
-    update: function(level, attr) {
-        var nodelabel = $( "#node_label" );
-        //nodelabel.empty().html( "<h2>"+label+"</h2>" );
-        var contents = $( "#node_contents" );
-        var neighbours = $( "#node_neighbourhood" );
-        for(var id in attr) {
-            if (this.attr[id] === undefined) {
-                this.attr[id] = attr[id];
-                this.updateInfo(attr[id]);
-                //this.updateTagCloud(attr[id]);
-            }
+    update: function(level, lastselection) {
+        this.label.empty();
+        this.contents.empty();
+        for(var id in lastselection) {
+            this.selection[id] = lastselection[id];
+            this.updateInfo(lastselection[id]);
         }
+        this.updateTagCloud();
         return;
     },
     reset: function() {
-        this.attr = {};
+        this.label.empty().append($("<h2></h2>").html("No node selected"));
+        this.contents.empty().append($("<h4></h4>").html("Click on a node to begin exploration"));
+        this.cloud.empty();
+        this.selection = {};
         this.neighbours = {};
-        return
+        return;
     }
     } // end of return
 };
 
-infodiv = new InfoDiv();
+function Tinaviz() {
 
-function Tinaviz(infodiv) {
-
-    var infodiv = infodiv;
     var wrapper = null;
     var applet = null;
+
+    this.infodiv = null;
 
     //return {
         // MAIN PROGRAM
@@ -208,34 +242,38 @@ function Tinaviz(infodiv) {
             });
         }
 
-        this.openGraph= function(view,relativePath) {
+        this.openGraph = function(view,relativePath) {
             if (applet == null) return;
             applet.getSession().updateFromURI(view,path);
         }
-        this.toggleLabels= function() {
+        this.toggleLabels = function() {
             if (applet == null) return;
             return applet.getView().toggleLabels();
         }
-        this.toggleNodes= function() {
+        this.toggleNodes = function() {
             if (applet == null) return;
             return applet.getView().toggleNodes();
         }
-        this.toggleEdges= function() {
+        this.toggleEdges = function() {
             if (applet == null) return;
             return applet.getView().toggleLinks();
         }
-        this.togglePause= function() {
+        this.togglePause = function() {
             if (applet == null) return;
             return applet.getView().togglePause();
         }
-        this.toggleHD= function() {
+        this.toggleHD = function() {
             if (applet == null) return;
             return applet.getView().toggleHD();
         }
-        this.setLevel= function(level) {
+        this.setLevel = function(level) {
             if (applet == null) return;
             applet.getSession().setLevel(level);
         }
+        /*
+        * Commits applets parameters
+        },
+        */
         this.touch= function(level) {
             if (applet == null) return;
             applet.getView(level).getGraph().touch();
@@ -272,6 +310,7 @@ function Tinaviz(infodiv) {
         }
         this.unselect= function() {
             if (applet != null)  applet.unselect();
+            this.infodiv.reset();
             this.setProperty("meso", "subgraph/item", "");
             applet.clear("meso");
         }
@@ -297,17 +336,11 @@ function Tinaviz(infodiv) {
             var cat = this.getProperty(level, "category/value");
             if (cat == "Document") newcategory = "NGram";
             if (cat == "NGram") newcategory = "Document";
+            this.infodiv.reset();
             this.setProperty("macro", "category/value", newcategory);
             this.touch(level);
             this.recenter();
         }
-        /*this.nodeSelected = function(level, x, y, id, label, attr, mouse) {
-            if ( mouse == "left" ) {
-                this.nodeLeftClicked(level, x, y, id, label, $.parseJSON(attr));
-            } else if ( mouse == "right" ) {
-                this.nodeRightClicked(level, x, y, id, label, $.parseJSON(attr));
-            }
-        }*/
         this.selected = function(level, attr, mouse) {
             if ( mouse == "left" ) {
                 this.nodeLeftClicked(level,$.parseJSON(attr));
@@ -350,9 +383,14 @@ function Tinaviz(infodiv) {
         }
     //};
 }
-tinaviz = new Tinaviz(infodiv);
+
+var tinaviz = new Tinaviz();
 
 $(document).ready(function(){
+
+    var infodiv = new InfoDiv();
+    infodiv.reset();
+    tinaviz.infodiv = infodiv;
     // updates applet size
     $('#htoolbar input[type=file]').change(function(e){
         tinaviz.clear();
