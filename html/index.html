@@ -16,8 +16,10 @@
         <!-- JQUERY UI CSS -->
         <!--<link type="text/css" rel="stylesheet" href="css/smoothness/jquery-ui-1.8.custom.css"/>-->
         <link type="text/css" rel="stylesheet" href="css/eggplant/jquery-ui-1.8.1.custom.css"/>
-        <!-- YAHOO UI CSS -->
-        <link rel="stylesheet" type="text/css" href="css/yui.css">
+        <!-- YAHOO UI CSS
+        <link rel="stylesheet" type="text/css" href="css/yui.css"> -->
+        <!-- Combo-handled YUI CSS files: -->
+        <link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/combo?2.8.1/build/grids/grids-min.css">
         <!-- UTILITIES -->
         <!--<script type="text/javascript" src="js/themelia/nalarium.trace.js" language="javascript"></script>-->
         <!--<script type="text/javascript" src="js/tenjin/shotenjin.js" language="javascript"></script>-->
@@ -30,8 +32,8 @@
 
     </head>
     <body>
-        <div id="doc3" class="yui-t7">
-            <div id="hd">
+        <div id="doc3" class="yui-t5">
+            <div id="hd"  class="ui-widget">
                 <div id="hdt">
                     <div class="hdl">
                         <h1>FET Open : projects explorer</h1>
@@ -85,6 +87,10 @@
                             <div class="slider">Edge weight<div id="macroSlider_edgeWeight"></div></div>
                             <div class="slider">Node size<div id="macroSlider_nodeSize"></div></div>
                         </div><!-- end of sliders -->
+                        <div class="search">
+                            <input id="search_input" type="text" value="">
+                            <label id="search_button">search</div>
+                        </div>
                     </div><!-- End of htoolbar -->
 
                     <div style="clear:both;"></div>
@@ -173,29 +179,23 @@
                             <!--</div>-->
                         </div><!-- end of visualization -->
                         <!-- RIGHT MAIN COLUMN-->
-                        <div id="infodiv" class="yui-u ui-widget ui-widget-content ui-corner-all">
-                            <div id="node_label" class="ui-widget-header">
+                        <div id="infodiv" class="ui-widget ui-widget-content ui-corner-all yui-u">
+                            <div id="node_label" class="ui-widget-header ui-corner-all">
                                 <h2>No element selected</h2>
                             </div>
-                            <div id="node_contents" class="ui-widget-content">
-                                <h4>To begin exploration, try clicking or double-clicking on nodes on the left!</h4>
+                            <div id="node_contents" class="ui-widget-content ui-corner-all">
+                                <h4>To begin exploration, try clicking or double-clicking on nodes !</h4>
                             </div>
-                            <div id="node_neighbourhood" class="ui-widget-content"></div>
-
+                            <div id="node_neighbourhood" class="ui-widget-content ui-corner-all"></div>
                         </div><!-- / INFODIV -->
                     </div><!-- end of yui-gc -->
                     </div><!-- end of yui-b -->
-                    <div id="branding" class="yui-b">
-                        <div><a href="http://moma.csregistry.org" target="_BLANK">
-                        <img src="css/branding/moma-crea.png"/></a></div>
-                        <div>Copyright MOMA, CREA, CNRS - 2009, 2010, 2011.</div>
-                        <div><img src="css/branding/partners_small.jpg" style="margin: 0px 0px -12px 0px;"/></div>
-                    </div>
                 </div><!-- end of yui-main -->
             </div>
             <div id="ft">
-                <a href="http://tinasoft.eu/" target="_BLANK">Download Tinasoft desktop
-                </a>
+                <p>Copyright MOMA, CREA, CNRS - 2009, 2010, 2011.</p>
+                <p>Tinaweb is developed by <a href="http://moma.csregistry.org" target="_BLANK"><img src="css/branding/moma-crea.png" height=20px/></a> under the  <a href="http://www.gnu.org/licenses/gpl.html">GNU GPL license</a> with the support of <a href="http://cordis.europa.eu/fp7/ict/programme/fet_en.html" target="_BLANK">EU FP7 ICT - Future and emerging technologies</a></p>
+                <p><a href="http://tinasoft.eu/"><img src="css/branding/get-tinasoft.png" height=20px/></a>    <img src="css/branding/partners_small.jpg"/></p>
             </div>
         </div>
     </body>
