@@ -46,6 +46,7 @@ function displayInfodivTagCloud(level, id, label, attr) {
                 .css('font-size', Math.floor( coef* Math.log( 1 + nb[nbid]['occurrences'] )))
                 .html( nb[nbid]['label'] );
             tagcloud.append(tag);
+            tagcloud.append(" ");
         }
     }
     neighbours.append( tagcloud );
@@ -118,8 +119,8 @@ function Tinaviz() {
             if (wrapper == null || applet == null) return;
             wrapper.width = width;
             wrapper.height = height;
-            $('#tinaviz').css('width',""+ width + "px");
-            $('#tinaviz').css('height',"" + height +"px");
+            $('#tinaviz').css('width',width);
+            $('#tinaviz').css('height',height);
         }
 
         // TODO: use a cross-browser compatible way of getting the current URL
@@ -241,10 +242,21 @@ function Tinaviz() {
         }
         this.nodeSelected = function(level, x, y, id, label, attr, mouse) {
             if ( mouse == "left" ) {
-                this.nodeLeftClicked(level,x,y,id,label,$.parseJSON(attr));
+                this.nodeLeftClicked(level,$.parseJSON(attr));
             } else if ( mouse == "right" ) {
-                this.nodeRightClicked(level,x,y,id,label,$.parseJSON(attr));
+                this.nodeRightClicked(level,$.parseJSON(attr));
             }
+        }
+        /*this.selected = function(level, attr, mouse) {
+            if ( mouse == "left" ) {
+                this.nodeLeftClicked(level,$.parseJSON(attr));
+            } else if ( mouse == "right" ) {
+                this.nodeRightClicked(level,$.parseJSON(attr));
+            }
+        }*/
+        this.selectFromId = function( id ) {
+            if (applet == null) return;
+            return applet.selectFromId(id);
         }
         this.enabled = function() {
             if (applet == null) {

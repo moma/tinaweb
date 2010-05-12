@@ -39,24 +39,19 @@ button.fg-button { width:auto; overflow:visible; }
 
 
 body {
-    font-size: 12px;
-    font-family: "Trebuchet MS", "Helvetica", "Arial",  "Verdana", "sans-serif";
+    font-size: .6em;
 }
 
-#infodiv {
-    overflow: auto;
-}
-
-/*#vizdiv {
-    overflow: auto;
+/*#yui-main {
+    margin: 5px 0;
 }*/
 
-.nodeinfo {
-    height:100%;
-    overflow:auto;
+#infodiv {
+    margin: 5px 6px;
+    height: 300px;
 }
 
-/* slider's paretn div*/
+/* slider's parent div*/
 .sliders {
    position: relative;
    color: #ffffee;
@@ -71,6 +66,9 @@ body {
     margin: 0 10px;
 }
 
+.search {
+    float: right;
+}
 
 .tabfiller {
    height:500px;
