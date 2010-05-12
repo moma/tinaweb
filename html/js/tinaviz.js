@@ -148,7 +148,7 @@ function Tinaviz(infodiv) {
             this.dispatchProperty("radiusByWeight/max", 100.0/200.0);
 
             // we want to keep documents
-            this.dispatchProperty("category/value", "Document");
+            this.dispatchProperty("category/value", "NGram");
             this.dispatchProperty("category/mode", "keep");
 
             this.dispatchProperty("radius/value",  100.0/200.0); // because we set default value to 25/200 in the GUI
@@ -157,7 +157,7 @@ function Tinaviz(infodiv) {
             //this.bindFilter("NodeWeightRange",  "nodeWeight", "macro");
             // filter by edge threshold
             this.bindFilter("EdgeWeightRange", "edgeWeight",  "macro");
-            this.bindFilter("NodeFunction", "radiusByWeight", "macro");
+            //this.bindFilter("NodeFunction", "radiusByWeight", "macro");
             this.bindFilter("NodeRadius",   "radius",         "macro");
 
             this.readGraphJava("macro", "FET60bipartite_graph_cooccurrences_.gexf");
