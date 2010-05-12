@@ -29,12 +29,14 @@ function getScreenHeight() {
 }
 
 function InfoDiv() {
-    attr: {},
-    neighbours: {},
+    var attr = {};
+    var neighbours = {};
+    return {
+
     /*
-     * updates the infodiv tag cloud contents
-     * given a node id,
-     * displays the opposite category neighbourhood
+     * infodiv tag cloud contents
+     * Unique node mode = uses the occurrences attr to set the size of the label
+     * of the opposite type of a given node
      */
     displayInfodivTagCloudOne: function(level, id, label, attr) {
         var nb = tinaviz.getNeighbourhood(id);
@@ -57,9 +59,9 @@ function InfoDiv() {
     },
 
     /*
-     * updates the infodiv tag cloud contents
-     * given a node id,
-     * displays the opposite category neighbourhood
+     * infodiv tag cloud contents
+     * multiple mode = sums degrees to set the size of label
+     * of the opposite type of a given node
      */
     displayInfodivTagCloudMultiple: function(level, id, label, attr) {
         //var nb = tinaviz.getNeighbourhood(id);
@@ -79,18 +81,23 @@ function InfoDiv() {
         }
         neighbours.append( tagcloud );
         return true;
-    }
-
-    updateTagCloud: function(node) {
-
     },
+    /*
+     * updates the tag cloud
+     */
+    updateTagCloud: function(node, neighbours) {
+        alert( node );
+    },
+    /*
+     * updates the label and contents divs
+     */
     updateInfo: function( node, nodelabel, contents ) {
         nodelabel.append( $("<h2></h2>").html(node.label) );
         if ( node.category == 'NGram' ) {
             // no content to display
         }
         if ( node.category == 'Document' ) {
-            contents.append( $( "<p></p>".html(node.content) );
+            contents.append( $("<p></p>").html(node.content) );
         }
     },
     /*
@@ -115,12 +122,14 @@ function InfoDiv() {
         this.neighbours = {};
         return
     }
-}
+    } // end of return
+};
 
 infodiv = new InfoDiv();
 
-function Tinaviz() {
+function Tinaviz(infodiv) {
 
+    var infodiv = infodiv;
     var wrapper = null;
     var applet = null;
 
@@ -149,8 +158,8 @@ function Tinaviz() {
             // filter by edge threshold
             this.bindFilter("EdgeWeightRange", "edgeWeight",  "macro");
             this.bindFilter("NodeFunction", "radiusByWeight", "macro");
-            this.bindFilter("NodeRadius",   "radius",         "macro");  
-            
+            this.bindFilter("NodeRadius",   "radius",         "macro");
+
             this.readGraphJava("macro", "FET60bipartite_graph_cooccurrences_.gexf");
 
             //tinaviz.togglePause();
@@ -281,7 +290,7 @@ function Tinaviz() {
         }
         this.nodeLeftClicked = function(level, attr) {
             if ( attr == null ) return;
-            return infodiv.update( level, attr);
+            return this.infodiv.update(level, attr);
         }
         this.nodeRightClicked = function(level, attr) {
             if (applet == null) return;
@@ -292,13 +301,13 @@ function Tinaviz() {
             this.touch(level);
             this.recenter();
         }
-        this.nodeSelected = function(level, x, y, id, label, attr, mouse) {
+        /*this.nodeSelected = function(level, x, y, id, label, attr, mouse) {
             if ( mouse == "left" ) {
                 this.nodeLeftClicked(level, x, y, id, label, $.parseJSON(attr));
             } else if ( mouse == "right" ) {
                 this.nodeRightClicked(level, x, y, id, label, $.parseJSON(attr));
             }
-        }
+        }*/
         this.selected = function(level, attr, mouse) {
             if ( mouse == "left" ) {
                 this.nodeLeftClicked(level,$.parseJSON(attr));
@@ -341,7 +350,7 @@ function Tinaviz() {
         }
     //};
 }
-tinaviz = new Tinaviz();
+tinaviz = new Tinaviz(infodiv);
 
 $(document).ready(function(){
     // updates applet size
