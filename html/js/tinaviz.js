@@ -37,8 +37,10 @@ Object.size = function(obj) {
 };
 
 
-function InfoDiv() {
+function InfoDiv(divid) {
+
     return {
+    id: divid,
     selection : {},
     neighbours : {},
     label : $( "#node_label" ),
@@ -386,7 +388,9 @@ var tinaviz = new Tinaviz();
 
 $(document).ready(function(){
 
-    var infodiv = new InfoDiv();
+    var infodiv = new InfoDiv("#infodiv");
+    alert( infodiv.id );
+    $(infodiv.id).css( 'height', getScreenHeight() - $("#hd").height() );
     infodiv.reset();
     tinaviz.infodiv = infodiv;
     // updates applet size
