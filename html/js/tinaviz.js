@@ -226,13 +226,13 @@ function Tinaviz() {
             this.bindFilter("EdgeWeightRange", "edgeWeight",  "macro");
             this.bindFilter("NodeFunction", "radiusByWeight", "macro");
             this.bindFilter("NodeRadius",   "radius",         "macro");
-            
-            // special version of the subgraph copy filter: this one does not use the 
+
+            // special version of the subgraph copy filter: this one does not use the
             // tinasoft berkeley database to get data
             this.bindFilter("SubGraphCopyStandalone", "subgraph", "meso");
             this.setProperty("meso", "subgraph/source", "macro");
-		    this.setProperty("meso", "subgraph/item", "");
-		    this.setProperty("meso", "subgraph/category", "NGram");
+            this.setProperty("meso", "subgraph/item", "");
+            this.setProperty("meso", "subgraph/category", "NGram");
 
             this.readGraphJava("macro", "FET60bipartite_graph_cooccurrences_.gexf");
 
@@ -343,11 +343,10 @@ function Tinaviz() {
             return applet.getView(level).getProperty(key);
         }
         this.getNodesByLabel= function(label, search_type) {
-            if (applet == null || search_type != "equals" || search_type != "contains"|| search_type != "startsWith" || search_type != "endsWith" || search_type != "equalsIgnoreCase") {
-                return;
-            }
-            alert(label);
-            return applet.getNodesByLabel(label, search_type);
+            if (applet == null)
+                return {};
+            if ( $.inArray(search_type, ["equals","contains","startsWith","endsWith","equalsIgnoreCase"]) )
+                return applet.getNodesByLabel(label, search_type);
         }
         this.unselect= function() {
             if (applet != null)  applet.unselect();
@@ -369,15 +368,15 @@ function Tinaviz() {
         }
         this.nodeLeftClicked = function(level, attr) {
             if ( attr == null ) return;
-            console.log( attr );
-            
+            //console.log( attr );
+
             /*
             var tmp = [];
             for ((key in attr) {
                tmp.push(key);
             }
             var keys = tmp.join(' ');*/
-            
+
             // TODO replace the hash by a list
             for (key in attr) {
                 this.setProperty("meso", "subgraph/item", key);
@@ -480,8 +479,10 @@ $(document).ready(function(){
             $(this).removeClass("ui-state-active");
         }
     });
+
     // TODO a handler to open a graph
     //$("inputgraph").button();
+
     var searchinput = $("#search_input");
     // binds the click event to tinaviz.getNodesByLabel()
     $("#search_button").button({
@@ -490,8 +491,7 @@ $(document).ready(function(){
             primary: 'ui-icon-search'
         }
     }).click( function(eventObject) {
-        var matchlist = tinaviz.getNodesByLabel(searchinput.html(), "contains" );
-        alert( matchlist );
+        var matchlist = tinaviz.getNodesByLabel(searchinput.text(), "contains" );
         for (var foundnodes in matchlist) {
             console.info( "found a node" );
             tinaviz.selectFromId( foundnodes );
