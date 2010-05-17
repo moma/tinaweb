@@ -226,6 +226,13 @@ function Tinaviz() {
             this.bindFilter("EdgeWeightRange", "edgeWeight",  "macro");
             this.bindFilter("NodeFunction", "radiusByWeight", "macro");
             this.bindFilter("NodeRadius",   "radius",         "macro");
+            
+            // special version of the subgraph copy filter: this one does not use the 
+            // tinasoft berkeley database to get data
+            this.bindFilter("SubGraphCopyStandalone", "subgraph", "meso");
+            this.setProperty("meso", "subgraph/source", "macro");
+		    this.setProperty("meso", "subgraph/item", "");
+		    this.setProperty("meso", "subgraph/category", "NGram");
 
             this.readGraphJava("macro", "FET60bipartite_graph_cooccurrences_.gexf");
 
@@ -362,6 +369,20 @@ function Tinaviz() {
         }
         this.nodeLeftClicked = function(level, attr) {
             if ( attr == null ) return;
+            console.log( attr );
+            
+            /*
+            var tmp = [];
+            for ((key in attr) {
+               tmp.push(key);
+            }
+            var keys = tmp.join(' ');*/
+            
+            // TODO replace the hash by a list
+            for (key in attr) {
+                this.setProperty("meso", "subgraph/item", key);
+            }
+
             return this.infodiv.update(level, attr);
         }
         this.nodeRightClicked = function(level, attr) {
@@ -369,16 +390,17 @@ function Tinaviz() {
             var cat = this.getProperty(level, "category/value");
             if (cat == "Document") newcategory = "NGram";
             if (cat == "NGram") newcategory = "Document";
-            this.infodiv.reset();
-            this.setProperty("macro", "category/value", newcategory);
+            this.setProperty(level, "category/value", newcategory);
             this.touch(level);
             this.recenter();
         }
         this.selected = function(level, attr, mouse) {
+            data = $.parseJSON(attr);
+            this.infodiv.reset();
             if ( mouse == "left" ) {
-                this.nodeLeftClicked(level,$.parseJSON(attr));
+                this.nodeLeftClicked(level,data);
             } else if ( mouse == "right" ) {
-                this.nodeRightClicked(level,$.parseJSON(attr));
+                this.nodeRightClicked(level,data);
             }
         }
         this.selectFromId = function( id ) {
