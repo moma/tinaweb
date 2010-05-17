@@ -339,6 +339,7 @@ function Tinaviz() {
             if (applet == null || search_type != "equals" || search_type != "contains"|| search_type != "startsWith" || search_type != "endsWith" || search_type != "equalsIgnoreCase") {
                 return;
             }
+            alert(label);
             return applet.getNodesByLabel(label, search_type);
         }
         this.unselect= function() {
@@ -357,7 +358,6 @@ function Tinaviz() {
         }
         this.getNeighbourhood = function(id) {
             if (applet == null) return;
-            //alert( applet.getNeighbourhood(id) );
             return $.parseJSON( applet.getNeighbourhood(id) );
         }
         this.nodeLeftClicked = function(level, attr) {
@@ -468,10 +468,10 @@ $(document).ready(function(){
             primary: 'ui-icon-search'
         }
     }).click( function(eventObject) {
-        alert("Hi");
-        tinaviz.unselect();
-        for ( var foundnodes in tinaviz.getNodesByLabel(searchinput.html(), "contains" ) ) {
-            console.log( foundnodes );
+        var matchlist = tinaviz.getNodesByLabel(searchinput.html(), "contains" );
+        alert( matchlist );
+        for (var foundnodes in matchlist) {
+            console.info( "found a node" );
             tinaviz.selectFromId( foundnodes );
         }
     });
