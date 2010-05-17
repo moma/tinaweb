@@ -47,6 +47,23 @@ function InfoDiv(divid) {
     contents : $( "#node_contents" ),
     cloud : $( "#node_neighbourhood" ),
     unselect_button: $( "#node_unselect" ),
+
+    /*
+     * Generic sorting DOM lists
+     */
+    alphabetSort: function(maindiv, parentdiv, childrendiv) {
+        var listitems = parentdiv.children(childrendiv).get();
+        listitems.sort(function(a, b) {
+           var compA = $(a).html().toUpperCase();
+           var compB = $(b).html().toUpperCase();
+           return (compA < compB) ? -1 : (compA > compB) ? 1 : 0;
+        })
+        $.each(listitems, function(idx, itm) {
+            maindiv.append(itm);
+            maindiv.append(" ");
+        });
+    },
+
     /*
      * infodiv tag cloud contents
      * Unique node mode = uses the occurrences attr to set the size of the label
@@ -69,10 +86,11 @@ function InfoDiv(divid) {
                         tag.css('font-size', Math.floor( ngsizecoef* Math.log( 1 + nb[nbid]['occurrences'] )))
                     }
                     tagcloud.append(tag);
-                    tagcloud.append(" ");
+                    //tagcloud.append(" ");
                 }
             }
-            this.cloud.append( tagcloud );
+            //this.cloud.append( tagcloud );
+            this.alphabetSort( this.cloud, tagcloud, "span" );
             break;
         }
         return true;
@@ -103,22 +121,19 @@ function InfoDiv(divid) {
         }
         /* displaying tag cloud */
         var tagcloud = $("<p></p>");
-        var orderedcloud = [];
         for (var tagid in tempcloud) {
             var tag = $("<span></span>")
                 .addClass('ui-widget-content')
                 .css('font-size', Math.floor( sizecoef* Math.log( 1 + tempcloud[tagid]['occurrences'] )))
                 .html( tempcloud[tagid]['label'] );
-            if (lastlabel )
                 tagcloud.append(tag);
-            else
-                tagcloud.prepend(tag);
             tagcloud.append(" ");
-            lastlabel = tempcloud[tagid]['label'];
         }
-        this.cloud.append( tagcloud );
+        //this.cloud.append( tagcloud );
+        this.alphabetSort( this.cloud, tagcloud, "span" );
         return true;
     },
+
     /*
      * updates the tag cloud
      */
@@ -131,19 +146,26 @@ function InfoDiv(divid) {
             this.tagCloudMultiple();
         }
     },
+
     /*
-     * updates the label and contents divs
+     * updates the label and content DOM divs
      */
-    updateInfo: function( node ) {
-        this.label.append( $("<h3></h3>").html(node.label  + ",") );
-        if ( node.category == 'NGram' ) {
-            // no content to display
+    updateInfo: function() {
+        var labelinnerdiv = $("<div></div>");
+        for(var id in this.selection) {
+            var node = this.selection[id];
+            labelinnerdiv.append( $("<h3></h3>").html(node.label) );
+            if ( node.category == 'NGram' ) {
+                // no content to display
+            }
+            if ( node.category == 'Document' ) {
+                this.contents.append( $("<h3></h3>").html(node.label) );
+                this.contents.append( $("<p></p>").html(node.content) );
+            }
         }
-        if ( node.category == 'Document' ) {
-            this.contents.append( $("<h3></h3>").html(node.label) );
-            this.contents.append( $("<p></p>").html(node.content) );
-        }
+        this.alphabetSort( this.label, labelinnerdiv, "h3" );
     },
+
     /*
      * updates the infodiv contents
      */
@@ -152,12 +174,15 @@ function InfoDiv(divid) {
         this.unselect_button.show();
         this.contents.empty();
         this.selection = lastselection;
-        for(var id in lastselection) {
-            this.updateInfo(lastselection[id]);
-        }
+        this.updateInfo();
+        //this.alphabetSort( this.label,  ,"h3" );
         this.updateTagCloud();
         return;
     },
+
+    /*
+     * Resets the entire infodiv
+     */
     reset: function() {
         this.unselect_button.hide();
         this.label.empty().append($("<h2></h2>").html("No node selected"));
