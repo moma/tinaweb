@@ -39,12 +39,17 @@ button.fg-button { width:auto; overflow:visible; }
 
 
 body {
-    font-size: .6em;
+    font-size: .7em;
 }
 
-/*#yui-main {
-    margin: 5px 0;
-}*/
+#title {
+    margin: 5px 5px;
+}
+
+#node_unselect {
+    float: right;
+    margin: 5px 2px;
+}
 
 #infodiv {
     margin: 5px 6px;
@@ -52,19 +57,16 @@ body {
     overflow: auto;
 }
 
-/* slider's parent div*/
+/* slider's parent div
 .sliders {
    position: relative;
-   color: #ffffee;
-}
+}*/
 
 /* each sliders positioned relatively to their parent */
 .slider {
-    position: relative;
-    float:left;
-    width:180px;
-    height:12px;
-    margin: 0 10px;
+    float: left;
+    width: 180px;
+    padding: 0px 10px 0px 0px;
 }
 
 .search {
@@ -79,6 +81,9 @@ body {
     color: #000000;
 }
 
+#macroSlider_nodeSize, #macroSlider_edgeWeight {
+    margin: 2px 2px;
+}
 
 /*.toolbardiv {
     padding:12px;

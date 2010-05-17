@@ -46,6 +46,7 @@ function InfoDiv(divid) {
     label : $( "#node_label" ),
     contents : $( "#node_contents" ),
     cloud : $( "#node_neighbourhood" ),
+    unselect_button: $( "#node_unselect" ),
     /*
      * infodiv tag cloud contents
      * Unique node mode = uses the occurrences attr to set the size of the label
@@ -102,13 +103,18 @@ function InfoDiv(divid) {
         }
         /* displaying tag cloud */
         var tagcloud = $("<p></p>");
+        var orderedcloud = [];
         for (var tagid in tempcloud) {
             var tag = $("<span></span>")
                 .addClass('ui-widget-content')
                 .css('font-size', Math.floor( sizecoef* Math.log( 1 + tempcloud[tagid]['occurrences'] )))
                 .html( tempcloud[tagid]['label'] );
-            tagcloud.append(tag);
+            if (lastlabel )
+                tagcloud.append(tag);
+            else
+                tagcloud.prepend(tag);
             tagcloud.append(" ");
+            lastlabel = tempcloud[tagid]['label'];
         }
         this.cloud.append( tagcloud );
         return true;
@@ -129,7 +135,7 @@ function InfoDiv(divid) {
      * updates the label and contents divs
      */
     updateInfo: function( node ) {
-        this.label.append( $("<h2></h2>").html(node.label) );
+        this.label.append( $("<h3></h3>").html(node.label  + ",") );
         if ( node.category == 'NGram' ) {
             // no content to display
         }
@@ -143,15 +149,17 @@ function InfoDiv(divid) {
      */
     update: function(level, lastselection) {
         this.label.empty();
+        this.unselect_button.show();
         this.contents.empty();
+        this.selection = lastselection;
         for(var id in lastselection) {
-            this.selection[id] = lastselection[id];
             this.updateInfo(lastselection[id]);
         }
         this.updateTagCloud();
         return;
     },
     reset: function() {
+        this.unselect_button.hide();
         this.label.empty().append($("<h2></h2>").html("No node selected"));
         this.contents.empty().append($("<h4></h4>").html("Click on a node to begin exploration"));
         this.cloud.empty();
@@ -387,11 +395,13 @@ function Tinaviz() {
 var tinaviz = new Tinaviz();
 
 $(document).ready(function(){
-
+    $("#title").html("FET Open projects explorer");
     var infodiv = new InfoDiv("#infodiv");
-    alert( infodiv.id );
+    // auto-adjusting infodiv height
     $(infodiv.id).css( 'height', getScreenHeight() - $("#hd").height() );
+    // cleans infodiv
     infodiv.reset();
+    // passing infodiv to tinaviz
     tinaviz.infodiv = infodiv;
     // updates applet size
     $('#htoolbar input[type=file]').change(function(e){
@@ -399,7 +409,7 @@ $(document).ready(function(){
         tinaviz.loadAbsoluteGraph( $(this).val() );
     });
 
-    //all hover and click logic for buttons
+    // all hover and click logic for buttons
     $(".fg-button:not(.ui-state-disabled)")
     .hover(
         function(){
@@ -411,12 +421,33 @@ $(document).ready(function(){
     )
     .mousedown(function(){
         $(this).parents('.fg-buttonset-single:first').find(".fg-button.ui-state-active").removeClass("ui-state-active");
-        if( $(this).is('.ui-state-active.fg-button-toggleable, .fg-buttonset-multi .ui-state-active') ){ $(this).removeClass("ui-state-active"); }
-        else { $(this).addClass("ui-state-active"); }
+        if( $(this).is('.ui-state-active.fg-button-toggleable, .fg-buttonset-multi .ui-state-active') ) {
+            $(this).removeClass("ui-state-active");
+        }
+        else {
+            $(this).addClass("ui-state-active");
+        }
     })
     .mouseup(function(){
-        if(! $(this).is('.fg-button-toggleable, .fg-buttonset-single .fg-button,  .fg-buttonset-multi .fg-button') ){
+        if(! $(this).is('.fg-button-toggleable, .fg-buttonset-single .fg-button,  .fg-buttonset-multi .fg-button') ) {
             $(this).removeClass("ui-state-active");
+        }
+    });
+    // TODO a handler to open a graph
+    //$("inputgraph").button();
+    var searchinput = $("#search_input");
+    // binds the click event to tinaviz.getNodesByLabel()
+    $("#search_button").button({
+        text: false,
+        icons: {
+            primary: 'ui-icon-search'
+        }
+    }).click( function(eventObject) {
+        alert("Hi");
+        tinaviz.unselect();
+        for ( var foundnodes in tinaviz.getNodesByLabel(searchinput.html(), "contains" ) ) {
+            console.log( foundnodes );
+            tinaviz.selectFromId( foundnodes );
         }
     });
 
