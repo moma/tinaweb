@@ -46,6 +46,24 @@ function InfoDiv(divid) {
     label : $( "#node_label" ),
     contents : $( "#node_contents" ),
     cloud : $( "#node_neighbourhood" ),
+    unselect_button: $( "#node_unselect" ),
+
+    /*
+     * Generic sorting DOM lists
+     */
+    alphabetSort: function(maindiv, parentdiv, childrendiv) {
+        var listitems = parentdiv.children(childrendiv).get();
+        listitems.sort(function(a, b) {
+           var compA = $(a).html().toUpperCase();
+           var compB = $(b).html().toUpperCase();
+           return (compA < compB) ? -1 : (compA > compB) ? 1 : 0;
+        })
+        $.each(listitems, function(idx, itm) {
+            maindiv.append(itm);
+            maindiv.append(" ");
+        });
+    },
+
     /*
      * infodiv tag cloud contents
      * Unique node mode = uses the occurrences attr to set the size of the label
@@ -68,10 +86,11 @@ function InfoDiv(divid) {
                         tag.css('font-size', Math.floor( ngsizecoef* Math.log( 1 + nb[nbid]['occurrences'] )))
                     }
                     tagcloud.append(tag);
-                    tagcloud.append(" ");
+                    //tagcloud.append(" ");
                 }
             }
-            this.cloud.append( tagcloud );
+            //this.cloud.append( tagcloud );
+            this.alphabetSort( this.cloud, tagcloud, "span" );
             break;
         }
         return true;
@@ -107,12 +126,14 @@ function InfoDiv(divid) {
                 .addClass('ui-widget-content')
                 .css('font-size', Math.floor( sizecoef* Math.log( 1 + tempcloud[tagid]['occurrences'] )))
                 .html( tempcloud[tagid]['label'] );
-            tagcloud.append(tag);
+                tagcloud.append(tag);
             tagcloud.append(" ");
         }
-        this.cloud.append( tagcloud );
+        //this.cloud.append( tagcloud );
+        this.alphabetSort( this.cloud, tagcloud, "span" );
         return true;
     },
+
     /*
      * updates the tag cloud
      */
@@ -125,33 +146,45 @@ function InfoDiv(divid) {
             this.tagCloudMultiple();
         }
     },
+
     /*
-     * updates the label and contents divs
+     * updates the label and content DOM divs
      */
-    updateInfo: function( node ) {
-        this.label.append( $("<h2></h2>").html(node.label) );
-        if ( node.category == 'NGram' ) {
-            // no content to display
+    updateInfo: function() {
+        var labelinnerdiv = $("<div></div>");
+        for(var id in this.selection) {
+            var node = this.selection[id];
+            labelinnerdiv.append( $("<h3></h3>").html(node.label) );
+            if ( node.category == 'NGram' ) {
+                // no content to display
+            }
+            if ( node.category == 'Document' ) {
+                this.contents.append( $("<h3></h3>").html(node.label) );
+                this.contents.append( $("<p></p>").html(node.content) );
+            }
         }
-        if ( node.category == 'Document' ) {
-            this.contents.append( $("<h3></h3>").html(node.label) );
-            this.contents.append( $("<p></p>").html(node.content) );
-        }
+        this.alphabetSort( this.label, labelinnerdiv, "h3" );
     },
+
     /*
      * updates the infodiv contents
      */
     update: function(level, lastselection) {
         this.label.empty();
+        this.unselect_button.show();
         this.contents.empty();
-        for(var id in lastselection) {
-            this.selection[id] = lastselection[id];
-            this.updateInfo(lastselection[id]);
-        }
+        this.selection = lastselection;
+        this.updateInfo();
+        //this.alphabetSort( this.label,  ,"h3" );
         this.updateTagCloud();
         return;
     },
+
+    /*
+     * Resets the entire infodiv
+     */
     reset: function() {
+        this.unselect_button.hide();
         this.label.empty().append($("<h2></h2>").html("No node selected"));
         this.contents.empty().append($("<h4></h4>").html("Click on a node to begin exploration"));
         this.cloud.empty();
@@ -409,11 +442,13 @@ function Tinaviz() {
 var tinaviz = new Tinaviz();
 
 $(document).ready(function(){
-
+    $("#title").html("FET Open projects explorer");
     var infodiv = new InfoDiv("#infodiv");
-    alert( infodiv.id );
+    // auto-adjusting infodiv height
     $(infodiv.id).css( 'height', getScreenHeight() - $("#hd").height() );
+    // cleans infodiv
     infodiv.reset();
+    // passing infodiv to tinaviz
     tinaviz.infodiv = infodiv;
     // updates applet size
     $('#htoolbar input[type=file]').change(function(e){
@@ -421,7 +456,7 @@ $(document).ready(function(){
         tinaviz.loadAbsoluteGraph( $(this).val() );
     });
 
-    //all hover and click logic for buttons
+    // all hover and click logic for buttons
     $(".fg-button:not(.ui-state-disabled)")
     .hover(
         function(){
@@ -433,12 +468,33 @@ $(document).ready(function(){
     )
     .mousedown(function(){
         $(this).parents('.fg-buttonset-single:first').find(".fg-button.ui-state-active").removeClass("ui-state-active");
-        if( $(this).is('.ui-state-active.fg-button-toggleable, .fg-buttonset-multi .ui-state-active') ){ $(this).removeClass("ui-state-active"); }
-        else { $(this).addClass("ui-state-active"); }
+        if( $(this).is('.ui-state-active.fg-button-toggleable, .fg-buttonset-multi .ui-state-active') ) {
+            $(this).removeClass("ui-state-active");
+        }
+        else {
+            $(this).addClass("ui-state-active");
+        }
     })
     .mouseup(function(){
-        if(! $(this).is('.fg-button-toggleable, .fg-buttonset-single .fg-button,  .fg-buttonset-multi .fg-button') ){
+        if(! $(this).is('.fg-button-toggleable, .fg-buttonset-single .fg-button,  .fg-buttonset-multi .fg-button') ) {
             $(this).removeClass("ui-state-active");
+        }
+    });
+    // TODO a handler to open a graph
+    //$("inputgraph").button();
+    var searchinput = $("#search_input");
+    // binds the click event to tinaviz.getNodesByLabel()
+    $("#search_button").button({
+        text: false,
+        icons: {
+            primary: 'ui-icon-search'
+        }
+    }).click( function(eventObject) {
+        alert("Hi");
+        tinaviz.unselect();
+        for ( var foundnodes in tinaviz.getNodesByLabel(searchinput.html(), "contains" ) ) {
+            console.log( foundnodes );
+            tinaviz.selectFromId( foundnodes );
         }
     });
 
