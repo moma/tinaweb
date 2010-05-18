@@ -53,8 +53,8 @@ body {
 
 #infodiv {
     margin: 5px 6px;
-    /*height: 800px;*/
-    overflow: auto;
+    /*height: 800px;
+    overflow: auto;*/
 }
 
 /* slider's parent div

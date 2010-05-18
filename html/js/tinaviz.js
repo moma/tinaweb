@@ -36,6 +36,14 @@ Object.size = function(obj) {
     return size;
 };
 
+function displayNodeRow(label) {
+    //console.log("inserting "+label);
+    $("#node_table > tbody").append(
+        $("<tr></tr>").append(
+            $("<td class='tinaviz_node'></td>").text("some label")
+        )
+    );
+};
 
 function InfoDiv(divid) {
 
@@ -47,6 +55,7 @@ function InfoDiv(divid) {
     contents : $( "#node_contents" ),
     cloud : $( "#node_neighbourhood" ),
     unselect_button: $( "#node_unselect" ),
+    table: $("#node_table > tbody"),
 
     /*
      * Generic sorting DOM lists
@@ -76,7 +85,7 @@ function InfoDiv(divid) {
             var tagcloud = $("<p></p>");
             for(var nbid in nb) {
                 if (this.selection[nodeid]['category'] != nb[nbid]['category']) {
-                    var tag = $("<span></span>")
+                    var tag = $("<span class='tinaviz_node'></span>")
                         .addClass('ui-widget-content')
                         .html( nb[nbid]['label'] );
                     if ( this.selection[nodeid]['category'] == 'NGram' ) {
@@ -122,7 +131,7 @@ function InfoDiv(divid) {
         /* displaying tag cloud */
         var tagcloud = $("<p></p>");
         for (var tagid in tempcloud) {
-            var tag = $("<span></span>")
+            var tag = $("<span class='tinaviz_node'></span>")
                 .addClass('ui-widget-content')
                 .css('font-size', Math.floor( sizecoef* Math.log( 1 + tempcloud[tagid]['occurrences'] )))
                 .html( tempcloud[tagid]['label'] );
@@ -185,13 +194,32 @@ function InfoDiv(divid) {
      */
     reset: function() {
         this.unselect_button.hide();
-        this.label.empty().append($("<h2></h2>").html("No node selected"));
+        this.label.empty().append($("<h2></h2>").html("empty selection"));
         this.contents.empty().append($("<h4></h4>").html("Click on a node to begin exploration"));
         this.cloud.empty();
         this.selection = {};
         this.neighbours = {};
         return;
-    }
+    },
+
+    /*
+     * Init the node list
+     */
+    updateNodeList: function( node_list ) {
+        for (var i = 0; i < node_list.length; i++ ) {
+            (function () {
+                var rowLabel = node_list[i]['label'];
+                // Do a little bit of work here...
+                //if (true) {
+                    // Inform the application of the progress
+                    //progressFn(value, total);
+                    // Process next chunk
+                setTimeout("displayNodeRow("+rowLabel+")", 0);
+                //}
+            })();
+        }
+    },
+
     } // end of return
 };
 
@@ -236,9 +264,11 @@ function Tinaviz() {
 
             this.readGraphJava("macro", "FET60bipartite_graph_cooccurrences_.gexf");
 
-            //tinaviz.togglePause();
+            this.togglePause();
+            this.getNodes( "macro", "NGram" );
 
         }
+
         this.init= function() {
             if (wrapper != null || applet != null) return;
             wrapper = $('#tinaviz')[0];
@@ -346,7 +376,7 @@ function Tinaviz() {
             if (applet == null)
                 return {};
             if ( $.inArray(search_type, ["equals","contains","startsWith","endsWith","equalsIgnoreCase"]) ) {
-                console.log( "sending %s", label );
+                //console.log( "sending %s", label );
                 return $.parseJSON( applet.getNodesByLabel(label, search_type));
             }
         }
@@ -370,15 +400,6 @@ function Tinaviz() {
         }
         this.nodeLeftClicked = function(level, attr) {
             if ( attr == null ) return;
-            //console.log( attr );
-
-            /*
-            var tmp = [];
-            for ((key in attr) {
-               tmp.push(key);
-            }
-            var keys = tmp.join(' ');*/
-
             // TODO replace the hash by a list
             for (key in attr) {
                 this.setProperty("meso", "subgraph/item", key);
@@ -408,6 +429,12 @@ function Tinaviz() {
             if (applet == null) return;
             return applet.selectFromId(id);
         }
+
+        this.getNodes = function(level, category) {
+            if (applet == null) return;
+            this.infodiv.updateNodeList( $.parseJSON( applet.getNodes(level, category) ) );
+        }
+
         this.enabled = function() {
             if (applet == null) {
                 return false;
@@ -446,19 +473,29 @@ function Tinaviz() {
 var tinaviz = new Tinaviz();
 
 $(document).ready(function(){
+
     $("#title").html("FET Open projects explorer");
     var infodiv = new InfoDiv("#infodiv");
     // auto-adjusting infodiv height
     $(infodiv.id).css( 'height', getScreenHeight() - $("#hd").height() );
+    $(infodiv.id).accordion({
+        fillSpace: true,
+    });
+    $(".tinaviz_node").each( function() {
+        this.click( function(eventObject) {
+            tinaviz.getNodesByLabel(this.html(), "contains");
+        };
+    });
     // cleans infodiv
     infodiv.reset();
     // passing infodiv to tinaviz
     tinaviz.infodiv = infodiv;
-    // updates applet size
-    $('#htoolbar input[type=file]').change(function(e){
+    // TODO a handler to open a graph file
+    //$("inputgraph").button();
+    /*$('#htoolbar input[type=file]').change(function(e){
         tinaviz.clear();
         tinaviz.loadAbsoluteGraph( $(this).val() );
-    });
+    });*/
 
     // all hover and click logic for buttons
     $(".fg-button:not(.ui-state-disabled)")
@@ -485,9 +522,6 @@ $(document).ready(function(){
         }
     });
 
-    // TODO a handler to open a graph
-    //$("inputgraph").button();
-
     var searchinput = $("#search_input");
     // binds the click event to tinaviz.getNodesByLabel()
     $("#search_button").button({
@@ -502,7 +536,6 @@ $(document).ready(function(){
             tinaviz.selectFromId( foundnodes );
         }
     });
-
     // SLIDERS INIT
     $.extend($.ui.slider.defaults, {
         //range: "min",
