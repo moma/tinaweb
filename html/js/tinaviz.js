@@ -345,8 +345,10 @@ function Tinaviz() {
         this.getNodesByLabel= function(label, search_type) {
             if (applet == null)
                 return {};
-            if ( $.inArray(search_type, ["equals","contains","startsWith","endsWith","equalsIgnoreCase"]) )
-                return applet.getNodesByLabel(label, search_type);
+            if ( $.inArray(search_type, ["equals","contains","startsWith","endsWith","equalsIgnoreCase"]) ) {
+                console.log( "sending %s", label );
+                return $.parseJSON( applet.getNodesByLabel(label, search_type));
+            }
         }
         this.unselect= function() {
             if (applet != null)  applet.unselect();
@@ -422,10 +424,13 @@ function Tinaviz() {
             applet.setEnabled(false);
         }
         this.logError= function(msg) {
+            //console.error(msg);
         }
         this.logNormal= function(msg) {
+            //console.log(msg);
         }
         this.logDebug= function(msg) {
+            //console.info(msg);
         }
         this.switchedTo= function(level) {
         }
@@ -491,9 +496,9 @@ $(document).ready(function(){
             primary: 'ui-icon-search'
         }
     }).click( function(eventObject) {
-        var matchlist = tinaviz.getNodesByLabel(searchinput.text(), "contains" );
+        var matchlist = tinaviz.getNodesByLabel(searchinput.val(), "contains" );
         for (var foundnodes in matchlist) {
-            console.info( "found a node" );
+            //console.info( "found a node" );
             tinaviz.selectFromId( foundnodes );
         }
     });
