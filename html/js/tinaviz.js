@@ -261,8 +261,11 @@ function Tinaviz() {
             this.setProperty("meso", "subgraph/source", "macro");
             this.setProperty("meso", "subgraph/item", "");
             this.setProperty("meso", "subgraph/category", "NGram");
-
-            this.readGraphJava("macro", "FET60bipartite_graph_cooccurrences_.gexf");
+            
+            this.bindFilter("Category", "category", "meso");
+            
+            //this.readGraphJava("macro", "FET60bipartite_graph_cooccurrences_.gexf");
+            this.readGraphJava("macro", "CSSScholarsMay2010.gexf");
 
             this.togglePause();
             this.getNodes( "macro", "NGram" );
@@ -404,6 +407,8 @@ function Tinaviz() {
             for (key in attr) {
                 this.setProperty("meso", "subgraph/item", key);
             }
+            if (level=="meso")
+                this.touch(level);
 
             return this.infodiv.update(level, attr);
         }
@@ -414,7 +419,7 @@ function Tinaviz() {
             if (cat == "NGram") newcategory = "Document";
             this.setProperty(level, "category/value", newcategory);
             this.touch(level);
-            this.recenter();
+            if (level=="macro") this.recenter();
         }
         this.selected = function(level, attr, mouse) {
             data = $.parseJSON(attr);
