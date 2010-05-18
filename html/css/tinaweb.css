@@ -57,6 +57,11 @@ body {
     overflow: auto;*/
 }
 
+#node_table {
+    border: none;
+    width: 100%;
+}
+
 /* slider's parent div
 .sliders {
    position: relative;
