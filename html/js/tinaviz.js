@@ -233,11 +233,11 @@ function Tinaviz() {
             this.setProperty("meso", "subgraph/source", "macro");
             this.setProperty("meso", "subgraph/item", "");
             this.setProperty("meso", "subgraph/category", "NGram");
-            
-            this.bindFilter("Category", "category", "meso");
-            
-            //this.readGraphJava("macro", "FET60bipartite_graph_cooccurrences_.gexf");
-            this.readGraphJava("macro", "CSSScholarsMay2010.gexf");
+           
+            //this.bindFilter("NodeWeightRangeHack", "subgraph", "meso");
+
+            this.readGraphJava("macro", "FET60bipartite_graph_cooccurrences_.gexf");
+            //this.readGraphJava("macro", "CSSScholarsMay2010.gexf");
 
             //tinaviz.togglePause();
 
@@ -391,12 +391,22 @@ function Tinaviz() {
         }
         this.nodeRightClicked = function(level, attr) {
             if (applet == null) return;
-            var cat = this.getProperty(level, "category/value");
-            if (cat == "Document") newcategory = "NGram";
-            if (cat == "NGram") newcategory = "Document";
-            this.setProperty(level, "category/value", newcategory);
-            this.touch(level);
-            if (level=="macro") this.recenter();
+            if (level=="macro") {
+                var cat = this.getProperty(level, "category/value");
+                if (cat == "Document") newcategory = "NGram";
+                if (cat == "NGram") newcategory = "Document";
+                this.setProperty(level, "category/value", newcategory);
+                this.touch(level);
+                this.recenter();
+            }
+            else if (level=="meso") {
+                var cat = this.getProperty(level, "subgraph/category");
+                if (cat == "Document") newcategory = "NGram";
+                if (cat == "NGram") newcategory = "Document";
+                this.setProperty(level, "subgraph/category", newcategory);
+                this.touch(level);
+                this.recenter();     
+            }
         }
         this.selected = function(level, attr, mouse) {
             data = $.parseJSON(attr);
