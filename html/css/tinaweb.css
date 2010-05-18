@@ -53,20 +53,26 @@ body {
 
 #infodiv {
     margin: 5px 6px;
-    /*height: 800px;*/
-    overflow: auto;
+    /*height: 800px;
+    overflow: auto;*/
+}
+
+#node_table {
+    border: none;
+    width: 100%;
 }
 
 /* slider's parent div
 .sliders {
-   position: relative;
+  
 }*/
 
 /* each sliders positioned relatively to their parent */
 .slider {
     float: left;
     width: 180px;
-    padding: 0px 10px 0px 0px;
+    padding: 0px 20px 0px 0px;
+    margin-top: -5px;
 }
 
 .search {

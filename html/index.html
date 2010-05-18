@@ -179,16 +179,31 @@
                             <!--</div>-->
                         </div><!-- end of visualization -->
                         <!-- RIGHT MAIN COLUMN-->
-                        <div id="infodiv" class="ui-widget ui-widget-content ui-corner-all yui-u">
-                            <div id="node_unselect" class="fg-buttonset ui-helper-clearfix">
-                                    <a href="#"
-                                        id="toggle-unselect-macro"
-                                        class="fg-button ui-state-default fg-button-icon-left ui-priority-primary ui-corner-all"
-                                       title="unselect"><span class="ui-icon ui-icon-close"></span></a>
+                        <div id="infodiv" class="yui-u">
+                            <h3>Current selection</h3>
+                            <div>
+                                <div id="node_unselect" class="fg-buttonset ui-helper-clearfix">
+                                        <a href="#"
+                                            id="toggle-unselect-macro"
+                                            class="fg-button ui-state-default fg-button-icon-left ui-priority-primary ui-corner-all"
+                                           title="unselect"><span class="ui-icon ui-icon-close"></span></a>
+                                </div>
+                                <div id="node_label" class="ui-widget-header ui-corner-all"></div>
+                                <div id="node_neighbourhood" class="ui-widget-content ui-corner-all"></div>
+                                <div id="node_contents" class="ui-widget-content ui-corner-all">  </div>
                             </div>
-                            <div id="node_label" class="ui-widget-header ui-corner-all"></div>
-                            <div id="node_neighbourhood" class="ui-widget-content ui-corner-all"></div>
-                            <div id="node_contents" class="ui-widget-content ui-corner-all">  </div>
+                            <h3>Node table</h3>
+                            <div id="node_list">
+                                <table id="node_table" class="ui-widget-content ui-corner-all">
+                                <thead>
+                                <tr>
+                                    <th>all visible nodes</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                                </table>
+                            </div>
                         </div><!-- / INFODIV -->
                     </div><!-- end of yui-gc -->
                     </div><!-- end of yui-b -->
