@@ -48,17 +48,13 @@ function decodeJSON(encvalue) {
 };
 
 
-function displayNodeRow(label) {
+function displayNodeRow(label, id) {
     //console.log("inserting "+label);
     $("#node_table > tbody").append(
         $("<tr></tr>").append(
-            $("<td class='tinaviz_node'></td>").text(label).click( function(eventObject) {
-                var matchlist = tinaviz.getNodesByLabel(label, "equalsIgnoreCase");
-                console.log(matchlist);
-                tinaviz.setProperty("meso", "subgraph/item", decodeJSON( matchlist[0]['id'] ));
-                tinaviz.touch("meso");
-                tinaviz.setLevel("meso");
-                tinaviz.recenter();
+            $("<td id='"+id+"'></td>").text(label).click( function(eventObject) {
+                //switch to meso view
+                tinaviz.viewMeso(id);
             })
         )
     );
@@ -110,8 +106,8 @@ function InfoDiv(divid) {
                         .addClass('ui-widget-content')
                         .html( decodeJSON(nb[nbid]['label']) )
                         .click( function(eventObject) {
-                            //tinaviz.toggleCategory( "macro" );
-                            //tinaviz.searchNodes(nb[nbid]['label'], "equalsIgnoreCase");
+                            //switch to meso view
+                            tinaviz.viewMeso(decodeJSON(nbid));
                         });
                     if ( this.selection[nodeid]['category'] == 'NGram' ) {
                         tag.css('font-size', 12)
@@ -161,8 +157,8 @@ function InfoDiv(divid) {
                 .css('font-size', Math.floor( sizecoef* Math.log( 1 + tempcloud[tagid]['occurrences'] )))
                 .html( tempcloud[tagid]['label'] )
                 .click( function(eventObject) {
-                    //tinaviz.toggleCategory( "macro" );
-                    //tinaviz.searchNodes(tempcloud[tagid]['label'], "equalsIgnoreCase");
+                    //switch to meso view
+                    tinaviz.viewMeso(decodeJSON(nbid));
                 });
                 tagcloud.append(tag);
             tagcloud.append(" ");
@@ -244,7 +240,7 @@ function InfoDiv(divid) {
                     // Inform the application of the progress
                     //progressFn(value, total);
                     // Process next chunk
-                setTimeout("displayNodeRow('"+rowLabel+"')", 0);
+                setTimeout("displayNodeRow('"+rowLabel+"','"+rowId+"')", 0);
                 //}
             })();
         }
@@ -390,18 +386,36 @@ function Tinaviz() {
             applet.getView(level).getGraph().touch();
         }
 
+        this.getOppositeCategory = function(level) {
+            var cat = this.getProperty(level, "category/value");
+            if (cat == "Document")
+                return "NGram";
+            if (cat == "NGram")
+                return "Document";
+        }
+
         /*
         * Toggle node's category visible
         */
         this.toggleCategory = function(level) {
             if (applet == null) return;
-            var cat = this.getProperty(level, "category/value");
-            if (cat == "Document") newcategory = "NGram";
-            if (cat == "NGram") newcategory = "Document";
+            var newcategory = this.getOppositeCategory(level);
             this.setProperty(level, "category/value", newcategory);
             this.touch(level);
             this.recenter();
             this.updateNodes(level, newcategory);
+        }
+
+        /*
+        * Toggle level to meso given an id
+        */
+        this.viewMeso = function(id) {
+            this.setProperty("meso", "subgraph/item", id );
+            var newcategory = this.getOppositeCategory("meso");
+            this.setProperty("meso", "subgraph/category", newcategory);
+            this.touch("meso");
+            this.setLevel("meso");
+            this.recenter();
         }
 
         this.bindFilter= function(name, path, level) {
@@ -471,8 +485,11 @@ function Tinaviz() {
         this.nodeLeftClicked = function(level, data) {
             if ( data == null ) return;
             // TODO replace the hash by a list
+            console.log( data );
             for (key in data) {
                 this.setProperty("meso", "subgraph/item", decodeJSON(key));
+                var newcategory = this.getOppositeCategory(level);
+                this.setProperty("meso", "subgraph/category", newcategory);
             }
             if (level=="meso") {
                 this.touch(level);
@@ -489,6 +506,7 @@ function Tinaviz() {
         }
 
         this.selected = function(level, attr, mouse) {
+            if (attr == null) return;
             data = $.parseJSON(attr);
             this.infodiv.reset();
             if ( mouse == "left" ) {
