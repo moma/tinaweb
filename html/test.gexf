@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gexf xmlns:viz="http:///www.gexf.net/1.1draft/viz" version="1.1" xmlns="http://www.gexf.net/1.1draft">
+<meta lastmodifieddate="2010-05-19+18:06">
+<creator>Gephi 0.7</creator>
+</meta>
+<graph defaultedgetype="directed" idtype="string" type="static">
+<nodes count="31">
+<node id="n0" label="">
+<viz:size value="10.0"/>
+<viz:color b="0" g="0" r="0"/>
+<viz:position x="-0.1753858" y="-21.796057" z="0.0"/>
+</node>
+<node id="n1" label="">
+<viz:size value="10.0"/>
+<viz:color b="0" g="0" r="0"/>
+<viz:position x="-0.3260358" y="18.003654" z="0.0"/>
+</node>
+<node id="n2" label="">
+<viz:size value="10.0"/>
+<viz:color b="0" g="0" r="0"/>
+<viz:position x="10.663058" y="-14.702029" z="0.0"/>
+</node>
+<node id="n3" label="">
+<viz:size value="10.0"/>
+<viz:color b="0" g="0" r="0"/>
+<viz:position x="-0.289173" y="-13.285503" z="0.0"/>
+</node>
+<node id="n4" label="">
+<viz:size value="10.0"/>
+<viz:color b="0" g="0" r="0"/>
+<viz:position x="-11.609155" y="19.16923" z="0.0"/>
+</node>
+<node id="n5" label="">
+<viz:size value="10.0"/>
+<viz:color b="0" g="0" r="0"/>
+<viz:position x="8.317899" y="15.986018" z="0.0"/>
+</node>
+<node id="n6" label="">
+<viz:size value="10.0"/>
+<viz:color b="0" g="0" r="0"/>
+<viz:position x="5.8860407" y="-5.574865" z="0.0"/>
+</node>
+<node id="n7" label="">
+<viz:size value="10.0"/>
+<viz:color b="0" g="0" r="0"/>
+<viz:position x="19.49925" y="0.6789753" z="0.0"/>
+</node>
+<node id="n8" label="">
+<viz:size value="10.0"/>
+<viz:color b="0" g="0" r="0"/>
+<viz:position x="-1.137615" y="-24.765202" z="0.0"/>
+</node>
+<node id="n9" label="">
+<viz:size value="10.0"/>
+<viz:color b="0" g="0" r="0"/>
+<viz:position x="19.634434" y="13.471485" z="0.0"/>
+</node>
+<node id="60" label="">
+<viz:size value="1.0"/>
+<viz:color b="0" g="0" r="0"/>
+<viz:position x="-11.069267" y="18.420164" z="0.0"/>
+</node>
+<node id="61" label="">
+<viz:size value="1.0"/>
+<viz:color b="0" g="0" r="0"/>
+<viz:position x="-15.280418" y="-13.220784" z="0.0"/>
+</node>
+<node id="62" label="">
+<viz:size value="1.0"/>
+<viz:color b="0" g="0" r="0"/>
+<viz:position x="10.296694" y="7.0657563" z="0.0"/>
+</node>
+<node id="63" label="">
+<viz:size value="1.0"/>
+<viz:color b="0" g="0" r="0"/>
+<viz:position x="9.724501" y="-16.22715" z="0.0"/>
+</node>
+<node id="64" label="">
+<viz:size value="5.5"/>
+<viz:color b="0" g="0" r="0"/>
+<viz:position x="-19.340006" y="-18.32018" z="0.0"/>
+</node>
+<node id="65" label="">
+<viz:size value="19.0"/>
+<viz:color b="0" g="0" r="0"/>
+<viz:position x="12.41346" y="15.159368" z="0.0"/>
+</node>
+<node id="66" label="">
+<viz:size value="19.0"/>
+<viz:color b="0" g="0" r="0"/>
+<viz:position x="-17.288887" y="13.097834" z="0.0"/>
+</node>
+<node id="67" label="">
+<viz:size value="19.0"/>
+<viz:color b="0" g="0" r="0"/>
+<viz:position x="-19.41127" y="-22.41683" z="0.0"/>
+</node>
+<node id="68" label="">
+<viz:size value="19.0"/>
+<viz:color b="0" g="0" r="0"/>
+<viz:position x="12.513329" y="-24.959906" z="0.0"/>
+</node>
+<node id="69" label="">
+<viz:size value="19.0"/>
+<viz:color b="0" g="0" r="0"/>
+<viz:position x="-2.610269" y="10.255029" z="0.0"/>
+</node>
+<node id="70" label="">
+<viz:size value="19.0"/>
+<viz:color b="0" g="0" r="0"/>
+<viz:position x="5.013437" y="14.518209" z="0.0"/>
+</node>
+<node id="71" label="">
+<viz:size value="19.0"/>
+<viz:color b="0" g="0" r="0"/>
+<viz:position x="-15.982968" y="-11.268733" z="0.0"/>
+</node>
+<node id="72" label="">
+<viz:size value="19.0"/>
+<viz:color b="0" g="0" r="0"/>
+<viz:position x="14.941905" y="-14.868858" z="0.0"/>
+</node>
+<node id="73" label="">
+<viz:size value="19.0"/>
+<viz:color b="0" g="0" r="0"/>
+<viz:position x="-6.950844" y="-1.3574375" z="0.0"/>
+</node>
+<node id="74" label="">
+<viz:size value="19.0"/>
+<viz:color b="0" g="0" r="0"/>
+<viz:position x="13.443359" y="1.6995722" z="0.0"/>
+</node>
+<node id="75" label="">
+<viz:size value="18.0"/>
+<viz:color b="0" g="0" r="0"/>
+<viz:position x="18.381641" y="7.611196" z="0.0"/>
+</node>
+<node id="76" label="">
+<viz:size value="18.0"/>
+<viz:color b="0" g="0" r="0"/>
+<viz:position x="6.9208727" y="-5.3419347" z="0.0"/>
+</node>
+<node id="77" label="">
+<viz:size value="18.0"/>
+<viz:color b="0" g="0" r="0"/>
+<viz:position x="9.741467" y="-19.40247" z="0.0"/>
+</node>
+<node id="78" label="">
+<viz:size value="18.0"/>
+<viz:color b="0" g="0" r="0"/>
+<viz:position x="-5.2174206" y="-10.842243" z="0.0"/>
+</node>
+<node id="79" label="">
+<viz:size value="18.0"/>
+<viz:color b="0" g="0" r="0"/>
+<viz:position x="-9.283601" y="12.480961" z="0.0"/>
+</node>
+<node id="80" label="">
+<viz:size value="18.0"/>
+<viz:color b="0" g="0" r="0"/>
+<viz:position x="7.0467334" y="6.9279513" z="0.0"/>
+</node>
+</nodes>
+<edges count="41">
+<edge id="70" source="n0" target="n4"/>
+<edge id="69" source="n0" target="n5"/>
+<edge id="76" source="n0" target="n9" weight="1.8"/>
+<edge id="79" source="n1" target="n1" weight="1.8"/>
+<edge id="80" source="n2" target="n1" weight="1.8"/>
+<edge id="86" source="n3" target="71" weight="1.8"/>
+<edge id="71" source="n4" target="n5" weight="3.1999998"/>
+<edge id="75" source="n4" target="n9" weight="1.8"/>
+<edge id="73" source="n5" target="n8" weight="3.1999998"/>
+<edge id="77" source="n5" target="n9" weight="1.8"/>
+<edge id="100" source="n6" target="65" weight="1.8"/>
+<edge id="92" source="n6" target="67" weight="1.8"/>
+<edge id="104" source="n7" target="75" weight="1.8"/>
+<edge id="78" source="n8" target="n0" weight="1.8"/>
+<edge id="72" source="n8" target="n4" weight="3.1999998"/>
+<edge id="74" source="n9" target="n8" weight="1.8"/>
+<edge id="91" source="66" target="n6" weight="1.8"/>
+<edge id="99" source="66" target="68" weight="1.8"/>
+<edge id="101" source="66" target="69" weight="1.8"/>
+<edge id="90" source="67" target="65" weight="1.8"/>
+<edge id="89" source="67" target="66" weight="1.8"/>
+<edge id="95" source="67" target="71" weight="1.8"/>
+<edge id="93" source="68" target="n6" weight="1.8"/>
+<edge id="94" source="68" target="65" weight="1.8"/>
+<edge id="88" source="68" target="67" weight="1.8"/>
+<edge id="102" source="70" target="n7" weight="1.8"/>
+<edge id="83" source="71" target="73" weight="1.8"/>
+<edge id="87" source="72" target="n3" weight="1.8"/>
+<edge id="82" source="72" target="71" weight="1.8"/>
+<edge id="97" source="72" target="74" weight="1.8"/>
+<edge id="98" source="73" target="n3" weight="1.8"/>
+<edge id="81" source="73" target="72" weight="1.8"/>
+<edge id="84" source="73" target="74" weight="1.8"/>
+<edge id="96" source="74" target="66" weight="1.8"/>
+<edge id="85" source="74" target="71" weight="1.8"/>
+<edge id="103" source="75" target="70" weight="1.8"/>
+<edge id="105" source="76" target="78" weight="1.8"/>
+<edge id="109" source="76" target="80" weight="1.8"/>
+<edge id="107" source="79" target="77" weight="1.8"/>
+<edge id="106" source="79" target="78" weight="1.8"/>
+<edge id="108" source="80" target="77" weight="1.8"/>
+</edges>
+</graph>
+</gexf>
