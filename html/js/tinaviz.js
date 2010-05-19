@@ -27,7 +27,10 @@ function getScreenHeight() {
     }
     return y;
 }
-/* useful utility modifying the Object prototype */
+/*
+ * utility modifying the Object prototype
+ * to get its lenght
+ */
 Object.size = function(obj) {
     var size = 0, key;
     for (key in obj) {
@@ -35,6 +38,15 @@ Object.size = function(obj) {
     }
     return size;
 };
+
+/*
+ * utility to safely decode encoded
+ * values from JSON sent by the java applet
+ */
+function decodeJSON(encvalue) {
+    return decodeURIComponent(encvalue).replace(/\+/g, " ").replace(/%21/g, "!").replace(/%27/g, "'").replace(/%28/g, "(").replace(/%29/g, ")").replace(/%2A/g, "*");
+};
+
 
 function displayNodeRow(label) {
     //console.log("inserting "+label);
@@ -70,7 +82,8 @@ function InfoDiv(divid) {
            return (compA < compB) ? -1 : (compA > compB) ? 1 : 0;
         })
         $.each(listitems, function(idx, itm) {
-            maindiv.append(separator);
+            if ( idx != 0 && idx != listitems.length )
+                maindiv.append(separator);
             maindiv.append(itm);
         });
     },
@@ -89,7 +102,7 @@ function InfoDiv(divid) {
                 if (this.selection[nodeid]['category'] != nb[nbid]['category']) {
                     var tag = $("<span class='tinaviz_node'></span>")
                         .addClass('ui-widget-content')
-                        .html( nb[nbid]['label'] )
+                        .html( decodeJSON(nb[nbid]['label']) )
                         .click( function(eventObject) {
                             tinaviz.toggleCategory( "macro" );
                             tinaviz.getNodesByLabel(nb[nbid]['label'], "equalsIgnoreCase");
@@ -126,7 +139,7 @@ function InfoDiv(divid) {
                 if (this.selection[nodeid]['category'] != nb[nbid]['category']) {
                     if ( tempcloud[nbid] === undefined )
                         tempcloud[nbid] = {
-                            'label' : nb[nbid]['label'],
+                            'label' : decodeJSON(nb[nbid]['label']),
                             'occurrences' : 1
                         };
                     else
@@ -173,13 +186,13 @@ function InfoDiv(divid) {
         var labelinnerdiv = $("<div></div>");
         for(var id in this.selection) {
             var node = this.selection[id];
-            labelinnerdiv.append( $("<b></b>").html(node.label) );
+            labelinnerdiv.append( $("<b></b>").html(decodeJSON(node.label)) );
             if ( node.category == 'NGram' ) {
                 // no content to display
             }
             if ( node.category == 'Document' && node.content != null ) {
-                this.contents.append( $("<b></b>").html(node.label) );
-                this.contents.append( $("<p></p>").html(node.content) );
+                this.contents.append( $("<b></b>").html(decodeJSON(node.label)) );
+                this.contents.append( $("<p></p>").html(decodeJSON(node.content)) );
             }
         }
         this.alphabetSort( this.label, labelinnerdiv, "b", ",<br/>" );
@@ -218,7 +231,7 @@ function InfoDiv(divid) {
         this.table.empty();
         for (var i = 0; i < node_list.length; i++ ) {
             (function () {
-                var rowLabel = node_list[i]['label'];
+            var rowLabel = decodeJSON(node_list[i]['label']);
                 // Do a little bit of work here...
                 //if (true) {
                     // Inform the application of the progress
@@ -271,7 +284,7 @@ function Tinaviz() {
             this.setProperty("meso", "subgraph/source", "macro");
             this.setProperty("meso", "subgraph/item", "");
             this.setProperty("meso", "subgraph/category", "NGram");
-           
+
             //this.bindFilter("NodeWeightRangeHack", "subgraph", "meso");
 
             this.readGraphJava("macro", "FET60bipartite_graph_cooccurrences_.gexf");
@@ -299,10 +312,6 @@ function Tinaviz() {
             wrapper.height = height;
             $('#tinaviz').css('width',width);
             $('#tinaviz').css('height',height);
-        }
-
-        this.decode = function( data ) {
-            return $.parseJSON( data )
         }
 
         // TODO: use a cross-browser compatible way of getting the current URL
@@ -365,13 +374,15 @@ function Tinaviz() {
 
         /*
         * Commits applets parameters
-        },
         */
         this.touch= function(level) {
             if (applet == null) return;
             applet.getView(level).getGraph().touch();
         }
 
+        /*
+        * Toggle node's category visible
+        */
         this.toggleCategory = function(level) {
             if (applet == null) return;
             var cat = this.getProperty(level, "category/value");
@@ -407,7 +418,7 @@ function Tinaviz() {
             if (applet == null) return {};
             matchlist = $.parseJSON( applet.getNodesByLabel(label, type));
             for (var foundnodes in matchlist) {
-                applet.selectFromId( foundnodes );
+                applet.selectFromId( decodeJSON( foundnodes ) );
             }
         }
 
@@ -433,32 +444,23 @@ function Tinaviz() {
             return $.parseJSON( applet.getNeighbourhood(id) );
         }
 
-        this.nodeLeftClicked = function(level, attr) {
-            if ( attr == null ) return;
+        this.nodeLeftClicked = function(level, data) {
+            if ( data == null ) return;
             // TODO replace the hash by a list
-            for (key in attr) {
-                this.setProperty("meso", "subgraph/item", key);
+            for (key in data) {
+                this.setProperty("meso", "subgraph/item", decodeJSON(key));
             }
             if (level=="meso") {
                 this.touch(level);
                 this.recenter();
             }
-            return this.infodiv.update(level, attr);
+            return this.infodiv.update(level, data);
         }
 
-        this.nodeRightClicked = function(level, attr) {
+        this.nodeRightClicked = function(level, data) {
             if (applet == null) return;
-
-            if (level=="macro") {
+            if (level=="macro" || level == "meso") {
                 this.toggleCategory(level);
-            }
-            else if (level=="meso") {
-                var cat = this.getProperty(level, "subgraph/category");
-                if (cat == "Document") newcategory = "NGram";
-                if (cat == "NGram") newcategory = "Document";
-                this.setProperty(level, "subgraph/category", newcategory);
-                this.touch(level);
-                this.recenter();     
             }
         }
 

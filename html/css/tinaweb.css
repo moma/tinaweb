@@ -62,11 +62,6 @@ body {
     width: 100%;
 }
 
-/* slider's parent div
-.sliders {
-  
-}*/
-
 /* each sliders positioned relatively to their parent */
 .slider {
     float: left;
