@@ -53,7 +53,12 @@ function displayNodeRow(label) {
     $("#node_table > tbody").append(
         $("<tr></tr>").append(
             $("<td class='tinaviz_node'></td>").text(label).click( function(eventObject) {
-                tinaviz.getNodesByLabel(label, "equalsIgnoreCase");
+                var matchlist = tinaviz.getNodesByLabel(label, "equalsIgnoreCase");
+                console.log(matchlist);
+                tinaviz.setProperty("meso", "subgraph/item", decodeJSON( matchlist[0]['id'] ));
+                tinaviz.touch("meso");
+                tinaviz.setLevel("meso");
+                tinaviz.recenter();
             })
         )
     );
@@ -105,8 +110,8 @@ function InfoDiv(divid) {
                         .addClass('ui-widget-content')
                         .html( decodeJSON(nb[nbid]['label']) )
                         .click( function(eventObject) {
-                            tinaviz.toggleCategory( "macro" );
-                            tinaviz.getNodesByLabel(nb[nbid]['label'], "equalsIgnoreCase");
+                            //tinaviz.toggleCategory( "macro" );
+                            //tinaviz.searchNodes(nb[nbid]['label'], "equalsIgnoreCase");
                         });
                     if ( this.selection[nodeid]['category'] == 'NGram' ) {
                         tag.css('font-size', 12)
@@ -156,8 +161,8 @@ function InfoDiv(divid) {
                 .css('font-size', Math.floor( sizecoef* Math.log( 1 + tempcloud[tagid]['occurrences'] )))
                 .html( tempcloud[tagid]['label'] )
                 .click( function(eventObject) {
-                    tinaviz.toggleCategory( "macro" );
-                    tinaviz.getNodesByLabel(tempcloud[tagid]['label'], "equalsIgnoreCase");
+                    //tinaviz.toggleCategory( "macro" );
+                    //tinaviz.searchNodes(tempcloud[tagid]['label'], "equalsIgnoreCase");
                 });
                 tagcloud.append(tag);
             tagcloud.append(" ");
@@ -232,7 +237,8 @@ function InfoDiv(divid) {
         this.table.empty();
         for (var i = 0; i < node_list.length; i++ ) {
             (function () {
-            var rowLabel = decodeJSON(node_list[i]['label']);
+                var rowLabel = decodeJSON(node_list[i]['label']);
+                var rowId = decodeJSON(node_list[i]['id']);
                 // Do a little bit of work here...
                 //if (true) {
                     // Inform the application of the progress
@@ -418,22 +424,35 @@ function Tinaviz() {
             if (applet == null) return;
             return applet.getView(level).getProperty(key);
         }
-
-        this.getNodesByLabel= function(label, type) {
+        /*
+        * Search nodes
+        */
+        this.getNodesByLabel = function(label, type) {
             if (applet == null) return {};
-            matchlist = $.parseJSON( applet.getNodesByLabel(label, type));
-            for (var foundnodes in matchlist) {
-                applet.selectFromId( decodeJSON( foundnodes ) );
+            return $.parseJSON( applet.getNodesByLabel(label, type));
+        }
+        /*
+        * Search and select nodes
+        */
+        this.searchNodes= function(label, type) {
+            if (applet == null) return {};
+            var matchlist = this.getNodesByLabel(label, type);
+            for (var i = 0; i < matchlist.length; i++ ) {
+                applet.selectFromId( decodeJSON( matchlist[i]['id'] ) );
             }
         }
-
+        /*
+        * unselect all nodes
+        */
         this.unselect= function() {
             if (applet != null)  applet.unselect();
             this.infodiv.reset();
             this.setProperty("meso", "subgraph/item", "");
             applet.clear("meso");
         }
-
+        /*
+        * recenter the graph
+        */
         this.recenter= function() {
             if (applet == null) return false;
             return applet.recenter();
@@ -587,14 +606,14 @@ $(document).ready(function(){
     });
 
     var searchinput = $("#search_input");
-    // binds the click event to tinaviz.getNodesByLabel()
+    // binds the click event to tinaviz.searchNodes()
     $("#search_button").button({
         text: false,
         icons: {
             primary: 'ui-icon-search'
         }
     }).click( function(eventObject) {
-        tinaviz.getNodesByLabel(searchinput.val(), "containsIgnoreCase");
+        tinaviz.searchNodes(searchinput.val(), "containsIgnoreCase");
     });
     // SLIDERS INIT
     $.extend($.ui.slider.defaults, {
