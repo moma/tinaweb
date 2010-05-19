@@ -70,6 +70,7 @@ function InfoDiv(divid) {
     cloud : $( "#node_neighbourhood" ),
     unselect_button: $( "#node_unselect" ),
     table: $("#node_table > tbody"),
+    data: {},
 
     /*
      * Generic sorting DOM lists
@@ -250,7 +251,7 @@ function Tinaviz() {
 
     var wrapper = null;
     var applet = null;
-
+    this.isReady = 0;
     this.infodiv = null;
 
     //return {
@@ -291,8 +292,10 @@ function Tinaviz() {
             //this.readGraphJava("macro", "CSSScholarsMay2010.gexf");
 
             //this.togglePause();
-            this.getNodes( "macro", "NGram" );
-
+            // init the node list with ngrams
+            this.updateNodes( "macro", "NGram" );
+            // cache the document list
+            this.getNodes( "macro", "Document" );
         }
 
         this.init= function() {
@@ -303,6 +306,7 @@ function Tinaviz() {
             if (applet == null) return;
             this.size(this.getWidth(), this.getHeight());
             this.main();
+            this.isReady = 1;
         }
 
         // RESIZE THE APPLET
@@ -391,6 +395,7 @@ function Tinaviz() {
             this.setProperty(level, "category/value", newcategory);
             this.touch(level);
             this.recenter();
+            this.updateNodes(level, newcategory);
         }
 
         this.bindFilter= function(name, path, level) {
@@ -481,7 +486,15 @@ function Tinaviz() {
 
         this.getNodes = function(level, category) {
             if (applet == null) return;
-            this.infodiv.updateNodeList( $.parseJSON( applet.getNodes(level, category) ) );
+            this.infodiv.data[category] = $.parseJSON( applet.getNodes(level, category) );
+            return this.infodiv.data[category];
+        }
+
+        this.updateNodes = function(level, category)  {
+            if (this.infodiv.data[category] === undefined)
+                this.infodiv.updateNodeList( this.getNodes( level, category ) );
+            else
+                this.infodiv.updateNodeList( this.infodiv.data[category] );
         }
 
         this.enabled = function() {
@@ -542,7 +555,7 @@ $(document).ready(function(){
     // passing infodiv to tinaviz is REQUIRED
     tinaviz.infodiv = infodiv;
 
-    // TODO a handler to open a graph file
+    // TODO : handler to open a graph file
     /*$('#htoolbar input[type=file]').change(function(e){
         tinaviz.clear();
         tinaviz.loadAbsoluteGraph( $(this).val() );
