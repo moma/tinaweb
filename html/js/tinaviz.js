@@ -306,11 +306,15 @@ function Tinaviz() {
             if (wrapper == null) return;
             applet = wrapper.getSubApplet();
             if (applet == null) return;
-            this.size(this.getWidth(), this.getHeight());
+            this.resize();
             this.main();
             this.isReady = 1;
         }
 
+        this.resize = function() {
+           this.size(this.getWidth(), this.getHeight());
+        }
+        
         // RESIZE THE APPLET
         this.size= function(width, height) {
             if (wrapper == null || applet == null) return;
@@ -692,5 +696,11 @@ $(document).ready(function(){
     });
     $("#toggle-recenter-macro").click(function(event) {
         tinaviz.recenter();
+    });
+    
+    $(window).bind('resize', function() {
+        if (tinaviz.enabled()) {
+            tinaviz.resize();
+        }
     });
 });
