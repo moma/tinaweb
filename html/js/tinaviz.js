@@ -272,15 +272,18 @@ function Tinaviz() {
             this.dispatchProperty("nodeWeight/max", 1.0);
             this.dispatchProperty("category/value", "NGram");
             this.dispatchProperty("category/mode", "keep");
-
-            this.dispatchProperty("radius/value",  100.0/200.0); // because we set default value to 25/200 in the GUI
-
+            this.dispatchProperty("output/nodeSizeMin", 5.0);
+            this.dispatchProperty("output/nodeSizeMax", 20.0);
+            this.dispatchProperty("output/nodeSizeRatio", 100.0/200.0);
+            
             this.bindFilter("Category", "category", "macro");
             
             this.bindFilter("NodeWeightRange",  "nodeWeight", "macro");
             this.bindFilter("EdgeWeightRange", "edgeWeight",  "macro");
             this.bindFilter("NodeFunction", "radiusByWeight", "macro");
-            this.bindFilter("NodeRadius",   "radius",         "macro");
+            this.bindFilter("Output", "output", "macro");
+
+            //this.bindFilter("NodeRadius",   "radius",         "macro");
 
             // special version of the subgraph copy filter: this one does not use the
             // tinasoft berkeley database to get data
@@ -292,8 +295,8 @@ function Tinaviz() {
             
             this.bindFilter("EdgeWeightRange", "edgeWeight",  "meso");
             this.bindFilter("NodeFunction", "radiusByWeight", "meso");
-            this.bindFilter("NodeRadius",   "radius",         "meso");
-            
+            //this.bindFilter("NodeRadius",   "radius",         "meso");
+            this.bindFilter("Output", "output", "meso");
             //this.bindFilter("NodeWeightRangeHack", "subgraph", "meso");
 
             this.readGraphJava("macro", "FET60bipartite_graph_cooccurrences_.gexf");
@@ -708,15 +711,17 @@ $(document).ready(function(){
         }
     });
 
+  /*
     $("#sliderNodeSize").slider({
         value: 50.0,
         max: 200.0,// precision/size
         animate: true,
         slide: function(event, ui) {
-            tinaviz.setProperty("current", "radius/value", ui.value / 200.0);
+            tinaviz.setProperty("current", "output/nodeSizeRatio", ui.value / 200.0);
             tinaviz.touch();
         }}
     );
+    */
     
     $("#toggle-labels").click(function(event) {
         tinaviz.toggleLabels();
