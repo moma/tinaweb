@@ -49,7 +49,7 @@ function decodeJSON(encvalue) {
 
 
 function displayNodeRow(label, id) {
-    //console.log("inserting "+label);
+    //console.console.log("inserting "+label);
     $("#node_table > tbody").append(
         $("<tr></tr>").append(
             $("<td id='"+id+"'></td>").text(label).click( function(eventObject) {
@@ -203,7 +203,11 @@ function InfoDiv(divid) {
     /*
      * updates the infodiv contents
      */
-    update: function(level, lastselection) {
+    update: function(view, lastselection) {
+        if ( Object.size ( lastselection ) == 0 ) {
+            this.reset();
+            return;
+        }
         this.label.empty();
         this.unselect_button.show();
         this.contents.empty();
@@ -260,23 +264,20 @@ function Tinaviz() {
         // MAIN PROGRAM
         this.main = function() {
 
-            this.setLevel("macro");
+            this.setView("macro");
 
             this.dispatchProperty("edgeWeight/min", 0.0);
             this.dispatchProperty("edgeWeight/max", 1.0);
-
             this.dispatchProperty("nodeWeight/min", 0.0);
             this.dispatchProperty("nodeWeight/max", 1.0);
-
-
-            // we want to keep documents
             this.dispatchProperty("category/value", "NGram");
             this.dispatchProperty("category/mode", "keep");
 
             this.dispatchProperty("radius/value",  100.0/200.0); // because we set default value to 25/200 in the GUI
 
             this.bindFilter("Category", "category", "macro");
-            //this.bindFilter("NodeWeightRange",  "nodeWeight", "macro");
+            
+            this.bindFilter("NodeWeightRange",  "nodeWeight", "macro");
             this.bindFilter("EdgeWeightRange", "edgeWeight",  "macro");
             this.bindFilter("NodeFunction", "radiusByWeight", "macro");
             this.bindFilter("NodeRadius",   "radius",         "macro");
@@ -287,7 +288,12 @@ function Tinaviz() {
             this.setProperty("meso", "subgraph/source", "macro");
             this.setProperty("meso", "subgraph/item", "");
             this.setProperty("meso", "subgraph/category", "NGram");
-
+            this.bindFilter("NodeWeightRange",  "nodeWeight", "meso");
+            
+            this.bindFilter("EdgeWeightRange", "edgeWeight",  "meso");
+            this.bindFilter("NodeFunction", "radiusByWeight", "meso");
+            this.bindFilter("NodeRadius",   "radius",         "meso");
+            
             //this.bindFilter("NodeWeightRangeHack", "subgraph", "meso");
 
             this.readGraphJava("macro", "FET60bipartite_graph_cooccurrences_.gexf");
@@ -377,70 +383,80 @@ function Tinaviz() {
             return applet.getView().toggleHD();
         }
 
-        this.setLevel = function(level) {
+        this.setView = function(view) {
             if (applet == null) return;
-            applet.getSession().setLevel(level);
+            applet.getSession().setView(view);
         }
 
         /*
         * Commits applets parameters
         */
-        this.touch= function(level) {
+        this.touch= function(view) {
             if (applet == null) return;
-            applet.getView(level).getGraph().touch();
+            if (view==null) {
+                applet.touch();
+            } else {
+                applet.touch(view);
+            }
         }
 
-        this.getOppositeCategory = function(level) {
-            var cat = this.getProperty(level, "category/value");
+        this.getOppositeCategory = function(cat) {
+
             if (cat == "Document")
                 return "NGram";
-            if (cat == "NGram")
+            else if (cat == "NGram")
                 return "Document";
+            else alert("error, cannot get opposite category of "+cat);
+              
         }
 
         /*
         * Toggle node's category visible
         */
-        this.toggleCategory = function(level) {
+        this.toggleCategory = function(view) {
             if (applet == null) return;
-            var newcategory = this.getOppositeCategory(level);
-            this.setProperty(level, "category/value", newcategory);
-            this.touch(level);
+            var newcategory = this.getOppositeCategory(
+                this.getProperty(view, "category/value"));
+            this.setProperty(view, "category/value", newcategory);
+            this.touch(view);
             this.recenter();
-            this.updateNodes(level, newcategory);
+            this.updateNodes(view, newcategory);
         }
 
         /*
-        * Toggle level to meso given an id
+        * Toggle view to meso given an id
         */
         this.viewMeso = function(id) {
             this.setProperty("meso", "subgraph/item", id );
-            var newcategory = this.getOppositeCategory("meso");
-            this.setProperty("meso", "subgraph/category", newcategory);
-            this.touch("meso");
-            this.setLevel("meso");
+            this.setProperty("meso", "subgraph/category",
+                this.getOppositeCategory(
+                    this.getProperty("meso", "category/value")));
+            // this.touch("meso");
+            this.setView("meso");
             this.recenter();
         }
 
-        this.bindFilter= function(name, path, level) {
+        this.bindFilter= function(name, path, view) {
             if (applet == null) return;
-            if (level == null) return applet.getSession().addFilter(name, path);
-            return applet.getView(level).addFilter(name, path);
+            if (view == null) return applet.getSession().addFilter(name, path);
+            return applet.getView(view).addFilter(name, path);
         }
 
         this.dispatchProperty= function(key,value) {
             if (applet == null) return;
-            return applet.getSession().setProperty(key,value);
+            return applet.setProperty("all",key,value);
         }
 
-        this.setProperty= function(level,key,value) {
+        this.setProperty= function(view,key,value) {
             if (applet == null) return;
-            return applet.getView(level).setProperty(key,value);
+            return applet.setProperty(view,key,value);
         }
+        
+    
 
-        this.getProperty= function(level,key,value) {
+        this.getProperty= function(view,key) {
             if (applet == null) return;
-            return applet.getView(level).getProperty(key);
+            return applet.getProperty(view,key);
         }
         /*
         * Search nodes
@@ -486,37 +502,39 @@ function Tinaviz() {
             return $.parseJSON( applet.getNeighbourhood(id) );
         }
 
-        this.nodeLeftClicked = function(level, data) {
+        this.nodeLeftClicked = function(view, data) {
             if ( data == null ) return;
             // TODO replace the hash by a list
-            console.log( data );
+            //console.log( data );
             for (key in data) {
-                this.setProperty("meso", "subgraph/item", decodeJSON(key));
-                var newcategory = this.getOppositeCategory(level);
-                this.setProperty("meso", "subgraph/category", newcategory);
+                this.setProperty("meso", "subgraph/item", key);
+ 
+                this.setProperty("meso", "subgraph/category", 
+                    this.getOppositeCategory(
+                        this.getProperty(view, "category/value")));
             }
-            if (level=="meso") {
-                this.touch(level);
+            if (view=="meso") {
+                this.touch(view);
                 this.recenter();
             }
-            return this.infodiv.update(level, data);
+            return this.infodiv.update(view, data);
         }
 
-        this.nodeRightClicked = function(level, data) {
+        this.nodeRightClicked = function(view, data) {
             if (applet == null) return;
-            if (level=="macro" || level == "meso") {
-                this.toggleCategory(level);
+            if (view=="macro" || view == "meso") {
+                this.toggleCategory(view);
             }
         }
 
-        this.selected = function(level, attr, mouse) {
+        this.selected = function(view, attr, mouse) {
             if (attr == null) return;
             data = $.parseJSON(attr);
             this.infodiv.reset();
             if ( mouse == "left" ) {
-                this.nodeLeftClicked(level,data);
+                this.nodeLeftClicked(view,data);
             } else if ( mouse == "right" ) {
-                this.nodeRightClicked(level,data);
+                this.nodeRightClicked(view,data);
             }
         }
 
@@ -525,15 +543,15 @@ function Tinaviz() {
             return applet.selectFromId(id);
         }
 
-        this.getNodes = function(level, category) {
+        this.getNodes = function(view, category) {
             if (applet == null) return;
-            this.infodiv.data[category] = $.parseJSON( applet.getNodes(level, category) );
+            this.infodiv.data[category] = $.parseJSON( applet.getNodes(view, category) );
             return this.infodiv.data[category];
         }
 
-        this.updateNodes = function(level, category)  {
+        this.updateNodes = function(view, category)  {
             if (this.infodiv.data[category] === undefined)
-                this.infodiv.updateNodeList( this.getNodes( level, category ) );
+                this.infodiv.updateNodeList( this.getNodes( view, category ) );
             else
                 this.infodiv.updateNodeList( this.infodiv.data[category] );
         }
@@ -556,18 +574,18 @@ function Tinaviz() {
         }
 
         this.logError= function(msg) {
-            //console.error(msg);
+            //console.console.error(msg);
         }
 
         this.logNormal= function(msg) {
-            //console.log(msg);
+            //console.console.log(msg);
         }
 
         this.logDebug= function(msg) {
-            //console.info(msg);
+            //console.console.info(msg);
         }
 
-        this.switchedTo= function(level) {
+        this.switchedTo= function(view) {
         }
 
         this.getWidth= function() {
@@ -583,6 +601,26 @@ function Tinaviz() {
 var tinaviz = new Tinaviz();
 
 $(document).ready(function(){
+
+    $(function(){
+	    $.extend($.fn.disableTextSelect = function() {
+		    return this.each(function(){
+			    if($.browser.mozilla){//Firefox
+				    $(this).css('MozUserSelect','none');
+			    }else if($.browser.msie){//IE
+				    $(this).bind('selectstart',function(){return false;});
+			    }else{//Opera, etc.
+				    $(this).mousedown(function(){return false;});
+			    }
+		    });
+	    });
+	    $('.noSelect').disableTextSelect();//No text selection on elements with a class of 'noSelect'
+	     $('.noSelect').hover(function() {
+            $(this).css('cursor','default');
+         }, function() {
+            $(this).css('cursor','auto');
+        });
+    });
 
     $("#title").html("FET Open projects explorer");
     var infodiv = new InfoDiv("#infodiv");
@@ -648,53 +686,54 @@ $(document).ready(function(){
     });
 
     // MACRO SLIDERS
-    $("#macroSlider_edgeWeight").slider({
+    $("#sliderEdgeWeight").slider({
         range: true,
         values: [0, 200],
         animate: true,
         slide: function(event, ui) {
-            tinaviz.setProperty("macro", "edgeWeight/min", ui.values[0] / 200.0);
-            tinaviz.setProperty("macro", "edgeWeight/max", ui.values[1] / 200.0);
-            tinaviz.touch("macro");
+            tinaviz.setProperty("current", "edgeWeight/min", ui.values[0] / 200.0);
+            tinaviz.setProperty("current", "edgeWeight/max", ui.values[1] / 200.0);
+            tinaviz.touch();
         }
     });
-    /*
-    $("#macroSlider_nodeWeight").slider({
+    
+    $("#sliderNodeWeight").slider({
         range: true,
         values: [0, 200],
         animate: true,
         slide: function(event, ui) {
-            tinaviz.setProperty("macro", "nodeWeight/min", ui.values[0] / 200.0);
-            tinaviz.setProperty("macro", "nodeWeight/max", ui.values[1] / 200.0);
-            tinaviz.touch("macro");
+            tinaviz.setProperty("current", "nodeWeight/min", ui.values[0] / 200.0);
+            tinaviz.setProperty("current", "nodeWeight/max", ui.values[1] / 200.0);
+            tinaviz.touch();
         }
-    });*/
+    });
 
-    $("#macroSlider_nodeSize").slider({
+    $("#sliderNodeSize").slider({
         value: 50.0,
         max: 200.0,// precision/size
         animate: true,
         slide: function(event, ui) {
-            tinaviz.setProperty("macro", "radius/value", ui.value / 200.0);
-            tinaviz.touch("macro");
+            tinaviz.setProperty("current", "radius/value", ui.value / 200.0);
+            tinaviz.touch();
         }}
     );
-    $("#toggle-labels-macro").click(function(event) {
+    
+    $("#toggle-labels").click(function(event) {
         tinaviz.toggleLabels();
     });
-    $("#toggle-nodes-macro").click(function(event) {
+    $("#toggle-nodes").click(function(event) {
         tinaviz.toggleNodes();
     });
-    $("#toggle-edges-macro").click(function(event) {
+    $("#toggle-edges").click(function(event) {
         tinaviz.toggleEdges();
     });
-    $("#toggle-pause-macro").click(function(event) {
+    $("#toggle-pause").click(function(event) {
         tinaviz.togglePause();
     });
-    $("#toggle-unselect-macro").click(function(event) {
+    $("#toggle-unselect").click(function(event) {
         tinaviz.unselect();
     });
-    $("#toggle-recenter-macro").click(function(event) {
+    $("#toggle-recenter").click(function(event) {
         tinaviz.recenter();
     });
     

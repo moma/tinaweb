@@ -46,39 +46,48 @@
                 </div>-->
                 <div id="hdb">
                     <div id="htoolbar" class="toolbardiv fg-toolbar ui-widget-header ui-corner-all ui-helper-clearfix">
-                        <div id="title"></div>
+                        <div id="title" class="noSelect"></div>
                         <div class="fg-buttonset fg-buttonset-multi ui-helper-clearfix">
-                                <a id="toggle-labels-macro"
+                                <a id="toggle-labels"
                                    href="#"
                                    class="fg-button ui-state-default ui-state-active fg-button-icon-solo ui-corner-left"
-                                   title="hide/show labels"><span class="ui-icon ui-icon-labels"></span> Labels</a>
-                                <a id="toggle-nodes-macro"
+                                   title="hide/show labels"><span class="ui-icon ui-icon-labels"></span> <span class="noSelect">Labels</span></a>
+                                <a id="toggle-nodes"
                                    href="#"
                                    class="fg-button ui-state-default ui-state-active fg-button-icon-solo"
-                                   title="hide/show nodes"><span class="ui-icon ui-icon-nodes"></span> Nodes</a>
-                                <a id="toggle-edges-macro"
+                                   title="hide/show nodes"><span class="ui-icon ui-icon-nodes"></span> <span class="noSelect">Nodes</span></a>
+                                <a id="toggle-edges"
                                    href="#"
                                    class="fg-button ui-state-default ui-state-active fg-button-icon-solo ui-corner-right"
-                                   title="hide/show edges"><span class="ui-icon ui-icon-edges"></span> Edges</a>
+                                   title="hide/show edges"><span class="ui-icon ui-icon-edges"></span> <span class="noSelect">Edges</span></a>
                             </div>
 
                         <div class="fg-buttonset fg-buttonset-multi ui-helper-clearfix">
-                            <a id="toggle-pause-macro"
+                            <a id="toggle-pause"
                                href="#"
                                class="fg-button ui-state-default ui-state-active fg-button-icon-left ui-priority-primary ui-corner-all"
-                               title="pause spatialization"><span class="ui-icon ui-icon-pause"></span> Pause</a>
+                               title="pause spatialization"><span class="ui-icon ui-icon-pause"></span> <span class="noSelect">Pause</span></a>
                         </div>
 
                         <div class="fg-buttonset ui-helper-clearfix">
                             <a href="#"
-                               id="toggle-recenter-macro"
+                               id="toggle-recenter"
                                class="fg-button ui-state-default fg-button-icon-left ui-priority-primary ui-corner-all"
-                               title="recenter the view"><span class="ui-icon ui-icon-home"></span> Center</a>
+                               title="recenter the view"><span class="ui-icon ui-icon-home"></span> <span class="noSelect">Center</span></a>
                         </div>
                         <div class="sliders">
-                            <div class="slider">filter edge weight<div id="macroSlider_edgeWeight"></div></div>
-                            <div class="slider">node size<div id="macroSlider_nodeSize"></div></div>
-                        </div><!-- end of sliders -->
+                            <div class="slider"><span class="noSelect">edges filter</span><div id="sliderEdgeWeight"></div></div>
+                            <div class="slider"><span class="noSelect">nodes filter</span><div id="sliderNodeWeight"></div></div>
+                            <div class="slider"><span class="noSelect">node size</span><div id="sliderNodeSize"></div></div>
+                            
+                        </div>
+                        <div class="fg-buttonset ui-helper-clearfix">
+                        <a href="#"
+                               id="toggle-project"
+                               class="fg-button ui-state-default fg-button-icon-left ui-priority-primary ui-corner-all"
+                               title="reproject"><span class="ui-icon ui-icon-arrows"></span> <span class="noSelect">Reproject</spzn></a>
+                        </div>
+                        <!-- end of sliders -->
                         <!--<div class="fg-buttonset ui-helper-clearfix fg-button">-->
                             <!--<a href="#"
                               id="open-macro"
