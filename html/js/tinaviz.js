@@ -25,7 +25,8 @@ function getScreenHeight() {
     else if (document.body) {
         y = document.body.clientHeight;
     }
-    return y;
+    
+    return y - 48;
 }
 /*
  * utility modifying the Object prototype
@@ -274,7 +275,7 @@ function Tinaviz() {
             this.dispatchProperty("category/mode", "keep");
             this.dispatchProperty("output/nodeSizeMin", 5.0);
             this.dispatchProperty("output/nodeSizeMax", 20.0);
-            this.dispatchProperty("output/nodeSizeRatio", 100.0/200.0);
+            this.dispatchProperty("output/nodeSizeRatio", 50.0/100.0);
             
             this.bindFilter("Category", "category", "macro");
             
@@ -476,6 +477,8 @@ function Tinaviz() {
             var matchlist = this.getNodesByLabel(label, type);
             for (var i = 0; i < matchlist.length; i++ ) {
                 applet.selectFromId( decodeJSON( matchlist[i]['id'] ) );
+                // todo: auto center!!
+                //applet.
             }
         }
         /*
@@ -587,8 +590,37 @@ function Tinaviz() {
         this.logDebug= function(msg) {
             //console.console.info(msg);
         }
+        
+        this.projectToOtherView= function(view) {
+            // TODO switch to the other view
+            if (view!="macro") return;
+            this.selectFromId(id);
+            this.recenter();
+        }
 
+        /**
+         * Callback called whenever the applet change of view
+         */
         this.switchedTo= function(view) {
+        
+            if (view=="macro") {
+                $("#toggle-project").enable();
+            
+            } else if (view=="meso") {
+                $("#toggle-project").disable();
+            
+            }
+            
+            // update the buttons
+            $("#sliderEdgeWeight").slider( "option", "values", [
+                this.getProperty(view, "edgeWeight/min"),
+                this.getProperty(view, "edgeWeight/max")*100
+            ]);
+            $("#sliderNodeWeight").slider( "option", "values", [
+                this.getProperty(view, "nodeWeight/min"),
+                this.getProperty(view, "nodeWeight/max")*100
+            ]);
+            
         }
 
         this.getWidth= function() {
@@ -596,7 +628,7 @@ function Tinaviz() {
         }
 
         this.getHeight= function() {
-            return getScreenHeight() - $("#hd").height();
+            return getScreenHeight() - $("#hd").height() - $("#ft").height() + 10;
         }
     //};
 }
@@ -608,7 +640,7 @@ $(document).ready(function(){
     $(function(){
 	    $.extend($.fn.disableTextSelect = function() {
 		    return this.each(function(){
-			    if($.browser.mozilla){//Firefox
+			    if($.browser.mozilla){//Firefox $("#sliderEdgeWeight")
 				    $(this).css('MozUserSelect','none');
 			    }else if($.browser.msie){//IE
 				    $(this).bind('selectstart',function(){return false;});
@@ -628,7 +660,7 @@ $(document).ready(function(){
     $("#title").html("FET Open projects explorer");
     var infodiv = new InfoDiv("#infodiv");
     // auto-adjusting infodiv height
-    $(infodiv.id).css( 'height', getScreenHeight() - $("#hd").height() );
+    $(infodiv.id).css( 'height', getScreenHeight() - $("#hd").height() - $("#ft").height() );
     $(infodiv.id).accordion({
         fillSpace: true,
     });
@@ -643,7 +675,7 @@ $(document).ready(function(){
         tinaviz.loadAbsoluteGraph( $(this).val() );
     });*/
 
-    // all hover and click logic for buttons
+    // all hover and c$( ".selector" ).slider( "option", "values", [1,5,9] );lick logic for buttons
     $(".fg-button:not(.ui-state-disabled)")
     .hover(
         function(){
@@ -691,22 +723,22 @@ $(document).ready(function(){
     // MACRO SLIDERS
     $("#sliderEdgeWeight").slider({
         range: true,
-        values: [0, 200],
+        values: [0, 100],
         animate: true,
         slide: function(event, ui) {
-            tinaviz.setProperty("current", "edgeWeight/min", ui.values[0] / 200.0);
-            tinaviz.setProperty("current", "edgeWeight/max", ui.values[1] / 200.0);
+            tinaviz.setProperty("current", "edgeWeight/min", ui.values[0] / 100.0);
+            tinaviz.setProperty("current", "edgeWeight/max", ui.values[1] / 100.0);
             tinaviz.touch();
         }
     });
     
     $("#sliderNodeWeight").slider({
         range: true,
-        values: [0, 200],
+        values: [0, 100],
         animate: true,
         slide: function(event, ui) {
-            tinaviz.setProperty("current", "nodeWeight/min", ui.values[0] / 200.0);
-            tinaviz.setProperty("current", "nodeWeight/max", ui.values[1] / 200.0);
+            tinaviz.setProperty("current", "nodeWeight/min", ui.values[0] / 100.0);
+            tinaviz.setProperty("current", "nodeWeight/max", ui.values[1] / 100.0);
             tinaviz.touch();
         }
     });
@@ -741,7 +773,9 @@ $(document).ready(function(){
     $("#toggle-recenter").click(function(event) {
         tinaviz.recenter();
     });
-    
+    $("#toggle-project").click(function(event) {
+        tinaviz.projectToOtherView();
+    });
     $(window).bind('resize', function() {
         if (tinaviz.enabled()) {
             tinaviz.resize();

@@ -43,7 +43,7 @@ body {
 }
 
 #title {
-    margin: 5px 5px;
+    margin: 2px 2px;
 }
 
 #node_unselect {
@@ -52,9 +52,9 @@ body {
 }
 
 #infodiv {
-    margin: 5px 6px;
-    /*height: 800px;
-    overflow: auto;*/
+    margin: 4px 9px;
+    /*height: 90%;*/
+    /*overflow: auto;*/
 }
 
 #node_table {
@@ -85,6 +85,7 @@ body {
 #macroSlider_nodeSize, #macroSlider_edgeWeight {
     margin: 2px 2px;
 }
+
 
 /*.toolbardiv {
     padding:12px;
