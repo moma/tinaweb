@@ -755,8 +755,7 @@ $(document).ready(function(){
             tinaviz.touch();
         }}
     );
-<<<<<<< HEAD
-        
+
     $("#sliderSelectionZone").slider({
         value: 100.0,
         max: 300.0,// precision/size
@@ -767,10 +766,7 @@ $(document).ready(function(){
         }
     });
     
-=======
-    */
 
->>>>>>> 80c20e973cbd4f22df438df610b735eee615fe58
     $("#toggle-labels").click(function(event) {
         tinaviz.toggleLabels();
     });
