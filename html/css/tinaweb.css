@@ -46,9 +46,13 @@ body {
     margin: 2px 2px;
 }
 
-#node_unselect {
-    float: right;
-    margin: 5px 2px;
+#toggle-unselect {
+    font-size:10pt;
+    height:0;
+    left:25px;
+    position:absolute;
+    top:0;
+    width:0;
 }
 
 #infodiv {

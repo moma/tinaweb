@@ -70,7 +70,7 @@ function InfoDiv(divid) {
     label : $( "#node_label" ),
     contents : $( "#node_contents" ),
     cloud : $( "#node_neighbourhood" ),
-    unselect_button: $( "#node_unselect" ),
+    unselect_button: $( "#toggle-unselect" ),
     table: $("#node_table > tbody"),
     data: {},
 
@@ -99,7 +99,6 @@ function InfoDiv(divid) {
     tagCloudOne: function() {
         for (var nodeid in this.selection) {
             var nb = tinaviz.getNeighbourhood(nodeid);
-            var ngsizecoef = 10;
             var tagcloud = $("<p></p>");
             for(var nbid in nb) {
                 if (this.selection[nodeid]['category'] != nb[nbid]['category']) {
@@ -114,7 +113,7 @@ function InfoDiv(divid) {
                         tag.css('font-size', 12)
                     }
                     else if ( this.selection[nodeid]['category'] == 'Document' ) {
-                        tag.css('font-size', Math.floor( ngsizecoef* Math.log( 4 + nb[nbid]['occurrences'] )))
+                        tag.css('font-size', Math.floor( ngsizecoef* Math.log( 1.5 + nb[nbid]['occurrences'] )))
                     }
                     tagcloud.append(tag);
                     //tagcloud.append(" ");
@@ -133,7 +132,7 @@ function InfoDiv(divid) {
      * of the opposite type of a given node
      */
     tagCloudMultiple: function() {
-        var sizecoef = 10;
+        var sizecoef = 15;
         var tempcloud = {};
         /* builds tempcloud variable */
         for (var nodeid in this.selection) {
@@ -155,7 +154,7 @@ function InfoDiv(divid) {
         for (var tagid in tempcloud) {
             var tag = $("<span class='tinaviz_node'></span>")
                 .addClass('ui-widget-content')
-                .css('font-size', Math.floor( sizecoef* Math.log( 4 + tempcloud[tagid]['occurrences'] )))
+                .css('font-size', Math.floor( sizecoef* Math.log( 1.5 + tempcloud[tagid]['occurrences'] )))
                 .html( tempcloud[tagid]['label'] )
                 .click( function(eventObject) {
                     //switch to meso view
@@ -302,8 +301,8 @@ function Tinaviz() {
             this.bindFilter("Output", "output", "meso");
             //this.bindFilter("NodeWeightRangeHack", "subgraph", "meso");
 
-            // this.readGraphJava("macro", "FET60bipartite_graph_cooccurrences_.gexf");
-            this.readGraphJava("macro", "CSSScholarsMay2010.gexf");
+            this.readGraphJava("macro", "FET60bipartite_graph_cooccurrences_.gexf");
+            //this.readGraphJava("macro", "CSSScholarsMay2010.gexf");
 
             //this.togglePause();
             // init the node list with ngrams
@@ -786,7 +785,9 @@ $(document).ready(function(){
     $("#toggle-pause").click(function(event) {
         tinaviz.togglePause();
     });
-    $("#toggle-unselect").click(function(event) {
+    $("#toggle-unselect").button({
+         icons: {primary:'ui-icon-close'},
+    }).click(function(event) {
         tinaviz.unselect();
     });
     $("#toggle-recenter").click(function(event) {
