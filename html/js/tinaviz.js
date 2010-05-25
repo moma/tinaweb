@@ -26,7 +26,7 @@ function getScreenHeight() {
         y = document.body.clientHeight;
     }
     
-    return y - 48;
+    return y;
 }
 /*
  * utility modifying the Object prototype
@@ -628,7 +628,7 @@ function Tinaviz() {
         }
 
         this.getHeight= function() {
-            return getScreenHeight() - $("#hd").height() - $("#ft").height() + 10;
+            return getScreenHeight() - $("#hd").height() - $("#ft").height() + 58;
         }
     //};
 }
@@ -660,7 +660,7 @@ $(document).ready(function(){
     $("#title").html("FET Open projects explorer");
     var infodiv = new InfoDiv("#infodiv");
     // auto-adjusting infodiv height
-    $(infodiv.id).css( 'height', getScreenHeight() - $("#hd").height() - $("#ft").height() );
+    $(infodiv.id).css( 'height', getScreenHeight() - $("#hd").height() - $("#ft").height() - 60);
     $(infodiv.id).accordion({
         fillSpace: true,
     });
