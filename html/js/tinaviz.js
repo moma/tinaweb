@@ -302,8 +302,8 @@ function Tinaviz() {
             this.bindFilter("Output", "output", "meso");
             //this.bindFilter("NodeWeightRangeHack", "subgraph", "meso");
 
-            this.readGraphJava("macro", "FET60bipartite_graph_cooccurrences_.gexf");
-            //this.readGraphJava("macro", "CSSScholarsMay2010.gexf");
+            // this.readGraphJava("macro", "FET60bipartite_graph_cooccurrences_.gexf");
+            this.readGraphJava("macro", "CSSScholarsMay2010.gexf");
 
             //this.togglePause();
             // init the node list with ngrams
@@ -599,6 +599,11 @@ function Tinaviz() {
             this.selectFromId(id);
             this.recenter();
         }
+        
+        this.resetLayoutCounter= function(view) {
+            // TODO switch to the other view
+            applet.resetLayoutCounter();
+        }
 
         /**
          * Callback called whenever the applet change of view
@@ -730,6 +735,7 @@ $(document).ready(function(){
         slide: function(event, ui) {
             tinaviz.setProperty("current", "edgeWeight/min", ui.values[0] / 100.0);
             tinaviz.setProperty("current", "edgeWeight/max", ui.values[1] / 100.0);
+            tinaviz.resetLayoutCounter();
             tinaviz.touch();
         }
     });
@@ -741,10 +747,10 @@ $(document).ready(function(){
         slide: function(event, ui) {
             tinaviz.setProperty("current", "nodeWeight/min", ui.values[0] / 100.0);
             tinaviz.setProperty("current", "nodeWeight/max", ui.values[1] / 100.0);
+            tinaviz.resetLayoutCounter();
             tinaviz.touch();
         }
     });
-
   
     $("#sliderNodeSize").slider({
         value: 50.0,
@@ -763,6 +769,7 @@ $(document).ready(function(){
         slide: function(event, ui) {
             tinaviz.setProperty("current", "selection/radius", ui.value);
             tinaviz.touch();
+
         }
     });
     
