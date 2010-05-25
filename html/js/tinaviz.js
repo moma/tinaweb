@@ -276,6 +276,7 @@ function Tinaviz() {
             this.dispatchProperty("output/nodeSizeMin", 5.0);
             this.dispatchProperty("output/nodeSizeMax", 20.0);
             this.dispatchProperty("output/nodeSizeRatio", 50.0/100.0);
+            this.dispatchProperty("selection/radius", 100.0);
             
             this.bindFilter("Category", "category", "macro");
             
@@ -743,17 +744,26 @@ $(document).ready(function(){
         }
     });
 
-  /*
+  
     $("#sliderNodeSize").slider({
         value: 50.0,
-        max: 200.0,// precision/size
+        max: 100.0,// precision/size
         animate: true,
         slide: function(event, ui) {
-            tinaviz.setProperty("current", "output/nodeSizeRatio", ui.value / 200.0);
+            tinaviz.setProperty("current", "output/nodeSizeRatio", ui.value / 100.0);
             tinaviz.touch();
         }}
     );
-    */
+        
+    $("#sliderSelectionZone").slider({
+        value: 100.0,
+        max: 300.0,// precision/size
+        animate: true,
+        slide: function(event, ui) {
+            tinaviz.setProperty("current", "selection/radius", ui.value);
+            tinaviz.touch();
+        }
+    });
     
     $("#toggle-labels").click(function(event) {
         tinaviz.toggleLabels();
