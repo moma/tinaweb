@@ -25,7 +25,7 @@ function getScreenHeight() {
     else if (document.body) {
         y = document.body.clientHeight;
     }
-    
+
     return y;
 }
 /*
@@ -99,7 +99,7 @@ function InfoDiv(divid) {
     tagCloudOne: function() {
         for (var nodeid in this.selection) {
             var nb = tinaviz.getNeighbourhood(nodeid);
-            var ngsizecoef=20;
+            var ngsizecoef = 10;
             var tagcloud = $("<p></p>");
             for(var nbid in nb) {
                 if (this.selection[nodeid]['category'] != nb[nbid]['category']) {
@@ -114,7 +114,7 @@ function InfoDiv(divid) {
                         tag.css('font-size', 12)
                     }
                     else if ( this.selection[nodeid]['category'] == 'Document' ) {
-                        tag.css('font-size', Math.floor( ngsizecoef* Math.log( 1 + nb[nbid]['occurrences'] )))
+                        tag.css('font-size', Math.floor( ngsizecoef* Math.log( 4 + nb[nbid]['occurrences'] )))
                     }
                     tagcloud.append(tag);
                     //tagcloud.append(" ");
@@ -133,7 +133,7 @@ function InfoDiv(divid) {
      * of the opposite type of a given node
      */
     tagCloudMultiple: function() {
-        var sizecoef=20;
+        var sizecoef = 10;
         var tempcloud = {};
         /* builds tempcloud variable */
         for (var nodeid in this.selection) {
@@ -155,7 +155,7 @@ function InfoDiv(divid) {
         for (var tagid in tempcloud) {
             var tag = $("<span class='tinaviz_node'></span>")
                 .addClass('ui-widget-content')
-                .css('font-size', Math.floor( sizecoef* Math.log( 1 + tempcloud[tagid]['occurrences'] )))
+                .css('font-size', Math.floor( sizecoef* Math.log( 4 + tempcloud[tagid]['occurrences'] )))
                 .html( tempcloud[tagid]['label'] )
                 .click( function(eventObject) {
                     //switch to meso view
@@ -276,10 +276,11 @@ function Tinaviz() {
             this.dispatchProperty("output/nodeSizeMin", 5.0);
             this.dispatchProperty("output/nodeSizeMax", 20.0);
             this.dispatchProperty("output/nodeSizeRatio", 50.0/100.0);
+
             this.dispatchProperty("selection/radius", 100.0);
             
             this.bindFilter("Category", "category", "macro");
-            
+
             this.bindFilter("NodeWeightRange",  "nodeWeight", "macro");
             this.bindFilter("EdgeWeightRange", "edgeWeight",  "macro");
             this.bindFilter("NodeFunction", "radiusByWeight", "macro");
@@ -294,7 +295,7 @@ function Tinaviz() {
             this.setProperty("meso", "subgraph/item", "");
             this.setProperty("meso", "subgraph/category", "NGram");
             this.bindFilter("NodeWeightRange",  "nodeWeight", "meso");
-            
+
             this.bindFilter("EdgeWeightRange", "edgeWeight",  "meso");
             this.bindFilter("NodeFunction", "radiusByWeight", "meso");
             //this.bindFilter("NodeRadius",   "radius",         "meso");
@@ -325,7 +326,7 @@ function Tinaviz() {
         this.resize = function() {
            this.size(this.getWidth(), this.getHeight());
         }
-        
+
         // RESIZE THE APPLET
         this.size= function(width, height) {
             if (wrapper == null || applet == null) return;
@@ -412,7 +413,7 @@ function Tinaviz() {
             else if (cat == "NGram")
                 return "Document";
             else alert("error, cannot get opposite category of "+cat);
-              
+
         }
 
         /*
@@ -456,8 +457,8 @@ function Tinaviz() {
             if (applet == null) return;
             return applet.setProperty(view,key,value);
         }
-        
-    
+
+
 
         this.getProperty= function(view,key) {
             if (applet == null) return;
@@ -515,8 +516,8 @@ function Tinaviz() {
             //console.log( data );
             for (key in data) {
                 this.setProperty("meso", "subgraph/item", key);
- 
-                this.setProperty("meso", "subgraph/category", 
+
+                this.setProperty("meso", "subgraph/category",
                     this.getOppositeCategory(
                         this.getProperty(view, "category/value")));
             }
@@ -591,7 +592,7 @@ function Tinaviz() {
         this.logDebug= function(msg) {
             //console.console.info(msg);
         }
-        
+
         this.projectToOtherView= function(view) {
             // TODO switch to the other view
             if (view!="macro") return;
@@ -603,15 +604,15 @@ function Tinaviz() {
          * Callback called whenever the applet change of view
          */
         this.switchedTo= function(view) {
-        
+
             if (view=="macro") {
                 $("#toggle-project").enable();
-            
+
             } else if (view=="meso") {
                 $("#toggle-project").disable();
-            
+
             }
-            
+
             // update the buttons
             $("#sliderEdgeWeight").slider( "option", "values", [
                 this.getProperty(view, "edgeWeight/min"),
@@ -621,7 +622,7 @@ function Tinaviz() {
                 this.getProperty(view, "nodeWeight/min"),
                 this.getProperty(view, "nodeWeight/max")*100
             ]);
-            
+
         }
 
         this.getWidth= function() {
@@ -639,19 +640,19 @@ var tinaviz = new Tinaviz();
 $(document).ready(function(){
 
     $(function(){
-	    $.extend($.fn.disableTextSelect = function() {
-		    return this.each(function(){
-			    if($.browser.mozilla){//Firefox $("#sliderEdgeWeight")
-				    $(this).css('MozUserSelect','none');
-			    }else if($.browser.msie){//IE
-				    $(this).bind('selectstart',function(){return false;});
-			    }else{//Opera, etc.
-				    $(this).mousedown(function(){return false;});
-			    }
-		    });
-	    });
-	    $('.noSelect').disableTextSelect();//No text selection on elements with a class of 'noSelect'
-	     $('.noSelect').hover(function() {
+        $.extend($.fn.disableTextSelect = function() {
+            return this.each(function(){
+                if($.browser.mozilla){//Firefox $("#sliderEdgeWeight")
+                    $(this).css('MozUserSelect','none');
+                }else if($.browser.msie){//IE
+                    $(this).bind('selectstart',function(){return false;});
+                }else{//Opera, etc.
+                    $(this).mousedown(function(){return false;});
+                }
+            });
+        });
+        $('.noSelect').disableTextSelect();//No text selection on elements with a class of 'noSelect'
+         $('.noSelect').hover(function() {
             $(this).css('cursor','default');
          }, function() {
             $(this).css('cursor','auto');
@@ -732,7 +733,7 @@ $(document).ready(function(){
             tinaviz.touch();
         }
     });
-    
+
     $("#sliderNodeWeight").slider({
         range: true,
         values: [0, 100],
@@ -754,6 +755,7 @@ $(document).ready(function(){
             tinaviz.touch();
         }}
     );
+<<<<<<< HEAD
         
     $("#sliderSelectionZone").slider({
         value: 100.0,
@@ -765,6 +767,10 @@ $(document).ready(function(){
         }
     });
     
+=======
+    */
+
+>>>>>>> 80c20e973cbd4f22df438df610b735eee615fe58
     $("#toggle-labels").click(function(event) {
         tinaviz.toggleLabels();
     });
