@@ -628,7 +628,7 @@ function Tinaviz() {
         }
 
         this.getHeight= function() {
-            return getScreenHeight() - $("#hd").height() - $("#ft").height() + 58;
+            return getScreenHeight() - $("#hd").height() - $("#ft").height() - 40;
         }
     //};
 }
