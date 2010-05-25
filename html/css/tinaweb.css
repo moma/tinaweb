@@ -57,9 +57,18 @@ body {
     /*overflow: auto;*/
 }
 
+#node_label {
+    font-size: 12pt;
+}
+
+.tinaviz_node {
+    border: none;
+}
+
 #node_table {
     border: none;
     width: 100%;
+    text-align: left;
 }
 
 /* each sliders positioned relatively to their parent */
