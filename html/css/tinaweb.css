@@ -75,12 +75,23 @@ body {
     text-align: left;
 }
 
+.bigTitle {
+    font-size: 20px;
+}
+
 /* each sliders positioned relatively to their parent */
 .slider {
     float: left;
-    width: 180px;
+    width: 100px;
     padding: 0px 20px 0px 0px;
     margin-top: -5px;
+}
+.smallslider {
+    width: 80px;
+}
+
+.sliderLabel {
+    font-size: 11px;
 }
 
 .search {

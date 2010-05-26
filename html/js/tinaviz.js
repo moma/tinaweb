@@ -97,6 +97,7 @@ function InfoDiv(divid) {
      * of the opposite type of a given node
      */
     tagCloudOne: function() {
+        var ngsizecoef = 15;
         for (var nodeid in this.selection) {
             var nb = tinaviz.getNeighbourhood(nodeid);
             var tagcloud = $("<p></p>");
@@ -197,7 +198,8 @@ function InfoDiv(divid) {
                 this.contents.append( $("<p></p>").html(decodeJSON(node.content)) );
             }
         }
-        this.alphabetSort( this.label, labelinnerdiv, "b", ",<br/>" );
+        //this.alphabetSort( this.label, labelinnerdiv, "b", ",<br/>" );
+        this.alphabetSort( this.label, labelinnerdiv, "b", ",&nbsp;" );
     },
 
     /*
@@ -244,7 +246,7 @@ function InfoDiv(divid) {
                     // Inform the application of the progress
                     //progressFn(value, total);
                     // Process next chunk
-                setTimeout("displayNodeRow('"+rowLabel+"','"+rowId+"')", 0);
+                setTimeout("displayNodeRow(\""+rowLabel+"\",\""+rowId+"\")", 0);
                 //}
             })();
         }
@@ -293,15 +295,15 @@ function Tinaviz() {
             this.setProperty("meso", "subgraph/source", "macro");
             this.setProperty("meso", "subgraph/item", "");
             this.setProperty("meso", "subgraph/category", "NGram");
+            /*
             this.bindFilter("NodeWeightRange",  "nodeWeight", "meso");
-
             this.bindFilter("EdgeWeightRange", "edgeWeight",  "meso");
             this.bindFilter("NodeFunction", "radiusByWeight", "meso");
-            //this.bindFilter("NodeRadius",   "radius",         "meso");
-            this.bindFilter("Output", "output", "meso");
-            //this.bindFilter("NodeWeightRangeHack", "subgraph", "meso");
 
-            this.readGraphJava("macro", "FET60bipartite_graph_cooccurrences_.gexf");
+            this.bindFilter("Output", "output", "meso");
+*/
+            this.readGraphJava("macro", "French_bipartite_graph.gexf");
+            //this.readGraphJava("macro", "FET60bipartite_graph_cooccurrences_.gexf");
             //this.readGraphJava("macro", "CSSScholarsMay2010.gexf");
 
             //this.togglePause();
@@ -424,7 +426,7 @@ function Tinaviz() {
                 this.getProperty(view, "category/value"));
             this.setProperty(view, "category/value", newcategory);
             this.touch(view);
-            this.recenter();
+            this.autoCentering();
             this.updateNodes(view, newcategory);
         }
 
@@ -438,7 +440,7 @@ function Tinaviz() {
                     this.getProperty("meso", "category/value")));
             // this.touch("meso");
             this.setView("meso");
-            this.recenter();
+            this.autoCentering();
         }
 
         this.bindFilter= function(name, path, view) {
@@ -482,6 +484,17 @@ function Tinaviz() {
                 //applet.
             }
         }
+        
+       this.highlightNodes= function(label, type) {
+            if (applet == null) return {};
+            var matchlist = this.getNodesByLabel(label, type);
+            for (var i = 0; i < matchlist.length; i++ ) {
+                applet.highlightFromId( decodeJSON( matchlist[i]['id'] ) );
+                // todo: auto center!!
+                //applet.
+            }
+        }
+        
         /*
         * unselect all nodes
         */
@@ -494,9 +507,9 @@ function Tinaviz() {
         /*
         * recenter the graph
         */
-        this.recenter= function() {
+        this.autoCentering= function() {
             if (applet == null) return false;
-            return applet.recenter();
+            return applet.autoCentering();
         }
 
         this.getNodeAttributes = function(id) {
@@ -522,7 +535,7 @@ function Tinaviz() {
             }
             if (view=="meso") {
                 this.touch(view);
-                this.recenter();
+                this.autoCentering();
             }
             return this.infodiv.update(view, data);
         }
@@ -596,7 +609,7 @@ function Tinaviz() {
             // TODO switch to the other view
             if (view!="macro") return;
             this.selectFromId(id);
-            this.recenter();
+            this.autoCentering();
         }
         
         this.resetLayoutCounter= function(view) {
@@ -610,11 +623,9 @@ function Tinaviz() {
         this.switchedTo= function(view) {
 
             if (view=="macro") {
-                $("#toggle-project").enable();
-
+                $("#toggle-project").button('enable');
             } else if (view=="meso") {
-                $("#toggle-project").disable();
-
+                $("#toggle-project").button('disable');
             }
 
             // update the buttons
@@ -636,6 +647,14 @@ function Tinaviz() {
         this.getHeight= function() {
             return getScreenHeight() - $("#hd").height() - $("#ft").height() - 40;
         }
+                
+        this.buttonStateCallback = function(button, enabled) {
+            // state = "disable"; if (enabled) { state = "enable"; } 
+            //alert("#toggle-"+button);
+            $("#toggle-"+button).toggleClass("ui-state-active", enabled);
+            //$("#toggle-"+button).button(state);
+         }
+                 
     //};
 }
 
@@ -705,17 +724,41 @@ $(document).ready(function(){
             $(this).removeClass("ui-state-active");
         }
     });
-
-    var searchinput = $("#search_input");
+ 
     // binds the click event to tinaviz.searchNodes()
+    
+    $("#search").submit(function() {
+      var txt = $("#search_input").val();
+      if (txt=="") {
+        tinaviz.unselect();
+      } else {
+           tinaviz.searchNodes(txt, "containsIgnoreCase");
+      }
+      return false;
+    });
+    $("#search").keypress(function() {
+      var txt = $("#search_input").val();
+      if (txt=="") {
+        tinaviz.unselect();
+      } else {
+           tinaviz.highlightNodes(txt, "containsIgnoreCase");
+      }
+    });
+    /*
     $("#search_button").button({
         text: false,
         icons: {
             primary: 'ui-icon-search'
         }
     }).click( function(eventObject) {
-        tinaviz.searchNodes(searchinput.val(), "containsIgnoreCase");
-    });
+        var txt = $("#search_input").val();
+        if (txt=="") {
+        tinaviz.unselect();
+        } else {
+           tinaviz.searchNodes(txt, "containsIgnoreCase");
+        }
+    });*/
+    
     // SLIDERS INIT
     $.extend($.ui.slider.defaults, {
         //range: "min",
@@ -763,26 +806,25 @@ $(document).ready(function(){
 
     $("#sliderSelectionZone").slider({
         value: 100.0,
-        max: 300.0,// precision/size
+        max: 300.0, // max disk radius, in pixel
         animate: true,
         slide: function(event, ui) {
             tinaviz.setProperty("current", "selection/radius", ui.value);
             tinaviz.touch();
-
         }
     });
     
 
-    $("#toggle-labels").click(function(event) {
+    $("#toggle-showLabels").click(function(event) {
         tinaviz.toggleLabels();
     });
-    $("#toggle-nodes").click(function(event) {
+    $("#toggle-showNodes").click(function(event) {
         tinaviz.toggleNodes();
     });
-    $("#toggle-edges").click(function(event) {
+    $("#toggle-showEdges").click(function(event) {
         tinaviz.toggleEdges();
     });
-    $("#toggle-pause").click(function(event) {
+    $("#toggle-paused").click(function(event) {
         tinaviz.togglePause();
     });
     $("#toggle-unselect").button({
@@ -790,8 +832,8 @@ $(document).ready(function(){
     }).click(function(event) {
         tinaviz.unselect();
     });
-    $("#toggle-recenter").click(function(event) {
-        tinaviz.recenter();
+    $("#toggle-autoCentering").click(function(event) {
+        tinaviz.autoCentering();
     });
     $("#toggle-project").click(function(event) {
         tinaviz.projectToOtherView();
@@ -799,6 +841,7 @@ $(document).ready(function(){
     $(window).bind('resize', function() {
         if (tinaviz.enabled()) {
             tinaviz.resize();
+            $("#infodiv").css( 'height', getScreenHeight() - $("#hd").height() - $("#ft").height() - 60);
         }
     });
 });
