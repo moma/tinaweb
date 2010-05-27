@@ -45,7 +45,10 @@ Object.size = function(obj) {
  * values from JSON sent by the java applet
  */
 function decodeJSON(encvalue) {
-    return decodeURIComponent(encvalue).replace(/\+/g, " ").replace(/%21/g, "!").replace(/%27/g, "'").replace(/%28/g, "(").replace(/%29/g, ")").replace(/%2A/g, "*");
+    if (encvalue !== undefined)
+        return decodeURIComponent(encvalue).replace(/\+/g, " ").replace(/%21/g, "!").replace(/%27/g, "'").replace(/%28/g, "(").replace(/%29/g, ")").replace(/%2A/g, "*");
+    else
+        return "";
 };
 
 
@@ -117,11 +120,10 @@ function InfoDiv(divid) {
                         tag.css('font-size', Math.floor( ngsizecoef* Math.log( 1.5 + nb[nbid]['occurrences'] )))
                     }
                     tagcloud.append(tag);
-                    //tagcloud.append(" ");
                 }
             }
-            //this.cloud.append( tagcloud );
-            this.alphabetSort( this.cloud, tagcloud, "span", "  " );
+            this.cloud.append( "<h3>More connected opposite nodes</h3>" );
+            this.alphabetSort( this.cloud, tagcloud, "span", ", " );
             break;
         }
         return true;
@@ -164,8 +166,8 @@ function InfoDiv(divid) {
                 tagcloud.append(tag);
             tagcloud.append(" ");
         }
-        //this.cloud.append( tagcloud );
-        this.alphabetSort( this.cloud, tagcloud, "span", "  " );
+        this.cloud.append( "<h3>More connected opposite nodes</h3>" );
+        this.alphabetSort( this.cloud, tagcloud, "span", ", " );
         return true;
     },
 
@@ -199,7 +201,7 @@ function InfoDiv(divid) {
             }
         }
         //this.alphabetSort( this.label, labelinnerdiv, "b", ",<br/>" );
-        this.alphabetSort( this.label, labelinnerdiv, "b", ",&nbsp;" );
+        this.alphabetSort( this.label, labelinnerdiv, "b", ", &nbsp;" );
     },
 
     /*
@@ -279,7 +281,7 @@ function Tinaviz() {
             this.dispatchProperty("output/nodeSizeRatio", 50.0/100.0);
 
             this.dispatchProperty("selection/radius", 100.0);
-            
+
             this.bindFilter("Category", "category", "macro");
 
             this.bindFilter("NodeWeightRange",  "nodeWeight", "macro");
@@ -460,7 +462,6 @@ function Tinaviz() {
         }
 
 
-
         this.getProperty= function(view,key) {
             if (applet == null) return;
             return applet.getProperty(view,key);
@@ -484,7 +485,7 @@ function Tinaviz() {
                 //applet.
             }
         }
-        
+
        this.highlightNodes= function(label, type) {
             if (applet == null) return {};
             var matchlist = this.getNodesByLabel(label, type);
@@ -494,7 +495,7 @@ function Tinaviz() {
                 //applet.
             }
         }
-        
+
         /*
         * unselect all nodes
         */
@@ -611,7 +612,7 @@ function Tinaviz() {
             this.selectFromId(id);
             this.autoCentering();
         }
-        
+
         this.resetLayoutCounter= function(view) {
             // TODO switch to the other view
             applet.resetLayoutCounter();
@@ -647,14 +648,14 @@ function Tinaviz() {
         this.getHeight= function() {
             return getScreenHeight() - $("#hd").height() - $("#ft").height() - 40;
         }
-                
+
         this.buttonStateCallback = function(button, enabled) {
-            // state = "disable"; if (enabled) { state = "enable"; } 
+            // state = "disable"; if (enabled) { state = "enable"; }
             //alert("#toggle-"+button);
             $("#toggle-"+button).toggleClass("ui-state-active", enabled);
             //$("#toggle-"+button).button(state);
          }
-                 
+
     //};
 }
 
@@ -724,9 +725,9 @@ $(document).ready(function(){
             $(this).removeClass("ui-state-active");
         }
     });
- 
+
     // binds the click event to tinaviz.searchNodes()
-    
+
     $("#search").submit(function() {
       var txt = $("#search_input").val();
       if (txt=="") {
@@ -758,7 +759,7 @@ $(document).ready(function(){
            tinaviz.searchNodes(txt, "containsIgnoreCase");
         }
     });*/
-    
+
     // SLIDERS INIT
     $.extend($.ui.slider.defaults, {
         //range: "min",
@@ -793,7 +794,7 @@ $(document).ready(function(){
             tinaviz.touch();
         }
     });
-  
+
     $("#sliderNodeSize").slider({
         value: 50.0,
         max: 100.0,// precision/size
@@ -813,7 +814,7 @@ $(document).ready(function(){
             tinaviz.touch();
         }
     });
-    
+
 
     $("#toggle-showLabels").click(function(event) {
         tinaviz.toggleLabels();
