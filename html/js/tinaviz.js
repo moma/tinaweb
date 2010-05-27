@@ -102,7 +102,8 @@ function InfoDiv(divid) {
     tagCloudOne: function() {
         var ngsizecoef = 15;
         for (var nodeid in this.selection) {
-            var nb = tinaviz.getNeighbourhood(nodeid);
+            // we need the full neighbourhood for the tag cloud
+            var nb = tinaviz.getNeighbourhood("macro",nodeid);
             var tagcloud = $("<p></p>");
             for(var nbid in nb) {
                 if (this.selection[nodeid]['category'] != nb[nbid]['category']) {
@@ -123,7 +124,7 @@ function InfoDiv(divid) {
                 }
             }
             this.cloud.append( "<h3>More connected opposite nodes</h3>" );
-            this.alphabetSort( this.cloud, tagcloud, "span", ", " );
+            this.alphabetSort( this.cloud, tagcloud, "span", ", &nbsp;" );
             break;
         }
         return true;
@@ -139,7 +140,8 @@ function InfoDiv(divid) {
         var tempcloud = {};
         /* builds tempcloud variable */
         for (var nodeid in this.selection) {
-            var nb = tinaviz.getNeighbourhood(nodeid);
+            // we need the full neighbourhood for the tag cloud
+            var nb = tinaviz.getNeighbourhood("macro",nodeid);
             for(var nbid in nb) {
                 if (this.selection[nodeid]['category'] != nb[nbid]['category']) {
                     if ( tempcloud[nbid] === undefined )
@@ -167,7 +169,7 @@ function InfoDiv(divid) {
             tagcloud.append(" ");
         }
         this.cloud.append( "<h3>More connected opposite nodes</h3>" );
-        this.alphabetSort( this.cloud, tagcloud, "span", ", " );
+        this.alphabetSort( this.cloud, tagcloud, "span", ", &nbsp;" );
         return true;
     },
 
@@ -201,7 +203,7 @@ function InfoDiv(divid) {
             }
         }
         //this.alphabetSort( this.label, labelinnerdiv, "b", ",<br/>" );
-        this.alphabetSort( this.label, labelinnerdiv, "b", ", &nbsp;" );
+        this.alphabetSort( this.label, labelinnerdiv, "b", ", &nbsp;&nbsp;" );
     },
 
     /*
@@ -280,7 +282,7 @@ function Tinaviz() {
             this.dispatchProperty("output/nodeSizeMax", 20.0);
             this.dispatchProperty("output/nodeSizeRatio", 50.0/100.0);
 
-            this.dispatchProperty("selection/radius", 100.0);
+            this.dispatchProperty("selection/radius", 1.0);
 
             this.bindFilter("Category", "category", "macro");
 
@@ -300,12 +302,13 @@ function Tinaviz() {
             /*
             this.bindFilter("NodeWeightRange",  "nodeWeight", "meso");
             this.bindFilter("EdgeWeightRange", "edgeWeight",  "meso");
+            */
             this.bindFilter("NodeFunction", "radiusByWeight", "meso");
 
             this.bindFilter("Output", "output", "meso");
-*/
-            this.readGraphJava("macro", "French_bipartite_graph.gexf");
-            //this.readGraphJava("macro", "FET60bipartite_graph_cooccurrences_.gexf");
+
+            // this.readGraphJava("macro", "French_bipartite_graph.gexf");
+            this.readGraphJava("macro", "FET60bipartite_graph_cooccurrences_.gexf");
             //this.readGraphJava("macro", "CSSScholarsMay2010.gexf");
 
             //this.togglePause();
@@ -518,32 +521,32 @@ function Tinaviz() {
             return $.parseJSON( applet.getNodesAttributes(id) );
         }
 
-        this.getNeighbourhood = function(id) {
+        this.getNeighbourhood = function(view,id) {
             if (applet == null) return;
-            return $.parseJSON( applet.getNeighbourhood(id) );
+            return $.parseJSON( applet.getNeighbourhood(view,id) );
         }
 
         this.nodeLeftClicked = function(view, data) {
             if ( data == null ) return;
-            // TODO replace the hash by a list
-            //console.log( data );
-            for (key in data) {
-                this.setProperty("meso", "subgraph/item", key);
 
-                this.setProperty("meso", "subgraph/category",
+           if (view=="meso") {
+           this.setProperty("meso", "subgraph/category",
                     this.getOppositeCategory(
                         this.getProperty(view, "category/value")));
-            }
-            if (view=="meso") {
+             }
+            /*if (view=="meso") {
                 this.touch(view);
                 this.autoCentering();
-            }
+            }*/
+            
+            //this.setProperty("meso", "subgraph/item", key);
+       
             return this.infodiv.update(view, data);
         }
 
         this.nodeRightClicked = function(view, data) {
             if (applet == null) return;
-            if (view=="macro" || view == "meso") {
+            if (view == "meso") {
                 this.toggleCategory(view);
             }
         }
@@ -606,10 +609,15 @@ function Tinaviz() {
             //console.console.info(msg);
         }
 
-        this.projectToOtherView= function(view) {
+        this.switchToOtherCategory= function() {
+            KEY = "category/value";
+            
             // TODO switch to the other view
-            if (view!="macro") return;
-            this.selectFromId(id);
+            this.setProperty("macro",KEY, this.getOppositeCategory( this.getProperty("macro", KEY)));
+            tinaviz.resetLayoutCounter();
+            this.touch();
+ 
+            //this.selectFromId(id);
             this.autoCentering();
         }
 
@@ -618,11 +626,14 @@ function Tinaviz() {
             applet.resetLayoutCounter();
         }
 
+
         /**
          * Callback called whenever the applet change of view
          */
         this.switchedTo= function(view) {
-
+            if (applet == null) return;
+            this.autoCentering();
+            
             if (view=="macro") {
                 $("#toggle-project").button('enable');
             } else if (view=="meso") {
@@ -737,6 +748,7 @@ $(document).ready(function(){
       }
       return false;
     });
+    /*
     $("#search").keypress(function() {
       var txt = $("#search_input").val();
       if (txt=="") {
@@ -745,20 +757,15 @@ $(document).ready(function(){
            tinaviz.highlightNodes(txt, "containsIgnoreCase");
       }
     });
-    /*
+    */
     $("#search_button").button({
         text: false,
         icons: {
             primary: 'ui-icon-search'
         }
     }).click( function(eventObject) {
-        var txt = $("#search_input").val();
-        if (txt=="") {
-        tinaviz.unselect();
-        } else {
-           tinaviz.searchNodes(txt, "containsIgnoreCase");
-        }
-    });*/
+        ("#search").submit();
+    });
 
     // SLIDERS INIT
     $.extend($.ui.slider.defaults, {
@@ -806,7 +813,7 @@ $(document).ready(function(){
     );
 
     $("#sliderSelectionZone").slider({
-        value: 100.0,
+        value: 1.0,
         max: 300.0, // max disk radius, in pixel
         animate: true,
         slide: function(event, ui) {
@@ -836,8 +843,8 @@ $(document).ready(function(){
     $("#toggle-autoCentering").click(function(event) {
         tinaviz.autoCentering();
     });
-    $("#toggle-project").click(function(event) {
-        tinaviz.projectToOtherView();
+    $("#toggle-switch").click(function(event) {
+        tinaviz.switchToOtherCategory();
     });
     $(window).bind('resize', function() {
         if (tinaviz.enabled()) {

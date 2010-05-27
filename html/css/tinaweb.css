@@ -77,6 +77,7 @@ body {
 
 .bigTitle {
     font-size: 20px;
+    width: 300px;
 }
 
 /* each sliders positioned relatively to their parent */
@@ -93,9 +94,20 @@ body {
 .sliderLabel {
     font-size: 11px;
 }
+.toolbar-left {
+    float: left;
+}
+
+.toolbar-right {
+    float: right;
+}
+
+.waitMessage {
+    font-size: 80px;
+}
 
 .search {
-    float: right;
+    /*float: right;*/
 }
 
 .tabfiller {
