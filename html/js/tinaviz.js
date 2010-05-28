@@ -123,7 +123,7 @@ function InfoDiv(divid) {
                     tagcloud.append(tag);
                 }
             }
-            this.cloud.append( "<h3>More connected opposite nodes</h3>" );
+            this.cloud.append( "<h3>Related to:</h3>" );
             this.alphabetSort( this.cloud, tagcloud, "span", ", &nbsp;" );
             break;
         }
@@ -168,7 +168,7 @@ function InfoDiv(divid) {
                 tagcloud.append(tag);
             tagcloud.append(" ");
         }
-        this.cloud.append( "<h3>More connected opposite nodes</h3>" );
+        this.cloud.append( "<h3>Related to:</h3>" );
         this.alphabetSort( this.cloud, tagcloud, "span", ", &nbsp;" );
         return true;
     },
