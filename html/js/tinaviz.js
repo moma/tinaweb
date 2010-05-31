@@ -54,13 +54,13 @@ function decodeJSON(encvalue) {
 /*
  * Asynchronous display of node list
  */
-function displayNodeRow(label, id) {
+function displayNodeRow(label, id, category) {
     //console.console.log("inserting "+label);
     $("#node_table > tbody").append(
         $("<tr></tr>").append(
             $("<td id='"+id+"'></td>").text(label).click( function(eventObject) {
                 //switch to meso view
-                tinaviz.viewMeso(id);
+                tinaviz.viewMeso(id, category);
             })
         )
     );
@@ -144,7 +144,7 @@ function InfoDiv(divid) {
                         .html( decodeJSON(nb[nbid]['label']) )
                         .click( function(eventObject) {
                             //switch to meso view
-                            tinaviz.viewMeso(decodeJSON(nbid));
+                            tinaviz.viewMeso(decodeJSON(nbid), decodeJSON(nb[nbid]['category']));
                         });
                     if ( this.selection[nodeid]['category'] == 'NGram' ) {
                         tag.css('font-size', 12)
@@ -175,11 +175,13 @@ function InfoDiv(divid) {
             // we need the full neighbourhood for the tag cloud
             var nb = tinaviz.getNeighbourhood("macro",nodeid);
             for(var nbid in nb) {
+                nbid = decodeJSON(nbid);
                 if (this.selection[nodeid]['category'] != nb[nbid]['category']) {
                     if ( tempcloud[nbid] === undefined )
                         tempcloud[nbid] = {
                             'label' : decodeJSON(nb[nbid]['label']),
-                            'occurrences' : 1
+                            'occurrences' : 1,
+                            'category': , decodeJSON(nb[nbid]['category']),
                         };
                     else
                         tempcloud[nbid]['occurrences']++;
@@ -195,7 +197,7 @@ function InfoDiv(divid) {
                 .html( tempcloud[tagid]['label'] )
                 .click( function(eventObject) {
                     //switch to meso view
-                    tinaviz.viewMeso(decodeJSON(nbid));
+                    tinaviz.viewMeso(tagid, tempcloud[nbid]['category']));
                 });
                 tagcloud.append(tag);
             tagcloud.append(" ");
@@ -438,7 +440,7 @@ function Tinaviz() {
 
         this.setView = function(view) {
             if (applet == null) return;
-            applet.getSession().setView(view);
+            applet.setView(view);
         }
         this.getView = function(view) {
             if (applet == null) return;
@@ -549,15 +551,13 @@ function Tinaviz() {
         /**
          * Toggle view to meso given an id
          */
-        this.viewMeso = function(id) {
+        this.viewMeso = function(id, category) {
+            // changes view level
             this.setView("meso");
-            /*this.setProperty("meso", "subgraph/item", id );
-            this.setProperty("meso", "subgraph/category",
-                this.getOppositeCategory(
-                    this.getProperty("meso", "category/value")));
-            // this.touch("meso");
-            this.setView("meso");*/
-            //this.autoCentering();
+            // sets the center of the graph
+            this.setProperty("meso", "subgraph/category", category);
+            // sets the neighbours' type
+            this.setProperty("meso", "subgraph/item", id );
         }
 
         this.bindFilter= function(name, path, view) {
@@ -642,8 +642,7 @@ function Tinaviz() {
             if ( data == null ) return;
             if (view=="meso") {
                 this.setProperty("meso", "subgraph/category",
-                    this.getOppositeCategory(
-                        this.getProperty(view, "category/value")));
+                    this.getProperty(view, "category/value"));
             }
             return this.infodiv.update(view, data);
         }
@@ -730,7 +729,6 @@ function Tinaviz() {
         this.switchedTo= function(view) {
             if (applet == null) return;
             this.autoCentering();
-
             if (view=="macro") {
                 $("#toggle-project").button('enable');
             } else if (view=="meso") {
