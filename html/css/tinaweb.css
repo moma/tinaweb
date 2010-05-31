@@ -12,29 +12,30 @@
 
 /* Jquery customization */
 
-.fg-button { outline: 0; margin:0 4px 0 0; padding: .4em 1em; text-decoration:none !important; cursor:pointer; position: relative; text-align: center; zoom: 1; }
-.fg-button .ui-icon { position: absolute; top: 50%; margin-top: -8px; left: 50%; margin-left: -8px; }
-
-a.fg-button { float:left; }
+.fg-button { margin:0 4px 0 0; text-decoration:none; position: relative; text-align: center; }
+.sliders { margin:0 4px 0 0; text-decoration:none; position: relative; text-align: center; }
+./*fg-button .ui-icon { position: absolute; top: 50%; margin-top: -8px; left: 50%; margin-left: -8px; }*/
 
 /* remove extra button width in IE */
-button.fg-button { width:auto; overflow:visible; }
+/*button.fg-button { width:auto; overflow:visible; }*/
 
-.fg-button-icon-left { padding-left: 2.1em; }
+/*.fg-button-icon-left { padding-left: 2.1em; }
 .fg-button-icon-right { padding-right: 2.1em; }
 .fg-button-icon-left .ui-icon { right: auto; left: .2em; margin-left: 0; }
 .fg-button-icon-right .ui-icon { left: auto; right: .2em; margin-left: 0; }
 
-.fg-button-icon-solo { display:block; width:8px; text-indent: -9999px; }     /* solo icon buttons must have block properties for the text-indent to work */
+.fg-button-icon-solo { display:block; width:8px; text-indent: -9999px; } */    /* solo icon buttons must have block properties for the text-indent to work */
 
-.fg-buttonset { float:left; }
-.fg-buttonset .fg-button { float: left; }
+/*.fg-buttonset { float:left; }*/
+/*.fg-buttonset .fg-button { float: left; }*/
 .fg-buttonset-single .fg-button,
 .fg-buttonset-multi .fg-button { margin-right: -1px;}
 
-.fg-toolbar { padding: .5em; margin: 0;  }
-.fg-toolbar .fg-buttonset { margin-right:1.5em; padding-left: 1px; }
-.fg-toolbar .fg-button { font-size: 1em;  }
+.fg-toolbar { padding: .5em; }
+
+.fg-toolbar .fg-buttonset { margin: 1,5em; padding-left: 1px; }
+.sliders { margin: 1,5em; padding-left: 30px; border: 1px;}
+/*.fg-toolbar .fg-button { font-size: 1em;  }*/
 
 
 
@@ -77,7 +78,6 @@ body {
 
 .bigTitle {
     font-size: 20px;
-    width: 300px;
 }
 
 /* each sliders positioned relatively to their parent */
@@ -87,6 +87,7 @@ body {
     padding: 0px 20px 0px 0px;
     margin-top: -5px;
 }
+
 .smallslider {
     width: 80px;
 }
@@ -94,6 +95,7 @@ body {
 .sliderLabel {
     font-size: 11px;
 }
+
 .toolbar-left {
     float: left;
 }
@@ -106,12 +108,6 @@ body {
     font-size: 20px;
 }
 
-.search {
-    float: right;
-}
-.recenter {
-    float: right;
-}
 
 .tabfiller {
    height:500px;
@@ -119,10 +115,6 @@ body {
 
 .detailtext {
     color: #000000;
-}
-
-#macroSlider_nodeSize, #macroSlider_edgeWeight {
-    margin: 2px 2px;
 }
 
 

@@ -26,64 +26,81 @@
 
     </head>
     <body>
-        <div id="doc3" class="yui-t5">
+        <div id="doc3" class="yui-t5 ui-widget">
             <div id="hd"  class="ui-widget">
                 <div id="hdb">
                     <div id="htoolbar" class="toolbardiv fg-toolbar ui-widget-header ui-corner-all ui-helper-clearfix">
                         <div id="title" class="bigTitle noSelect"></div>
+                            <button id="toggle-switch" class="fg-button toolbar-left">switch category</button>
+                            <button id="toggle-paused" class="fg-button toolbar-left">pause</button>
 
+                            <!-- TEMPORARY DISABLED - FOR THE ONLINE VERSION -->
+                            <!--
+                            <div class="fg-buttonset fg-buttonset-multi ui-helper-clearfix">
 
-                        <div class="fg-buttonset fg-buttonset-multi ui-helper-clearfix noSelect">
-                            
-                            <a id="toggle-paused"
-                               href="#"
-                               class="fg-button ui-state-default ui-state-active fg-button-icon-left ui-priority-primary ui-corner-all"
-                               title="pause spatialization"><span id="toggle-paused-icon" class="ui-icon ui-icon-play"></span>Play</a>
-                        </div>
+                                    <a id="toggle-showLabels"
+                                       href="#"
+                                       class="fg-button ui-state-default ui-state-active fg-button-icon-solo ui-corner-left"
+                                       title="hide/show labels"><span class="ui-icon ui-icon-labels"></span> <span class="noSelect">Labels</span></a>
+                                    <a id="toggle-showNodes"
+                                       href="#"
+                                       class="fg-button ui-state-default ui-state-active fg-button-icon-solo"
+                                       title="hide/show nodes"><span class="ui-icon ui-icon-nodes"></span> <span class="noSelect">Nodes</span></a>
+                                    <a id="toggle-showEdges"
+                                       href="#"
+                                       class="fg-button ui-state-default ui-state-active fg-button-icon-solo ui-corner-right"
+                                       title="hide/show edges"><span class="ui-icon ui-icon-edges"></span> <span class="noSelect">Edges</span></a>
 
+                            </div>
 
-                        <div class="fg-buttonset fg-buttonset-multi ui-helper-clearfix noSelect">
-                            <a href="#"
-                               id="toggle-autoCentering"
-                               class="fg-button ui-state-default ui-state-active fg-button-icon-left ui-priority-primary ui-corner-all"
-                               title="recenter the view"><span class="ui-icon ui-icon-home"></span> Resize</a>
-                        </div>
-                        <div class="sliders">
-                            <div class="slider"><span class="sliderLabel">edges filter</span><div id="sliderEdgeWeight"></div></div>
-                            <div class="slider"><span class="sliderLabel">nodes filter</span><div id="sliderNodeWeight"></div></div>
-                            <div class="slider"><span class="sliderLabel">magnify</span><div id="sliderNodeSize"></div></div>
-                            <div class="slider smallslider"><span class="sliderLabel noSelect">cursor size</span><div id="sliderSelectionZone"></div></div>
-                            
-                        </div>
-                        <div class="fg-buttonset ui-helper-clearfix">
-                        <a href="#"
-                               id="toggle-switch"
-                               class="fg-button ui-state-default fg-button-icon-left ui-priority-primary ui-corner-all"
-                               title="Switch"><span class="ui-icon ui-icon-arrows"></span> <span class="noSelect">Switch</span></a>
+                            <div class="fg-buttonset fg-buttonset-multi ui-helper-clearfix">
+                                <a id="toggle-paused"
+                                   href="#"
+                                   class="fg-button ui-state-default ui-state-active fg-button-icon-left ui-priority-primary ui-corner-all"
+                                   title="pause spatialization"><span class="ui-icon ui-icon-thunder"></span> <span class="noSelect">Run layout</span></a>
+                            </div>
+                            -->
+                            <div id="sliders_topology" class="sliders toolbar-left">
+                                <div class="slider">
+                                    <span class="sliderLabel noSelect">edges filter</span>
+                                    <div id="sliderEdgeWeight"></div>
+                                </div>
+                                <div class="slider">
+                                    <span class="sliderLabel noSelect">nodes filter</span>
+                                    <div id="sliderNodeWeight"></div>
+                                </div>
+                            </div>
+                            <div id="sliders_view" class="sliders toolbar-left">
+                                <div class="slider">
+                                    <span class="sliderLabel noSelect">magnify</span>
+                                    <div id="sliderNodeSize"></div>
+                                </div>
+                                <div class="slider smallslider">
+                                    <span class="sliderLabel noSelect">cursor size</span>
+                                    <div id="sliderSelectionZone"></div>
+                                </div>
+                            </div>
+                            <!-- end of sliders -->
+                            <!--<div class="fg-buttonset ui-helper-clearfix fg-button">-->
+                                <!--<a href="#"
+                                  id="open"
+                                  class="fg-button ui-state-default fg-button-icon-left ui-priority-primary ui-corner-all"
+                                  title="pause">-->
+                                  <!--<input id="inputgraph" type="file" size="2" style="height: 15px; opacity: 0; width: 10px;">Open</input> -->
+                                  <!--<input id="inputgraph" type="file" value="Open">-->
+                                <!--</a> -->
+                            <!--</div>-->
+                            <!--<div class="toolbar-right">-->
+                                <button id="toggle-autoCentering" class="fg-button toolbar-right">recenter</button>
+                                <form id="search" action="#" class="fg-button toolbar-right">
+                                    <input id="search_input" type="text" value="">
+                                    <button id="search_button" class="fg-button">search</button>
+                                </form>
+                            <!--</div>-->
+                        </div> <!-- End of BUTTON SET -->
 
-                        </div>
-                        <!-- end of sliders -->
-                        <!--<div class="fg-buttonset ui-helper-clearfix fg-button">-->
-                            <!--<a href="#"
-                              id="open"
-                              class="fg-button ui-state-default fg-button-icon-left ui-priority-primary ui-corner-all"
-                              title="pause">-->
-                              <!--<input id="inputgraph" type="file" size="2" style="height: 15px; opacity: 0; width: 10px;">Open</input> -->
-                              <!--<input id="inputgraph" type="file" value="Open">-->
-                            <!--</a> -->
-                        <!--</div>-->
-                        <div class="recenter">
-                            <button id="toggle-autoCentering">recenter</button>
-                        </div>
-                        <div class="search">
-                            <form id="search" action="#">
-                                <input id="search_input" type="text" value="">
-                                <button id="search_button">search</button>
-                            </form>
-                        </div>
-                        </div> <!--End of BUTTON SET -->
                     </div><!-- End of htoolbar -->
-                    <div style="clear:both;"></div>
+                   <!--<div style="clear:both;"></div>-->
                 </div><!-- End of hdb -->
             </div><!-- End of hd -->
             <div id="bd">
@@ -168,8 +185,7 @@ style="padding: 0px"
                         </div><!-- end of visualization -->
                         <!-- RIGHT MAIN COLUMN-->
                         <div id="infodiv" class="yui-u">
-                            <h3>Current selection <a href="#" id="toggle-unselect" ></a></h3>
-
+                            <h3>Current selection <a href="#" id="toggle-unselect"></a></h3>
                             <div>
                             <!--
                                 <div id="node_unselect" class="fg-buttonset">
@@ -178,7 +194,7 @@ style="padding: 0px"
                                             class="fg-button ui-state-default fg-button-icon-left ui-priority-primary ui-corner-all"
                                            title="unselect"><span class="ui-icon ui-icon-close"></span></a>
                                 </div>-->
-                                <div style="clear:both;"></div>
+                                <!--<div style="clear:both;"></div>-->
                                 <div id="node_label" class="ui-widget-header ui-corner-all"></div>
                                 <div id="node_neighbourhood" class="ui-widget-content ui-corner-all"></div>
                                 <div id="node_contents" class="ui-widget-content ui-corner-all">  </div>
@@ -200,8 +216,8 @@ style="padding: 0px"
                     </div><!-- end of yui-b -->
                 </div><!-- end of yui-main -->
             </div>
-            <div id="ft" class="ui-widget ui-corner-all" >
-                <p class="ui-widget-header ui-corner-all" style="margin: 0;">Copyright MOMA, CREA, CNRS - 2009, 2010, 2011.</p>
+            <div id="ft" class="ui-widget ui-widget-header ui-corner-all">
+                <p class="ui-corner-all" style="margin: 0;">Copyright MOMA, CREA, CNRS - 2009, 2010, 2011.</p>
                 <p class="ui-widget-content ui-corner-all" style="margin: 0;">
                     Tinaweb is developed by <a href="http://moma.csregistry.org" target="_BLANK"><img src="css/branding/moma-crea.png" height="15px" /></a> under the  <a href="http://www.gnu.org/licenses/gpl.html" target="_BLANK">GNU GPL license</a> with the support of <a href="http://cordis.europa.eu/fp7/ict/programme/fet_en.html" target="_BLANK">EU FP7 ICT - Future and emerging technologies</a><br/>
                 Our partners : <img src="css/branding/partners_small.jpg" height=15px/>

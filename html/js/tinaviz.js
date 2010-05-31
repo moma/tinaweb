@@ -54,13 +54,13 @@ function decodeJSON(encvalue) {
 /*
  * Asynchronous display of node list
  */
-function displayNodeRow(label, id) {
+function displayNodeRow(label, id, category) {
     //console.console.log("inserting "+label);
     $("#node_table > tbody").append(
         $("<tr></tr>").append(
             $("<td id='"+id+"'></td>").text(label).click( function(eventObject) {
                 //switch to meso view
-                tinaviz.viewMeso(id);
+                tinaviz.viewMeso(id, category);
             })
         )
     );
@@ -82,8 +82,8 @@ function InfoDiv(divid) {
     table: $("#node_table > tbody"),
     data: {},
     categories: {
-        'NGram' : 'keyword',
-        'Document': 'project',
+        'NGram' : 'keywords',
+        'Document': 'projects',
     },
     /*
     * dispatch current category displayed
@@ -103,10 +103,10 @@ function InfoDiv(divid) {
     */
     display_current_view: function() {
         var current_view = tinaviz.getView();
-        //if (current_view !== undefined)
-            //$("#-switch").button("option", "label", "switch to "+tinaviz.getOppositeCategory(current_cat));
-        //else
-            //$("#toggle-switch").button("option", "label", "switch category");
+        if (current_view !== undefined)
+            $("#title").html("FET Open projects explorer : "+current_view+" view");
+        else
+            $("#title").html("FET Open projects explorer");
     },
 
     /*
@@ -144,7 +144,7 @@ function InfoDiv(divid) {
                         .html( decodeJSON(nb[nbid]['label']) )
                         .click( function(eventObject) {
                             //switch to meso view
-                            tinaviz.viewMeso(decodeJSON(nbid));
+                            tinaviz.viewMeso(decodeJSON(nbid), decodeJSON(nb[nbid]['category']));
                         });
                     if ( this.selection[nodeid]['category'] == 'NGram' ) {
                         tag.css('font-size', 12)
@@ -175,11 +175,13 @@ function InfoDiv(divid) {
             // we need the full neighbourhood for the tag cloud
             var nb = tinaviz.getNeighbourhood("macro",nodeid);
             for(var nbid in nb) {
+                nbid = decodeJSON(nbid);
                 if (this.selection[nodeid]['category'] != nb[nbid]['category']) {
                     if ( tempcloud[nbid] === undefined )
                         tempcloud[nbid] = {
                             'label' : decodeJSON(nb[nbid]['label']),
-                            'occurrences' : 1
+                            'occurrences' : 1,
+                            'category': , decodeJSON(nb[nbid]['category']),
                         };
                     else
                         tempcloud[nbid]['occurrences']++;
@@ -195,7 +197,7 @@ function InfoDiv(divid) {
                 .html( tempcloud[tagid]['label'] )
                 .click( function(eventObject) {
                     //switch to meso view
-                    tinaviz.viewMeso(decodeJSON(nbid));
+                    tinaviz.viewMeso(tagid, tempcloud[nbid]['category']));
                 });
                 tagcloud.append(tag);
             tagcloud.append(" ");
@@ -340,17 +342,17 @@ function Tinaviz() {
             this.bindFilter("NodeFunction", "radiusByWeight", "meso");
 
             this.bindFilter("Output", "output", "meso");
-            
- 
+
+
             // this.readGraphJava("macro", "French_bipartite_graph.gexf");
             this.readGraphJava("macro", "FET60bipartite_graph_cooccurrences_.gexf");
             //this.readGraphJava("macro", "CSSScholarsMay2010.gexf");
 
             //this.togglePause();
-            
+
             // init the node list with ngrams
             this.updateNodes( "macro", "NGram" );
-            
+
             // cache the document list
             this.getNodes( "macro", "Document" );
 
@@ -438,18 +440,18 @@ function Tinaviz() {
 
         this.setView = function(view) {
             if (applet == null) return;
-            applet.getSession().setView(view);
+            applet.setView(view);
         }
         this.getView = function(view) {
             if (applet == null) return;
-            applet.getView().getName();
+            return applet.getView().getName();
         }
 
         /**
          * Commits applets parameters
          * Accept an optional callback to give some reaction to events
          */
-         
+
         this.touch= function(view) {
             if (applet == null) return;
             if (view==null) {
@@ -458,7 +460,7 @@ function Tinaviz() {
                 applet.touch(view);
             }
         }
-        
+
         this.touchCallback= function(view, cb) {
             if (applet == null) return;
             if (view==null) {
@@ -476,7 +478,7 @@ function Tinaviz() {
             cbsAwait[id] = cb;
         }
         this.runCb=function(id) {
-            cbsRun[i]();     
+            cbsRun[i]();
             delete cbsRun[i];
         }
 
@@ -489,14 +491,14 @@ function Tinaviz() {
             delete cbsAwait[id];
             return id;
         }
-        
+
         /**
-         * How the callback system works: 
+         * How the callback system works:
          *
          * When the client call the "touch()" method, an update of the current view is
          * scheduled by the applet, then the id of the new revision will be stored together
-         * with a callback address, by the javascript. 
-         * 
+         * with a callback address, by the javascript.
+         *
          * As soon as the current view will reach this revision (or a greater one) the
          * corresponding callback(s) will be called, then removed from the stack.
          *
@@ -532,40 +534,30 @@ function Tinaviz() {
             this.setProperty(view, KEY, this.getOppositeCategory( this.getProperty(view, KEY)));
             tinaviz.resetLayoutCounter();
             this.touch();
-            //this.selectFromId(id);
             this.autoCentering();
             this.updateNodes(view, this.getProperty(view, KEY));
             // project the selection in the other view
-
             for(var id in this.selection) {
                 var neighbours = this.getNeighbourhood("macro", id);
                 for (var neighbourId in neighbours) {
                     if (neighbours[neighbourId].category == opposite) {
-                        this.selectFromId(neighbourId);   
+                        this.selectFromId(neighbourId);
                     }
                 }
             }
-            /*
-            for(var id in this.selection) {
-                var neighbours = this.getNeighbourhood("macro", id);
-                for (var neighbourId in neighbours) {
-                    this.selectNode(neighbours[neighbourId]);
-                }
-            }*/
         }
 
 
         /**
          * Toggle view to meso given an id
          */
-        this.viewMeso = function(id) {
-            this.setProperty("meso", "subgraph/item", id );
-            this.setProperty("meso", "subgraph/category",
-                this.getOppositeCategory(
-                    this.getProperty("meso", "category/value")));
-            // this.touch("meso");
+        this.viewMeso = function(id, category) {
+            // changes view level
             this.setView("meso");
-            this.autoCentering();
+            // sets the center of the graph
+            this.setProperty("meso", "subgraph/category", category);
+            // sets the neighbours' type
+            this.setProperty("meso", "subgraph/item", id );
         }
 
         this.bindFilter= function(name, path, view) {
@@ -649,17 +641,9 @@ function Tinaviz() {
         this.nodeLeftClicked = function(view, data) {
             if ( data == null ) return;
             if (view=="meso") {
-            this.setProperty("meso", "subgraph/category",
-                    this.getOppositeCategory(
-                        this.getProperty(view, "category/value")));
+                this.setProperty("meso", "subgraph/category",
+                    this.getProperty(view, "category/value"));
             }
-            /*if (view=="meso") {
-                this.touch(view);
-                this.autoCentering();
-            }*/
-
-            //this.setProperty("meso", "subgraph/item", key);
-
             return this.infodiv.update(view, data);
         }
 
@@ -745,7 +729,6 @@ function Tinaviz() {
         this.switchedTo= function(view) {
             if (applet == null) return;
             this.autoCentering();
-
             if (view=="macro") {
                 $("#toggle-project").button('enable');
             } else if (view=="meso") {
@@ -761,7 +744,7 @@ function Tinaviz() {
                 this.getProperty(view, "nodeWeight/min"),
                 this.getProperty(view, "nodeWeight/max")*100
             ]);
-
+            this.infodiv.display_current_view();
         }
 
         this.getWidth= function() {
@@ -805,9 +788,9 @@ $(document).ready(function(){
             $(this).css('cursor','auto');
         });
     });
-    
-   
-  
+
+
+
     $("#title").html("FET Open projects explorer");
     var infodiv = new InfoDiv("#infodiv");
     // auto-adjusting infodiv height
@@ -949,15 +932,20 @@ $(document).ready(function(){
         tinaviz.toggleEdges();
     });
 
-    $("#toggle-paused").click(function(event) {
+    $("#toggle-paused").button({
+        icons: {primary:'ui-icon-pause'},
+        text: true,
+        label: "pause",
+    })
+    .click(function(event) {
         tinaviz.togglePause();
-        
-        
-        if( $("#toggle-paused-icon").is('.ui-icon-play') ) {
-            $("#toggle-paused").html('<span id="toggle-paused-icon" class="ui-icon ui-icon-pause"></span>Pause');
+        if( $("#toggle-paused").button('option','icons')['primary'] == 'ui-icon-pause'  ) {
+            $("#toggle-paused").button('option','icons',{'primary':'ui-icon-play'});
+            $("#toggle-paused").button('option','label',"play");
         }
         else {
-            $("#toggle-paused").html('<span id="toggle-paused-icon" class="ui-icon ui-icon-play"></span>Play');
+            $("#toggle-paused").button('option','icons',{'primary':'ui-icon-pause'});
+            $("#toggle-paused").button('option','label',"pause");
         }
     });
 
@@ -985,9 +973,9 @@ $(document).ready(function(){
     }).click(function(event) {
         tinaviz.toggleCategory("current");
     });
-    
+
    $('#waitMessage').effect('pulsate', {}, 'normal');
-  
+
     $(window).bind('resize', function() {
         if (tinaviz.enabled()) {
             tinaviz.resize();
