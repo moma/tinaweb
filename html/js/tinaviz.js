@@ -60,7 +60,6 @@ function displayNodeRow(label, id, category) {
         $("<tr></tr>").append(
             $("<td id='"+id+"'></td>").text(label).click( function(eventObject) {
                 //switch to meso view
-                alert(category);
                 tinaviz.viewMeso(id, category);
             })
         )
@@ -90,12 +89,16 @@ function InfoDiv(divid) {
     * dispatch current category displayed
     */
     display_current_category: function() {
+        var current_view = tinaviz.getView();
         var current_cat = tinaviz.getProperty("current","category/category");
         if (current_cat !== undefined)
             var opposite = this.categories[tinaviz.getOppositeCategory(current_cat)];
             //$("#title_acc_1").text("current selection of "+ this.categories[current_cat]);
         if (opposite !== undefined)
-            $("#toggle-switch").button("option", "label", "switch to "+ opposite);
+            if (current_view == "macro")
+                $("#toggle-switch").button("option", "label", "switch to "+ opposite);
+            else
+                $("#toggle-switch").button("option", "label", "project "+ opposite);
         else
             $("#toggle-switch").button("option", "label", "switch category");
     },
@@ -145,7 +148,7 @@ function InfoDiv(divid) {
                         .html( decodeJSON(nb[nbid]['label']) )
                         .click( function(eventObject) {
                             //switch to meso view
-                            alert(decodeJSON(nb[nbid]['category']));
+                            //alert(decodeJSON(nb[nbid]['category']));
                             tinaviz.viewMeso(decodeJSON(nbid), decodeJSON(nb[nbid]['category']));
                         });
                     if ( this.selection[nodeid]['category'] == 'NGram' ) {
@@ -199,7 +202,7 @@ function InfoDiv(divid) {
                 .html( tempcloud[tagid]['label'] )
                 .click( function(eventObject) {
                     //switch to meso view
-                    alert(tempcloud[tagid]['category']);
+                    //alert(tempcloud[tagid]['category']);
                     tinaviz.viewMeso(tagid, tempcloud[tagid]['category']);
                 });
                 tagcloud.append(tag);
@@ -388,10 +391,7 @@ function Tinaviz() {
                 // window.location.pathname
                 var sPath = document.location.href;
                 var gexfURL = sPath.substring(0, sPath.lastIndexOf('/') + 1) + graphURL;
-                applet.getSession().updateFromURI(view,gexfURL);
-        }
-
-        this.readGraphAJAX= function(view,graphURL) {
+                applet.getSession().updateFromURI(view,gexfURL        this.readGraphAJAX= function(view,graphURL) {
             if (applet == null) return;
             $.ajax({
                 url: graphURL,
@@ -434,17 +434,20 @@ function Tinaviz() {
             if (applet == null) return;
             return applet.getView().toggleHD();
         }
-
+        /*
+         * Commands switching between view levels
+         */
         this.setView = function(view) {
             if (applet == null) return;
-            this.unselect();
             applet.setView(view);
         }
+        /*
+         * Gets the the view level name
+         */
         this.getView = function(view) {
             if (applet == null) return;
             return applet.getView().getName();
         }
-
         /**
          * Commits applets parameters
          * Accept an optional callback to give some reaction to events
@@ -530,12 +533,11 @@ function Tinaviz() {
             var KEY = "category/category";
             // TODO switch to the other view
             this.setProperty(view, KEY, this.getOppositeCategory( this.getProperty(view, KEY)));
-      
             tinaviz.resetLayoutCounter();
             this.touch();
             this.autoCentering();
             this.updateNodes(view, this.getProperty(view, KEY));
-            // project the selection in the other view
+            // project the selection in the macro view
             for(var id in this.selection) {
                 var neighbours = this.getNeighbourhood("macro", id);
                 for (var neighbourId in neighbours) {
@@ -546,18 +548,18 @@ function Tinaviz() {
             }
         }
 
-
         /**
          * Toggle view to meso given an id
          */
         this.viewMeso = function(id, category) {
-            alert(category);
+            //alert(category);
             // changes view level
-            this.setView("meso");
+            this.unselect();
             this.selectFromId(id);
+            this.setView("meso");
             // sets the center of the graph
-
             this.setProperty("meso", "category/category", category);
+            this.updateNodes("meso", category);
 
         }
 
