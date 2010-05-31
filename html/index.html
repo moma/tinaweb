@@ -9,10 +9,10 @@
 
         <!-- JQUERY -->
         <script type="text/javascript" src="js/jquery-1.4.2.min.js" language="javascript"></script>
-        
+
         <!-- JQUERY UI -->
         <script type="text/javascript" src="js/jquery-ui-1.8.min.js" language="javascript"></script>
-        
+
         <!-- TINAWEB JAVASCRIPT -->
         <script type="text/javascript" src="js/tinaviz.js" language="javascript"></script>
 
@@ -31,23 +31,7 @@
                 <div id="hdb">
                     <div id="htoolbar" class="toolbardiv fg-toolbar ui-widget-header ui-corner-all ui-helper-clearfix">
                         <div id="title" class="bigTitle noSelect"></div>
-                        <div class="fg-buttonset fg-buttonset-multi ui-helper-clearfix noSelect">
-                            <!-- TEMPORARY DISABLED - FOR THE ONLINE VERSION -->
-                            <!--
-                                <a id="toggle-showLabels"
-                                   href="#"
-                                   class="fg-button ui-state-default ui-state-active fg-button-icon-solo ui-corner-left"
-                                   title="hide/show labels"><span class="ui-icon ui-icon-labels"></span> <span class="noSelect">Labels</span></a>
-                                <a id="toggle-showNodes"
-                                   href="#"
-                                   class="fg-button ui-state-default ui-state-active fg-button-icon-solo"
-                                   title="hide/show nodes"><span class="ui-icon ui-icon-nodes"></span> <span class="noSelect">Nodes</span></a>
-                                <a id="toggle-showEdges"
-                                   href="#"
-                                   class="fg-button ui-state-default ui-state-active fg-button-icon-solo ui-corner-right"
-                                   title="hide/show edges"><span class="ui-icon ui-icon-edges"></span> <span class="noSelect">Edges</span></a>
-                            -->
-                            </div>
+
 
                         <div class="fg-buttonset fg-buttonset-multi ui-helper-clearfix noSelect">
                             
@@ -56,6 +40,7 @@
                                class="fg-button ui-state-default ui-state-active fg-button-icon-left ui-priority-primary ui-corner-all"
                                title="pause spatialization"><span id="toggle-paused-icon" class="ui-icon ui-icon-play"></span>Play</a>
                         </div>
+
 
                         <div class="fg-buttonset fg-buttonset-multi ui-helper-clearfix noSelect">
                             <a href="#"
@@ -75,6 +60,7 @@
                                id="toggle-switch"
                                class="fg-button ui-state-default fg-button-icon-left ui-priority-primary ui-corner-all"
                                title="Switch"><span class="ui-icon ui-icon-arrows"></span> <span class="noSelect">Switch</span></a>
+
                         </div>
                         <!-- end of sliders -->
                         <!--<div class="fg-buttonset ui-helper-clearfix fg-button">-->
@@ -86,6 +72,9 @@
                               <!--<input id="inputgraph" type="file" value="Open">-->
                             <!--</a> -->
                         <!--</div>-->
+                        <div class="recenter">
+                            <button id="toggle-autoCentering">recenter</button>
+                        </div>
                         <div class="search">
                             <form id="search" action="#">
                                 <input id="search_input" type="text" value="">
@@ -105,7 +94,6 @@
                         <div id="vizdiv" class="yui-u first">
 
                            <div id="waitMessage" class="waitMessage">Please wait while loading..</div>
-                                
                             <!--[if !IE]> -->
                             <object id="tinaviz"
                                         classid="java:org.jdesktop.applet.util.JNLPAppletLauncher"

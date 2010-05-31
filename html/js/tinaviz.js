@@ -51,7 +51,9 @@ function decodeJSON(encvalue) {
         return "";
 };
 
-
+/*
+ * Asynchronous display of node list
+ */
 function displayNodeRow(label, id) {
     //console.console.log("inserting "+label);
     $("#node_table > tbody").append(
@@ -64,6 +66,9 @@ function displayNodeRow(label, id) {
     );
 };
 
+/*
+ * Infodiv object need tinaviz object to retrieve data
+ */
 function InfoDiv(divid) {
 
     return {
@@ -76,6 +81,33 @@ function InfoDiv(divid) {
     unselect_button: $( "#toggle-unselect" ),
     table: $("#node_table > tbody"),
     data: {},
+    categories: {
+        'NGram' : 'keyword',
+        'Document': 'project',
+    },
+    /*
+    * dispatch current category displayed
+    */
+    display_current_category: function() {
+        var current_cat = tinaviz.getProperty("current","category/value");
+        if (current_cat !== undefined)
+            var opposite = this.categories[tinaviz.getOppositeCategory(current_cat)];
+            //$("#title_acc_1").text("current selection of "+ this.categories[current_cat]);
+        if (opposite !== undefined)
+            $("#toggle-switch").button("option", "label", "switch to "+ opposite);
+        else
+            $("#toggle-switch").button("option", "label", "switch category");
+    },
+    /*
+    * dispatch current view displayed
+    */
+    display_current_view: function() {
+        var current_view = tinaviz.getView();
+        //if (current_view !== undefined)
+            //$("#-switch").button("option", "label", "switch to "+tinaviz.getOppositeCategory(current_cat));
+        //else
+            //$("#toggle-switch").button("option", "label", "switch category");
+    },
 
     /*
      * Generic sorting DOM lists
@@ -321,8 +353,10 @@ function Tinaviz() {
             
             // cache the document list
             this.getNodes( "macro", "Document" );
-            
+
              $("#waitMessage").hide();
+            this.infodiv.display_current_category();
+            this.infodiv.display_current_view();
         }
 
         this.init= function() {
@@ -406,6 +440,10 @@ function Tinaviz() {
             if (applet == null) return;
             applet.getSession().setView(view);
         }
+        this.getView = function(view) {
+            if (applet == null) return;
+            applet.getView().getName();
+        }
 
         /**
          * Commits applets parameters
@@ -425,14 +463,14 @@ function Tinaviz() {
             if (applet == null) return;
             if (view==null) {
                 applet.touch();
-            } 
+            }
             if (cb==null) {
                applet.touch(view);
             } else {
                 this.enqueueCb(applet.touch(view),cb);
             }
         }
-        
+
         /* Push a callback in the queue */
         this.enqueueCb=function(id,cb) {
             cbsAwait[id] = cb;
@@ -441,7 +479,7 @@ function Tinaviz() {
             cbsRun[i]();     
             delete cbsRun[i];
         }
-        
+
         /**
          * Put a callback for the "await" list to the "run" list
          *
@@ -470,14 +508,12 @@ function Tinaviz() {
                 }
             }
         }
-        
-        
-        /**
-         *
-         *
-         */
-        this.getOppositeCategory = function(cat) {
 
+
+        /*
+        * Tells the NOT DISPLAYED category name
+        */
+        this.getOppositeCategory = function(cat) {
             if (cat == "Document")
                 return "NGram";
             else if (cat == "NGram")
@@ -491,13 +527,33 @@ function Tinaviz() {
          */
         this.toggleCategory = function(view) {
             if (applet == null) return;
-            var newcategory = this.getOppositeCategory(
-                this.getProperty(view, "category/value"));
-            this.setProperty(view, "category/value", newcategory);
-            this.touch(view);
+            var KEY = "category/value";
+            // TODO switch to the other view
+            this.setProperty(view, KEY, this.getOppositeCategory( this.getProperty(view, KEY)));
+            tinaviz.resetLayoutCounter();
+            this.touch();
+            //this.selectFromId(id);
             this.autoCentering();
-            this.updateNodes(view, newcategory);
+            this.updateNodes(view, this.getProperty(view, KEY));
+            // project the selection in the other view
+
+            for(var id in this.selection) {
+                var neighbours = this.getNeighbourhood("macro", id);
+                for (var neighbourId in neighbours) {
+                    if (neighbours[neighbourId].category == opposite) {
+                        this.selectFromId(neighbourId);   
+                    }
+                }
+            }
+            /*
+            for(var id in this.selection) {
+                var neighbours = this.getNeighbourhood("macro", id);
+                for (var neighbourId in neighbours) {
+                    this.selectNode(neighbours[neighbourId]);
+                }
+            }*/
         }
+
 
         /**
          * Toggle view to meso given an id
@@ -592,19 +648,18 @@ function Tinaviz() {
 
         this.nodeLeftClicked = function(view, data) {
             if ( data == null ) return;
-
-           if (view=="meso") {
-           this.setProperty("meso", "subgraph/category",
+            if (view=="meso") {
+            this.setProperty("meso", "subgraph/category",
                     this.getOppositeCategory(
                         this.getProperty(view, "category/value")));
-             }
+            }
             /*if (view=="meso") {
                 this.touch(view);
                 this.autoCentering();
             }*/
-            
+
             //this.setProperty("meso", "subgraph/item", key);
-       
+
             return this.infodiv.update(view, data);
         }
 
@@ -630,14 +685,19 @@ function Tinaviz() {
             if (applet == null) return;
             return applet.selectFromId(id);
         }
-
+        /*
+         *  Retrieves list of nodes
+         */
         this.getNodes = function(view, category) {
             if (applet == null) return;
             this.infodiv.data[category] = $.parseJSON( applet.getNodes(view, category) );
             return this.infodiv.data[category];
         }
-
+        /*
+         *  Fires theupdate of node cache
+         */
         this.updateNodes = function(view, category)  {
+            this.infodiv.display_current_category();
             if (this.infodiv.data[category] === undefined)
                 this.infodiv.updateNodeList( this.getNodes( view, category ) );
             else
@@ -673,35 +733,11 @@ function Tinaviz() {
             //console.console.info(msg);
         }
 
-        this.switchToOtherCategory= function() {
-            var KEY = "category/value";
-            var opposite = this.getOppositeCategory( this.getProperty( "macro", KEY ) );
-            // TODO switch to the other view
-            this.setProperty( "macro", KEY, opposite);
-                    
-            tinaviz.resetLayoutCounter();
-            this.touch();
- 
-            //this.selectFromId(id);
-            this.autoCentering();
-            
-             // project the selection in the other view 
-            for(var id in this.selection) {
-                var neighbours = this.getNeighbourhood("macro", id);
-                for (var neighbourId in neighbours) {
-                    if (neighbours[neighbourId].category == opposite) {
-                        this.selectFromId(neighbourId);   
-                    }
-                    //this.selectNode(neighbours[neighbourId]);
-                }
-            }
-        }
 
         this.resetLayoutCounter= function(view) {
             // TODO switch to the other view
             applet.resetLayoutCounter();
         }
-
 
         /**
          * Callback called whenever the applet change of view
@@ -709,7 +745,7 @@ function Tinaviz() {
         this.switchedTo= function(view) {
             if (applet == null) return;
             this.autoCentering();
-            
+
             if (view=="macro") {
                 $("#toggle-project").button('enable');
             } else if (view=="meso") {
@@ -820,9 +856,9 @@ $(document).ready(function(){
     $("#search").submit(function() {
       var txt = $("#search_input").val();
       if (txt=="") {
-        tinaviz.unselect();
+            tinaviz.unselect();
       } else {
-           tinaviz.searchNodes(txt, "containsIgnoreCase");
+            tinaviz.searchNodes(txt, "containsIgnoreCase");
       }
       return false;
     });
@@ -900,16 +936,18 @@ $(document).ready(function(){
         }
     });
 
-
     $("#toggle-showLabels").click(function(event) {
         tinaviz.toggleLabels();
     });
+
     $("#toggle-showNodes").click(function(event) {
         tinaviz.toggleNodes();
     });
+
     $("#toggle-showEdges").click(function(event) {
         tinaviz.toggleEdges();
     });
+
     $("#toggle-paused").click(function(event) {
         tinaviz.togglePause();
         
@@ -921,21 +959,33 @@ $(document).ready(function(){
             $("#toggle-paused").html('<span id="toggle-paused-icon" class="ui-icon ui-icon-play"></span>Play');
         }
     });
+
     $("#toggle-unselect").button({
-         icons: {primary:'ui-icon-close'},
+        icons: {primary:'ui-icon-close'},
     }).click(function(event) {
         tinaviz.unselect();
     });
-    $("#toggle-autoCentering").click(function(event) {
+
+    $("#toggle-autoCentering").button({
+        text: true,
+        icons: {
+            primary: 'ui-icon-home'
+        }
+    })
+    .click(function(event) {
         tinaviz.autoCentering();
     });
-    $("#toggle-switch").click(function(event) {
-        tinaviz.switchToOtherCategory();
+
+    $("#toggle-switch").button({
+        text: true,
+        icons: {
+            primary: 'ui-icon-arrows'
+        },
+    }).click(function(event) {
+        tinaviz.toggleCategory("current");
     });
     
-   $('#waitMessage').effect(
-    'pulsate', {}, 'normal'
-   );
+   $('#waitMessage').effect('pulsate', {}, 'normal');
   
     $(window).bind('resize', function() {
         if (tinaviz.enabled()) {
