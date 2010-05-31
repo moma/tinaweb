@@ -60,6 +60,7 @@ function displayNodeRow(label, id, category) {
         $("<tr></tr>").append(
             $("<td id='"+id+"'></td>").text(label).click( function(eventObject) {
                 //switch to meso view
+                alert(category);
                 tinaviz.viewMeso(id, category);
             })
         )
@@ -144,7 +145,8 @@ function InfoDiv(divid) {
                         .html( decodeJSON(nb[nbid]['label']) )
                         .click( function(eventObject) {
                             //switch to meso view
-                            tinaviz.viewMeso(decodeJSON(nbid), nb[nbid]['category']);
+                            alert(decodeJSON(nb[nbid]['category']));
+                            tinaviz.viewMeso(decodeJSON(nbid), decodeJSON(nb[nbid]['category']));
                         });
                     if ( this.selection[nodeid]['category'] == 'NGram' ) {
                         tag.css('font-size', 12)
@@ -197,7 +199,8 @@ function InfoDiv(divid) {
                 .html( tempcloud[tagid]['label'] )
                 .click( function(eventObject) {
                     //switch to meso view
-                    tinaviz.viewMeso(tagid, tempcloud[nbid]['category']);
+                    alert(tempcloud[tagid]['category']);
+                    tinaviz.viewMeso(tagid, tempcloud[tagid]['category']);
                 });
                 tagcloud.append(tag);
             tagcloud.append(" ");
@@ -273,19 +276,14 @@ function InfoDiv(divid) {
     /*
      * Init the node list
      */
-    updateNodeList: function( node_list ) {
+    updateNodeList: function( node_list, category ) {
         this.table.empty();
         for (var i = 0; i < node_list.length; i++ ) {
             (function () {
                 var rowLabel = decodeJSON(node_list[i]['label']);
                 var rowId = decodeJSON(node_list[i]['id']);
-                // Do a little bit of work here...
-                //if (true) {
-                    // Inform the application of the progress
-                    //progressFn(value, total);
-                    // Process next chunk
-                setTimeout("displayNodeRow(\""+rowLabel+"\",\""+rowId+"\")", 0);
-                //}
+                // asynchronously displays the node list
+                setTimeout("displayNodeRow(\""+rowLabel+"\",\""+rowId+"\",\""+category+"\")", 0);
             })();
         }
     },
@@ -313,7 +311,6 @@ function Tinaviz() {
             this.dispatchProperty("nodeWeight/min", 0.0);
             this.dispatchProperty("nodeWeight/max", 1.0);
             this.dispatchProperty("category/category", "NGram");
-            this.dispatchProperty("category/mode", "keep");
             this.dispatchProperty("output/nodeSizeMin", 5.0);
             this.dispatchProperty("output/nodeSizeMax", 20.0);
             this.dispatchProperty("output/nodeSizeRatio", 50.0/100.0);
@@ -331,9 +328,11 @@ function Tinaviz() {
 
             // special version of the subgraph copy filter: this one does not use the
             // tinasoft berkeley database to get data
+
             this.bindFilter("SubGraphCopyStandalone", "category", "meso");
             this.setProperty("meso", "category/source", "macro");
             this.setProperty("meso", "category/category", "NGram");
+            this.setProperty("meso", "category/mode", "keep");
             /*
             this.bindFilter("NodeWeightRange",  "nodeWeight", "meso");
             this.bindFilter("EdgeWeightRange", "edgeWeight",  "meso");
@@ -351,11 +350,10 @@ function Tinaviz() {
 
             // init the node list with ngrams
             this.updateNodes( "macro", "NGram" );
-
             // cache the document list
             this.getNodes( "macro", "Document" );
 
-             $("#waitMessage").hide();
+            $("#waitMessage").hide();
             this.infodiv.display_current_category();
             this.infodiv.display_current_view();
         }
@@ -439,6 +437,7 @@ function Tinaviz() {
 
         this.setView = function(view) {
             if (applet == null) return;
+            this.unselect();
             applet.setView(view);
         }
         this.getView = function(view) {
@@ -531,6 +530,7 @@ function Tinaviz() {
             var KEY = "category/category";
             // TODO switch to the other view
             this.setProperty(view, KEY, this.getOppositeCategory( this.getProperty(view, KEY)));
+      
             tinaviz.resetLayoutCounter();
             this.touch();
             this.autoCentering();
@@ -551,13 +551,13 @@ function Tinaviz() {
          * Toggle view to meso given an id
          */
         this.viewMeso = function(id, category) {
-            alert(id, category);
+            alert(category);
             // changes view level
             this.setView("meso");
+            this.selectFromId(id);
             // sets the center of the graph
+
             this.setProperty("meso", "category/category", category);
-            // sets the neighbours' type
-            this.setProperty("meso", "category/item", id );
 
         }
 
@@ -616,9 +616,10 @@ function Tinaviz() {
         * unselect all nodes
         */
         this.unselect= function() {
-            if (applet != null)  applet.unselect();
+            if (applet == null) return;
+            applet.unselect();
             this.infodiv.reset();
-            this.setProperty("meso", "category/item", "");
+
             applet.clear("meso");
         }
         /*
@@ -684,9 +685,9 @@ function Tinaviz() {
         this.updateNodes = function(view, category)  {
             this.infodiv.display_current_category();
             if (this.infodiv.data[category] === undefined)
-                this.infodiv.updateNodeList( this.getNodes( view, category ) );
+                this.infodiv.updateNodeList( this.getNodes( view, category ), category );
             else
-                this.infodiv.updateNodeList( this.infodiv.data[category] );
+                this.infodiv.updateNodeList( this.infodiv.data[category], category );
         }
 
         this.enabled = function() {
@@ -862,7 +863,12 @@ $(document).ready(function(){
             primary: 'ui-icon-search'
         }
     }).click( function(eventObject) {
-        ("#search").submit();
+          var txt = $("#search_input").val();
+          if (txt=="") {
+                tinaviz.unselect();
+          } else {
+                tinaviz.searchNodes(txt, "containsIgnoreCase");
+          }
     });
 
     // SLIDERS INIT
