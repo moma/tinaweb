@@ -107,7 +107,10 @@ body {
 }
 
 .search {
-    /*float: right;*/
+    float: right;
+}
+.recenter {
+    float: right;
 }
 
 .tabfiller {
