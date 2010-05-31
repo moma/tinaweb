@@ -922,6 +922,7 @@ $(document).ready(function(){
         animate: true,
         slide: function(event, ui) {
             tinaviz.setProperty("current", "output/nodeSizeRatio", ui.value / 100.0);
+            tinaviz.resetLayoutCounter();
             tinaviz.touch();
         }}
     );
