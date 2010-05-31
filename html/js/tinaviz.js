@@ -263,6 +263,8 @@ function Tinaviz() {
 
     var wrapper = null;
     var applet = null;
+    var cbsAwait = {};
+    var cbsReady = {};
     this.isReady = 0;
     this.infodiv = null;
 
@@ -400,18 +402,54 @@ function Tinaviz() {
             applet.getSession().setView(view);
         }
 
-        /*
-        * Commits applets parameters
-        */
-        this.touch= function(view) {
+        /**
+         * Commits applets parameters
+         * Accept an optional callback to give some reaction to events
+         */
+        this.touch= function(view, cb) {
             if (applet == null) return;
             if (view==null) {
                 applet.touch();
+            } 
+            if (cb==null) {
+               applet.touch(view);
             } else {
-                applet.touch(view);
+                this.enqueueCb(applet.touch(view),cb);
             }
         }
-
+    
+        /* Push a callback in the queue */
+        this.enqueueCb=function(id,cb) {
+            cbsAwait[id] = cb;
+        }
+        this.runCb=function(id) {
+            cbsReady[i]();         
+            delete cbsReady[i];
+        }
+        
+        /**
+         *
+         *
+         */
+        this.activateCb=function(id) {
+            cbsReady[id] = cbsAwait[id];
+            delete cbsAwait[id];
+            return id;
+        }
+        this.cbSync=function(id) {
+            // since we use a map, actually callbacks are not in order
+            for (i in cbsAwait) {
+                if (i<=id) {
+                    setTimeout("tinaviz.runCb("+this.activateCb(id)+")",0);
+                }
+            }
+        }
+        
+        
+        /**
+         *
+         *
+         */
         this.getOppositeCategory = function(cat) {
 
             if (cat == "Document")
@@ -422,9 +460,9 @@ function Tinaviz() {
 
         }
 
-        /*
-        * Toggle node's category visible
-        */
+        /**
+         * Toggle node's category visible
+         */
         this.toggleCategory = function(view) {
             if (applet == null) return;
             var newcategory = this.getOppositeCategory(
@@ -435,9 +473,9 @@ function Tinaviz() {
             this.updateNodes(view, newcategory);
         }
 
-        /*
-        * Toggle view to meso given an id
-        */
+        /**
+         * Toggle view to meso given an id
+         */
         this.viewMeso = function(id) {
             this.setProperty("meso", "subgraph/item", id );
             this.setProperty("meso", "subgraph/category",
@@ -613,12 +651,23 @@ function Tinaviz() {
             KEY = "category/value";
             
             // TODO switch to the other view
-            this.setProperty("macro",KEY, this.getOppositeCategory( this.getProperty("macro", KEY)));
+            this.setProperty( "macro", KEY, 
+                this.getOppositeCategory( 
+                    this.getProperty( "macro", KEY )));
+                    
             tinaviz.resetLayoutCounter();
             this.touch();
  
             //this.selectFromId(id);
             this.autoCentering();
+            
+             // project the selection in the other view 
+            for(var id in this.selection) {
+                var neighbours = this.getNeighbourhood("macro", id);
+                for (var neighbourId in neighbours) {
+                    this.selectNode(neighbours[neighbourId]);
+                }
+            }
         }
 
         this.resetLayoutCounter= function(view) {
