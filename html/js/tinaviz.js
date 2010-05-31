@@ -181,7 +181,7 @@ function InfoDiv(divid) {
                         tempcloud[nbid] = {
                             'label' : decodeJSON(nb[nbid]['label']),
                             'occurrences' : 1,
-                            'category': , decodeJSON(nb[nbid]['category']),
+                            'category': decodeJSON(nb[nbid]['category']),
                         };
                     else
                         tempcloud[nbid]['occurrences']++;
@@ -197,7 +197,7 @@ function InfoDiv(divid) {
                 .html( tempcloud[tagid]['label'] )
                 .click( function(eventObject) {
                     //switch to meso view
-                    tinaviz.viewMeso(tagid, tempcloud[nbid]['category']));
+                    tinaviz.viewMeso(tagid, tempcloud[nbid]['category']);
                 });
                 tagcloud.append(tag);
             tagcloud.append(" ");
