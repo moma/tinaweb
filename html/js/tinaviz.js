@@ -144,7 +144,7 @@ function InfoDiv(divid) {
                         .html( decodeJSON(nb[nbid]['label']) )
                         .click( function(eventObject) {
                             //switch to meso view
-                            tinaviz.viewMeso(decodeJSON(nbid), decodeJSON(nb[nbid]['category']));
+                            tinaviz.viewMeso(decodeJSON(nbid), nb[nbid]['category']);
                         });
                     if ( this.selection[nodeid]['category'] == 'NGram' ) {
                         tag.css('font-size', 12)
@@ -193,7 +193,7 @@ function InfoDiv(divid) {
         for (var tagid in tempcloud) {
             var tag = $("<span class='tinaviz_node'></span>")
                 .addClass('ui-widget-content')
-                .css('font-size', Math.floor( sizecoef* Math.log( 1.5 + tempcloud[tagid]['occurrences'] )))
+                .css('font-size', Math.floor( sizecoef*Math.log( 1.5 + tempcloud[tagid]['occurrences'] )))
                 .html( tempcloud[tagid]['label'] )
                 .click( function(eventObject) {
                     //switch to meso view
@@ -552,12 +552,14 @@ function Tinaviz() {
          * Toggle view to meso given an id
          */
         this.viewMeso = function(id, category) {
+            alert(id, category);
             // changes view level
             this.setView("meso");
             // sets the center of the graph
             this.setProperty("meso", "subgraph/category", category);
             // sets the neighbours' type
             this.setProperty("meso", "subgraph/item", id );
+
         }
 
         this.bindFilter= function(name, path, view) {
