@@ -31,7 +31,7 @@
                 <div id="hdb">
                     <div id="htoolbar" class="toolbardiv fg-toolbar ui-widget-header ui-corner-all ui-helper-clearfix">
                         <div id="title" class="bigTitle noSelect"></div>
-                        <div class="fg-buttonset fg-buttonset-multi ui-helper-clearfix">
+                        <div class="fg-buttonset fg-buttonset-multi ui-helper-clearfix noSelect">
                             <!-- TEMPORARY DISABLED - FOR THE ONLINE VERSION -->
                             <!--
                                 <a id="toggle-showLabels"
@@ -49,23 +49,24 @@
                             -->
                             </div>
 
-                        <div class="fg-buttonset fg-buttonset-multi ui-helper-clearfix">
+                        <div class="fg-buttonset fg-buttonset-multi ui-helper-clearfix noSelect">
+                            
                             <a id="toggle-paused"
                                href="#"
                                class="fg-button ui-state-default ui-state-active fg-button-icon-left ui-priority-primary ui-corner-all"
-                               title="pause spatialization"><span class="ui-icon ui-icon-thunder"></span> <span class="noSelect">Run layout</span></a>
+                               title="pause spatialization"><span id="toggle-paused-icon" class="ui-icon ui-icon-play"></span>Play</a>
                         </div>
 
-                        <div class="fg-buttonset fg-buttonset-multi ui-helper-clearfix">
+                        <div class="fg-buttonset fg-buttonset-multi ui-helper-clearfix noSelect">
                             <a href="#"
                                id="toggle-autoCentering"
                                class="fg-button ui-state-default ui-state-active fg-button-icon-left ui-priority-primary ui-corner-all"
-                               title="recenter the view"><span class="ui-icon ui-icon-home"></span> <span class="noSelect">Resize</span></a>
+                               title="recenter the view"><span class="ui-icon ui-icon-home"></span> Resize</a>
                         </div>
                         <div class="sliders">
-                            <div class="slider"><span class="sliderLabel noSelect">edges filter</span><div id="sliderEdgeWeight"></div></div>
-                            <div class="slider"><span class="sliderLabel noSelect">nodes filter</span><div id="sliderNodeWeight"></div></div>
-                            <div class="slider"><span class="sliderLabel noSelect">magnify</span><div id="sliderNodeSize"></div></div>
+                            <div class="slider"><span class="sliderLabel">edges filter</span><div id="sliderEdgeWeight"></div></div>
+                            <div class="slider"><span class="sliderLabel">nodes filter</span><div id="sliderNodeWeight"></div></div>
+                            <div class="slider"><span class="sliderLabel">magnify</span><div id="sliderNodeSize"></div></div>
                             <div class="slider smallslider"><span class="sliderLabel noSelect">cursor size</span><div id="sliderSelectionZone"></div></div>
                             
                         </div>
@@ -103,7 +104,7 @@
                         <!-- LEFT MAIN COLUMN-->
                         <div id="vizdiv" class="yui-u first">
 
-                           <div id="waitMessage" class="waitMessage"></div>
+                           <div id="waitMessage" class="waitMessage">Please wait while loading..</div>
                                 
                             <!--[if !IE]> -->
                             <object id="tinaviz"

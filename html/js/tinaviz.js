@@ -264,7 +264,7 @@ function Tinaviz() {
     var wrapper = null;
     var applet = null;
     var cbsAwait = {};
-    var cbsReady = {};
+    var cbsRun = {};
     this.isReady = 0;
     this.infodiv = null;
 
@@ -308,16 +308,21 @@ function Tinaviz() {
             this.bindFilter("NodeFunction", "radiusByWeight", "meso");
 
             this.bindFilter("Output", "output", "meso");
-
+            
+ 
             // this.readGraphJava("macro", "French_bipartite_graph.gexf");
             this.readGraphJava("macro", "FET60bipartite_graph_cooccurrences_.gexf");
             //this.readGraphJava("macro", "CSSScholarsMay2010.gexf");
 
             //this.togglePause();
+            
             // init the node list with ngrams
             this.updateNodes( "macro", "NGram" );
+            
             // cache the document list
             this.getNodes( "macro", "Document" );
+            
+             $("#waitMessage").hide();
         }
 
         this.init= function() {
@@ -406,7 +411,17 @@ function Tinaviz() {
          * Commits applets parameters
          * Accept an optional callback to give some reaction to events
          */
-        this.touch= function(view, cb) {
+         
+        this.touch= function(view) {
+            if (applet == null) return;
+            if (view==null) {
+                applet.touch();
+            } else {
+                applet.touch(view);
+            }
+        }
+        
+        this.touchCallback= function(view, cb) {
             if (applet == null) return;
             if (view==null) {
                 applet.touch();
@@ -417,30 +432,41 @@ function Tinaviz() {
                 this.enqueueCb(applet.touch(view),cb);
             }
         }
-    
+        
         /* Push a callback in the queue */
         this.enqueueCb=function(id,cb) {
             cbsAwait[id] = cb;
         }
         this.runCb=function(id) {
-            cbsReady[i]();         
-            delete cbsReady[i];
+            cbsRun[i]();     
+            delete cbsRun[i];
         }
         
         /**
-         *
+         * Put a callback for the "await" list to the "run" list
          *
          */
         this.activateCb=function(id) {
-            cbsReady[id] = cbsAwait[id];
+            cbsRun[id] = cbsAwait[id];
             delete cbsAwait[id];
             return id;
         }
+        
+        /**
+         * How the callback system works: 
+         *
+         * When the client call the "touch()" method, an update of the current view is
+         * scheduled by the applet, then the id of the new revision will be stored together
+         * with a callback address, by the javascript. 
+         * 
+         * As soon as the current view will reach this revision (or a greater one) the
+         * corresponding callback(s) will be called, then removed from the stack.
+         *
+         */
         this.cbSync=function(id) {
-            // since we use a map, actually callbacks are not in order
             for (i in cbsAwait) {
                 if (i<=id) {
-                    setTimeout("tinaviz.runCb("+this.activateCb(id)+")",0);
+                    setTimeout("tinaviz.runCb("+this.activateCb(i)+")",0);
                 }
             }
         }
@@ -648,12 +674,10 @@ function Tinaviz() {
         }
 
         this.switchToOtherCategory= function() {
-            KEY = "category/value";
-            
+            var KEY = "category/value";
+            var opposite = this.getOppositeCategory( this.getProperty( "macro", KEY ) );
             // TODO switch to the other view
-            this.setProperty( "macro", KEY, 
-                this.getOppositeCategory( 
-                    this.getProperty( "macro", KEY )));
+            this.setProperty( "macro", KEY, opposite);
                     
             tinaviz.resetLayoutCounter();
             this.touch();
@@ -665,7 +689,10 @@ function Tinaviz() {
             for(var id in this.selection) {
                 var neighbours = this.getNeighbourhood("macro", id);
                 for (var neighbourId in neighbours) {
-                    this.selectNode(neighbours[neighbourId]);
+                    if (neighbours[neighbourId].category == opposite) {
+                        this.selectFromId(neighbourId);   
+                    }
+                    //this.selectNode(neighbours[neighbourId]);
                 }
             }
         }
@@ -742,7 +769,9 @@ $(document).ready(function(){
             $(this).css('cursor','auto');
         });
     });
-
+    
+   
+  
     $("#title").html("FET Open projects explorer");
     var infodiv = new InfoDiv("#infodiv");
     // auto-adjusting infodiv height
@@ -883,6 +912,14 @@ $(document).ready(function(){
     });
     $("#toggle-paused").click(function(event) {
         tinaviz.togglePause();
+        
+        
+        if( $("#toggle-paused-icon").is('.ui-icon-play') ) {
+            $("#toggle-paused").html('<span id="toggle-paused-icon" class="ui-icon ui-icon-pause"></span>Pause');
+        }
+        else {
+            $("#toggle-paused").html('<span id="toggle-paused-icon" class="ui-icon ui-icon-play"></span>Play');
+        }
     });
     $("#toggle-unselect").button({
          icons: {primary:'ui-icon-close'},
@@ -895,6 +932,11 @@ $(document).ready(function(){
     $("#toggle-switch").click(function(event) {
         tinaviz.switchToOtherCategory();
     });
+    
+   $('#waitMessage').effect(
+    'pulsate', {}, 'normal'
+   );
+  
     $(window).bind('resize', function() {
         if (tinaviz.enabled()) {
             tinaviz.resize();
