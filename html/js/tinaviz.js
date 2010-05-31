@@ -89,7 +89,7 @@ function InfoDiv(divid) {
     * dispatch current category displayed
     */
     display_current_category: function() {
-        var current_cat = tinaviz.getProperty("current","category/value");
+        var current_cat = tinaviz.getProperty("current","category/category");
         if (current_cat !== undefined)
             var opposite = this.categories[tinaviz.getOppositeCategory(current_cat)];
             //$("#title_acc_1").text("current selection of "+ this.categories[current_cat]);
@@ -312,7 +312,7 @@ function Tinaviz() {
             this.dispatchProperty("edgeWeight/max", 1.0);
             this.dispatchProperty("nodeWeight/min", 0.0);
             this.dispatchProperty("nodeWeight/max", 1.0);
-            this.dispatchProperty("category/value", "NGram");
+            this.dispatchProperty("category/category", "NGram");
             this.dispatchProperty("category/mode", "keep");
             this.dispatchProperty("output/nodeSizeMin", 5.0);
             this.dispatchProperty("output/nodeSizeMax", 20.0);
@@ -331,10 +331,9 @@ function Tinaviz() {
 
             // special version of the subgraph copy filter: this one does not use the
             // tinasoft berkeley database to get data
-            this.bindFilter("SubGraphCopyStandalone", "subgraph", "meso");
-            this.setProperty("meso", "subgraph/source", "macro");
-            this.setProperty("meso", "subgraph/item", "");
-            this.setProperty("meso", "subgraph/category", "NGram");
+            this.bindFilter("SubGraphCopyStandalone", "category", "meso");
+            this.setProperty("meso", "category/source", "macro");
+            this.setProperty("meso", "category/category", "NGram");
             /*
             this.bindFilter("NodeWeightRange",  "nodeWeight", "meso");
             this.bindFilter("EdgeWeightRange", "edgeWeight",  "meso");
@@ -529,7 +528,7 @@ function Tinaviz() {
          */
         this.toggleCategory = function(view) {
             if (applet == null) return;
-            var KEY = "category/value";
+            var KEY = "category/category";
             // TODO switch to the other view
             this.setProperty(view, KEY, this.getOppositeCategory( this.getProperty(view, KEY)));
             tinaviz.resetLayoutCounter();
@@ -556,9 +555,9 @@ function Tinaviz() {
             // changes view level
             this.setView("meso");
             // sets the center of the graph
-            this.setProperty("meso", "subgraph/category", category);
+            this.setProperty("meso", "category/category", category);
             // sets the neighbours' type
-            this.setProperty("meso", "subgraph/item", id );
+            this.setProperty("meso", "category/item", id );
 
         }
 
@@ -619,7 +618,7 @@ function Tinaviz() {
         this.unselect= function() {
             if (applet != null)  applet.unselect();
             this.infodiv.reset();
-            this.setProperty("meso", "subgraph/item", "");
+            this.setProperty("meso", "category/item", "");
             applet.clear("meso");
         }
         /*
@@ -643,8 +642,8 @@ function Tinaviz() {
         this.nodeLeftClicked = function(view, data) {
             if ( data == null ) return;
             if (view=="meso") {
-                this.setProperty("meso", "subgraph/category",
-                    this.getProperty(view, "category/value"));
+                this.setProperty("meso", "category/category",
+                    this.getProperty(view, "category/category"));
             }
             return this.infodiv.update(view, data);
         }
