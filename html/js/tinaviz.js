@@ -114,7 +114,7 @@ function InfoDiv(divid) {
             if (current_view == "macro")
                 $("#toggle-switch").button("option", "label", "switch to "+ opposite);
             else
-                $("#toggle-switch").button("option", "label", "project "+ opposite);
+                $("#toggle-switch").button("option", "label", "view " + opposite + " neighbours");
         else
             $("#toggle-switch").button("option", "label", "switch category");
     },
@@ -651,6 +651,7 @@ function Tinaviz() {
          */
         this.leftDoubleClicked = function(view, data) {
             var category = this.getProperty("current", "category/category");
+            this.logNormal(category);
             if (view =="macro") {
                 for (var id in data) {
                     this.viewMeso(decodeJSON(id), category);
@@ -836,12 +837,13 @@ function Tinaviz() {
         this.viewMeso = function(id, category) {
             // changes view level
             this.unselect();
+            this.logNormal("selecting "+id);
             this.selectFromId(id);
             this.setView("meso");
-            // sets the center of the graph
+            // sets the category of the graph
             this.setProperty("meso", "category/category", category);
+            //this.touch("meso");
             this.updateNodes("meso", category);
-
         }
 
 
