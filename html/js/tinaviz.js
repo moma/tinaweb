@@ -460,7 +460,7 @@ function Tinaviz() {
                 applet.touch(view);
             }
         }
-        
+
         /*
          *  Adds a node to the current selection
          */
@@ -474,7 +474,7 @@ function Tinaviz() {
             // TODO switch to the other view
             applet.resetLayoutCounter();
         }
-        
+
         /*
          *  Get the current state of the applet
          */
@@ -649,9 +649,13 @@ function Tinaviz() {
         /*
          *  Callback of double left clics
          */
-        this.leftDoubleClicked = function(view, data, category) {
+        this.leftDoubleClicked = function(view, data) {
+            var category = this.getProperty("current", "category/category");
             if (view =="macro") {
-                this.viewMeso(data[0], category);
+                for (var id in data) {
+                    this.viewMeso(decodeJSON(id), category);
+                    break;
+                }
             }
             if (view == "meso") {
                 this.toggleCategory(view);
@@ -667,7 +671,7 @@ function Tinaviz() {
             data = $.parseJSON(attr);
             this.infodiv.reset();
             this.infodiv.update(view, data);
-            // dispatch action depending on clic type
+
             // left == selected a node
             if ( mouse == "left" ) {
                 this.nodeLeftClicked(view,data);
@@ -676,16 +680,17 @@ function Tinaviz() {
             else if ( mouse == "right" ) {
                 this.nodeRightClicked(view,data);
             }
-            else if (mouse == "doubleleft") {
-                this.leftDoubleClicked(view, data, category);
+            else if (mouse == "doubleLeft") {
+                this.leftDoubleClicked(view, data);
             }
         }
 
         /**
         * Callback after CHANGING THE VIEW LEVEL
         */
-        this.switchedTo = function(view) {
+        this.switchedTo = function(view, selected) {
             if (applet == null) return;
+
             this.autoCentering();
             /*if (view=="macro") {
                 $("#toggle-project").button('enable');
@@ -702,6 +707,7 @@ function Tinaviz() {
                 this.getProperty(view, "nodeWeight/min"),
                 this.getProperty(view, "nodeWeight/max")*100
             ]);
+            this.infodiv.display_current_category();
             this.infodiv.display_current_view();
         }
         /************************
@@ -801,26 +807,27 @@ function Tinaviz() {
          */
         this.toggleCategory = function(view) {
             if (applet == null) return;
+            // get and set the new category to display
             var KEY = "category/category";
             var next_cat = this.getOppositeCategory( this.getProperty(view, KEY));
             this.setProperty(view, KEY, next_cat);
             //this.unselect();
-            
+            // resets the layout
             this.resetLayoutCounter();
             this.touch();
-
             this.autoCentering();
-            // updates node list
+            // updates the node list table
             this.updateNodes(view, this.getProperty(view, KEY));
-            // adds neighbour nodes (from next_cat) from the macro view
-            for(var id in this.infodiv.selection) {
+            // adds neighbour nodes (from next_cat) to the selection of the macro view
+            /*for(var id in this.infodiv.selection) {
                 var neighbours = this.getNeighbourhood("macro", id);
                 for (var neighbourId in neighbours) {
                     if (neighbours[neighbourId].category == next_cat) {
-                        this.selectFromId(neighbourId);
+                        this.logNormal( "selecting a neighbour "+neighbourId );
+                        //this.selectFromId(neighbourId);
                     }
                 }
-            }
+            }*/
         }
 
         /**
