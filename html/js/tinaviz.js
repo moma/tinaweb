@@ -71,10 +71,12 @@ function decodeJSON(encvalue) {
  */
 function displayNodeRow(label, id, category) {
     //console.console.log("inserting "+label);
+    // tinaviz.logNormal("displayNodeRow id:"+id+" cat:"+category);
     $("#node_table > tbody").append(
         $("<tr></tr>").append(
             $("<td id='"+id+"'></td>").text(label).click( function(eventObject) {
                 //switch to meso view
+                // tinaviz.logError("clicked id:"+id+" cat:"+category);
                 tinaviz.viewMeso(id, category);
             })
         )
@@ -153,6 +155,7 @@ function InfoDiv(divid) {
      */
     tagCloudOne: function() {
         var ngsizecoef = 15;
+        tinaviz.logNormal(this.selection);
         for (var nodeid in this.selection) {
             // we need the full neighbourhood for the tag cloud
             var nb = tinaviz.getNeighbourhood("macro",nodeid);
@@ -161,11 +164,13 @@ function InfoDiv(divid) {
                 if (this.selection[nodeid]['category'] != nb[nbid]['category']) {
                     var tag = $("<span class='tinaviz_node'></span>")
                         .addClass('ui-widget-content')
+                        //.html( nbid + "; "+ decodeJSON(nb[nbid]['label']) )
                         .html( decodeJSON(nb[nbid]['label']) )
                         .click( function(eventObject) {
                             //switch to meso view
                             //alert(decodeJSON(nb[nbid]['category']));
-                            tinaviz.viewMeso(decodeJSON(nbid), decodeJSON(nb[nbid]['category']));
+                            //tinaviz.logNormal(nb[nbid]);
+                            tinaviz.viewMeso(nbid, decodeJSON(nb[nbid]['category']));
                         });
                     if ( this.selection[nodeid]['category'] == 'NGram' ) {
                         tag.css('font-size', 12)
@@ -196,7 +201,7 @@ function InfoDiv(divid) {
             // we need the full neighbourhood for the tag cloud
             var nb = tinaviz.getNeighbourhood("macro",nodeid);
             for(var nbid in nb) {
-                nbid = decodeJSON(nbid);
+                //nbid = decodeJSON(nbid);
                 if (this.selection[nodeid]['category'] != nb[nbid]['category']) {
                     if ( tempcloud[nbid] === undefined )
                         tempcloud[nbid] = {
@@ -302,7 +307,7 @@ function InfoDiv(divid) {
             for (var i = 0; i < node_list.length; i++ ) {
                 (function () {
                     var rowLabel = decodeJSON(node_list[i]['label']);
-                    var rowId = decodeJSON(node_list[i]['id']);
+                    var rowId = node_list[i]['id'];
                     // asynchronously displays the node list
                     setTimeout("displayNodeRow(\""+rowLabel+"\",\""+rowId+"\",\""+category+"\")", 0);
                 })();
@@ -799,7 +804,7 @@ function Tinaviz() {
                 return "NGram";
             else if (cat == "NGram")
                 return "Document";
-            else alert("error, cannot get opposite category of "+cat);
+            else this.logError("error, cannot get opposite category of "+cat);
 
         }
 
@@ -837,9 +842,11 @@ function Tinaviz() {
         this.viewMeso = function(id, category) {
             // changes view level
             this.unselect();
-            this.logNormal("selecting "+id);
-            this.selectFromId(id);
+            this.logNormal("selecting "+id+" with category "+category);
+
+            this.selectFromId(id);// select the node in the macro view
             this.setView("meso");
+                        
             // sets the category of the graph
             this.setProperty("meso", "category/category", category);
             //tinaviz.resetLayoutCounter();
