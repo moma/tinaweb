@@ -85,6 +85,7 @@ function InfoDiv(divid) {
         'NGram' : 'keywords',
         'Document': 'projects',
     },
+    last_category: "",
     /*
     * dispatch current category displayed
     */
@@ -280,14 +281,17 @@ function InfoDiv(divid) {
      * Init the node list
      */
     updateNodeList: function( node_list, category ) {
-        this.table.empty();
-        for (var i = 0; i < node_list.length; i++ ) {
-            (function () {
-                var rowLabel = decodeJSON(node_list[i]['label']);
-                var rowId = decodeJSON(node_list[i]['id']);
-                // asynchronously displays the node list
-                setTimeout("displayNodeRow(\""+rowLabel+"\",\""+rowId+"\",\""+category+"\")", 0);
-            })();
+        if (category != this.last_category) {
+            this.table.empty();
+            this.last_category = category;
+            for (var i = 0; i < node_list.length; i++ ) {
+                (function () {
+                    var rowLabel = decodeJSON(node_list[i]['label']);
+                    var rowId = decodeJSON(node_list[i]['id']);
+                    // asynchronously displays the node list
+                    setTimeout("displayNodeRow(\""+rowLabel+"\",\""+rowId+"\",\""+category+"\")", 0);
+                })();
+            }
         }
     },
 
@@ -304,7 +308,20 @@ function Tinaviz() {
     this.infodiv = null;
 
     //return {
-        // MAIN PROGRAM
+        this.init= function() {
+            if (wrapper != null || applet != null) return;
+            wrapper = $('#tinaviz')[0];
+            if (wrapper == null) return;
+            applet = wrapper.getSubApplet();
+            if (applet == null) return;
+            this.auto_resize();
+            this.main();
+            this.isReady = 1;
+        }
+        /************************
+         * Main method
+         *
+         ************************/
         this.main = function() {
 
             this.setView("macro");
@@ -361,34 +378,293 @@ function Tinaviz() {
             this.infodiv.display_current_view();
         }
 
-        this.init= function() {
-            if (wrapper != null || applet != null) return;
-            wrapper = $('#tinaviz')[0];
-            if (wrapper == null) return;
-            applet = wrapper.getSubApplet();
+        /************************
+         * Core applet methods
+         *
+         ************************/
+
+        /*
+         * Core method communicating with the applet
+         */
+        this.bindFilter= function(name, path, view) {
             if (applet == null) return;
-            this.auto_resize();
-            this.main();
-            this.isReady = 1;
+            if (view == null) return applet.getSession().addFilter(name, path);
+            return applet.getView(view).addFilter(name, path);
         }
 
         /*
-         * PUBLIC METHOD, AUTOMATIC RESIZE THE APPLET
+         * Core method communicating with the applet
          */
-        this.auto_resize = function() {
-           this.size(this.getWidth(), this.getHeight());
+        this.dispatchProperty= function(key,value) {
+            if (applet == null) return;
+            return applet.setProperty("all",key,value);
         }
 
         /*
-         * PRIVATE METHOD, RESIZE THE APPLET
+         * Core method communicating with the applet
          */
-        this.size= function(width, height) {
-            if (wrapper == null || applet == null) return;
-            wrapper.width = width;
-            wrapper.height = height;
-            $('#tinaviz').css('width',width);
-            $('#tinaviz').css('height',height);
+        this.setProperty= function(view,key,value) {
+            if (applet == null) return;
+            return applet.setProperty(view,key,value);
         }
+
+        /*
+         * Core method communicating with the applet
+         */
+        this.getProperty= function(view,key) {
+            if (applet == null) return;
+            return applet.getProperty(view,key);
+        }
+
+        /*
+         * Commands switching between view levels
+         */
+        this.setView = function(view) {
+            if (applet == null) return;
+            applet.setView(view);
+        }
+
+        /*
+         * Gets the the view level name
+         */
+        this.getView = function(view) {
+            if (applet == null) return;
+            return applet.getView().getName();
+        }
+
+        /*
+         * Commits the applet's parameters
+         * Accept an optional callback to give some reaction to events
+         */
+        this.touch= function(view) {
+            if (applet == null) return;
+            if (view==null) {
+                applet.touch();
+            } else {
+                applet.touch(view);
+            }
+        }
+        /*
+         *  Adds a node to the current selection
+         */
+        this.selectFromId = function( id ) {
+            if (applet == null) return;
+            return applet.selectFromId(id);
+        }
+
+        /*
+         *  Get the current state of the applet
+         */
+        this.enabled = function() {
+            if (applet == null) {
+                return false;
+            } else {
+                return applet.isEnabled();
+            }
+        }
+        /*
+         *  Set the current state of the applet to enable
+         */
+        this.enable =  function() {
+            if (applet == null) return;
+            applet.setEnabled(true);
+        }
+        /*
+         *  Set the current state of the applet to disabled
+         */
+        this.disable =  function() {
+            if (applet == null) return;
+            applet.setEnabled(false);
+        }
+        /*
+        * Search nodes
+        */
+        this.getNodesByLabel = function(label, type) {
+            if (applet == null) return {};
+            return $.parseJSON( applet.getNodesByLabel(label, type));
+        }
+
+        /*
+        * Search and select nodes
+        */
+        this.searchNodes= function(label, type) {
+            if (applet == null) return {};
+            var matchlist = this.getNodesByLabel(label, type);
+            for (var i = 0; i < matchlist.length; i++ ) {
+                applet.selectFromId( decodeJSON( matchlist[i]['id'] ) );
+                // todo: auto center!!
+                //applet.
+            }
+        }
+        /*
+        * Highlight nodes
+        */
+        this.highlightNodes= function(label, type) {
+            if (applet == null) return {};
+            var matchlist = this.getNodesByLabel(label, type);
+            for (var i = 0; i < matchlist.length; i++ ) {
+                applet.highlightFromId( decodeJSON( matchlist[i]['id'] ) );
+                // todo: auto center!!
+                //applet.
+            }
+        }
+
+        this.touchCallback= function(view, cb) {
+            if (applet == null) return;
+            if (view==null) {
+                applet.touch();
+            }
+            if (cb==null) {
+               applet.touch(view);
+            } else {
+                this.enqueueCb(applet.touch(view),cb);
+            }
+        }
+
+        /*
+        * recenter the graph
+        */
+        this.autoCentering= function() {
+            if (applet == null) return false;
+            return applet.autoCentering();
+        }
+
+        /*
+         *  Gets lattributes o a given node
+         */
+        this.getNodeAttributes = function(id) {
+            if (applet == null) return;
+            return $.parseJSON( applet.getNodesAttributes(id) );
+        }
+
+        /*
+         * Gets the list of neighbours for a given node
+         */
+        this.getNeighbourhood = function(view,id) {
+            if (applet == null) return;
+            return $.parseJSON( applet.getNeighbourhood(view,id) );
+        }
+
+
+        /************************
+         * Core Callback system
+         *
+         ************************/
+
+        /*
+         * Push a callback in the queue
+         */
+        this.enqueueCb=function(id,cb) {
+            cbsAwait[id] = cb;
+        }
+
+        /*
+         * Runs a callback
+         */
+        this.runCb=function(id) {
+            cbsRun[i]();
+            delete cbsRun[i];
+        }
+        /**
+         * Put a callback for the "await" list to the "run" list
+         *
+         */
+        this.activateCb=function(id) {
+            cbsRun[id] = cbsAwait[id];
+            delete cbsAwait[id];
+            return id;
+        }
+
+        /**
+         * How the callback system works:
+         *
+         * When the client call the "touch()" method, an update of the current view is
+         * scheduled by the applet, then the id of the new revision will be stored together
+         * with a callback address, by the javascript.
+         *
+         * As soon as the current view will reach this revision (or a greater one) the
+         * corresponding callback(s) will be called, then removed from the stack.
+         *
+         */
+        this.cbSync=function(id) {
+            for (i in cbsAwait) {
+                if (i<=id) {
+                    setTimeout("tinaviz.runCb("+this.activateCb(i)+")",0);
+                }
+            }
+        }
+
+        /********************************
+         *
+         * Mouse Callback system
+         *
+         ********************************/
+
+        /*
+         *  Callback of right clics
+         */
+        this.nodeRightClicked = function(view, data) {
+            if (applet == null) return;
+            //if (view == "meso") {
+                //this.toggleCategory(view);
+            //}
+        }
+
+        /*
+         *  Callback of left clics
+         */
+        this.nodeLeftClicked = function(view, data) {
+            if ( data == null ) return;
+            // copies the category from view to meso
+            //if (view == "meso") {
+                //this.toggleCategory(view);
+                //this.setProperty("meso", "category/category", this.getProperty(view, "category/category"));
+            //}
+        }
+
+        /*
+         *  Callback of double left clics
+         */
+        this.leftDoubleClicked = function(view, data, category) {
+            if (view =="macro") {
+                this.setView("meso");
+                // sets the center of the graph
+                this.setProperty("meso", "category/category", category);
+                this.updateNodes("meso", category);
+            }
+            if (view == "meso") {
+                this.toggleCategory(view);
+            }
+        }
+
+        /*
+         *  Callback of a node selection/clics
+         */
+        this.selected = function(view, attr, mouse) {
+            if (attr == null) return;
+            // always updates infodiv
+            data = $.parseJSON(attr);
+            this.infodiv.reset();
+            this.infodiv.update(view, data);
+            // dispatch action depending on clic type
+            // left == selected a node
+            if ( mouse == "left" ) {
+                this.nodeLeftClicked(view,data);
+            }
+            //right == unselected a node
+            else if ( mouse == "right" ) {
+                this.nodeRightClicked(view,data);
+            }
+            else if (mouse == "doubleleft") {
+                this.leftDoubleClicked(view, data, category);
+            }
+        }
+
+        /************************
+         *
+         * I/O system
+         *
+         ************************/
 
         // TODO: use a cross-browser compatible way of getting the current URL
         this.readGraphJava= function(view,graphURL) {
@@ -420,110 +696,52 @@ function Tinaviz() {
             applet.getSession().updateFromURI(view,path);
         }
 
+        /***********************************
+         *
+         * Manual actions controler system
+         *
+         ***********************************/
+        /*
+         * hide/show labels
+         */
         this.toggleLabels = function() {
             if (applet == null) return;
             return applet.getView().toggleLabels();
         }
 
+        /*
+         * hide/show nodes
+         */
         this.toggleNodes = function() {
             if (applet == null) return;
             return applet.getView().toggleNodes();
         }
 
+        /*
+         * hide/show edges
+         */
         this.toggleEdges = function() {
             if (applet == null) return;
             return applet.getView().toggleLinks();
         }
 
+        /*
+         * play/pause layout engine
+         */
         this.togglePause = function() {
             if (applet == null) return;
             return applet.getView().togglePause();
         }
+
+        /*
+         * toggles HD rendering
+         */
         this.toggleHD = function() {
             if (applet == null) return;
             return applet.getView().toggleHD();
         }
         /*
-         * Commands switching between view levels
-         */
-        this.setView = function(view) {
-            if (applet == null) return;
-            applet.setView(view);
-        }
-        /*
-         * Gets the the view level name
-         */
-        this.getView = function(view) {
-            if (applet == null) return;
-            return applet.getView().getName();
-        }
-        /**
-         * Commits applets parameters
-         * Accept an optional callback to give some reaction to events
-         */
-
-        this.touch= function(view) {
-            if (applet == null) return;
-            if (view==null) {
-                applet.touch();
-            } else {
-                applet.touch(view);
-            }
-        }
-
-        this.touchCallback= function(view, cb) {
-            if (applet == null) return;
-            if (view==null) {
-                applet.touch();
-            }
-            if (cb==null) {
-               applet.touch(view);
-            } else {
-                this.enqueueCb(applet.touch(view),cb);
-            }
-        }
-
-        /* Push a callback in the queue */
-        this.enqueueCb=function(id,cb) {
-            cbsAwait[id] = cb;
-        }
-        this.runCb=function(id) {
-            cbsRun[i]();
-            delete cbsRun[i];
-        }
-
-        /**
-         * Put a callback for the "await" list to the "run" list
-         *
-         */
-        this.activateCb=function(id) {
-            cbsRun[id] = cbsAwait[id];
-            delete cbsAwait[id];
-            return id;
-        }
-
-        /**
-         * How the callback system works:
-         *
-         * When the client call the "touch()" method, an update of the current view is
-         * scheduled by the applet, then the id of the new revision will be stored together
-         * with a callback address, by the javascript.
-         *
-         * As soon as the current view will reach this revision (or a greater one) the
-         * corresponding callback(s) will be called, then removed from the stack.
-         *
-         */
-        this.cbSync=function(id) {
-            for (i in cbsAwait) {
-                if (i<=id) {
-                    setTimeout("tinaviz.runCb("+this.activateCb(i)+")",0);
-                }
-            }
-        }
-
-
-        /*
-        * Tells the NOT DISPLAYED category name
+        * Get the opposite category name (the NOT DISPLAYED one)
         */
         this.getOppositeCategory = function(cat) {
             if (cat == "Document")
@@ -535,22 +753,24 @@ function Tinaviz() {
         }
 
         /**
-         * Toggle node's category visible
+         * Manually toggles the category
          */
         this.toggleCategory = function(view) {
             if (applet == null) return;
             var KEY = "category/category";
-            // TODO switch to the other view
-            this.setProperty(view, KEY, this.getOppositeCategory( this.getProperty(view, KEY)));
-            tinaviz.resetLayoutCounter();
+            var next_cat = this.getOppositeCategory( this.getProperty(view, KEY));
+            this.setProperty(view, KEY, next_cat);
+            //this.unselect();
+            this.resetLayoutCounter();
             this.touch();
             this.autoCentering();
+            // updates node list
             this.updateNodes(view, this.getProperty(view, KEY));
-            // project the selection in the macro view
-            for(var id in this.selection) {
+            // adds neighbour nodes (from next_cat) from the macro view
+            for(var id in this.infodiv.selection) {
                 var neighbours = this.getNeighbourhood("macro", id);
                 for (var neighbourId in neighbours) {
-                    if (neighbours[neighbourId].category == opposite) {
+                    if (neighbours[neighbourId].category == next_cat) {
                         this.selectFromId(neighbourId);
                     }
                 }
@@ -558,10 +778,9 @@ function Tinaviz() {
         }
 
         /**
-         * Toggle view to meso given an id
+         * Manually toggles the view to meso given an id
          */
         this.viewMeso = function(id, category) {
-            //alert(category);
             // changes view level
             this.unselect();
             this.selectFromId(id);
@@ -572,131 +791,17 @@ function Tinaviz() {
 
         }
 
-        this.bindFilter= function(name, path, view) {
-            if (applet == null) return;
-            if (view == null) return applet.getSession().addFilter(name, path);
-            return applet.getView(view).addFilter(name, path);
-        }
-
-        this.dispatchProperty= function(key,value) {
-            if (applet == null) return;
-            return applet.setProperty("all",key,value);
-        }
-
-        this.setProperty= function(view,key,value) {
-            if (applet == null) return;
-            return applet.setProperty(view,key,value);
-        }
-
-
-        this.getProperty= function(view,key) {
-            if (applet == null) return;
-            return applet.getProperty(view,key);
-        }
-        /*
-        * Search nodes
-        */
-        this.getNodesByLabel = function(label, type) {
-            if (applet == null) return {};
-            return $.parseJSON( applet.getNodesByLabel(label, type));
-        }
-        /*
-        * Search and select nodes
-        */
-        this.searchNodes= function(label, type) {
-            if (applet == null) return {};
-            var matchlist = this.getNodesByLabel(label, type);
-            for (var i = 0; i < matchlist.length; i++ ) {
-                applet.selectFromId( decodeJSON( matchlist[i]['id'] ) );
-                // todo: auto center!!
-                //applet.
-            }
-        }
-
-       this.highlightNodes= function(label, type) {
-            if (applet == null) return {};
-            var matchlist = this.getNodesByLabel(label, type);
-            for (var i = 0; i < matchlist.length; i++ ) {
-                applet.highlightFromId( decodeJSON( matchlist[i]['id'] ) );
-                // todo: auto center!!
-                //applet.
-            }
-        }
 
         /*
-        * unselect all nodes
+        * Manually unselects all nodes
         */
         this.unselect= function() {
             if (applet == null) return;
             applet.unselect();
             this.infodiv.reset();
-
             applet.clear("meso");
         }
-        /*
-        * recenter the graph
-        */
-        this.autoCentering= function() {
-            if (applet == null) return false;
-            return applet.autoCentering();
-        }
 
-        /*
-         *  Gets lattributes o a given node
-         */
-        this.getNodeAttributes = function(id) {
-            if (applet == null) return;
-            return $.parseJSON( applet.getNodesAttributes(id) );
-        }
-
-        /*
-         *  Gets list of neighbours for a given node
-         */
-        this.getNeighbourhood = function(view,id) {
-            if (applet == null) return;
-            return $.parseJSON( applet.getNeighbourhood(view,id) );
-        }
-        /*
-         *  Callback of right clics
-         */
-        this.nodeLeftClicked = function(view, data) {
-            if ( data == null ) return;
-            if (view=="meso") {
-                this.setProperty("meso", "category/category",
-                    this.getProperty(view, "category/category"));
-            }
-            return this.infodiv.update(view, data);
-        }
-        /*
-         *  Callback of left clics
-         */
-        this.nodeRightClicked = function(view, data) {
-            if (applet == null) return;
-            if (view == "meso") {
-                this.toggleCategory(view);
-            }
-        }
-        /*
-         *  Callback of a node selection/clics
-         */
-        this.selected = function(view, attr, mouse) {
-            if (attr == null) return;
-            data = $.parseJSON(attr);
-            this.infodiv.reset();
-            if ( mouse == "left" ) {
-                this.nodeLeftClicked(view,data);
-            } else if ( mouse == "right" ) {
-                this.nodeRightClicked(view,data);
-            }
-        }
-
-        /*
-         *  Adds a node to the current selection
-         */
-        this.selectFromId = function( id ) {
-            if (applet == null) return;
-            return applet.selectFromId(id);
-        }
 
         /*
          *  Retrieves list of nodes
@@ -717,30 +822,8 @@ function Tinaviz() {
                 this.infodiv.updateNodeList( this.infodiv.data[category], category );
         }
 
-        /*
-         *  Get the current state of the applet
-         */
-        this.enabled = function() {
-            if (applet == null) {
-                return false;
-            } else {
-                return applet.isEnabled();
-            }
-        }
-        /*
-         *  Set the current state of the applet to enable
-         */
-        this.enable =  function() {
-            if (applet == null) return;
-            applet.setEnabled(true);
-        }
-        /*
-         *  Set the current state of the applet to disabled
-         */
-        this.disable =  function() {
-            if (applet == null) return;
-            applet.setEnabled(false);
-        }
+
+
         /*
          *  Try to log an error with firebug otherwise alert it
          */
@@ -765,44 +848,25 @@ function Tinaviz() {
             }
         }
 
-        this.resetLayoutCounter= function(view) {
-            if (applet == null) return;
-            // TODO switch to the other view
-            applet.resetLayoutCounter();
-        }
 
-        /**
-         * Callback called whenever the applet change of view
+        /****************************************
+         *
+         * HTML VIZ DIV ADJUSTING/ACTION
+         *
+         ****************************************/
+
+        /*
+         * Dynamic div width
          */
-        this.switchedTo= function(view) {
-            if (applet == null) return;
-            this.autoCentering();
-            if (view=="macro") {
-                $("#toggle-project").button('enable');
-            } else if (view=="meso") {
-                $("#toggle-project").button('disable');
-            }
-
-            // update the buttons
-            $("#sliderEdgeWeight").slider( "option", "values", [
-                this.getProperty(view, "edgeWeight/min"),
-                this.getProperty(view, "edgeWeight/max")*100
-            ]);
-            $("#sliderNodeWeight").slider( "option", "values", [
-                this.getProperty(view, "nodeWeight/min"),
-                this.getProperty(view, "nodeWeight/max")*100
-            ]);
-            this.infodiv.display_current_view();
-        }
-
         this.getWidth= function() {
             return $("#vizdiv").width();
         }
 
+        /*
+         * Dynamic div height
         this.getHeight= function() {
             return getScreenHeight() - $("#hd").height() - $("#ft").height() - 40;
         }
-
         /*
          * Callback changing utton states
          */
@@ -816,6 +880,23 @@ function Tinaviz() {
             );
         }
 
+        /*
+         * PUBLIC METHOD, AUTOMATIC RESIZE THE APPLET
+         */
+        this.auto_resize = function() {
+           this.size(this.getWidth(), this.getHeight());
+        }
+
+        /*
+         * PRIVATE METHOD, RESIZE THE APPLET
+         */
+        this.size= function(width, height) {
+            if (wrapper == null || applet == null) return;
+            wrapper.width = width;
+            wrapper.height = height;
+            $('#tinaviz').css('width',width);
+            $('#tinaviz').css('height',height);
+        }
     //};
 }
 
