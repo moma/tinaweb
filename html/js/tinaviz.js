@@ -453,12 +453,14 @@ function Tinaviz() {
          */
         this.touch= function(view) {
             if (applet == null) return;
-            if (view==null) {
+            //this.logNormal("touch("+view+")");
+            if (view===undefined) {
                 applet.touch();
             } else {
                 applet.touch(view);
             }
         }
+        
         /*
          *  Adds a node to the current selection
          */
@@ -467,6 +469,12 @@ function Tinaviz() {
             return applet.selectFromId(id);
         }
 
+        this.resetLayoutCounter= function(view) {
+            if (applet == null) return;
+            // TODO switch to the other view
+            applet.resetLayoutCounter();
+        }
+        
         /*
          *  Get the current state of the applet
          */
@@ -797,8 +805,10 @@ function Tinaviz() {
             var next_cat = this.getOppositeCategory( this.getProperty(view, KEY));
             this.setProperty(view, KEY, next_cat);
             //this.unselect();
+            
             this.resetLayoutCounter();
             this.touch();
+
             this.autoCentering();
             // updates node list
             this.updateNodes(view, this.getProperty(view, KEY));
