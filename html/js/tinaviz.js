@@ -367,16 +367,21 @@ function Tinaviz() {
             if (wrapper == null) return;
             applet = wrapper.getSubApplet();
             if (applet == null) return;
-            this.resize();
+            this.auto_resize();
             this.main();
             this.isReady = 1;
         }
 
-        this.resize = function() {
+        /*
+         * PUBLIC METHOD, AUTOMATIC RESIZE THE APPLET
+         */
+        this.auto_resize = function() {
            this.size(this.getWidth(), this.getHeight());
         }
 
-        // RESIZE THE APPLET
+        /*
+         * PRIVATE METHOD, RESIZE THE APPLET
+         */
         this.size= function(width, height) {
             if (wrapper == null || applet == null) return;
             wrapper.width = width;
@@ -636,16 +641,24 @@ function Tinaviz() {
             return applet.autoCentering();
         }
 
+        /*
+         *  Gets lattributes o a given node
+         */
         this.getNodeAttributes = function(id) {
             if (applet == null) return;
             return $.parseJSON( applet.getNodesAttributes(id) );
         }
 
+        /*
+         *  Gets list of neighbours for a given node
+         */
         this.getNeighbourhood = function(view,id) {
             if (applet == null) return;
             return $.parseJSON( applet.getNeighbourhood(view,id) );
         }
-
+        /*
+         *  Callback of right clics
+         */
         this.nodeLeftClicked = function(view, data) {
             if ( data == null ) return;
             if (view=="meso") {
@@ -654,14 +667,18 @@ function Tinaviz() {
             }
             return this.infodiv.update(view, data);
         }
-
+        /*
+         *  Callback of left clics
+         */
         this.nodeRightClicked = function(view, data) {
             if (applet == null) return;
             if (view == "meso") {
                 this.toggleCategory(view);
             }
         }
-
+        /*
+         *  Callback of a node selection/clics
+         */
         this.selected = function(view, attr, mouse) {
             if (attr == null) return;
             data = $.parseJSON(attr);
@@ -673,10 +690,14 @@ function Tinaviz() {
             }
         }
 
+        /*
+         *  Adds a node to the current selection
+         */
         this.selectFromId = function( id ) {
             if (applet == null) return;
             return applet.selectFromId(id);
         }
+
         /*
          *  Retrieves list of nodes
          */
@@ -686,7 +707,7 @@ function Tinaviz() {
             return this.infodiv.data[category];
         }
         /*
-         *  Fires theupdate of node cache
+         *  Fires the update of node list cache and display
          */
         this.updateNodes = function(view, category)  {
             this.infodiv.display_current_category();
@@ -696,6 +717,9 @@ function Tinaviz() {
                 this.infodiv.updateNodeList( this.infodiv.data[category], category );
         }
 
+        /*
+         *  Get the current state of the applet
+         */
         this.enabled = function() {
             if (applet == null) {
                 return false;
@@ -703,30 +727,46 @@ function Tinaviz() {
                 return applet.isEnabled();
             }
         }
+        /*
+         *  Set the current state of the applet to enable
+         */
         this.enable =  function() {
             if (applet == null) return;
             applet.setEnabled(true);
         }
-
+        /*
+         *  Set the current state of the applet to disabled
+         */
         this.disable =  function() {
             if (applet == null) return;
             applet.setEnabled(false);
         }
-
+        /*
+         *  Try to log an error with firebug otherwise alert it
+         */
         this.logError= function(msg) {
-            //console.console.error(msg);
+            try {
+                console.error(msg);
+            }
+            catch (e){
+                alert(msg);
+                return;
+            }
         }
-
-        this.logNormal= function(msg) {
-            //console.console.log(msg);
+        /*
+         *  Try to log an normal msg with firebug otherwise returns
+         */
+        this.logNormal = function(msg) {
+            try {
+                console.log(msg);
+            }
+            catch (e) {
+                return;
+            }
         }
-
-        this.logDebug= function(msg) {
-            //console.console.info(msg);
-        }
-
 
         this.resetLayoutCounter= function(view) {
+            if (applet == null) return;
             // TODO switch to the other view
             applet.resetLayoutCounter();
         }
@@ -763,12 +803,18 @@ function Tinaviz() {
             return getScreenHeight() - $("#hd").height() - $("#ft").height() - 40;
         }
 
+        /*
+         * Callback changing utton states
+         */
         this.buttonStateCallback = function(button, enabled) {
-            // state = "disable"; if (enabled) { state = "enable"; }
-            //alert("#toggle-"+button);
-            $("#toggle-"+button).toggleClass("ui-state-active", enabled);
-            //$("#toggle-"+button).button(state);
-         }
+            $(document).ready(
+                function() {
+                    // state = "disable"; if (enabled) { state = "enable"; }
+                    $("#toggle-"+button).toggleClass("ui-state-active", enabled);
+                    //$("#toggle-"+button).button(state);
+                }
+            );
+        }
 
     //};
 }
@@ -987,11 +1033,11 @@ $(document).ready(function(){
         tinaviz.toggleCategory("current");
     });
 
-   $('#waitMessage').effect('pulsate', {}, 'normal');
+   $('#waitMessage').effect('pulsate', {}, 'fast');
 
     $(window).bind('resize', function() {
         if (tinaviz.enabled()) {
-            tinaviz.resize();
+            tinaviz.auto_resize();
             $("#infodiv").css( 'height', getScreenHeight() - $("#hd").height() - $("#ft").height() - 60);
         }
     });
