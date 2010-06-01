@@ -123,10 +123,11 @@ function InfoDiv(divid) {
     */
     display_current_view: function() {
         var current_view = tinaviz.getView();
-        if (current_view !== undefined)
-            $("#title").html("FET Open projects explorer : "+current_view+" view");
+        var titleRoot = "Cartographie des chercheurs français dans le domaine des systèmes complexes - <strong>VERSION ALPHA</strong> <a href=\"https://tinasoft.eu/Feedback\">(feedback)</a>";
+	if (current_view !== undefined)
+            $("#title").html(titleRoot+": "+current_view+" view");
         else
-            $("#title").html("FET Open projects explorer");
+            $("#title").html(titleRoot);
     },
 
     /*
@@ -377,8 +378,8 @@ function Tinaviz() {
             this.bindFilter("Output", "output", "meso");
 
 
-            // this.readGraphJava("macro", "French_bipartite_graph.gexf");
-            this.readGraphJava("macro", "FET60bipartite_graph_cooccurrences_.gexf");
+             this.readGraphJava("macro", "French_bipartite_graph.gexf");
+            //this.readGraphJava("macro", "FET60bipartite_graph_cooccurrences_.gexf");
             //this.readGraphJava("macro", "CSSScholarsMay2010.gexf");
 
             //this.togglePause();
