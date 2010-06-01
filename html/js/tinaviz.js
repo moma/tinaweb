@@ -864,8 +864,9 @@ function Tinaviz() {
 
         /*
          * Dynamic div height
+         */
         this.getHeight= function() {
-            return getScreenHeight() - $("#hd").height() - $("#ft").height() - 40;
+            return getScreenHeight() - $("#hd").height() - $("#ft").height() - 50;
         }
         /*
          * Callback changing utton states
@@ -906,20 +907,21 @@ $(document).ready(function(){
 
     $(function(){
         $.extend($.fn.disableTextSelect = function() {
-            return this.each(function(){
+            return this.each(function() {
                 if($.browser.mozilla){//Firefox $("#sliderEdgeWeight")
                     $(this).css('MozUserSelect','none');
-                }else if($.browser.msie){//IE
+                } else if($.browser.msie) {//IE
                     $(this).bind('selectstart',function(){return false;});
-                }else{//Opera, etc.
+                } else {//Opera, etc.
                     $(this).mousedown(function(){return false;});
                 }
             });
         });
-        $('.noSelect').disableTextSelect();//No text selection on elements with a class of 'noSelect'
-         $('.noSelect').hover(function() {
+        //No text selection on elements with a class of 'noSelect'
+        $('.noSelect').disableTextSelect();
+        $('.noSelect').hover(function() {
             $(this).css('cursor','default');
-         }, function() {
+        }, function() {
             $(this).css('cursor','auto');
         });
     });
@@ -928,11 +930,15 @@ $(document).ready(function(){
 
     $("#title").html("FET Open projects explorer");
     var infodiv = new InfoDiv("#infodiv");
+
     // auto-adjusting infodiv height
-    $(infodiv.id).css( 'height', getScreenHeight() - $("#hd").height() - $("#ft").height() - 60);
+    var new_size = tinaviz.getHeight() - 20;
+    $(infodiv.id).css( 'height', new_size);
+
     $(infodiv.id).accordion({
         fillSpace: true,
     });
+
     // cleans infodiv
     infodiv.reset();
     // passing infodiv to tinaviz is REQUIRED

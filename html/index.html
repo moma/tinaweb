@@ -31,8 +31,9 @@
                 <div id="hdb">
                     <div id="htoolbar" class="toolbardiv fg-toolbar ui-widget-header ui-corner-all ui-helper-clearfix">
                         <div id="title" class="bigTitle noSelect"></div>
-                            <button id="toggle-switch" class="fg-button toolbar-left">switch category</button>
                             <button id="toggle-paused" class="fg-button toolbar-left">pause</button>
+                            <button id="toggle-switch" class="fg-button toolbar-left">switch category</button>
+
 
                             <!-- TEMPORARY DISABLED - FOR THE ONLINE VERSION -->
                             <!--
@@ -60,16 +61,7 @@
                                    title="pause spatialization"><span class="ui-icon ui-icon-thunder"></span> <span class="noSelect">Run layout</span></a>
                             </div>
                             -->
-                            <div id="sliders_topology" class="sliders toolbar-left">
-                                <div class="slider">
-                                    <span class="sliderLabel noSelect">edges filter</span>
-                                    <div id="sliderEdgeWeight"></div>
-                                </div>
-                                <div class="slider">
-                                    <span class="sliderLabel noSelect">nodes filter</span>
-                                    <div id="sliderNodeWeight"></div>
-                                </div>
-                            </div>
+
                             <div id="sliders_view" class="sliders toolbar-left">
                                 <div class="slider">
                                     <span class="sliderLabel noSelect">magnify</span>
@@ -78,6 +70,17 @@
                                 <div class="slider smallslider">
                                     <span class="sliderLabel noSelect">cursor size</span>
                                     <div id="sliderSelectionZone"></div>
+                                </div>
+                            </div>
+
+                            <div id="sliders_topology" class="sliders toolbar-left">
+                                <div class="slider">
+                                    <span class="sliderLabel noSelect">edges filter</span>
+                                    <div id="sliderEdgeWeight"></div>
+                                </div>
+                                <div class="slider">
+                                    <span class="sliderLabel noSelect">nodes filter</span>
+                                    <div id="sliderNodeWeight"></div>
                                 </div>
                             </div>
                             <!-- end of sliders -->
@@ -110,7 +113,7 @@
                         <!-- LEFT MAIN COLUMN-->
                         <div id="vizdiv" class="yui-u first">
 
-                           <div id="waitMessage" class="waitMessage">Please wait while loading..</div>
+                           <div id="waitMessage" class="waitMessage">Please wait while loading...</div>
                             <!--[if !IE]> -->
                             <object id="tinaviz"
                                         classid="java:org.jdesktop.applet.util.JNLPAppletLauncher"
