@@ -842,7 +842,8 @@ function Tinaviz() {
             this.setView("meso");
             // sets the category of the graph
             this.setProperty("meso", "category/category", category);
-            //this.touch("meso");
+            //tinaviz.resetLayoutCounter();
+            this.touch("meso");
             this.updateNodes("meso", category);
         }
 
@@ -854,6 +855,11 @@ function Tinaviz() {
             if (applet == null) return;
             applet.unselect();
             this.infodiv.reset();
+            if (this.getView() == "meso")
+                this.setView("macro");
+                //tinaviz.resetLayoutCounter();
+                this.touch("macro");
+                this.autoCentering();
             applet.clear("meso");
         }
 
