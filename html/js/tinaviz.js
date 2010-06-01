@@ -387,21 +387,25 @@ function Tinaviz() {
 
         // TODO: use a cross-browser compatible way of getting the current URL
         this.readGraphJava= function(view,graphURL) {
-                // window.location.href
-                // window.location.pathname
-                var sPath = document.location.href;
-                var gexfURL = sPath.substring(0, sPath.lastIndexOf('/') + 1) + graphURL;
-                applet.getSession().updateFromURI(view,gexfURL        this.readGraphAJAX= function(view,graphURL) {
+            // window.location.href
+            // window.location.pathname
+            var sPath = document.location.href;
+            var gexfURL = sPath.substring(0, sPath.lastIndexOf('/') + 1) + graphURL;
+            applet.getSession().updateFromURI(view,gexfURL);
+            $('#waitMessage').hide();
+        }
+
+        this.readGraphAJAX= function(view,graphURL) {
             if (applet == null) return;
             $.ajax({
                 url: graphURL,
                 type: "GET",
                 dataType: "text",
-                beforeSend: function() { $('#loading').show(); },
-                error: function() { $('#loading').hide(); },
+                beforeSend: function() { $('#waitMessage').show(); },
+                error: function() { $('#waitMessage').show(); },
                 success: function(gexf) {
                    applet.getSession().updateFromString(view,gexf);
-                   $('#loading').hide();
+                   $('#waitMessage').hide();
                }
             });
         }
