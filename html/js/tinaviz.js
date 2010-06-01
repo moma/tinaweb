@@ -28,6 +28,21 @@ function getScreenHeight() {
 
     return y;
 }
+
+$(function(){
+    $.extend($.fn.disableTextSelect = function() {
+        return this.each(function() {
+            if($.browser.mozilla){//Firefox $("#sliderEdgeWeight")
+                $(this).css('MozUserSelect','none');
+            } else if($.browser.msie) {//IE
+                $(this).bind('selectstart',function(){return false;});
+            } else {//Opera, etc.
+                $(this).mousedown(function(){return false;});
+            }
+        });
+    });
+});
+
 /*
  * utility modifying the Object prototype
  * to get its lenght
@@ -637,6 +652,30 @@ function Tinaviz() {
             }
         }
 
+        /**
+        * Callback called whenever the applet change of view
+        */
+        this.switchedTo= function(view) {
+            if (applet == null) return;
+            this.autoCentering();
+            /*if (view=="macro") {
+                $("#toggle-project").button('enable');
+            } else if (view=="meso") {
+                $("#toggle-project").button('disable');
+            }*/
+
+            // update the buttons
+            $("#sliderEdgeWeight").slider( "option", "values", [
+                this.getProperty(view, "edgeWeight/min"),
+                this.getProperty(view, "edgeWeight/max")*100
+            ]);
+            $("#sliderNodeWeight").slider( "option", "values", [
+                this.getProperty(view, "nodeWeight/min"),
+                this.getProperty(view, "nodeWeight/max")*100
+            ]);
+            this.infodiv.display_current_view();
+        }
+
         /*
          *  Callback of a node selection/clics
          */
@@ -905,28 +944,14 @@ var tinaviz = new Tinaviz();
 
 $(document).ready(function(){
 
-    $(function(){
-        $.extend($.fn.disableTextSelect = function() {
-            return this.each(function() {
-                if($.browser.mozilla){//Firefox $("#sliderEdgeWeight")
-                    $(this).css('MozUserSelect','none');
-                } else if($.browser.msie) {//IE
-                    $(this).bind('selectstart',function(){return false;});
-                } else {//Opera, etc.
-                    $(this).mousedown(function(){return false;});
-                }
-            });
-        });
-        //No text selection on elements with a class of 'noSelect'
-        $('.noSelect').disableTextSelect();
-        $('.noSelect').hover(function() {
-            $(this).css('cursor','default');
-        }, function() {
-            $(this).css('cursor','auto');
-        });
+
+    //No text selection on elements with a class of 'noSelect'
+    $('.noSelect').disableTextSelect();
+    $('.noSelect').hover(function() {
+        $(this).css('cursor','default');
+    }, function() {
+        $(this).css('cursor','auto');
     });
-
-
 
     $("#title").html("FET Open projects explorer");
     var infodiv = new InfoDiv("#infodiv");
