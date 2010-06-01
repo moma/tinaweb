@@ -511,6 +511,7 @@ function Tinaviz() {
                 //applet.
             }
         }
+
         /*
         * Highlight nodes
         */
@@ -642,38 +643,11 @@ function Tinaviz() {
          */
         this.leftDoubleClicked = function(view, data, category) {
             if (view =="macro") {
-                this.setView("meso");
-                // sets the center of the graph
-                this.setProperty("meso", "category/category", category);
-                this.updateNodes("meso", category);
+                this.viewMeso(data[0], category);
             }
             if (view == "meso") {
                 this.toggleCategory(view);
             }
-        }
-
-        /**
-        * Callback called whenever the applet change of view
-        */
-        this.switchedTo= function(view) {
-            if (applet == null) return;
-            this.autoCentering();
-            /*if (view=="macro") {
-                $("#toggle-project").button('enable');
-            } else if (view=="meso") {
-                $("#toggle-project").button('disable');
-            }*/
-
-            // update the buttons
-            $("#sliderEdgeWeight").slider( "option", "values", [
-                this.getProperty(view, "edgeWeight/min"),
-                this.getProperty(view, "edgeWeight/max")*100
-            ]);
-            $("#sliderNodeWeight").slider( "option", "values", [
-                this.getProperty(view, "nodeWeight/min"),
-                this.getProperty(view, "nodeWeight/max")*100
-            ]);
-            this.infodiv.display_current_view();
         }
 
         /*
@@ -699,6 +673,29 @@ function Tinaviz() {
             }
         }
 
+        /**
+        * Callback after CHANGING THE VIEW LEVEL
+        */
+        this.switchedTo = function(view) {
+            if (applet == null) return;
+            this.autoCentering();
+            /*if (view=="macro") {
+                $("#toggle-project").button('enable');
+            } else if (view=="meso") {
+                $("#toggle-project").button('disable');
+            }*/
+
+            // update the buttons
+            $("#sliderEdgeWeight").slider( "option", "values", [
+                this.getProperty(view, "edgeWeight/min"),
+                this.getProperty(view, "edgeWeight/max")*100
+            ]);
+            $("#sliderNodeWeight").slider( "option", "values", [
+                this.getProperty(view, "nodeWeight/min"),
+                this.getProperty(view, "nodeWeight/max")*100
+            ]);
+            this.infodiv.display_current_view();
+        }
         /************************
          *
          * I/O system
