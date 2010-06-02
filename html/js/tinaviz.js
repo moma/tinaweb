@@ -63,7 +63,6 @@ Object.values = function(obj) {
     for (key in obj) {
         values.push(obj[key]);
     }
-    tinaviz.logNormal(values);
     return values;
 };
 
@@ -293,7 +292,7 @@ function InfoDiv(divid) {
             }
         }
         var sorted_tags = this.alphabeticListSort( Object.values( tempcloud ), 'label' );
-        tinaviz.logNormal(sorted_tags);
+        //tinaviz.logNormal(sorted_tags);
         /* some display sizes const */
         var sizecoef = 15;
         var const_doc_tag = 12;
@@ -306,11 +305,15 @@ function InfoDiv(divid) {
             tagspan.addClass('ui-widget-content');
             tagspan.addClass('tinaviz_node');
             tagspan.html(tag['label']);
-            tagspan.click( function(eventObject) {
-                tinaviz.logNormal("clicked on " + tagid + " - " +tag['label']);
-                //switch to meso view
-                tinaviz.viewMeso(tagid, tag['category']);
-            });
+            (function() {
+                var attached_id = tagid;
+                var attached_cat =  tag['category'];
+                tagspan.click( function() {
+                    tinaviz.logNormal("clicked on " + tagid + " - " +tag['label']);
+                    //switch to meso view
+                    tinaviz.viewMeso(attached_id, attached_cat);
+                });
+            })();
             // sets the tag's text size
             if (sorted_tags.length == 1) {
                 if ( tag['category'] == 'Document' )
