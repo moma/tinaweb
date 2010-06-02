@@ -383,7 +383,7 @@ function Tinaviz() {
 
 
             // this.readGraphJava("macro", "French_bipartite_graph.gexf");
-            this.readGraphJava("macro", "FET60bipartite_graph_cooccurrences_.gexf");
+            this.readGraphAJAX("macro", "FET60bipartite_graph_cooccurrences_.gexf");
             //this.readGraphJava("macro", "CSSScholarsMay2010.gexf");
 
             //this.togglePause();

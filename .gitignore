@@ -13,6 +13,7 @@ dist
 dist/*
 build/*
 */build
+html/java/old_*
 tinasoft-*.*
 *.tar.gz
 *.zip
