@@ -747,15 +747,16 @@ function Tinaviz() {
          */
         this.leftDoubleClicked = function(view, data) {
             var category = this.getProperty("current", "category/category");
-            if (view =="macro") {
-                for (var id in data) {
-                    this.viewMeso(decodeJSON(id), category);
-                    break;
-                }
+            this.logNormal( category );
+            for (var id in data) {
+                this.viewMeso(decodeJSON(id), category);
+                break;
+            }
+            /*if (view =="macro") {
             }
             if (view == "meso") {
-                this.toggleCategory(view);
-            }
+                //this.toggleCategory(view);
+            }*/
         }
 
         /*
