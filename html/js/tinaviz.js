@@ -380,10 +380,11 @@ function Tinaviz() {
 
             this.bindFilter("NodeWeightRange",  "nodeWeight", "macro");
             this.bindFilter("EdgeWeightRange", "edgeWeight",  "macro");
+            
             this.bindFilter("NodeFunction", "radiusByWeight", "macro");
+
             this.bindFilter("Output", "output", "macro");
 
-            //this.bindFilter("NodeRadius",   "radius",         "macro");
 
             // special version of the subgraph copy filter: this one does not use the
             // tinasoft berkeley database to get data
@@ -1121,7 +1122,7 @@ $(document).ready(function(){
         animate: true,
         slide: function(event, ui) {
             tinaviz.setProperty("current", "output/nodeSizeRatio", ui.value / 100.0);
-            tinaviz.resetLayoutCounter();
+            //tinaviz.resetLayoutCounter();
             tinaviz.touch();
         }}
     );
