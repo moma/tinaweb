@@ -134,10 +134,22 @@ function InfoDiv(divid) {
     */
     display_current_view: function() {
         var current_view = tinaviz.getView();
-        if (current_view !== undefined)
-            $("#title").html("FET Open projects explorer : "+current_view+" view");
-        else
-            $("#title").html("FET Open projects explorer");
+        tinaviz.logNormal( current_view );
+        if (current_view !== undefined) {
+            var level = $("#level");
+        level.empty().html(current_view + " level <span class='ui-icon ui-icon-help icon-right' title='></span>");
+            var title = $("#infodiv > h3:first");
+            if (current_view == "meso") {
+                level.addClass("ui-state-highlight");
+                $("#level > span").attr("title","zoom out to switch to the macro view");
+                title.addClass("ui-state-highlight");
+            }
+            else {
+                level.removeClass("ui-state-highlight");
+                $("#level > span").attr("title","zoom in or double click on a node to switch to is meso view");
+                title.removeClass("ui-state-highlight");
+            }
+        }
     },
 
     alphabeticListSort: function( listitems, textkey ) {
@@ -200,6 +212,7 @@ function InfoDiv(divid) {
         /* some display sizes const */
         var sizecoef = 15;
         var const_doc_tag = 12;
+        var tooltip = "";
         /* displays tag cloud */
         var tagcloud = $("<p></p>");
         for (var i = 0; i < sorted_tags.length; i++) {
@@ -226,11 +239,13 @@ function InfoDiv(divid) {
                     tagspan.css('font-size',
                         Math.floor( sizecoef*Math.log( 1.5 + tag['occurrences'] ) )
                     );
+                tooltip = "click on a label to switch to its meso view - size is proportional to edge weight";
             }
             else {
                 tagspan.css('font-size',
                     Math.floor( sizecoef*Math.log( 1.5 + tag['degree'] ) )
                 );
+                tooltip = "click on a label to switch to its meso view - size is proportional to the degree";
             }
             // appends the final tag to the cloud paragraph
             tagcloud.append(tagspan);
@@ -239,7 +254,7 @@ function InfoDiv(divid) {
         }
         // updates the main cloud  div
         this.cloud.empty();
-        this.cloud.append( "<h3>related to:</h3>" );
+        this.cloud.append( '<h3>selection related to <span class="ui-icon ui-icon-help icon-right" title="'+tooltip+'"></span></h3>' );
         this.cloud.append( tagcloud );
     },
 

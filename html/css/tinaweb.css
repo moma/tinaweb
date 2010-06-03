@@ -14,6 +14,7 @@
 
 .fg-button { margin:0 4px 0 0; text-decoration:none; position: relative; text-align: center; }
 .sliders { margin:0 4px 0 0; text-decoration:none; position: relative; text-align: center; }
+.icon-right { float: right; }
 ./*fg-button .ui-icon { position: absolute; top: 50%; margin-top: -8px; left: 50%; margin-left: -8px; }*/
 
 /* remove extra button width in IE */
@@ -44,7 +45,13 @@ body {
 }
 
 #title {
-    margin: 2px 2px;
+    margin: 7px;
+}
+
+#level {
+    margin: 3px;
+    padding: 5px;
+
 }
 
 #toggle-unselect {
