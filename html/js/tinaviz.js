@@ -168,108 +168,12 @@ function InfoDiv(divid) {
     },
 
     /*
-     * infodiv tag cloud contents
-     * Unique node mode = uses the occurrences attr to set the size of the label
-     * of the opposite type of a given node
-
-    tagCloudOne: function( sorted_tags ) {
-        var ngsizecoef = 15;
-        for (var nodeid in this.selection) {
-            // we need the full neighbourhood for the tag cloud
-            var nb = tinaviz.getNeighbourhood("macro",nodeid);
-            var tagcloud = $("<p></p>");
-            var taglist = new Array();
-            for (var nbid in nb) {
-                if (this.selection[nodeid]['category'] != nb[nbid]['category']) {
-
-                }
-                    var tag = $("<span id='"+nbid+"'></span>")
-                    tag.addClass('ui-widget-content');
-                    tag.addClass('tinaviz_node');
-                    tag.html( decodeJSON(nb[nbid]['label']) );
-                    tag.click( function(eventObject) {
-                        //switch to meso view
-                        tinaviz.viewMeso(nbid, decodeJSON(nb[nbid]['category']));
-                    });
-                    if ( this.selection[nodeid]['category'] == 'NGram' )
-                        tag.css('font-size', 12);
-                    else if ( this.selection[nodeid]['category'] == 'Document' )
-                        tag.css('font-size',
-                            Math.floor( ngsizecoef*Math.log( 1.5 + nb[nbid]['occurrences'] ) )
-                        );
-                    tagcloud.append(tag);
-            }
-            this.cloud.empty();
-            this.cloud.append( "<h3>Related to:</h3>" );
-            this.cloud.append( this.alphabetSort( tagcloud, "span", ", &nbsp;" ));
-        }
-        return true;
-    },     */
-
-    /*
-     * infodiv tag cloud contents
-     * multiple mode = sums degrees to set the size of label
-     * of the opposite type of a given node
-
-    tagCloudMultiple: function( sorted_tags )  {
-        var sizecoef = 15;
-        var const_doc_tag = 12;
-        var tempcloud = {};
-
-        for (var tag in sorted_tags) {
-            var nbid = tag['id'];
-            if ( tempcloud[nbid] === undefined )
-                tempcloud[nbid] = {
-                    'label' : decodeJSON(tag['label']),
-                    'degree' : 1,
-                    'occs': tag['occurrences'],
-                    'category': decodeJSON(tag['category']),
-                };
-            else
-                tempcloud[nbid]['degree']++;
-        }
-
-        var tagcloud = $("<p></p>");
-        for (var tagid in tempcloud) {
-            var tag = $("<span id='"+tagid+"'></span>");
-            tag.addClass('ui-widget-content');
-            tag.addClass('tinaviz_node');
-            if (Object.size(tempcloud) > 1)
-                tagcloud.append(", &nbsp;");
-            tag.append(tempcloud[tagid]['label']);
-            tag.click( function(eventObject) {
-                tinaviz.logNormal(tagid);
-                //switch to meso view
-                tinaviz.viewMeso(tagid, tempcloud[tagid]['category']);
-            });
-            // tag text size
-            if (Object.size(tempcloud) == 1) {
-                if ( tempcloud[tagid]['category'] == 'Document' )
-                    tag.css('font-size', const_doc_tag);
-                else
-                    tag.css('font-size',
-                        Math.floor( sizecoef*Math.log( 1.5 + tempcloud[tagid]['occurrences'] ) )
-                    );
-            }
-            else if (Object.size(tempcloud) > 1) {
-                tag.css('font-size',
-                    Math.floor( sizecoef*Math.log( 1.5 + tempcloud[tagid]['degree'] ) )
-                );
-            }
-            // appends the final tag to the cloud paragraph
-            tagcloud.append(tag);
-        }
-        // updates the main cloud  div
-        this.cloud.empty();
-        this.cloud.append( "<h3>related to:</h3>" );
-        this.cloud.append( tagcloud );
-    },     */
-
-    /*
      * updates the tag cloud
+     * of the opposite nodes of a given selection
      */
     updateTagCloud: function( viewLevel ) {
         /* builds aggregated tag object */
+        if (Object.size( this.selection ) == 0) return;
         var tempcloud = {};
         for (var nodeid in this.selection) {
             // gets the full neighbourhood for the tag cloud
@@ -280,7 +184,7 @@ function InfoDiv(divid) {
                     tempcloud[nbid]['degree']++;
                 // pushes a node if belongs to the opposite category
                 else if (this.selection[nodeid]['category'] != nb[nbid]['category']) {
-                    tinaviz.logNormal("adding to tag cloud : "+decodeJSON(nb[nbid]['label']));
+                    //tinaviz.logNormal("adding to tag cloud : "+decodeJSON(nb[nbid]['label']));
                     tempcloud[nbid] = {
                         'id': nbid,
                         'label' : decodeJSON(nb[nbid]['label']),
@@ -309,7 +213,7 @@ function InfoDiv(divid) {
                 var attached_id = tagid;
                 var attached_cat =  tag['category'];
                 tagspan.click( function() {
-                    tinaviz.logNormal("clicked on " + tagid + " - " +tag['label']);
+                    //tinaviz.logNormal("clicked on " + tagid + " - " +tag['label']);
                     //switch to meso view
                     tinaviz.viewMeso(attached_id, attached_cat);
                 });
@@ -342,20 +246,32 @@ function InfoDiv(divid) {
     /*
      * updates the label and content DOM divs
      */
-    updateInfo: function() {
+    updateInfo: function(lastselection) {
+        var current_cat = tinaviz.getProperty("current", "category/category");
+        tinaviz.logNormal("current category = "+current_cat);
         var labelinnerdiv = $("<div></div>");
-        for(var id in this.selection) {
-            var node = this.selection[id];
-            labelinnerdiv.append( $("<b></b>").html(decodeJSON(node.label)) );
-            if ( node.category == 'NGram' ) {
-                // no content to display
-            }
-            if ( node.category == 'Document' && node.content != null ) {
-                this.contents.append( $("<b></b>").html(decodeJSON(node.label)) );
-                this.contents.append( $("<p></p>").html(decodeJSON(node.content)) );
+        var contentinnerdiv = $("<div></div>");
+        for(var id in lastselection) {
+            var node = lastselection[id];
+            if (node.category == current_cat)  {
+                this.selection[id] = lastselection[id];
+                labelinnerdiv.append( $("<b></b>").html(decodeJSON(node.label)) );
+                // displays contents only if it's a document
+                if ( node.category == 'Document' && node.content != null ) {
+                    contentinnerdiv.append( $("<b></b>").html(decodeJSON(node.label)) );
+                    contentinnerdiv.append( $("<p></p>").html(decodeJSON(node.content)) );
+                }
             }
         }
-        this.label.append( this.alphabeticJquerySort( labelinnerdiv, "b", ", &nbsp;&nbsp;" ));
+        if (Object.size( this.selection ) != 0) {
+            this.label.empty();
+            this.unselect_button.show();
+            this.contents.empty();
+            this.label.append( this.alphabeticJquerySort( labelinnerdiv, "b", ", &nbsp;" ));
+            this.contents.append( contentinnerdiv );
+        }
+        else
+            this.reset();
     },
 
     /*
@@ -366,11 +282,7 @@ function InfoDiv(divid) {
             this.reset();
             return;
         }
-        this.label.empty();
-        this.unselect_button.show();
-        this.contents.empty();
-        this.selection = lastselection;
-        this.updateInfo();
+        this.updateInfo(lastselection);
         this.updateTagCloud("macro");
         return;
     },
@@ -381,7 +293,7 @@ function InfoDiv(divid) {
     reset: function() {
         this.unselect_button.hide();
         this.label.empty().append($("<h2></h2>").html("empty selection"));
-        this.contents.empty().append($("<h4></h4>").html("Click on a node to begin exploration"));
+        this.contents.empty().append($("<h4></h4>").html("click on a node to begin exploration"));
         this.cloud.empty();
         this.selection = {};
         this.neighbours = {};
@@ -399,8 +311,9 @@ function InfoDiv(divid) {
                 (function () {
                     var rowLabel = decodeJSON(node_list[i]['label']);
                     var rowId = decodeJSON(node_list[i]['id']);
+                    var rowCat = category;
                     // asynchronously displays the node list
-                    setTimeout("displayNodeRow(\""+rowLabel+"\",\""+rowId+"\",\""+category+"\")", 0);
+                    setTimeout("displayNodeRow(\""+rowLabel+"\",\""+rowId+"\",\""+rowCat+"\")", 0);
                 })();
             }
         }
@@ -747,7 +660,7 @@ function Tinaviz() {
          */
         this.leftDoubleClicked = function(view, data) {
             var category = this.getProperty("current", "category/category");
-            this.logNormal( category );
+            this.logNormal( "after double-clic, category = "+category );
             for (var id in data) {
                 this.viewMeso(decodeJSON(id), category);
                 break;
@@ -771,11 +684,11 @@ function Tinaviz() {
 
             // left == selected a node
             if ( mouse == "left" ) {
-                this.nodeLeftClicked(view,data);
+                //this.nodeLeftClicked(view,data);
             }
             //right == unselected a node
             else if ( mouse == "right" ) {
-                this.nodeRightClicked(view,data);
+                //this.nodeRightClicked(view,data);
             }
             else if (mouse == "doubleLeft") {
                 this.leftDoubleClicked(view, data);
@@ -905,16 +818,15 @@ function Tinaviz() {
         this.toggleCategory = function(view) {
             if (applet == null) return;
             // get and set the new category to display
-            var KEY = "category/category";
-            var next_cat = this.getOppositeCategory( this.getProperty(view, KEY));
-            this.setProperty(view, KEY, next_cat);
+            var next_cat = this.getOppositeCategory( this.getProperty(view, "category/category"));
+            this.setProperty(view, "category/category", next_cat);
             //this.unselect();
             // resets the layout
             this.resetLayoutCounter();
             this.touch();
             this.autoCentering();
             // updates the node list table
-            this.updateNodes(view, this.getProperty(view, KEY));
+            this.updateNodes(view, next_cat);
             // adds neighbour nodes (from next_cat) to the selection of the macro view
             /*for(var id in this.infodiv.selection) {
                 var neighbours = this.getNeighbourhood("macro", id);
@@ -931,14 +843,13 @@ function Tinaviz() {
          * Manually toggles the view to meso given an id
          */
         this.viewMeso = function(id, category) {
-            // changes view level
+            // selects unique node
             this.unselect();
-            this.logNormal("viewMeso selecting " + id);
             this.selectFromId(id);
-            this.setView("meso");
             // sets the category of the graph
             this.setProperty("meso", "category/category", category);
-            //tinaviz.resetLayoutCounter();
+            //this.setProperty("macro", "category/category", category);
+            this.setView("meso");
             this.touch("meso");
             this.updateNodes("meso", category);
         }
@@ -972,6 +883,7 @@ function Tinaviz() {
          *  Fires the update of node list cache and display
          */
         this.updateNodes = function(view, category)  {
+            if ( category == this.infodiv.last_category ) return;
             this.infodiv.display_current_category();
             if (this.infodiv.data[category] === undefined)
                 this.infodiv.updateNodeList( this.getNodes( view, category ), category );
