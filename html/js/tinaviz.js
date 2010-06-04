@@ -391,7 +391,7 @@ function Tinaviz() {
 
             this.bindFilter("SubGraphCopyStandalone", "category", "meso");
             this.setProperty("meso", "category/source", "macro");
-            this.setProperty("meso", "category/category", "NGram");
+            this.setProperty("meso", "category/category", "Document");
             this.setProperty("meso", "category/mode", "keep");
             /*
             this.bindFilter("NodeWeightRange",  "nodeWeight", "meso");
