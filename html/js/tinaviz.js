@@ -878,12 +878,14 @@ function Tinaviz() {
             if (applet == null) return;
             applet.unselect();
             this.infodiv.reset();
-            if (this.getView() == "meso")
-                this.setView("macro");
+            //if (this.getView() == "meso") {
+               // this.setView("macro");
                 //tinaviz.resetLayoutCounter();
-                this.touch("macro");
-                this.autoCentering();
-            applet.clear("meso");
+                
+                //this.autoCentering();
+            //}
+            this.touch("current");
+            //applet.clear("meso");
         }
 
 
