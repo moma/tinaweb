@@ -381,6 +381,8 @@ function Tinaviz() {
             this.bindFilter("NodeWeightRange",  "nodeWeight", "macro");
             this.bindFilter("EdgeWeightRange", "edgeWeight",  "macro");
             
+           
+           
             this.bindFilter("NodeFunction", "radiusByWeight", "macro");
 
             this.bindFilter("Output", "output", "macro");
@@ -399,12 +401,9 @@ function Tinaviz() {
             */
             this.bindFilter("NodeFunction", "radiusByWeight", "meso");
 
-            this.bindFilter("Output", "output", "meso");
+            //this.bindFilter("Output", "output", "meso");
 
-
-            // this.readGraphJava("macro", "French_bipartite_graph.gexf");
             this.readGraphJava("macro", "FET60bipartite_graph_cooccurrences_.gexf");
-            //this.readGraphJava("macro", "CSSScholarsMay2010.gexf");
 
             //this.togglePause();
 
@@ -879,7 +878,7 @@ function Tinaviz() {
                 
                 //this.autoCentering();
             //}
-            this.touch("current");
+            //this.touch("current");
             //applet.clear("meso");
         }
 
@@ -1191,7 +1190,7 @@ $(document).ready(function(){
    $('#waitMessage').effect('pulsate', {}, 'fast');
 
     $(window).bind('resize', function() {
-        if (tinaviz.enabled()) {
+        if (tinaviz.isEnabled()) {
             tinaviz.auto_resize();
             $("#infodiv").css( 'height', getScreenHeight() - $("#hd").height() - $("#ft").height() - 60);
         }
