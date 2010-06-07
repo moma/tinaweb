@@ -378,11 +378,9 @@ function Tinaviz() {
 
             this.bindFilter("Category", "category", "macro");
 
-            this.bindFilter("NodeWeightRange",  "nodeWeight", "macro");
-            this.bindFilter("EdgeWeightRange", "edgeWeight",  "macro");
+            this.bindFilter("NodeWeightRange", "nodeWeight", "macro");
+            this.bindFilter("EdgeWeightRange", "edgeWeight", "macro");
             
-           
-           
             this.bindFilter("NodeFunction", "radiusByWeight", "macro");
 
             this.bindFilter("Output", "output", "macro");
@@ -396,14 +394,17 @@ function Tinaviz() {
             this.setProperty("meso", "category/category", "Document");
             this.setProperty("meso", "category/mode", "keep");
             /*
-            this.bindFilter("NodeWeightRange",  "nodeWeight", "meso");
-            this.bindFilter("EdgeWeightRange", "edgeWeight",  "meso");
-            */
+this.bindFilter("NodeWeightRange", "nodeWeight", "meso");
+this.bindFilter("EdgeWeightRange", "edgeWeight", "meso");
+*/
             this.bindFilter("NodeFunction", "radiusByWeight", "meso");
 
-            //this.bindFilter("Output", "output", "meso");
+            this.bindFilter("Output", "output", "meso");
 
+
+            // this.readGraphJava("macro", "French_bipartite_graph.gexf");
             this.readGraphJava("macro", "FET60bipartite_graph_cooccurrences_.gexf");
+            //this.readGraphJava("macro", "CSSScholarsMay2010.gexf");
 
             //this.togglePause();
 
@@ -878,7 +879,7 @@ function Tinaviz() {
                 
                 //this.autoCentering();
             //}
-            //this.touch("current");
+            this.touch("current");
             //applet.clear("meso");
         }
 
