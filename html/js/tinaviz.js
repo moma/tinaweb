@@ -503,6 +503,7 @@ function Tinaviz() {
 
 
         /*
+
          *  Get the current state of the applet
          */
         this.isEnabled = function() {
@@ -519,6 +520,7 @@ function Tinaviz() {
             if (applet == null) return;
             applet.setEnabled(value);
         }
+
 
         /*
         * Search nodes
