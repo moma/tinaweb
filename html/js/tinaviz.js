@@ -159,6 +159,7 @@ function InfoDiv(divid) {
             return (compA < compB) ? -1 : (compA > compB) ? 1 : 0;
         })
         return listitems;
+
     },
 
     /*
@@ -402,8 +403,8 @@ function Tinaviz() {
             this.bindFilter("Output", "output", "meso");
 
 
-            // this.readGraphJava("macro", "French_bipartite_graph.gexf");
-            this.readGraphJava("macro", "FET60bipartite_graph_cooccurrences_.gexf");
+             this.readGraphJava("macro", "French_bipartite_graph.gexf");
+            //this.readGraphJava("macro", "FET60bipartite_graph_cooccurrences_.gexf");
             //this.readGraphJava("macro", "CSSScholarsMay2010.gexf");
 
             //this.togglePause();
@@ -1001,7 +1002,7 @@ $(document).ready(function(){
         $(this).css('cursor','auto');
     });
 
-    $("#title").html("FET Open projects explorer");
+    $("#title").html("Cartographie des chercheurs français dans le domaine des systèmes complexes - <a href=\"http://tinasoft.eu/Feedback\">report a bug</a>");
     var infodiv = new InfoDiv("#infodiv");
 
     // auto-adjusting infodiv height
@@ -1117,7 +1118,7 @@ $(document).ready(function(){
             tinaviz.touch();
         }
     });
-
+    /*
     $("#sliderNodeSize").slider({
         value: 50.0,
         max: 100.0,// precision/size
@@ -1128,7 +1129,7 @@ $(document).ready(function(){
             tinaviz.touch();
         }}
     );
-
+*/
     $("#sliderSelectionZone").slider({
         value: 1.0,
         max: 300.0, // max disk radius, in pixel
