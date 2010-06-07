@@ -501,10 +501,11 @@ function Tinaviz() {
             applet.resetLayoutCounter();
         }
 
+
         /*
          *  Get the current state of the applet
          */
-        this.enabled = function() {
+        this.isEnabled = function() {
             if (applet == null) {
                 return false;
             } else {
@@ -514,17 +515,11 @@ function Tinaviz() {
         /*
          *  Set the current state of the applet to enable
          */
-        this.enable =  function() {
+        this.setEnabled =  function(value) {
             if (applet == null) return;
-            applet.setEnabled(true);
+            applet.setEnabled(value);
         }
-        /*
-         *  Set the current state of the applet to disabled
-         */
-        this.disable =  function() {
-            if (applet == null) return;
-            applet.setEnabled(false);
-        }
+
         /*
         * Search nodes
         */
@@ -909,7 +904,6 @@ function Tinaviz() {
             else
                 this.infodiv.updateNodeList( this.infodiv.data[category], category );
         }
-
 
 
         /*
