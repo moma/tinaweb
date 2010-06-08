@@ -1115,7 +1115,7 @@ $(document).ready(function(){
             tinaviz.touch();
         }
     });
-    /*
+    
     $("#sliderNodeSize").slider({
         value: 50.0,
         max: 100.0,// precision/size
@@ -1126,7 +1126,7 @@ $(document).ready(function(){
             tinaviz.touch();
         }}
     );
-*/
+
     $("#sliderSelectionZone").slider({
         value: 1.0,
         max: 300.0, // max disk radius, in pixel
