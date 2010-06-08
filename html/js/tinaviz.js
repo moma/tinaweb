@@ -379,8 +379,8 @@ function Tinaviz() {
 
             this.bindFilter("Category", "category", "macro");
 
-            this.bindFilter("NodeWeightRange",  "nodeWeight", "macro");
-            this.bindFilter("EdgeWeightRange", "edgeWeight",  "macro");
+            this.bindFilter("NodeWeightRange", "nodeWeight", "macro");
+            this.bindFilter("EdgeWeightRange", "edgeWeight", "macro");
             
             this.bindFilter("NodeFunction", "radiusByWeight", "macro");
 
@@ -395,9 +395,9 @@ function Tinaviz() {
             this.setProperty("meso", "category/category", "Document");
             this.setProperty("meso", "category/mode", "keep");
             /*
-            this.bindFilter("NodeWeightRange",  "nodeWeight", "meso");
-            this.bindFilter("EdgeWeightRange", "edgeWeight",  "meso");
-            */
+this.bindFilter("NodeWeightRange", "nodeWeight", "meso");
+this.bindFilter("EdgeWeightRange", "edgeWeight", "meso");
+*/
             this.bindFilter("NodeFunction", "radiusByWeight", "meso");
 
             this.bindFilter("Output", "output", "meso");
@@ -692,9 +692,7 @@ function Tinaviz() {
         this.selected = function(view, attr, mouse) {
             if (attr == null) return;
             // always updates infodiv
-            data = $.parseJSON(attr);
-            this.infodiv.reset();
-            this.infodiv.update(view, data);
+
 
             // left == selected a node
             if ( mouse == "left" ) {
@@ -705,6 +703,9 @@ function Tinaviz() {
                 //this.nodeRightClicked(view,data);
             }
             else if (mouse == "doubleLeft") {
+                data = $.parseJSON(attr);
+                this.infodiv.reset();
+                this.infodiv.update(view, data);
                 this.leftDoubleClicked(view, data);
             }
         }
@@ -882,7 +883,7 @@ function Tinaviz() {
                 
                 //this.autoCentering();
             //}
-            this.touch("current");
+            //this.touch("current"); // don't touch, so we do not redraw the graph
             //applet.clear("meso");
         }
 
@@ -1193,7 +1194,7 @@ $(document).ready(function(){
    $('#waitMessage').effect('pulsate', {}, 'fast');
 
     $(window).bind('resize', function() {
-        if (tinaviz.enabled()) {
+        if (tinaviz.isEnabled()) {
             tinaviz.auto_resize();
             $("#infodiv").css( 'height', getScreenHeight() - $("#hd").height() - $("#ft").height() - 60);
         }
