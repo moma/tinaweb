@@ -999,7 +999,7 @@ $(document).ready(function(){
         $(this).css('cursor','auto');
     });
 
-    $("#title").html("Cartographie des chercheurs français dans le domaine des systèmes complexes - <a href=\"http://tinasoft.eu/Feedback\">report a bug</a>");
+    $("#title").html("Mapping of French Complex Systems Scholars - <a href=\"http://tinasoft.eu/Feedback\">report a bug</a>");
     var infodiv = new InfoDiv("#infodiv");
 
     // auto-adjusting infodiv height
