@@ -38,7 +38,7 @@ $(function(){
                 $(this).bind('selectstart',function(){return false;});
             } else {//Opera, etc.
                 $(this).mousedown(function(){return false;});
-            }FET60bipartite_graph_cooccurrences_
+            }
         });
     });
 });
