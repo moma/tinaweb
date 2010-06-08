@@ -38,7 +38,7 @@ $(function(){
                 $(this).bind('selectstart',function(){return false;});
             } else {//Opera, etc.
                 $(this).mousedown(function(){return false;});
-            }
+            }FET60bipartite_graph_cooccurrences_
         });
     });
 });
@@ -259,6 +259,10 @@ function InfoDiv(divid) {
         this.cloud.append( tagcloud );
     },
 
+    htmlDecode: function (value){ 
+       return $('<div/>').html(value).text(); 
+    },
+   
     /*
      * updates the label and content DOM divs
      */
@@ -274,8 +278,9 @@ function InfoDiv(divid) {
                 labelinnerdiv.append( $("<b></b>").html(decodeJSON(node.label)) );
                 // displays contents only if it's a document
                 if ( node.category == 'Document' && node.content != null ) {
-                    contentinnerdiv.append( $("<b></b>").html(decodeJSON(node.label)) );
-                    contentinnerdiv.append( $("<p></p>").html(decodeJSON(node.content)) );
+                    contentinnerdiv.append( $("<b></b>").html(     this.htmlDecode( decodeJSON(node.label) )    ) );
+                    
+                    contentinnerdiv.append( $("<p></p>").html(      this.htmlDecode( decodeJSON(node.content) )     ) );
                 }
             }
         }
