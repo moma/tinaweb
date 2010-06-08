@@ -776,6 +776,8 @@ this.bindFilter("EdgeWeightRange", "edgeWeight", "meso");
             applet.getSession().updateFromURI(view,path);
         }
 
+
+        
         /***********************************
          *
          * Manual actions controler system
