@@ -258,6 +258,10 @@ function InfoDiv(divid) {
         this.cloud.append( tagcloud );
     },
 
+    htmlDecode: function (value){ 
+       return $('<div/>').html(value).text(); 
+    },
+   
     /*
      * updates the label and content DOM divs
      */
@@ -273,8 +277,9 @@ function InfoDiv(divid) {
                 labelinnerdiv.append( $("<b></b>").html(decodeJSON(node.label)) );
                 // displays contents only if it's a document
                 if ( node.category == 'Document' && node.content != null ) {
-                    contentinnerdiv.append( $("<b></b>").html(decodeJSON(node.label)) );
-                    contentinnerdiv.append( $("<p></p>").html(decodeJSON(node.content)) );
+                    contentinnerdiv.append( $("<b></b>").html(     this.htmlDecode( decodeJSON(node.label) )    ) );
+                    
+                    contentinnerdiv.append( $("<p></p>").html(      this.htmlDecode( decodeJSON(node.content) )     ) );
                 }
             }
         }
@@ -403,7 +408,7 @@ this.bindFilter("EdgeWeightRange", "edgeWeight", "meso");
 
 
             // this.readGraphJava("macro", "French_bipartite_graph.gexf");
-            this.readGraphJava("macro", "FET60bipartite_graph_cooccurrences_.gexf");
+            this.readGraphJava("macro", "test3.gexf");
             //this.readGraphJava("macro", "CSSScholarsMay2010.gexf");
 
             //this.togglePause();
