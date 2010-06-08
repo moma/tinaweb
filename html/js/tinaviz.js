@@ -692,7 +692,9 @@ this.bindFilter("EdgeWeightRange", "edgeWeight", "meso");
         this.selected = function(view, attr, mouse) {
             if (attr == null) return;
             // always updates infodiv
-
+                data = $.parseJSON(attr);
+                this.infodiv.reset();
+                this.infodiv.update(view, data);
 
             // left == selected a node
             if ( mouse == "left" ) {
@@ -703,9 +705,7 @@ this.bindFilter("EdgeWeightRange", "edgeWeight", "meso");
                 //this.nodeRightClicked(view,data);
             }
             else if (mouse == "doubleLeft") {
-                data = $.parseJSON(attr);
-                this.infodiv.reset();
-                this.infodiv.update(view, data);
+
                 this.leftDoubleClicked(view, data);
             }
         }
