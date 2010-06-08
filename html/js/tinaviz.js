@@ -38,7 +38,7 @@ $(function(){
                 $(this).bind('selectstart',function(){return false;});
             } else {//Opera, etc.
                 $(this).mousedown(function(){return false;});
-            }
+            }FET60bipartite_graph_cooccurrences_
         });
     });
 });
@@ -408,7 +408,7 @@ this.bindFilter("EdgeWeightRange", "edgeWeight", "meso");
 
 
             // this.readGraphJava("macro", "French_bipartite_graph.gexf");
-            this.readGraphJava("macro", "test3.gexf");
+            this.readGraphJava("macro", "FET60bipartite_graph_cooccurrences_.gexf");
             //this.readGraphJava("macro", "CSSScholarsMay2010.gexf");
 
             //this.togglePause();
