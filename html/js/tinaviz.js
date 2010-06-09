@@ -882,7 +882,13 @@ this.bindFilter("EdgeWeightRange", "edgeWeight", "meso");
         */
         this.unselect= function() {
             if (applet == null) return;
-            applet.unselect();
+            if (this.getView() == "meso") {
+                applet.unselectCurrent();
+            } else {
+                applet.unselect();
+            }
+
+
             this.infodiv.reset();
             //if (this.getView() == "meso") {
                // this.setView("macro");
@@ -891,7 +897,6 @@ this.bindFilter("EdgeWeightRange", "edgeWeight", "meso");
                 //this.autoCentering();
             //}
             //this.touch("current"); // don't touch, so we do not redraw the graph
-            //applet.clear("meso");
         }
 
 
@@ -1024,7 +1029,6 @@ $(document).ready(function(){
 
     // TODO : handler to open a graph file
     /*$('#htoolbar input[type=file]').change(function(e){
-        tinaviz.clear();
         tinaviz.loadAbsoluteGraph( $(this).val() );
     });*/
 
