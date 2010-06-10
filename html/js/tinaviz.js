@@ -847,7 +847,7 @@ this.bindFilter("EdgeWeightRange", "edgeWeight", "meso");
             // updates the node list table
             this.updateNodes(view, next_cat);
             // adds neighbour nodes (from next_cat) to the selection of the macro view
-            /*for(var id in this.infodiv.selection) {
+            for(var id in this.infodiv.selection) {
                 var neighbours = this.getNeighbourhood("macro", id);
                 for (var neighbourId in neighbours) {
                     if (neighbours[neighbourId].category == next_cat) {
@@ -855,7 +855,7 @@ this.bindFilter("EdgeWeightRange", "edgeWeight", "meso");
                         //this.selectFromId(neighbourId);
                     }
                 }
-            }*/
+            }
         }
 
         /**
