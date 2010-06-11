@@ -41,7 +41,7 @@
 
 
 body {
-    font-size: .7em;
+    font-size: .5em;
 }
 
 #title {
@@ -64,7 +64,7 @@ body {
 }
 
 #infodiv {
-    margin: 4px 9px;
+    margin: 2px 3px;
     /*height: 90%;*/
     /*overflow: auto;*/
 }
@@ -84,13 +84,13 @@ body {
 }
 
 .bigTitle {
-    font-size: 20px;
+    font-size: 18px;
 }
 
 /* each sliders positioned relatively to their parent */
 .slider {
     float: left;
-    width: 100px;
+    width: 80px;
     padding: 0px 20px 0px 0px;
     margin-top: -5px;
 }
@@ -100,7 +100,7 @@ body {
 }
 
 .sliderLabel {
-    font-size: 11px;
+    font-size: 10px;
 }
 
 .toolbar-left {
