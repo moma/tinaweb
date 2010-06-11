@@ -841,7 +841,7 @@ this.bindFilter("EdgeWeightRange", "edgeWeight", "meso");
             this.setProperty(view, "category/category", next_cat);
             //this.unselect();
             // resets the layout
-            this.resetLayoutCounter();
+            //this.resetLayoutCounter();
             this.touch();
             this.autoCentering();
             // updates the node list table
