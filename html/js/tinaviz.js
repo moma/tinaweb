@@ -109,7 +109,7 @@ function InfoDiv(divid) {
     data: {},
     categories: {
         'NGram' : 'keywords',
-        'Document': 'projects',
+        'Document': 'people',
     },
     last_category: "",
     /*
