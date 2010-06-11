@@ -21,7 +21,7 @@
 <viz:size value="4"/>   
 <attvalues> <attvalue for="0" value="Document"/> 
 <attvalue for="1" value="13"/> 
-<attvalue for="2" value=" ARTIST aims at exploring alternative routes towards long distance information transport and storage at the atomic and molecular scale (above 10 nm). It suggests new solutions for optical and electrical addressing of molecules,  efficient inter-molecular communication and compatible data storage. It will implement new concepts and methods for molecular electronics based on nanoscale plasmonic waveguides,  electrostatics and single charge injection by weak coupling to nanocapacitors. This proposal's overall goal will open the way to a completely new nano-scale technology for information processing and storage. ~ fact sheet ~ documents  and  reports ~ web site"/> 
+<attvalue for="2" value=" ARTIST aims at exploring alternative routes towards long distance information transport and storage at the atomic and molecular scale (above 10 nm). It suggests new solutions for optical and electrical addressing of molecules,  efficient inter-molecular communication and compatible data storage. It will implement new concepts and methods for molecular electronics based on nanoscale plasmonic waveguides,  electrostatics and single charge injection by weak coupling to nanocapacitors. This proposal's overall goal will open the way to a completely new nano-scale technology for information processing and storage. ~ fact sheet ~ documents  and  reports ~ &amp;lt;a href='http://cordis.europa.eu/fetch?CALLER=FP7_PROJ_EN&amp;ACTION=D&amp;DOC=2&amp;CAT=PROJ&amp;QUERY=0126f694df5a:1dbd:32ca2052&amp;RCN=93599'  target='_BLANK' &amp;gt;web site&amp;lt;/a&amp;gt;"/> 
 <attvalue for="3" value="information transport,  information storage,  atomic scale,  molecular scale, optical ,  electrical addressing of molecules,  inter-molecular communication,  data storage,  molecular electronics,  nanoscale plasmonic waveguides,  electrostatics and single charge injection,  nanocapacitors, nano-scale technology,  information processing"/> 
 <attvalue for="4" value="5"/> 
 </attvalues></node><node id="2" label="BION">  
@@ -30,7 +30,7 @@
 <viz:size value="4"/>   
 <attvalues> <attvalue for="0" value="Document"/> 
 <attvalue for="1" value="12"/> 
-<attvalue for="2" value="BION will use data from neuroanatomy and neurophysiology as a guide for the fabrication for deterministic and complex self-assembled networks of polymeric non-linear elements with adaptive properties. The project's main objective is the realization of new technology for the production of functional molecular assemblies which can perform advanced tasks involving learning and decision making and which can be tailored down to the nanoscale. The proposal combines expertise in neuroscience,  material science and algorithmics. ~ fact sheet ~ documents  and  reports ~ web site"/> 
+<attvalue for="2" value="BION will use data from neuroanatomy and neurophysiology as a guide for the fabrication for deterministic and complex self-assembled networks of polymeric non-linear elements with adaptive properties. The project's main objective is the realization of new technology for the production of functional molecular assemblies which can perform advanced tasks involving learning and decision making and which can be tailored down to the nanoscale. The proposal combines expertise in neuroscience,  material science and algorithmics. ~ &amp;lt;a href='http://cordis.europa.eu/fetch?CALLER=FP7_PROJ_EN&amp;ACTION=D&amp;DOC=1&amp;CAT=PROJ&amp;QUERY=0123bdddc830:4afa:50d3f01d&amp;RCN=86413' target='_BLANK' &amp;&gt;fact sheet&amp;lt;/a&amp;gt; ~ &amp;lt;a href='http://www.fp7-bion.eu/index.php?option=com_content&amp;view=category&amp;id=34&amp;Itemid=55' target='_BLANK' &amp;gt;documents and reports&amp;lt;/a&amp;gt; ~ &amp;lt;a href='http://www.fp7-bion.eu/' target='_BLANK' &amp;gt;web site&amp;lt;/a&amp;gt;"/> 
 <attvalue for="3" value="data,  neuroanatomy,  neurophysiology,  self-assembled networks,  polymeric non-linear elements,  adaptive properties, functional molecular assemblies,  learning,  decision making,  nanoscale, neuroscience, algorithmics"/> 
 <attvalue for="4" value="5"/> 
 </attvalues></node><node id="3" label="BISON">  
@@ -2678,6 +2678,7 @@
 <attvalue for="4" value="5.2727"/> 
 </attvalues></node><node id="364" label="precision force sensor">  
 <viz:color b="0" g="0"  r="255"/> 
+
 <viz:position x="0.20895" y="0.90515"  z="24.5116"/>   
 <viz:size value="4"/>   
 <attvalues> <attvalue for="0" value="NGram"/> 
@@ -9174,6 +9175,7 @@
 </edge><edge id="2945" source="268" target="300" weight="1">  
 <attvalues> <attvalue for="0" value="1"/><attvalue for="1" value="nodes2"/></attvalues> 
 
+
 </edge><edge id="2946" source="268" target="430" weight="1">  
 <attvalues> <attvalue for="0" value="1"/><attvalue for="1" value="nodes2"/></attvalues> 
 </edge><edge id="2947" source="269" target="68" weight="1">  
@@ -13113,6 +13115,7 @@
 </edge><edge id="5097" source="452" target="89" weight="1">  
 <attvalues> <attvalue for="0" value="1"/><attvalue for="1" value="nodes2"/></attvalues> 
 
+
 </edge><edge id="5098" source="452" target="98" weight="1">  
 <attvalues> <attvalue for="0" value="1"/><attvalue for="1" value="nodes2"/></attvalues> 
 </edge><edge id="5099" source="452" target="118" weight="1">  
@@ -13326,6 +13329,7 @@
 </edge><edge id="5211" source="460" target="192" weight="1">  
 <attvalues> <attvalue for="0" value="1"/><attvalue for="1" value="nodes2"/></attvalues> 
 </edge><edge id="5212" source="460" target="193" weight="1">  
+
 <attvalues> <attvalue for="0" value="1"/><attvalue for="1" value="nodes2"/></attvalues> 
 </edge><edge id="5213" source="460" target="405" weight="1">  
 <attvalues> <attvalue for="0" value="1"/><attvalue for="1" value="nodes2"/></attvalues> 
