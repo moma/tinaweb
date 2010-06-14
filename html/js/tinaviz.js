@@ -839,11 +839,13 @@ function Tinaviz() {
             if (this.getView()=="macro") {
                 if (this.infodiv.neighbours !== undefined) {
                     // adds neighbours (from opposite categ) to the selection
-                    for(var i=0; i<this.infodiv.neighbours.length - 1; i++) {
-                        //this.logNormal(neighbours[i].id);
-                        this.selectFromId(this.infodiv.neighbours[i].id, false);
-                    }
-                    this.selectFromId(this.infodiv.neighbours[i++].id, true);
+                    if (this.infodiv.neighbours.length > 0) {
+                        for(var i=0; i<this.infodiv.neighbours.length - 1; i++) {
+                            //this.logNormal(neighbours[i].id);
+                            this.selectFromId(this.infodiv.neighbours[i].id, false);
+                        }
+                        this.selectFromId(this.infodiv.neighbours[i+1].id, true);
+                    } 
                 }
             }
             // get and set the new category to display
@@ -1136,6 +1138,7 @@ $(document).ready(function(){
             tinaviz.setProperty("current", "edgeWeight/max", ui.values[1] / 100.0);
             tinaviz.resetLayoutCounter();
             tinaviz.touch();
+            if (tinaviz.getView()=="meso") tinaviz.autoCentering();
         }
     });
 
@@ -1148,6 +1151,7 @@ $(document).ready(function(){
             tinaviz.setProperty("current", "nodeWeight/max", ui.values[1] / 100.0);
             tinaviz.resetLayoutCounter();
             tinaviz.touch();
+            if (tinaviz.getView()=="meso") tinaviz.autoCentering();
         }
     });
 
