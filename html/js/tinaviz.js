@@ -136,16 +136,17 @@ function InfoDiv(divid) {
         var current_view = tinaviz.getView();
         if (current_view !== undefined) {
             var level = $("#level");
-        level.empty().html(current_view + " level <span class='ui-icon ui-icon-help icon-right' title='></span>");
+            level.button("option", "label", current_view + " level");
+            
             var title = $("#infodiv > h3:first");
             if (current_view == "meso") {
                 level.addClass("ui-state-highlight");
-                $("#level > span").attr("title","zoom out to switch to the macro view");
+                level.attr("title","click here or zoom out to switch to the macro view");
                 title.addClass("ui-state-highlight");
             }
             else {
                 level.removeClass("ui-state-highlight");
-                $("#level > span").attr("title","zoom in or double click on a node to switch to is meso view");
+                level.attr("title","click here or zoom in or double click on a node to switch to is meso view");
                 title.removeClass("ui-state-highlight");
             }
         }
@@ -489,6 +490,7 @@ this.bindFilter("EdgeWeightRange", "edgeWeight", "meso");
             }
         }
 
+        
         /*
          *  Adds a node to the current selection
          *  callback is boolean activating this.selected() callback
@@ -847,7 +849,6 @@ this.bindFilter("EdgeWeightRange", "edgeWeight", "meso");
             // get and set the new category to display
             var next_cat = this.getOppositeCategory( this.getProperty(view, "category/category"));
             this.setProperty(view, "category/category", next_cat);
-            
             // touch and centers the view
             this.touch();
             this.autoCentering();
@@ -870,7 +871,25 @@ this.bindFilter("EdgeWeightRange", "edgeWeight", "meso");
             this.updateNodes("meso", category);
         }
 
-
+        this.toggleView= function() {
+            var current_cat = this.getProperty("current","category/category");
+            if (this.getView() == "macro") {
+                // check if selection is empty
+                if (Object.size(this.infodiv.selection) != 0) {
+                    this.setProperty("meso", "category/category", current_cat);
+                    this.setView("meso");
+                    this.updateNodes("meso", current_cat);
+                } else {
+                    alert("please first select some nodes before switching to meso level");
+                }
+            } else if (this.getView() == "meso") {
+                this.setProperty("macro", "category/category", current_cat);
+                this.setView("macro");
+                this.updateNodes("macro", current_cat);
+            }
+        }
+        
+        
         /*
         * Manually unselects all nodes
         */
@@ -1073,6 +1092,16 @@ $(document).ready(function(){
       }
     });
     */
+    $("#level").button({
+        text: true,
+        icons: {
+            //primary: null,
+            secondary: 'ui-icon-help'
+        }
+    }).click( function(eventObject) {
+        tinaviz.toggleView();
+    });
+    
     $("#search_button").button({
         text: false,
         icons: {
