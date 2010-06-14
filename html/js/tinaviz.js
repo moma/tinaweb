@@ -398,10 +398,10 @@ function Tinaviz() {
             this.setProperty("meso", "category/source", "macro");
             this.setProperty("meso", "category/category", "Document");
             this.setProperty("meso", "category/mode", "keep");
-            /*
-this.bindFilter("NodeWeightRange", "nodeWeight", "meso");
-this.bindFilter("EdgeWeightRange", "edgeWeight", "meso");
-*/
+ 
+            this.bindFilter("NodeWeightRangeHack", "nodeWeight", "meso");
+            this.bindFilter("EdgeWeightRangeHack", "edgeWeight", "meso");
+
             this.bindFilter("NodeFunction", "radiusByWeight", "meso");
 
             this.bindFilter("Output", "output", "meso");
