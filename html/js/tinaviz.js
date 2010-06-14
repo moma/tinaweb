@@ -840,10 +840,11 @@ this.bindFilter("EdgeWeightRange", "edgeWeight", "meso");
             if (this.getView()=="macro") {
                 if (this.infodiv.neighbours !== undefined) {
                     // adds neighbours (from opposite categ) to the selection
-                    for(var i=0; i<this.infodiv.neighbours.length; i++) {
+                    for(var i=0; i<this.infodiv.neighbours.length - 1; i++) {
                         //this.logNormal(neighbours[i].id);
                         this.selectFromId(this.infodiv.neighbours[i].id, false);
                     }
+                    this.selectFromId(this.infodiv.neighbours[i++].id, true);
                 }
             }
             // get and set the new category to display
