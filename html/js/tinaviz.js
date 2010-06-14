@@ -302,8 +302,8 @@ function InfoDiv(divid) {
             return;
         }
         this.updateInfo(lastselection);
-        var neighbours = this.updateTagCloud("macro");
-        return neighbours;
+        this.neighbours = this.updateTagCloud("macro");
+        return;
     },
 
     /*
@@ -696,13 +696,7 @@ this.bindFilter("EdgeWeightRange", "edgeWeight", "meso");
             data = $.parseJSON(attr);
             this.infodiv.reset();
             var neighbours = this.infodiv.update(view, data);
-            if (neighbours !== undefined) {
-                // adds neighbours (from opposite categ) to the selection
-                for(var i=0; i<neighbours.length; i++) {
-                    //this.logNormal(neighbours[i].id);
-                    this.selectFromId(neighbours[i].id, false);
-                }
-            }
+   
             // left == selecteghbourd a node
             if ( mouse == "left" ) {
                 //this.nodeLeftClicked(view,data);
@@ -840,9 +834,19 @@ this.bindFilter("EdgeWeightRange", "edgeWeight", "meso");
          */
         this.toggleCategory = function(view) {
             if (applet == null) return;
+            if (this.getView()=="macro") {
+                if (this.infodiv.neighbours !== undefined) {
+                    // adds neighbours (from opposite categ) to the selection
+                    for(var i=0; i<this.infodiv.neighbours.length; i++) {
+                        //this.logNormal(neighbours[i].id);
+                        this.selectFromId(this.infodiv.neighbours[i].id, false);
+                    }
+                }
+            }
             // get and set the new category to display
             var next_cat = this.getOppositeCategory( this.getProperty(view, "category/category"));
             this.setProperty(view, "category/category", next_cat);
+            
             // touch and centers the view
             this.touch();
             this.autoCentering();
