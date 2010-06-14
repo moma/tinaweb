@@ -134,7 +134,6 @@ function InfoDiv(divid) {
     */
     display_current_view: function() {
         var current_view = tinaviz.getView();
-        tinaviz.logNormal( current_view );
         if (current_view !== undefined) {
             var level = $("#level");
         level.empty().html(current_view + " level <span class='ui-icon ui-icon-help icon-right' title='></span>");
@@ -257,6 +256,7 @@ function InfoDiv(divid) {
         this.cloud.empty();
         this.cloud.append( '<h3>selection related to <span class="ui-icon ui-icon-help icon-right" title="'+tooltip+'"></span></h3>' );
         this.cloud.append( tagcloud );
+        return sorted_tags;
     },
 
     htmlDecode: function (value){ 
@@ -268,7 +268,6 @@ function InfoDiv(divid) {
      */
     updateInfo: function(lastselection) {
         var current_cat = tinaviz.getProperty("current", "category/category");
-        tinaviz.logNormal("current category = "+current_cat);
         var labelinnerdiv = $("<div></div>");
         var contentinnerdiv = $("<div></div>");
         for(var id in lastselection) {
@@ -304,7 +303,7 @@ function InfoDiv(divid) {
             return;
         }
         this.updateInfo(lastselection);
-        this.updateTagCloud("macro");
+        this.neighbours = this.updateTagCloud("macro");
         return;
     },
 
@@ -484,7 +483,6 @@ this.bindFilter("EdgeWeightRange", "edgeWeight", "meso");
          */
         this.touch= function(view) {
             if (applet == null) return;
-            //this.logNormal("touch("+view+")");
             if (view===undefined) {
                 applet.touch();
             } else {
@@ -494,10 +492,11 @@ this.bindFilter("EdgeWeightRange", "edgeWeight", "meso");
 
         /*
          *  Adds a node to the current selection
+         *  callback is boolean activating this.selected() callback
          */
-        this.selectFromId = function( id ) {
+        this.selectFromId = function(id, callback) {
             if (applet == null) return;
-            return applet.selectFromId(id);
+            return applet.selectFromId(id,callback);
         }
 
         this.resetLayoutCounter= function(view) {
@@ -542,7 +541,7 @@ this.bindFilter("EdgeWeightRange", "edgeWeight", "meso");
             if (applet == null) return {};
             var matchlist = this.getNodesByLabel(label, type);
             for (var i = 0; i < matchlist.length; i++ ) {
-                applet.selectFromId( decodeJSON( matchlist[i]['id'] ) );
+                applet.selectFromId( decodeJSON( matchlist[i]['id'] ), true );
                 // todo: auto center!!
                 //applet.
             }
@@ -679,7 +678,6 @@ this.bindFilter("EdgeWeightRange", "edgeWeight", "meso");
          */
         this.leftDoubleClicked = function(view, data) {
             var category = this.getProperty("current", "category/category");
-            this.logNormal( "after double-clic, category = "+category );
             for (var id in data) {
                 this.viewMeso(decodeJSON(id), category);
                 break;
@@ -696,12 +694,13 @@ this.bindFilter("EdgeWeightRange", "edgeWeight", "meso");
          */
         this.selected = function(view, attr, mouse) {
             if (attr == null) return;
+            //this.logNormal("selected");
             // always updates infodiv
-                data = $.parseJSON(attr);
-                this.infodiv.reset();
-                this.infodiv.update(view, data);
-
-            // left == selected a node
+            data = $.parseJSON(attr);
+            this.infodiv.reset();
+            var neighbours = this.infodiv.update(view, data);
+   
+            // left == selecteghbourd a node
             if ( mouse == "left" ) {
                 //this.nodeLeftClicked(view,data);
             }
@@ -710,7 +709,6 @@ this.bindFilter("EdgeWeightRange", "edgeWeight", "meso");
                 //this.nodeRightClicked(view,data);
             }
             else if (mouse == "doubleLeft") {
-
                 this.leftDoubleClicked(view, data);
             }
         }
@@ -839,26 +837,24 @@ this.bindFilter("EdgeWeightRange", "edgeWeight", "meso");
          */
         this.toggleCategory = function(view) {
             if (applet == null) return;
+            if (this.getView()=="macro") {
+                if (this.infodiv.neighbours !== undefined) {
+                    // adds neighbours (from opposite categ) to the selection
+                    for(var i=0; i<this.infodiv.neighbours.length; i++) {
+                        //this.logNormal(neighbours[i].id);
+                        this.selectFromId(this.infodiv.neighbours[i].id, false);
+                    }
+                }
+            }
             // get and set the new category to display
             var next_cat = this.getOppositeCategory( this.getProperty(view, "category/category"));
             this.setProperty(view, "category/category", next_cat);
-            //this.unselect();
-            // resets the layout
-            //this.resetLayoutCounter();
+            
+            // touch and centers the view
             this.touch();
             this.autoCentering();
             // updates the node list table
             this.updateNodes(view, next_cat);
-            // adds neighbour nodes (from next_cat) to the selection of the macro view
-            for(var id in this.infodiv.selection) {
-                var neighbours = this.getNeighbourhood("macro", id);
-                for (var neighbourId in neighbours) {
-                    if (neighbours[neighbourId].category == next_cat) {
-                        this.logNormal( "selecting a neighbour "+neighbourId );
-                        //this.selectFromId(neighbourId);
-                    }
-                }
-            }
         }
 
         /**
@@ -867,7 +863,7 @@ this.bindFilter("EdgeWeightRange", "edgeWeight", "meso");
         this.viewMeso = function(id, category) {
             // selects unique node
             this.unselect();
-            this.selectFromId(id);
+            this.selectFromId(id, true);
             // sets the category of the graph
             this.setProperty("meso", "category/category", category);
             //this.setProperty("macro", "category/category", category);
