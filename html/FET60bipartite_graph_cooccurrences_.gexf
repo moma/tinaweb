@@ -39,7 +39,7 @@
 <viz:size value="4"/>   
 <attvalues> <attvalue for="0" value="Document"/> 
 <attvalue for="1" value="4"/> 
-<attvalue for="2" value="BISON aims to develop a new ICT paradigm shift based on the concept of bisociation,  a functional basis which allows to connect seemingly unrelated information,  for example,  by using metaphors or analogical reasoning. ~ fact sheet ~ documents  and  reports ~ web site"/> 
+<attvalue for="2" value="BISON aims to develop a new ICT paradigm shift based on the concept of bisociation,  a functional basis which allows to connect seemingly unrelated information,  for example,  by using metaphors or analogical reasoning. ~ &amp;lt;a href='http://cordis.europa.eu/fetch?CALLER=FP7_PROJ_EN&amp;ACTION=D&amp;DOC=1&amp;CAT=PROJ&amp;QUERY=0123bddeb627:bda6:36d86b9f&amp;RCN=86374'>fact sheet&amp;lt;/a&amp;gt; ~ &amp;lt;a href='http://www.bisonet.eu/results/publications'documents  and  reports&amp;lt;/a&amp;gt; ~ &amp;lt;a href='http://www.bisonet.eu/'>web site&amp;lt;/a&amp;gt;"/> 
 <attvalue for="3" value="bisociation,  information, metaphors , analogical reasoning"/> 
 <attvalue for="4" value="5"/> 
 </attvalues></node><node id="4" label="BRAIN_I_NETS">  
@@ -75,7 +75,7 @@
 <viz:size value="4"/>   
 <attvalues> <attvalue for="0" value="Document"/> 
 <attvalue for="1" value="3"/> 
-<attvalue for="2" value="COMPAS aims at carrying out exploratory research on mesoscopic continuous variable quantum information systems,  with the ultimate objective of designing the first small scale quantum processor using this continuous variable toolbox. ~ fact sheet ~ documents  and  reports ~ web site"/> 
+<attvalue for="2" value="COMPAS aims at carrying out exploratory research on mesoscopic continuous variable quantum information systems,  with the ultimate objective of designing the first small scale quantum processor using this continuous variable toolbox. ~ &amp;lt;a href='http://cordis.europa.eu/fetch?CALLER=FP7_PROJ_EN&amp;ACTION=D&amp;DOC=1&amp;CAT=PROJ&amp;QUERY=0123bddf847b:de6c:6c4e303d&amp;RCN=86412'>fact sheet&amp;lt;/a&amp;gt; ~ documents  and  reports ~ web site"/> 
 <attvalue for="3" value="mesoscopic continuous variable quantum information systems,  quantum processor, quantum information systems, information systems"/> 
 <attvalue for="4" value="5"/> 
 </attvalues></node><node id="8" label="CONNECT">  
@@ -102,7 +102,7 @@
 <viz:size value="4"/>   
 <attvalues> <attvalue for="0" value="Document"/> 
 <attvalue for="1" value="6"/> 
-<attvalue for="2" value="CORNER aims to develop a general framework for understanding and managing noise effects in quantum information technology with particular attention paid to the previously unexplored area of correlated noise errors that commonly arise in space and/or time especially in large scale operations. ~ fact sheet ~ documents  and  reports ~ web site"/> 
+<attvalue for="2" value="CORNER aims to develop a general framework for understanding and managing noise effects in quantum information technology with particular attention paid to the previously unexplored area of correlated noise errors that commonly arise in space and/or time especially in large scale operations. ~ &amp;lt;a href='http://cordis.europa.eu/fetch?CALLER=FP7_PROJ_EN&amp;ACTION=D&amp;DOC=58&amp;CAT=PROJ&amp;QUERY=0123bde090c3:c96a:16c2570e&amp;RCN=86410'>fact sheet&amp;lt;/a&amp;gt; ~ documents  and  reports ~ web site"/> 
 <attvalue for="3" value="noise effects, quantum information technology, noise errors, large scale operations, quantum information, noise"/> 
 <attvalue for="4" value="5"/> 
 </attvalues></node><node id="11" label="CROSSTRAP">  
@@ -120,7 +120,7 @@
 <viz:size value="4"/>   
 <attvalues> <attvalue for="0" value="Document"/> 
 <attvalue for="1" value="10"/> 
-<attvalue for="2" value="CROWN aims to solve the problem of distributed interference awareness,  and of communicating over as many as possible concurrent channels in the same communication spectrum with minimal mutual interference,  enabled by smart antenna systems. In order to address inefficient network spectrum regulatory authorities have introduced an initiative to improve utilisation of the licensed spectrum by removing the regulatory barriers,  thereby introducing the concept of dynamic spectrum licensing. ~ fact sheet ~ documents  and  reports ~ web site"/> 
+<attvalue for="2" value="CROWN aims to solve the problem of distributed interference awareness,  and of communicating over as many as possible concurrent channels in the same communication spectrum with minimal mutual interference,  enabled by smart antenna systems. In order to address inefficient network spectrum regulatory authorities have introduced an initiative to improve utilisation of the licensed spectrum by removing the regulatory barriers,  thereby introducing the concept of dynamic spectrum licensing. ~ fact sheet ~ documents  and  reports ~ &amp;lt;a href='http://www.cs.qub.ac.uk/fp7-crown/'>web site&amp;lt;/a&amp;gt;"/> 
 <attvalue for="3" value="distributed interference awareness,  concurrent channels, communication,  communication spectrum, mutual interference,  smart antenna systems, antenna, inefficient network spectrum,  regulatory authorities, dynamic spectrum licensing"/> 
 <attvalue for="4" value="5"/> 
 </attvalues></node><node id="13" label="CURVACE">  
@@ -147,7 +147,7 @@
 <viz:size value="4"/>   
 <attvalues> <attvalue for="0" value="Document"/> 
 <attvalue for="1" value="5"/> 
-<attvalue for="2" value="ECCELL will lay the foundation of micro- and nano-scale molecular information processing by creating the first electronically programmable chemical cell. Such cells will exhibit self-replication,  self-containment and self-regulation of resources. ~ fact sheet ~ documents  and  reports ~ web site"/> 
+<attvalue for="2" value="ECCELL will lay the foundation of micro- and nano-scale molecular information processing by creating the first electronically programmable chemical cell. Such cells will exhibit self-replication,  self-containment and self-regulation of resources. ~ &amp;lt;a href='http://cordis.europa.eu/fetch?CALLER=FP7_PROJ_EN&amp;ACTION=D&amp;DOC=1&amp;CAT=PROJ&amp;QUERY=0123bde1692c:1f34:6078a6e9&amp;RCN=87678'>fact sheet&amp;lt;/a&amp;gt; ~ &amp;lt;a href='http://www.istpace.org/ECCell/publications/index.html'>documents  and  reports&amp;lt;/a&amp;gt; ~ &amp;lt;a href='http://www.istpace.org/ECCell'>web site&amp;lt;/a&amp;gt;"/> 
 <attvalue for="3" value="Micro-scale molecular information processing, nano-scale molecular information processing, information processing,  chemical cell, self-replication,  self-containment,  self-regulation of ressources"/> 
 <attvalue for="4" value="5"/> 
 </attvalues></node><node id="16" label="E_FLUX">  
@@ -201,7 +201,7 @@
 <viz:size value="4"/>   
 <attvalues> <attvalue for="0" value="Document"/> 
 <attvalue for="1" value="6"/> 
-<attvalue for="2" value="GOSPEL aims at enabling slow and fast light propagation as a tunable feature in photonic devices,  offering the necessary and often missing functionality of a time-delay/phase shift line in broadband ICT systems. ~ fact sheet ~ documents  and  reports ~ web site"/> 
+<attvalue for="2" value="GOSPEL aims at enabling slow and fast light propagation as a tunable feature in photonic devices,  offering the necessary and often missing functionality of a time-delay/phase shift line in broadband ICT systems. ~ &amp;lt;a href='http://cordis.europa.eu/fetch?CALLER=FP7_PROJ_EN&amp;ACTION=D&amp;DOC=6&amp;CAT=PROJ&amp;QUERY=011cb0142957:80e3:3c9caba6&amp;RCN=87674'>fact sheet&amp;lt;/a&amp;gt; ~ documents  and  reports ~ web site"/> 
 <attvalue for="3" value="light propagation, photonic devices,  time-delay/phase shift line, broadband ICT systems, devices,  photonics"/> 
 <attvalue for="4" value="5"/> 
 </attvalues></node><node id="22" label="GSD">  
@@ -210,7 +210,7 @@
 <viz:size value="4"/>   
 <attvalues> <attvalue for="0" value="Document"/> 
 <attvalue for="1" value="6"/> 
-<attvalue for="2" value="GSD (addresses the use of future and emerging technologies to address simulation and analysis of global problems such as climate change,  to facilitate an improved dialog between scientists and other stakeholders such as policy makers. ~ fact sheet ~ documents  and  reports ~ web site"/> 
+<attvalue for="2" value="GSD (addresses the use of future and emerging technologies to address simulation and analysis of global problems such as climate change,  to facilitate an improved dialog between scientists and other stakeholders such as policy makers. ~ &amp;lt;a href='http://cordis.europa.eu/fetch?CALLER=FP7_PROJ_EN&amp;ACTION=D&amp;DOC=1&amp;CAT=PROJ&amp;QUERY=0123bdf77ecd:cb4f:31d520ce&amp;RCN=86415'>fact sheet&amp;lt;/a&amp;gt; ~ documents  and  reports ~ &amp;lt;a href='http://www.globalsystemdynamics.eu/'>web site&amp;lt;/a&amp;gt;"/> 
 <attvalue for="3" value="simulation,  global problems,  climate change,  dialog between scientists and,  policy makers, stakeholder"/> 
 <attvalue for="4" value="5"/> 
 </attvalues></node><node id="23" label="HIDEAS">  
@@ -219,7 +219,7 @@
 <viz:size value="4"/>   
 <attvalues> <attvalue for="0" value="Document"/> 
 <attvalue for="1" value="6"/> 
-<attvalue for="2" value="HIDEAS aims at exploiting the high-dimensional multimodal entangled quantum states of the optical radiation field to significantly increase the information capacity of quantum communication,  quantum imaging and quantum metrology. ~ fact sheet ~ documents  and  reports ~ web site"/> 
+<attvalue for="2" value="HIDEAS aims at exploiting the high-dimensional multimodal entangled quantum states of the optical radiation field to significantly increase the information capacity of quantum communication,  quantum imaging and quantum metrology. ~ fact sheet ~ &amp;lt;a href='http://hideas.dfm.uninsubria.it/public_papers/public_papers.php'>documents  and  reports&amp;lt;/a&amp;gt; ~ &amp;lt;a href='http://hideas.dfm.uninsubria.it/'>web site&amp;lt;/a&amp;gt;"/> 
 <attvalue for="3" value="quantum states , optical radiation , information capacity , quantum communication,  quantum imaging , quantum metrology"/> 
 <attvalue for="4" value="5"/> 
 </attvalues></node><node id="24" label="HIP">  
@@ -228,7 +228,7 @@
 <viz:size value="4"/>   
 <attvalues> <attvalue for="0" value="Document"/> 
 <attvalue for="1" value="6"/> 
-<attvalue for="2" value="HIP addresses the problem of scaling quantum processors by attempting to build elementary hybrid atom-photon devices and develop the schemes for their integration on platforms capable of being miniaturised and scaled up in functional networks. ~ fact sheet ~ documents  and  reports ~ web site"/> 
+<attvalue for="2" value="HIP addresses the problem of scaling quantum processors by attempting to build elementary hybrid atom-photon devices and develop the schemes for their integration on platforms capable of being miniaturised and scaled up in functional networks. ~ &amp;lt;a href='http://cordis.europa.eu/fetch?CALLER=FP7_PROJ_EN&amp;ACTION=D&amp;DOC=1&amp;CAT=PROJ&amp;QUERY=011c9d85e053:aa50:7a3fc22f&amp;RCN=87873'>fact sheet&amp;lt;/a&amp;gt; ~ documents  and  reports ~ web site"/> 
 <attvalue for="3" value="quantum processors, hybrid atom-photon devices,  atom-photon devices,  devices,  functional networks, networks"/> 
 <attvalue for="4" value="5"/> 
 </attvalues></node><node id="25" label="HIVE">  
@@ -237,7 +237,7 @@
 <viz:size value="4"/>   
 <attvalues> <attvalue for="0" value="Document"/> 
 <attvalue for="1" value="6"/> 
-<attvalue for="2" value="HIVE is attempting to develop a non-invasive brain stimulation device to enable direct machine to brain communication. It will attempt to explore high-level communication using stimulation during different states of consciousness as well as construction of new perceptions. ~ fact sheet ~ documents  and  reports ~ web site"/> 
+<attvalue for="2" value="HIVE is attempting to develop a non-invasive brain stimulation device to enable direct machine to brain communication. It will attempt to explore high-level communication using stimulation during different states of consciousness as well as construction of new perceptions. ~ &amp;lt;a href='http://cordis.europa.eu/fetch?CALLER=FP7_PROJ_EN&amp;ACTION=D&amp;DOC=1&amp;CAT=PROJ&amp;QUERY=0123bdf02d97:7abf:2139c6fc&amp;RCN=87676'>fact sheet&amp;lt;/a&amp;gt; ~ documents  and  reports ~ &amp;lt;a href='http://www.hive-eu.org/'>web site&amp;lt;/a&amp;gt;"/> 
 <attvalue for="3" value="non-invasive brain stimulation device, brain stimulation,  device,  machine to brain communication, communication , consciousness,  perceptions"/> 
 <attvalue for="4" value="5"/> 
 </attvalues></node><node id="26" label="ICTECOLLECTIVE">  
@@ -264,7 +264,7 @@
 <viz:size value="4"/>   
 <attvalues> <attvalue for="0" value="Document"/> 
 <attvalue for="1" value="4"/> 
-<attvalue for="2" value="LIQUIDPUBLICATION explores how ICT and the lessons learned from the social web can be applied to provide a paradigm shift in the way scientific knowledge is created,  evaluated and maintained. The aim is to enable a transition of the scientific paper from its traditional solid form to a Liquid Publication that can take multiple shapes,  evolving continuously in time,  and is enriched by multiple sources. ~ fact sheet ~ documents  and  reports ~ web site"/> 
+<attvalue for="2" value="LIQUIDPUBLICATION explores how ICT and the lessons learned from the social web can be applied to provide a paradigm shift in the way scientific knowledge is created,  evaluated and maintained. The aim is to enable a transition of the scientific paper from its traditional solid form to a Liquid Publication that can take multiple shapes,  evolving continuously in time,  and is enriched by multiple sources. ~ &amp;lt;a href='http://cordis.europa.eu/fetch?CALLER=FP7_PROJ_EN&amp;ACTION=D&amp;DOC=1&amp;CAT=PROJ&amp;QUERY=0123bdf11715:12a4:3e1f5195&amp;RCN=86414'>fact sheet&amp;lt;/a&amp;gt; ~ &amp;lt;a href='http://project.liquidpub.org/pages'>documents  and  reports&amp;lt;/a&amp;gt; ~ &amp;lt;a href='http://project.liquidpub.org/'>web site&amp;lt;/a&amp;gt;"/> 
 <attvalue for="3" value="social web, web , scientific knowledge, scientific paper,  web"/> 
 <attvalue for="4" value="5"/> 
 </attvalues></node><node id="29" label="LISTA">  
@@ -282,7 +282,7 @@
 <viz:size value="4"/>   
 <attvalues> <attvalue for="0" value="Document"/> 
 <attvalue for="1" value="12"/> 
-<attvalue for="2" value="MIDAS aims to work on noise control allowing high fidelity quantum operations on the entanglement of collective variables which are prerequisites for high precision metrology,  weak signal sensing and teleportation near the ultimate quantum limits. The project will explore the feasibility of interfacing UCA and SC quantum storage/readout system. This proposal aims to create a new field of research by merging two previously unrelated classes of quantum systems. ~ fact sheet ~ documents  and  reports ~ web site"/> 
+<attvalue for="2" value="MIDAS aims to work on noise control allowing high fidelity quantum operations on the entanglement of collective variables which are prerequisites for high precision metrology,  weak signal sensing and teleportation near the ultimate quantum limits. The project will explore the feasibility of interfacing UCA and SC quantum storage/readout system. This proposal aims to create a new field of research by merging two previously unrelated classes of quantum systems. ~ &amp;lt;a href='http://cordis.europa.eu/fetch?CALLER=FP7_PROJ_EN&amp;ACTION=D&amp;DOC=1&amp;CAT=PROJ&amp;QUERY=0123bdf1b28c:45ec:72591706&amp;RCN=86388'>fact sheet&amp;lt;/a&amp;gt; ~ &amp;lt;a href='http://www.weizmann.ac.il/chemphys/gershon/midas/?p=reports'>documents  and  reports&amp;lt;/a&amp;gt; ~ &amp;lt;a href='http://www.weizmann.ac.il/chemphys/gershon/midas/'>web site&amp;lt;/a&amp;gt;"/> 
 <attvalue for="3" value="noise, noise control, quantum operations,  collective variables, metrology,  weak signal sensing, teleportation, quantum limits, UCA, SC quantum storage,  quantum readout system, quantum systems"/> 
 <attvalue for="4" value="5"/> 
 </attvalues></node><node id="31" label="MINOS">  
@@ -291,7 +291,7 @@
 <viz:size value="4"/>   
 <attvalues> <attvalue for="0" value="Document"/> 
 <attvalue for="1" value="6"/> 
-<attvalue for="2" value="MINOS is targeting an emerging field in photonics,  namely micro- and nano-optomechanical cavities with the aim to exploit opto-mechanical effects to control light-matter interaction. ~ fact sheet ~ documents  and  reports ~ web site"/> 
+<attvalue for="2" value="MINOS is targeting an emerging field in photonics,  namely micro- and nano-optomechanical cavities with the aim to exploit opto-mechanical effects to control light-matter interaction. ~ &amp;lt;a href='http://cordis.europa.eu/fetch?CALLER=FP7_PROJ_EN&amp;ACTION=D&amp;DOC=1&amp;CAT=PROJ&amp;QUERY=0123bdf229ff:a093:61dfd3eb&amp;RCN=87672'>fact sheet&amp;lt;/a&amp;gt; ~ documents  and  reports ~ web site"/> 
 <attvalue for="3" value="photonics,  nano-optomechanical cavities,   micro-optomechanical cavities,  optomechanical cavities,  opto-mechanical effects,  light-matter interaction"/> 
 <attvalue for="4" value="5"/> 
 </attvalues></node><node id="32" label="MODAP">  
@@ -300,7 +300,7 @@
 <viz:size value="4"/>   
 <attvalues> <attvalue for="0" value="Document"/> 
 <attvalue for="1" value="5"/> 
-<attvalue for="2" value="MODAP deals with the emerging interdisciplinary topic of data mining of mobility data while preserving individual privacy,  and will further the activities of a privacy observatory. ~ fact sheet ~ documents  and  reports ~ web site"/> 
+<attvalue for="2" value="MODAP deals with the emerging interdisciplinary topic of data mining of mobility data while preserving individual privacy,  and will further the activities of a privacy observatory. ~ &amp;lt;a href='http://cordis.europa.eu/fp7/ict/fet-open'>fact sheet&amp;lt;/a&amp;gt; ~ &amp;lt;a href='http://cordis.europa.eu/fp7/ict/fet-open'>documents  and  reports&amp;lt;/a&amp;gt; ~ &amp;lt;a href='http://www.modap.org/'>web site&amp;lt;/a&amp;gt;"/> 
 <attvalue for="3" value=" data mining,  mobility data, individual privacy,  privacy observatory, data"/> 
 <attvalue for="4" value="5"/> 
 </attvalues></node><node id="33" label="MOLSPINQIP">  
@@ -309,7 +309,7 @@
 <viz:size value="4"/>   
 <attvalues> <attvalue for="0" value="Document"/> 
 <attvalue for="1" value="3"/> 
-<attvalue for="2" value="MOLSPINQIP intends to prove the validity of molecular spin clusters as building blocks for scalable quantum information architectures,  focussing on the engineering of new molecules and on the design of suitable computational schemes. ~ fact sheet ~ documents  and  reports ~ web site"/> 
+<attvalue for="2" value="MOLSPINQIP intends to prove the validity of molecular spin clusters as building blocks for scalable quantum information architectures,  focussing on the engineering of new molecules and on the design of suitable computational schemes. ~ &amp;lt;a href='http://cordis.europa.eu/fetch?CALLER=FP7_PROJ_EN&amp;ACTION=D&amp;DOC=1&amp;CAT=PROJ&amp;QUERY=0123bdf2bb78:fd00:16c0c457&amp;RCN=86366'>fact sheet&amp;lt;/a&amp;gt; ~ documents  and  reports ~ &amp;lt;a href='http://www.molspinqip.org/'>web site&amp;lt;/a&amp;gt;"/> 
 <attvalue for="3" value="molecular spin clusters, quantum information,  quantum information architectures"/> 
 <attvalue for="4" value="5"/> 
 </attvalues></node><node id="34" label="NAME_QUAM">  
@@ -318,7 +318,7 @@
 <viz:size value="4"/>   
 <attvalues> <attvalue for="0" value="Document"/> 
 <attvalue for="1" value="16"/> 
-<attvalue for="2" value="NAME-QUAM proposes to investigate ultra-cold atom/molecule quantum matter technology for quantum information processing in periodic nano-structures. The objective is the engineering and control of nano-scopic systems based on moderate and long-range quantum mechanical interactions for quantum simulation. These will contribute to advancement of technology for quantum systems that can simulate other quantum systems. The proposal provides an excellent balance between theory and experiment. If the partners succeed in creating parallel quantum computation it will have important impact on the next generation of quantum computing processors,  opening a new approach for future generations of quantum computers and quantum simulators. ~ fact sheet ~ documents  and  reports ~ web site"/> 
+<attvalue for="2" value="NAME-QUAM proposes to investigate ultra-cold atom/molecule quantum matter technology for quantum information processing in periodic nano-structures. The objective is the engineering and control of nano-scopic systems based on moderate and long-range quantum mechanical interactions for quantum simulation. These will contribute to advancement of technology for quantum systems that can simulate other quantum systems. The proposal provides an excellent balance between theory and experiment. If the partners succeed in creating parallel quantum computation it will have important impact on the next generation of quantum computing processors,  opening a new approach for future generations of quantum computers and quantum simulators. ~ &amp;lt;a href='http://cordis.europa.eu/fp7/ict/fet-open'>fact sheet&amp;lt;/a&amp;gt; ~ &amp;lt;a href='http://cordis.europa.eu/fp7/ict/fet-open'>documents  and  reports&amp;lt;/a&amp;gt; ~ &amp;lt;a href='http://cordis.europa.eu/fp7/ict/fet-open'>web site&amp;lt;/a&amp;gt;"/> 
 <attvalue for="3" value="ultra-cold atom,  ultra-cold molecule,  quantum matter,  quantum matter technology,  quantum information,  periodic nano-structure, control of nano-scopic systems,  nano-scopic system,  quantum mechanical interaction,  quantum simulation,  technology for quantum systems,  quantum systems,  parallel quantum computation,  quantum computing processors,  quantum computers,  quantum simulators"/> 
 <attvalue for="4" value="5"/> 
 </attvalues></node><node id="35" label="NEXTMUSE">  
@@ -336,7 +336,7 @@
 <viz:size value="4"/>   
 <attvalues> <attvalue for="0" value="Document"/> 
 <attvalue for="1" value="7"/> 
-<attvalue for="2" value="NIW addresses a specific aspect of interaction with virtual environments: the exploitation and integration of haptic,  auditory and to a lesser extent visual modalities for generating new paradigms for foot-ground interaction using low-cost actuator based devices. ~ fact sheet ~ documents  and  reports ~ web site"/> 
+<attvalue for="2" value="NIW addresses a specific aspect of interaction with virtual environments: the exploitation and integration of haptic,  auditory and to a lesser extent visual modalities for generating new paradigms for foot-ground interaction using low-cost actuator based devices. ~ &amp;lt;a href='http://cordis.europa.eu/fetch?CALLER=FP7_PROJ_EN&amp;ACTION=D&amp;DOC=1&amp;CAT=PROJ&amp;QUERY=0123bdf33829:0031:1fc6c910&amp;RCN=87677'>fact sheet&amp;lt;/a&amp;gt; ~ documents  and  reports ~ &amp;lt;a href='http://www.niwproject.eu/'>web site&amp;lt;/a&amp;gt;"/> 
 <attvalue for="3" value=" virtual environments,  haptic,  auditory,  visual,  foot-ground interaction,  actuator, devices"/> 
 <attvalue for="4" value="5"/> 
 </attvalues></node><node id="37" label="OPPORTUNITY">  
@@ -345,7 +345,7 @@
 <viz:size value="4"/>   
 <attvalues> <attvalue for="0" value="Document"/> 
 <attvalue for="1" value="7"/> 
-<attvalue for="2" value="OPPORTUNITY seeks to develop methods to recognize and understand context and activity for Ambient Intelligent systems. They will develop opportunistic systems that recognize complex activities/contexts despite the absence of static assumptions about sensor availability and characteristics. The S and T would adapt machine learning to allow dynamic configuration. ~ fact sheet ~ documents  and  reports ~ web site"/> 
+<attvalue for="2" value="OPPORTUNITY seeks to develop methods to recognize and understand context and activity for Ambient Intelligent systems. They will develop opportunistic systems that recognize complex activities/contexts despite the absence of static assumptions about sensor availability and characteristics. The S and T would adapt machine learning to allow dynamic configuration. ~ fact sheet ~ documents  and  reports ~ &amp;lt;a href='http://www.opportunity-project.eu'>web site&amp;lt;/a&amp;gt;"/> 
 <attvalue for="3" value=" Ambient Intelligent systems,  complex activities,  complex contexts,   machine learning,  dynamic configuration, sensor, learning"/> 
 <attvalue for="4" value="5"/> 
 </attvalues></node><node id="38" label="OPTONEURO">  
@@ -363,7 +363,7 @@
 <viz:size value="4"/>   
 <attvalues> <attvalue for="0" value="Document"/> 
 <attvalue for="1" value="10"/> 
-<attvalue for="2" value="PD-NET aims to explore the scientific challenges and new technologies required to enable the emergence of large scale networks of pervasive public displays and associated sensors that are open to applications and content from many sources. In effect,  the proposal provides the foundation for work on a brand new global communications medium for information access and interaction and aims to ensure that Europe is in the best possible position to benefit from this new medium. The project is highly innovative because no such pervasive display networks exist today and their emergence would represent a radical transformation in the way we think about information dissemination in public spaces. ~ fact sheet ~ fact sheet ~ documents  and  reports ~ web site"/> 
+<attvalue for="2" value="PD-NET aims to explore the scientific challenges and new technologies required to enable the emergence of large scale networks of pervasive public displays and associated sensors that are open to applications and content from many sources. In effect,  the proposal provides the foundation for work on a brand new global communications medium for information access and interaction and aims to ensure that Europe is in the best possible position to benefit from this new medium. The project is highly innovative because no such pervasive display networks exist today and their emergence would represent a radical transformation in the way we think about information dissemination in public spaces. ~ fact sheet ~ documents  and  reports ~ web site"/> 
 <attvalue for="3" value=" large scale networks,  pervasive,  public displays,  sensors ,  global communications medium,  information access,  display networks,  information dissemination ,  public spaces, networks"/> 
 <attvalue for="4" value="5"/> 
 </attvalues></node><node id="40" label="PHOCUS">  
@@ -381,7 +381,7 @@
 <viz:size value="4"/>   
 <attvalues> <attvalue for="0" value="Document"/> 
 <attvalue for="1" value="8"/> 
-<attvalue for="2" value="PHOME will identify and address the main obstacles for the development of real applications of optical/photonic meta-materials (PMM). The project will realize 3D PMM devices,  reduce losses in PMMs and develop active and tunable/switchable PMMs and chiral PMMs. ~ fact sheet ~ documents  and  reports ~ web site"/> 
+<attvalue for="2" value="PHOME will identify and address the main obstacles for the development of real applications of optical/photonic meta-materials (PMM). The project will realize 3D PMM devices,  reduce losses in PMMs and develop active and tunable/switchable PMMs and chiral PMMs. ~ &amp;lt;a href='http://cordis.europa.eu/fetch?CALLER=FP7_PROJ_EN&amp;ACTION=D&amp;DOC=1&amp;CAT=PROJ&amp;QUERY=0123bdf44c56:a8cb:5121294b&amp;RCN=86387'>fact sheet&amp;lt;/a&amp;gt; ~ &amp;lt;a href='http://esperia.iesl.forth.gr/~ppm/PHOME/publications.html'>documents  and  reports&amp;lt;/a&amp;gt; ~ &amp;lt;a href='http://esperia.iesl.forth.gr/~ppm/PHOME'>web site&amp;lt;/a&amp;gt;"/> 
 <attvalue for="3" value=" optical meta-materials, photonic meta-materials,  PMM,  3D PMM, active PMM,  chiral PMM, devices, photonics"/> 
 <attvalue for="4" value="5"/> 
 </attvalues></node><node id="42" label="PICC">  
@@ -444,7 +444,7 @@
 <viz:size value="4"/>   
 <attvalues> <attvalue for="0" value="Document"/> 
 <attvalue for="1" value="5"/> 
-<attvalue for="2" value="SCOPE builds on recent advances in superconducting quantum bit circuits to model,  design,  fabricate,  and measure circuits where the single charge quantum plays the dual role of the flux quantum in classical Josephson junction circuits. ~ fact sheet ~ documents  and  reports ~ web site"/> 
+<attvalue for="2" value="SCOPE builds on recent advances in superconducting quantum bit circuits to model,  design,  fabricate,  and measure circuits where the single charge quantum plays the dual role of the flux quantum in classical Josephson junction circuits. ~ &amp;lt;a href='http://cordis.europa.eu/fetch?CALLER=FP7_PROJ_EN&amp;ACTION=D&amp;DOC=84&amp;CAT=PROJ&amp;QUERY=0123bdf4e5c4:5198:2f44538f&amp;RCN=87673'>fact sheet&amp;lt;/a&amp;gt; ~ documents  and  reports ~ web site"/> 
 <attvalue for="3" value=" superconducting quantum bit circuit, single charge quantum,  flux quantum,  Josephson junction circuit, quantum operation, quantum devices"/> 
 <attvalue for="4" value="5"/> 
 </attvalues></node><node id="49" label="SEMSEG">  
@@ -471,7 +471,7 @@
 <viz:size value="4"/>   
 <attvalues> <attvalue for="0" value="Document"/> 
 <attvalue for="1" value="5"/> 
-<attvalue for="2" value="SIMBAD aims at undertaking a thorough study of several aspects of purely similarity-based pattern analysis and recognition methods,  from the theoretical,  computational and applicative perspective,  considering both supervised and unsupervised learning paradigms. ~ fact sheet ~ documents  and  reports ~ web site"/> 
+<attvalue for="2" value="SIMBAD aims at undertaking a thorough study of several aspects of purely similarity-based pattern analysis and recognition methods,  from the theoretical,  computational and applicative perspective,  considering both supervised and unsupervised learning paradigms. ~ &amp;lt;a href='http://cordis.europa.eu/fetch?CALLER=FP7_PROJ_EN&amp;ACTION=D&amp;DOC=1&amp;CAT=PROJ&amp;QUERY=0123bdf6405d:fc70:52e84881&amp;RCN=86409'>fact sheet&amp;lt;/a&amp;gt; ~ documents  and  reports ~ &amp;lt;a href='http://simbad-fp7.eu/'>web site&amp;lt;/a&amp;gt;"/> 
 <attvalue for="3" value="similarity-based pattern analysis,  recognition methods,  supervised learning,   unsupervised learning, learning"/> 
 <attvalue for="4" value="5"/> 
 </attvalues></node><node id="52" label="SMALL">  
@@ -516,7 +516,7 @@
 <viz:size value="4"/>   
 <attvalues> <attvalue for="0" value="Document"/> 
 <attvalue for="1" value="6"/> 
-<attvalue for="2" value="TINA is a support action aiming to develop tools for the analysis and visualisation of the relationships between scientific research projects and proposals. ~ fact sheet ~ documents  and  reports ~ web site"/> 
+<attvalue for="2" value="TINA is a support action aiming to develop tools for the analysis and visualisation of the relationships between scientific research projects and proposals. ~ &amp;lt;a href='http://cordis.europa.eu/fp7/ict/fet-open'>fact sheet&amp;lt;/a&amp;gt; ~ &amp;lt;a href='http://tina.csregistry.org/'>documents  and  reports&amp;lt;/a&amp;gt; ~ &amp;lt;a href='tinasoft.eu'>web site&amp;lt;/a&amp;gt;"/> 
 <attvalue for="3" value=" visualisation, scientific research projects,  scientific research  proposals,  semantic,  science, data mining"/> 
 <attvalue for="4" value="5"/> 
 </attvalues></node><node id="57" label="TREASURE">  
@@ -552,7 +552,7 @@
 <viz:size value="4"/>   
 <attvalues> <attvalue for="0" value="Document"/> 
 <attvalue for="1" value="2"/> 
-<attvalue for="2" value="VISMASTER deals with the emerging interdisciplinary topic of visual analytics and the establishment of a coherent European research community in this field. ~ fact sheet ~ documents  and  reports ~ web site"/> 
+<attvalue for="2" value="VISMASTER deals with the emerging interdisciplinary topic of visual analytics and the establishment of a coherent European research community in this field. ~ &amp;lt;a href='http://cordis.europa.eu/fetch?CALLER=FP7_PROJ_EN&amp;ACTION=D&amp;DOC=1&amp;CAT=PROJ&amp;QUERY=0123bdf8be1a:0ce6:44a8fd90&amp;RCN=87681'>fact sheet&amp;lt;/a&amp;gt; ~ documents  and  reports ~ &amp;lt;a href='http://www.vismaster.eu/'>web site&amp;lt;/a&amp;gt;"/> 
 <attvalue for="3" value=" visual analytics, visualisation"/> 
 <attvalue for="4" value="5"/> 
 </attvalues></node><node id="61" label="3d pmm">  
@@ -3045,6 +3045,7 @@
 <viz:color b="0" g="0"  r="255"/> 
 <viz:position x="0.78193" y="0.10061"  z="25.2518"/>   
 <viz:size value="4"/>   
+
 <attvalues> <attvalue for="0" value="NGram"/> 
 <attvalue for="1" value="1"/> 
 <attvalue for="4" value="5.2518"/> 
@@ -3616,6 +3617,7 @@
 <attvalue for="1" value="1"/> 
 <attvalue for="4" value="5.2727"/> 
 </attvalues></node><node id="499" label="uca">  
+
 <viz:color b="0" g="0"  r="255"/> 
 <viz:position x="0.95089" y="0.44396"  z="25.1025"/>   
 <viz:size value="4"/>   
@@ -7567,6 +7569,7 @@
 </edge><edge id="2079" source="203" target="489" weight="1">  
 <attvalues> <attvalue for="0" value="1"/><attvalue for="1" value="nodes2"/></attvalues> 
 </edge><edge id="2080" source="203" target="491" weight="1">  
+
 <attvalues> <attvalue for="0" value="1"/><attvalue for="1" value="nodes2"/></attvalues> 
 </edge><edge id="2081" source="203" target="493" weight="1">  
 <attvalues> <attvalue for="0" value="1"/><attvalue for="1" value="nodes2"/></attvalues> 
