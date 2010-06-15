@@ -842,12 +842,15 @@ function Tinaviz() {
             if (this.getView()=="macro") {
                 if (this.infodiv.neighbours !== undefined) {
                     // adds neighbours (from opposite categ) to the selection
-                    if (this.infodiv.neighbours.length > 0) {
+                    if (this.infodiv.neighbours.length > 1) {
                         for(var i=0; i<this.infodiv.neighbours.length - 1; i++) {
                             //this.logNormal(neighbours[i].id);
                             this.selectFromId(this.infodiv.neighbours[i].id, false);
                         }
                         this.selectFromId(this.infodiv.neighbours[i+1].id, true);
+                    } 
+                    else if (this.infodiv.neighbours.length == 1) {
+                        this.selectFromId(this.infodiv.neighbours[0].id, true);
                     } 
                 }
             }
