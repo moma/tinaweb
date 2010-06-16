@@ -386,7 +386,7 @@ function Tinaviz() {
 
             this.bindFilter("NodeWeightRange", "nodeWeight", "macro");
             this.bindFilter("EdgeWeightRange", "edgeWeight", "macro");
-            
+
             this.bindFilter("NodeFunction", "radiusByWeight", "macro");
 
             this.bindFilter("Output", "output", "macro");
@@ -842,12 +842,19 @@ function Tinaviz() {
             if (this.getView()=="macro") {
                 if (this.infodiv.neighbours !== undefined) {
                     // adds neighbours (from opposite categ) to the selection
-                    if (this.infodiv.neighbours.length > 0) {
-                        for(var i=0; i<this.infodiv.neighbours.length - 1; i++) {
+                    if (this.infodiv.neighbours.length > 1) {
+                        for(var i=0; i<this.infodiv.neighbours.length; i++) {
                             //this.logNormal(neighbours[i].id);
-                            this.selectFromId(this.infodiv.neighbours[i].id, false);
+			    if (i==this.infodiv.neighbours.length) {
+                            	this.selectFromId(this.infodiv.neighbours[i].id, true);
+			    } else {
+				 this.selectFromId(this.infodiv.neighbours[i].id, false);
+		            }
                         }
-                        this.selectFromId(this.infodiv.neighbours[i+1].id, true);
+                       
+                    } 
+                    else if (this.infodiv.neighbours.length == 1) {
+                        this.selectFromId(this.infodiv.neighbours[0].id, true);
                     } 
                 }
             }
