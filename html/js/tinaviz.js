@@ -386,7 +386,7 @@ function Tinaviz() {
 
             this.bindFilter("NodeWeightRange", "nodeWeight", "macro");
             this.bindFilter("EdgeWeightRange", "edgeWeight", "macro");
-            
+
             this.bindFilter("NodeFunction", "radiusByWeight", "macro");
 
             this.bindFilter("Output", "output", "macro");
