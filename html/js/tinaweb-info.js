@@ -28,10 +28,10 @@ function InfoDiv(divid) {
     * dispatch current category displayed
     */
     display_current_category: function() {
-        var current_view = viz.getView();
-        var current_cat = viz.getProperty("current","category/category");
+        var current_view = tinaviz.getView();
+        var current_cat = tinaviz.getProperty("current","category/category");
         if (current_cat !== undefined)
-            var opposite = this.categories[viz.getOppositeCategory(current_cat)];
+            var opposite = this.categories[tinaviz.getOppositeCategory(current_cat)];
             //$("#title_acc_1").text("current selection of "+ this.categories[current_cat]);
         if (opposite !== undefined)
             if (current_view == "macro")
@@ -45,8 +45,8 @@ function InfoDiv(divid) {
     * dispatch current view displayed
     */
     display_current_view: function() {
-        var current_view = viz.getView();
-        viz.logNormal( current_view );
+        var current_view = tinaviz.getView();
+        tinaviz.logNormal( current_view );
         if (current_view !== undefined) {
             var level = $("#level");
         level.empty().html(current_view + " level <span class='ui-icon ui-icon-help icon-right' title='></span>");
@@ -102,14 +102,14 @@ function InfoDiv(divid) {
         var tempcloud = {};
         for (var nodeid in this.selection) {
             // gets the full neighbourhood for the tag cloud
-            var nb = viz.getNeighbourhood(viewLevel,nodeid);
+            var nb = tinaviz.getNeighbourhood(viewLevel,nodeid);
             var taglist = new Array();
             for (var nbid in nb) {
                 if ( tempcloud[nbid] !== undefined )
                     tempcloud[nbid]['degree']++;
                 // pushes a node if belongs to the opposite category
                 else if (this.selection[nodeid]['category'] != nb[nbid]['category']) {
-                    //viz.logNormal("adding to tag cloud : "+decodeJSON(nb[nbid]['label']));
+                    //tinaviz.logNormal("adding to tag cloud : "+decodeJSON(nb[nbid]['label']));
                     tempcloud[nbid] = {
                         'id': nbid,
                         'label' : decodeJSON(nb[nbid]['label']),
@@ -121,7 +121,7 @@ function InfoDiv(divid) {
             }
         }
         var sorted_tags = this.alphabeticListSort( Object.values( tempcloud ), 'label' );
-        //viz.logNormal(sorted_tags);
+        //tinaviz.logNormal(sorted_tags);
         /* some display sizes const */
         var sizecoef = 15;
         var const_doc_tag = 12;
@@ -139,9 +139,9 @@ function InfoDiv(divid) {
                 var attached_id = tagid;
                 var attached_cat =  tag['category'];
                 tagspan.click( function() {
-                    //viz.logNormal("clicked on " + tagid + " - " +tag['label']);
+                    //tinaviz.logNormal("clicked on " + tagid + " - " +tag['label']);
                     //switch to meso view
-                    viz.viewMeso(attached_id, attached_cat);
+                    tinaviz.viewMeso(attached_id, attached_cat);
                 });
             })();
             // sets the tag's text size
@@ -175,8 +175,8 @@ function InfoDiv(divid) {
      * updates the label and content DOM divs
      */
     updateInfo: function(lastselection) {
-        var current_cat = viz.getProperty("current", "category/category");
-        viz.logNormal("current category = "+current_cat);
+        var current_cat = tinaviz.getProperty("current", "category/category");
+        tinaviz.logNormal("current category = "+current_cat);
         var labelinnerdiv = $("<div></div>");
         var contentinnerdiv = $("<div></div>");
         for(var id in lastselection) {

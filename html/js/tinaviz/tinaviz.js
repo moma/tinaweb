@@ -7,28 +7,104 @@ function Tinaviz() {
     var applet = null;
     var cbsAwait = {};
     var cbsRun = {};
+    var getSizeCb = function(){return{width: 10, height: 10};};
     var callbackReady = function() {};
+    
+    var height = 10;
+    var width = 10;
+    
     this.isReady = 0;
     this.infodiv = null;
+    
 
     // create the applet here
 
     //return {
         this.init= function() {
-            if (wrapper != null || applet != null) return;
-            wrapper = $('#tinaviz')[0];
-            if (wrapper == null) return;
-            applet = wrapper.getSubApplet();
-            if (applet == null) return;
-            this.auto_resize();
-            this.isReady = 1;
+        if (wrapper == null) return;
+        applet = wrapper.getSubApplet();
+        if (applet == null) {
+            alert("couldn't get the applet!");
+            return;
+        }
+        this.auto_resize();
+        this.isReady = 1;
 	    callbackReady(this);
         }
 
         this.ready=function(cb) {
-		callbackReady = cb;
-	}
+		    callbackReady = cb;
+	    }
 
+        this.create= function(path,context,engine) {
+            return '<!--[if !IE]> --> \
+                            <object id="tinaviz" \
+                                        classid="java:org.jdesktop.applet.util.JNLPAppletLauncher" \
+                                        type="application/x-java-applet" \
+                                        archive="'+path+'tinaviz.jar,'+path+'core.jar,'+path+'itext.jar,'+path+'pdf.jar,'+path+'colt.jar,'+path+'concurrent.jar,'+path+'applet-launcher.jar" \
+                                        width="10" height="10" \
+                                        standby="Loading Processing software..." > \
+ \
+                              <param name="archive" value="'+path+'tinaviz.jar,'+path+'core.jar,'+path+'itext.jar,'+path+'pdf.jar,'+path+'colt.jar,'+path+'concurrent.jar,'+path+'applet-launcher.jar" /> \
+                              <param name="mayscript" value="true" /> \
+                              <param name="scriptable" value="true" /> \
+ \
+                              <param name="image" value="css/branding/appletLoading.gif" /> \
+                                <param name="boxmessage" value="Loading TinaViz..." /> \
+                              <param name="boxbgcolor" value="#FFFFFF" /> \
+                              <param name="progressbar" value="true" /> \
+                              <!--<param name="noddraw.check" value="true">--> \
+ \
+                              <param name="subapplet.classname" value="tinaviz.Main" /> \
+                              <param name="subapplet.displayname" valuefg-buttonset-multi ="tinaviz.Main" /> \
+ \
+                                <param name="engine" value="'+engine+'" /> \
+                                <param name="js_context" value="'+context+'" /> \
+ \
+                              <!--<![endif]--> \
+ \
+                              <object id="tinaviz" \
+                                          classid="clsid:CAFEEFAC-0016-0000-FFFF-ABCDEFFEDCBA" \
+                                  width="10" height="10" \
+                                  standby="Loading Processing software..."  > \
+ \
+                                <param name="code" \
+                                   value="org.jdesktop.applet.util.JNLPAppletLauncher" /> \
+                                <param name="archive" value="'+path+'tinaviz.jar,'+path+'core.jar,'+path+'itext.jar,'+path+'pdf.jar,'+path+'colt.jar,'+path+'concurrent.jar,'+path+'applet-launcher.jar" />\
+                                <param name="mayscript" value="true" /> \
+                                <param name="scriptable" value="true" /> \
+ \
+                              <param name="image" value="css/branding/appletLoading.gif" /> \
+                                <param name="boxmessage" value="Loading TinaViz..." /> \
+                                <param name="boxbgcolor" value="#FFFFFF" /> \
+                                <param name="progressbar" value="true" /> \
+                                <!--<param name="noddraw.check" value="true">--> \
+ \
+                                <param name="subapplet.classname" value="tinaviz.Main" /> \
+                                <param name="subapplet.displayname" value="tinaviz.Main" /> \
+ \
+                                <param name="engine" value="'+engine+'" /> \
+                                <param name="js_context" value="'+context+'" />\
+                                \
+\
+                                <p>\
+                                    <strong>\
+                                        This browser does not have a Java Plug-in.\
+                                        <br />\
+                                        <a href="http://www.java.com/getjava" title="Download Java Plug-in">\
+                                            Get the latest Java Plug-in here.\
+                                        </a>\
+                                    </strong>\
+                                </p>\
+\
+                              </object>\
+\
+                              <!--[if !IE]> -->\
+                            </object>\
+                            <!--<![endif]-->';
+        
+        }
+        
         /************************
          * Core applet methods
          *
@@ -584,15 +660,15 @@ function Tinaviz() {
         /*
          * Dynamic div width
          */
-        this.getWidth= function() {
-            return $("#vizdiv").width();
-        }
+         this.setSize= function(cb) {
+            getSizeCb = cb;
+         }
 
         /*
          * Dynamic div height
          */
-        this.getHeight= function() {
-            return getScreenHeight() - $("#hd").height() - $("#ft").height() - 50;
+        this.getSize= function() {
+            return getSizeCb();
         }
         /*
          * Callback changing utton states

@@ -1,0 +1,5 @@
+#!/bin/sh
+cp ../tinaviz/js/tinaviz.js html/js/tinaviz/
+cp ../tinaviz/dist/tinaviz.jar html/js/tinaviz/
+cd html
+chrome index.html

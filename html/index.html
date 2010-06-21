@@ -22,6 +22,8 @@
         <!-- WE USE TINAWEB INFO PANEL -->
         <script type="text/javascript" src="js/tinaweb-info.js" language="javascript"></script>
 
+        <!-- WE USE TINAWEB INFO PANEL -->
+        <script type="text/javascript" src="js/tinaweb-main.js" language="javascript"></script>
 
         <!-- JQUERY UI CSS -->
         <link type="text/css" rel="stylesheet" href="css/eggplant/jquery-ui-1.8.1.custom.css"/>
@@ -119,79 +121,7 @@
                     <div class="yui-gc">
                         <!-- LEFT MAIN COLUMN-->
                         <div id="vizdiv" class="yui-u first">
-
-                            <!--[if !IE]> -->
-                            <object id="tinaviz"
-                                        classid="java:org.jdesktop.applet.util.JNLPAppletLauncher"
-                                        type="application/x-java-applet"
-                                        archive="java/tinaviz.jar,java/core.jar,java/itext.jar,java/pdf.jar,java/colt.jar,java/concurrent.jar,java/applet-launcher.jar"
-                                        width="10" height="10"
-                                        standby="Loading Processing software..." >
-
-                              <param name="archive" value="java/tinaviz.jar,java/core.jar,java/itext.jar,java/pdf.jar,java/colt.jar,java/concurrent.jar,java/applet-launcher.jar" />
-                              <!--<param name="jnlpNumExtensions" value="1">
-                              <param name="jnlpExtension1" value="http://download.java.net/media/jogl/builds/archive/jsr-231-webstart-current/jogl.jnlp">
--->
-                              <param name="mayscript" value="true" />
-                              <param name="scriptable" value="true" />
-
-                              <param name="image" value="css/branding/appletLoading.gif" />
-                                <param name="boxmessage" value="Loading TinaViz..." />
-                              <param name="boxbgcolor" value="#FFFFFF" />
-                              <param name="progressbar" value="true" />
-                              <!--<param name="noddraw.check" value="true">-->
-
-                              <param name="subapplet.classname" value="tinaviz.Main" />
-                              <param name="subapplet.displayname" valuefg-buttonset-multi ="tinaviz.Main" />
-
-                                <param name="engine" value="software" />
-                                <param name="js_context" value="" />
-
-                              <!--<![endif]-->
-
-                              <object id="tinaviz"
-                                          classid="clsid:CAFEEFAC-0016-0000-FFFF-ABCDEFFEDCBA"
-                                  width="10" height="10"
-                                  standby="Loading Processing software..."  >
-
-                                <param name="code"
-                                   value="org.jdesktop.applet.util.JNLPAppletLauncher" />
-                                <param name="archive" value="java/tinaviz.jar,java/core.jar,java/itext.jar,java/pdf.jar,java/colt.jar,java/concurrent.jar,java/applet-launcher.jar" /><!--
-                                <param name="jnlpNumExtensions" value="1">
-                                <param name="jnlpExtension1" value="http://download.java.net/media/jogl/builds/archive/jsr-231-webstart-current/jogl.jnlp">
--->
-                                <param name="mayscript" value="true" />
-                                <param name="scriptable" value="true" />
-
-                              <param name="image" value="css/branding/appletLoading.gif" />
-                                <param name="boxmessage" value="Loading TinaViz..." />
-                                <param name="boxbgcolor" value="#FFFFFF" />
-                                <param name="progressbar" value="true" />
-                                <!--<param name="noddraw.check" value="true">-->
-
-                                <param name="subapplet.classname" value="tinaviz.Main" />
-                                <param name="subapplet.displayname" value="tinaviz.Main" />
-
-                                <param name="engine" value="software" />
-                                <param name="js_context" value="" />
-
-                                <p>
-                                    <strong>
-                                        This browser does not have a Java Plug-in.
-                                        <br />
-                                        <a href="http://www.java.com/getjava" title="Download Java Plug-in">
-                                            Get the latest Java Plug-in here.
-                                        </a>
-                                    </strong>
-                                </p>
-
-                              </object>
-
-                              <!--[if !IE]> -->
-                            </object>
-                            <!--<![endif]-->
-                            <!--</div>-->
-                        </div><!-- end of visualization -->
+                        </div>
                         <!-- RIGHT MAIN COLUMN-->
                         <div id="infodiv" class="yui-u">
                             <h3>Current selection <a href="#" id="toggle-unselect"></a></h3>

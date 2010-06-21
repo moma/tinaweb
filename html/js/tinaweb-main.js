@@ -1,16 +1,68 @@
 
-var viz = new Tinaviz();
+ /* useful for fullscreen mode */
+function getScreenWidth() {
+    var x = 0;
+    if (self.innerHeight) {
+            x = self.innerWidth;
+    }
+    else if (document.documentElement && document.documentElement.clientHeight) {
+            x = document.documentElement.clientWidth;
+    }
+    else if (document.body) {
+            x = document.body.clientWidth;
+    }
+    return x;
+}
 
- /* wait for the applet to be ready */
- viz.ready(function(){
-    
-        viz.infodiv = Infodiv();
-    
-        viz.setView("macro");
+/* useful for fullscreen mode */
+function getScreenHeight() {
+    var y = 0;
+    if (self.innerHeight) {
+        y = self.innerHeight;
+    }
+    else if (document.documentElement && document.documentElement.clientHeight) {
+        y = document.documentElement.clientHeight;
+    }
+    else if (document.body) {
+        y = document.body.clientHeight;
+    }
 
-        var session = viz.session();
-        var macro = viz.view("macro");
-        var meso = viz.view("meso");
+    return y;
+}
+
+
+var tinaviz = {};
+    
+$(document).ready(function(){
+
+    tinaviz = new Tinaviz();
+    
+    // we tell tinaviz where to get its size
+    tinaviz.setSize(
+    
+        // our function will compute a new size each time
+        function(){
+            return {
+                width: $("#vizdiv").width(),
+                height: getScreenHeight() - $("#hd").height() - $("#ft").height() - 50,
+            }
+        }
+    );  
+        
+
+    // inject the applet inside the web page
+    $("#vizdiv").html(tinaviz.create("js/tinaviz/","","software"));
+    tinaviz.wrapper = $("#tinaviz"); // we need to get the html tag immediately, here
+
+    tinaviz.ready(function(){
+    
+        tinaviz.infodiv = Infodiv();
+        
+        tinaviz.setView("macro");
+
+        var session = tinaviz.session();
+        var macro = tinaviz.view("macro");
+        var meso = tinaviz.view("meso");
 
 	    session.set("edgeWeight/min", 0.0);
 	    session.set("edgeWeight/max", 1.0);
@@ -38,23 +90,36 @@ var viz = new Tinaviz();
 	    meso.filter("NodeFunction", "radiusByWeight");
 	    meso.filter("Output", "output");
 
-	    viz.readGraphJava("macro", "FET60bipartite_graph_cooccurrences_.gexf");
+	    tinaviz.readGraphJava("macro", "FET60bipartite_graph_cooccurrences_.gexf");
 
         // init the node list with ngrams
-	    viz.updateNodes( "macro", "NGram" );
+	    tinaviz.updateNodes( "macro", "NGram" );
 
         // cache the document list
-	    viz.getNodes( "macro", "Document" );
+	    tinaviz.getNodes( "macro", "Document" );
 
         $("#waitMessage").hide();
         
 	    infodiv.display_current_category();
 	    infodiv.display_current_view();
-});
-    
-$(document).ready(function(){
+    });
 
     //No text selection on elements with a class of 'noSelect'
+    
+    $(function(){
+        $.extend($.fn.disableTextSelect = function() {
+            return this.each(function() {
+                if($.browser.mozilla){//Firefox $("#sliderEdgeWeight")
+                    $(this).css('MozUserSelect','none');
+                } else if($.browser.msie) {//IE
+                    $(this).bind('selectstart',function(){return false;});
+                } else {//Opera, etc.
+                    $(this).mousedown(function(){return false;});
+                }
+            });
+        });
+    });
+
     $('.noSelect').disableTextSelect();
     $('.noSelect').hover(function() {
         $(this).css('cursor','default');
@@ -66,8 +131,8 @@ $(document).ready(function(){
     var infodiv = new InfoDiv("#infodiv");
 
     // auto-adjusting infodiv height
-    var new_size = tinaviz.getHeight() - 40;
-    $(infodiv.id).css( 'height', new_size);
+    var size = tinaviz.getSize();
+    $(infodiv.id).css('height', tinaviz.size.height - 40);
 
     $(infodiv.id).accordion({
         fillSpace: true,
