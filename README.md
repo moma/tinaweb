@@ -49,7 +49,7 @@ $(document).ready(function(){
 
 ###1. Featured in:
 
-- [FET Open Explorer](http://tina.iscpif.fr/htdocs/fet60)
+- [FET Open Explorer](http://tina.iscpif.fr/htdocs/fetopen)
 - [Who's Who](http://tina.iscpif.fr/htdocs/whoswho)
 
 ###2. Better tools to do the job (tm):
