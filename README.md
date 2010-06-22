@@ -42,7 +42,9 @@ $(document).ready(function(){
         var w = getScreenWidth() - 390;
         var h = getScreenHeight() - $("#hd").height() - $("#ft").height() - 60;
         tinaviz.size(w, h);
-        
+
+});
+
 
 ###1. Featured in:
 
