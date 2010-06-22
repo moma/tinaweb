@@ -52,11 +52,10 @@ $(document).ready(function(){
 
     // inject the applet inside the web page
     $("#vizdiv").html(tinaviz.create("js/tinaviz/","","software"));
-    tinaviz.wrapper = $("#tinaviz"); // we need to get the html tag immediately, here
 
     tinaviz.ready(function(){
-    
-        tinaviz.infodiv = Infodiv();
+
+        tinaviz.infodiv = InfoDiv();
         
         tinaviz.setView("macro");
 
@@ -234,8 +233,8 @@ $(document).ready(function(){
         values: [0, 100],
         animate: true,
         slide: function(event, ui) {
-            tinaviz.setProperty("current", "edgeWeight/min", ui.values[0] / 100.0);
-            tinaviz.setProperty("current", "edgeWeight/max", ui.values[1] / 100.0);
+            tinaviz.set("current", "edgeWeight/min", ui.values[0] / 100.0);
+            tinaviz.set("current", "edgeWeight/max", ui.values[1] / 100.0);
             tinaviz.resetLayoutCounter();
             tinaviz.touch();
             if (tinaviz.getView()=="meso") tinaviz.autoCentering();
@@ -247,8 +246,8 @@ $(document).ready(function(){
         values: [0, 100],
         animate: true,
         slide: function(event, ui) {
-            tinaviz.setProperty("current", "nodeWeight/min", ui.values[0] / 100.0);
-            tinaviz.setProperty("current", "nodeWeight/max", ui.values[1] / 100.0);
+            tinaviz.set("current", "nodeWeight/min", ui.values[0] / 100.0);
+            tinaviz.set("current", "nodeWeight/max", ui.values[1] / 100.0);
             tinaviz.resetLayoutCounter();
             tinaviz.touch();
             if (tinaviz.getView()=="meso") tinaviz.autoCentering();
@@ -260,7 +259,7 @@ $(document).ready(function(){
         max: 100.0,// precision/size
         animate: true,
         slide: function(event, ui) {
-            tinaviz.setProperty("current", "output/nodeSizeRatio", ui.value / 100.0);
+            tinaviz.set("current", "output/nodeSizeRatio", ui.value / 100.0);
             //tinaviz.resetLayoutCounter();
             tinaviz.touch();
         }}
@@ -271,11 +270,12 @@ $(document).ready(function(){
         max: 300.0, // max disk radius, in pixel
         animate: true,
         slide: function(event, ui) {
-            tinaviz.setProperty("current", "selection/radius", ui.value);
+            tinaviz.set("current", "selection/radius", ui.value);
             tinaviz.touch();
         }
     });
 
+    /** DISABLED **
     $("#toggle-showLabels").click(function(event) {
         tinaviz.toggleLabels();
     });
@@ -288,6 +288,8 @@ $(document).ready(function(){
         tinaviz.toggleEdges();
     });
 
+    **/
+    
     $("#toggle-paused").button({
         icons: {primary:'ui-icon-pause'},
         text: true,
@@ -295,13 +297,13 @@ $(document).ready(function(){
     })
     .click(function(event) {
         tinaviz.togglePause();
-        if( $("#toggle-paused").button('option','icons')['primary'] == 'ui-icon-pause'  ) {
-            $("#toggle-paused").button('option','icons',{'primary':'ui-icon-play'});
-            $("#toggle-paused").button('option','label',"play");
-        }
-        else {
-            $("#toggle-paused").button('option','icons',{'primary':'ui-icon-pause'});
-            $("#toggle-paused").button('option','label',"pause");
+        var p = $("#toggle-paused");
+        if( p.button('option','icons')['primary'] == 'ui-icon-pause'  ) {
+            p.button('option','icons',{'primary':'ui-icon-play'});
+            p.button('option','label',"play");
+        } else {
+            p.button('option','icons',{'primary':'ui-icon-pause'});
+            p.button('option','label',"pause");
         }
     });
 

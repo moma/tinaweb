@@ -3,6 +3,28 @@
 
  *
  */
+/*
+ * utility modifying the Object prototype
+ * to get its lenght
+ */
+Object.size = function(obj) {
+    var size = 0, key;
+    for (key in obj) {
+        if (obj.hasOwnProperty(key)) size++;
+    }
+    return size;
+};
+/*
+ * utility returning a list
+ * from the values of a given object
+ */
+Object.values = function(obj) {
+    var values = new Array();
+    for (key in obj) {
+        values.push(obj[key]);
+    }
+    return values;
+};
 
 /*
  * Infodiv object need viz object to retrieve data
@@ -29,7 +51,7 @@ function InfoDiv(divid) {
     */
     display_current_category: function() {
         var current_view = tinaviz.getView();
-        var current_cat = tinaviz.getProperty("current","category/category");
+        var current_cat = tinaviz.get("current","category/category");
         if (current_cat !== undefined)
             var opposite = this.categories[tinaviz.getOppositeCategory(current_cat)];
             //$("#title_acc_1").text("current selection of "+ this.categories[current_cat]);
@@ -175,7 +197,7 @@ function InfoDiv(divid) {
      * updates the label and content DOM divs
      */
     updateInfo: function(lastselection) {
-        var current_cat = tinaviz.getProperty("current", "category/category");
+        var current_cat = tinaviz.get("current", "category/category");
         tinaviz.logNormal("current category = "+current_cat);
         var labelinnerdiv = $("<div></div>");
         var contentinnerdiv = $("<div></div>");

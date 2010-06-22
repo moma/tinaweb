@@ -8,7 +8,7 @@ function Tinaviz() {
     var cbsAwait = {};
     var cbsRun = {};
     var getSizeCb = function(){return{width: 10, height: 10};};
-    var callbackReady = function() {};
+    var callbackReady = function() { alert("I haven't been replaced.."); };
     
     var height = 10;
     var width = 10;
@@ -19,17 +19,30 @@ function Tinaviz() {
 
     // create the applet here
 
-    //return {
+
         this.init= function() {
-        if (wrapper == null) return;
-        applet = wrapper.getSubApplet();
-        if (applet == null) {
-            alert("couldn't get the applet!");
+        wrapper = $("#tinaviz")[0]; // we need to get the html tag immediately
+        if (wrapper == null) {
+            alert("Error: couldn't get the applet!");
             return;
         }
-        this.auto_resize();
+        
+        if (typeof wrapper.getSubApplet == 'function') {
+            applet = wrapper.getSubApplet();
+        } else {
+            applet = wrapper;
+        }
+
+        if (applet == null) {
+            alert("Error: couldn't get the applet!");
+            return;
+        }
+        this.applet = applet;
+        // this.auto_resize();
+        alert("before callback");
+        callbackReady(this);
+        alert("after callback");
         this.isReady = 1;
-	    callbackReady(this);
         }
 
         this.ready=function(cb) {
@@ -124,23 +137,23 @@ function Tinaviz() {
          */
         this.dispatchProperty= function(key,value) {
             if (applet == null) return;
-            return applet.setProperty("all",key,value);
+            return applet.set("all",key,value);
         }
 
         /*
          * Core method communicating with the applet
          */
-        this.setProperty= function(view,key,value) {
+        this.set= function(view,key,value) {
             if (applet == null) return;
-            return applet.setProperty(view,key,value);
+            return applet.set(view,key,value);
         }
 
         /*
          * Core method communicating with the applet
          */
-        this.getProperty= function(view,key) {
+        this.get= function(view,key) {
             if (applet == null) return;
-            return applet.getProperty(view,key);
+            return applet.get(view,key);
         }
 
         /*
@@ -350,7 +363,7 @@ function Tinaviz() {
             // copies the category from view to meso
             //if (view == "meso") {
                 //this.toggleCategory(view);
-                //this.setProperty("meso", "category/category", this.getProperty(view, "category/category"));
+                //this.set("meso", "category/category", this.get(view, "category/category"));
             //}
         }
 
@@ -358,7 +371,7 @@ function Tinaviz() {
          *  Callback of double left clics
          */
         this.leftDoubleClicked = function(view, data) {
-            var category = this.getProperty("current", "category/category");
+            var category = this.get("current", "category/category");
             for (var id in data) {
                 this.viewMeso(decodeJSON(id), category);
                 break;
@@ -409,12 +422,12 @@ function Tinaviz() {
 
             // update the buttons
             $("#sliderEdgeWeight").slider( "option", "values", [
-                this.getProperty(view, "edgeWeight/min"),
-                this.getProperty(view, "edgeWeight/max")*100
+                this.get(view, "edgeWeight/min"),
+                this.get(view, "edgeWeight/max")*100
             ]);
             $("#sliderNodeWeight").slider( "option", "values", [
-                this.getProperty(view, "nodeWeight/min"),
-                this.getProperty(view, "nodeWeight/max")*100
+                this.get(view, "nodeWeight/min"),
+                this.get(view, "nodeWeight/max")*100
             ]);
             this.infodiv.display_current_category();
             this.infodiv.display_current_view();
@@ -538,8 +551,8 @@ function Tinaviz() {
                 }
             }
             // get and set the new category to display
-            var next_cat = this.getOppositeCategory( this.getProperty(view, "category/category"));
-            this.setProperty(view, "category/category", next_cat);
+            var next_cat = this.getOppositeCategory( this.get(view, "category/category"));
+            this.set(view, "category/category", next_cat);
             // touch and centers the view
             this.touch();
             this.autoCentering();
@@ -555,32 +568,39 @@ function Tinaviz() {
             this.unselect();
             this.selectFromId(id, true);
             // sets the category of the graph
-            this.setProperty("meso", "category/category", category);
-            //this.setProperty("macro", "category/category", category);
+            this.set("meso", "category/category", category);
+            //this.set("macro", "category/category", category);
             this.setView("meso");
             this.touch("meso");
             this.updateNodes("meso", category);
         }
 
         this.toggleView= function() {
-            var current_cat = this.getProperty("current","category/category");
+            var current_cat = this.get("current","category/category");
             if (this.getView() == "macro") {
                 // check if selection is empty
                 if (Object.size(this.infodiv.selection) != 0) {
-                    this.setProperty("meso", "category/category", current_cat);
+                    this.set("meso", "category/category", current_cat);
                     this.setView("meso");
                     this.updateNodes("meso", current_cat);
                 } else {
                     alert("please first select some nodes before switching to meso level");
                 }
             } else if (this.getView() == "meso") {
-                this.setProperty("macro", "category/category", current_cat);
+                this.set("macro", "category/category", current_cat);
                 this.setView("macro");
                 this.updateNodes("macro", current_cat);
             }
         }
         
+        this.session=function() {
+            return applet.session();
+        }
         
+        
+        this.view=function(v) {
+            return applet.view(v);
+        }
         /*
         * Manually unselects all nodes
         */
