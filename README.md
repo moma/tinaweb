@@ -42,6 +42,7 @@ $(document).ready(function(){
         var w = getScreenWidth() - 390;
         var h = getScreenHeight() - $("#hd").height() - $("#ft").height() - 60;
         tinaviz.size(w, h);
+    });
 
 });
 
@@ -54,15 +55,15 @@ $(document).ready(function(){
 ###2. Better tools to do the job (tm):
 
 If you prefer a Flash-based and production-ready GEXF visualization widget to embed in your web page, you should probably try:
-- [GexfExplorer](http://github.com/jacomyal/GexfExplorer) 
-- [GexfWalker](http://github.com/jacomyal/GexfWalker)
+ - [GexfExplorer](http://github.com/jacomyal/GexfExplorer) 
+ - [GexfWalker](http://github.com/jacomyal/GexfWalker)
 
 If you want to edit, arrange, produce printable maps:
-- [Gephi](http://gephi.org)
+ - [Gephi](http://gephi.org)
 
 for more information on the GEXF file format:
-- [GEXF Format](http://gexf.net/format/)
-- [Gephi](http://www.gephi.org/)
+ - [GEXF Format](http://gexf.net/format/)
+ - [Gephi](http://www.gephi.org/)
 
 
 
