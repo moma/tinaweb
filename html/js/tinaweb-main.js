@@ -35,27 +35,40 @@ var tinaviz = {};
     
 $(document).ready(function(){
 
-    tinaviz = new Tinaviz();
-    
-    // we tell tinaviz where to get its size
-    tinaviz.setSize(
-    
-        // our function will compute a new size each time
-        function(){
-            return {
-                width: $("#vizdiv").width(),
-                height: getScreenHeight() - $("#hd").height() - $("#ft").height() - 50,
-            }
-        }
-    );  
-        
-
-    // inject the applet inside the web page
-    $("#vizdiv").html(tinaviz.create("js/tinaviz/","","software"));
+    tinaviz = new Tinaviz({
+        tag: $("#vizdiv"),
+        path: "js/tinaviz/",
+        context: "",
+        engine: "software",
+        width: 0,
+        height: 0
+    });
 
     tinaviz.ready(function(){
+    
+        var infodiv =  InfoDiv('infodiv');
+        tinaviz.infodiv = infodiv;
+        
+        
+        // auto-adjusting infodiv height
+        $(infodiv.id).css('height', tinaviz.height - 40);
 
-        tinaviz.infodiv = InfoDiv();
+        $(infodiv.id).accordion({
+            fillSpace: true,
+        });
+
+        // cleans infodiv
+        infodiv.reset();
+
+        var w = getScreenWidth() - 390;
+        var h = getScreenHeight() - $("#hd").height() - $("#ft").height() - 60;
+        tinaviz.size(w, h);
+
+        //$("#infodiv").width(360);
+        //$("#infodiv").height(h);
+        
+        tinaviz.logNormal( "height:" + $("#infodiv").css( 'height' ) );
+        tinaviz.logNormal( "width:" + $("#infodiv").css( 'width' ) );
         
         tinaviz.setView("macro");
 
@@ -127,20 +140,7 @@ $(document).ready(function(){
     });
 
     $("#title").html("FET Open projects explorer");
-    var infodiv = new InfoDiv("#infodiv");
 
-    // auto-adjusting infodiv height
-    var size = tinaviz.getSize();
-    $(infodiv.id).css('height', tinaviz.size.height - 40);
-
-    $(infodiv.id).accordion({
-        fillSpace: true,
-    });
-
-    // cleans infodiv
-    infodiv.reset();
-    // passing infodiv to tinaviz is REQUIRED
-    tinaviz.infodiv = infodiv;
 
     // TODO : handler to open a graph file
     /*$('#htoolbar input[type=file]').change(function(e){
@@ -336,8 +336,8 @@ $(document).ready(function(){
 
     $(window).bind('resize', function() {
         if (tinaviz.isEnabled()) {
-            tinaviz.auto_resize();
             $("#infodiv").css( 'height', getScreenHeight() - $("#hd").height() - $("#ft").height() - 60);
+            tinaviz.size(getScreenWidth() - 450, getScreenHeight() - $("#hd").height() - $("#ft").height() - 60);
         }
     });
 });

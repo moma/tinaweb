@@ -26,6 +26,29 @@ Object.values = function(obj) {
     return values;
 };
 
+function decodeJSON(encvalue) {
+    if (encvalue !== undefined)
+        return decodeURIComponent(encvalue).replace(/\+/g, " ").replace(/%21/g, "!").replace(/%27/g, "'").replace(/%28/g, "(").replace(/%29/g, ")").replace(/%2A/g, "*");
+    else
+        return "";
+};
+
+/*
+ * Asynchronously displays of node list
+ */
+function displayNodeRow(label, id, category) {
+    //console.console.log("inserting "+label);
+    $("#node_table > tbody").append(
+        $("<tr></tr>").append(
+            $("<td id='"+id+"'></td>").text(label).click( function(eventObject) {
+                //switch to meso view
+                tinaviz.viewMeso(id, category);
+            })
+        )
+    );
+};
+
+
 /*
  * Infodiv object need viz object to retrieve data
  */

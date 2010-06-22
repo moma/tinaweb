@@ -1,32 +1,39 @@
  
 
 
-function Tinaviz() {
+function Tinaviz(args) {
 
+    var opts = {
+        width: 0,
+        height: 0
+    };
+    for (x in args) { opts[x] = args[x] };
+    
+    // PRIVATE MEMBERS
     var wrapper = null;
     var applet = null;
     var cbsAwait = {};
     var cbsRun = {};
-    var getSizeCb = function(){return{width: 10, height: 10};};
-    var callbackReady = function() { alert("I haven't been replaced.."); };
-    
-    var height = 10;
-    var width = 10;
-    
+
+    var callbackReady = function () {};
+  
+    // PUBLIC MEMBERS
     this.isReady = 0;
     this.infodiv = null;
+
+    this.height = opts.height;
+    this.width = opts.width;
+    this.tag = opts.tag;
+    this.path = opts.path;
+    this.engine = opts.engine;
+    this.context = opts.context;
     
-
-    // create the applet here
-
-
-        this.init= function() {
+    this.init= function() {
         wrapper = $("#tinaviz")[0]; // we need to get the html tag immediately
         if (wrapper == null) {
             alert("Error: couldn't get the applet!");
             return;
         }
-        
         if (typeof wrapper.getSubApplet == 'function') {
             applet = wrapper.getSubApplet();
         } else {
@@ -38,18 +45,18 @@ function Tinaviz() {
             return;
         }
         this.applet = applet;
-        // this.auto_resize();
-        alert("before callback");
         callbackReady(this);
-        alert("after callback");
         this.isReady = 1;
-        }
+     }
 
-        this.ready=function(cb) {
-		    callbackReady = cb;
-	    }
+     this.ready=function(cb) {
+		callbackReady = cb;
+	 }
 
-        this.create= function(path,context,engine) {
+     this.getHTML = function() {
+            var path = this.path;
+            var context = this.context;
+            var engine = this.engine;
             return '<!--[if !IE]> --> \
                             <object id="tinaviz" \
                                         classid="java:org.jdesktop.applet.util.JNLPAppletLauncher" \
@@ -680,16 +687,13 @@ function Tinaviz() {
         /*
          * Dynamic div width
          */
-         this.setSize= function(cb) {
-            getSizeCb = cb;
+         this.size= function(width, height) {
+            $('#tinaviz').css("height",""+(height)+"px");
+            $('#tinaviz').css("width",""+(width)+"px");
+            wrapper.height = height;
+            wrapper.width = width;
          }
 
-        /*
-         * Dynamic div height
-         */
-        this.getSize= function() {
-            return getSizeCb();
-        }
         /*
          * Callback changing utton states
          */
@@ -721,5 +725,9 @@ function Tinaviz() {
             $('#tinaviz').css('height',height);
         }
     //};
+    
+        
+ 
+    this.tag.html( this.getHTML() );
 }
 
