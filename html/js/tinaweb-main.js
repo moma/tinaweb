@@ -57,19 +57,12 @@ $(document).ready(function(){
             fillSpace: true,
         });
 
-        // cleans infodiv
         infodiv.reset();
 
         var w = getScreenWidth() - 390;
         var h = getScreenHeight() - $("#hd").height() - $("#ft").height() - 60;
         tinaviz.size(w, h);
 
-        //$("#infodiv").width(360);
-        //$("#infodiv").height(h);
-        
-        tinaviz.logNormal( "height:" + $("#infodiv").css( 'height' ) );
-        tinaviz.logNormal( "width:" + $("#infodiv").css( 'width' ) );
-        
         tinaviz.setView("macro");
 
         var session = tinaviz.session();
@@ -102,7 +95,8 @@ $(document).ready(function(){
 	    meso.filter("NodeFunction", "radiusByWeight");
 	    meso.filter("Output", "output");
 
-	    tinaviz.readGraphJava("macro", "FET60bipartite_graph_cooccurrences_.gexf");
+	    //tinaviz.readGraphJava("macro", "FET60bipartite_graph_cooccurrences_.gexf");
+	    tinaviz.readGraphJava("macro", "bipartite_graph_bipartite_map_bionet_2004_2007_g.gexf_.gexf");
 
         // init the node list with ngrams
 	    tinaviz.updateNodes( "macro", "NGram" );
