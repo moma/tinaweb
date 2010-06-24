@@ -65,7 +65,7 @@ function Tinaviz(args) {
             
             return '<!--[if !IE]> --> \
                             <object id="tinaviz" \
-                                        classid="java:org.jdesktop.applet.util.JNLPAppletLauncher" \
+                                        classid="java:tinaviz.Main" \
                                         type="application/x-java-applet" \
                                         archive="'+archives+'" \
                                         width="1" height="1" \
@@ -95,7 +95,7 @@ function Tinaviz(args) {
                                   standby="Loading Processing software..."  > \
  \
                                 <param name="code" \
-                                   value="org.jdesktop.applet.util.JNLPAppletLauncher" /> \
+                                   value="tinaviz.Main" /> \
                                 <param name="archive" value="'+archives+'" />\
                                 <param name="mayscript" value="true" /> \
                                 <param name="scriptable" value="true" /> \
@@ -535,8 +535,8 @@ function Tinaviz(args) {
                 return "NGram";
             else if (cat == "NGram")
                 return "Document";
-            else alert("error, cannot get opposite category of "+cat);
-
+            //else alert("error, cannot get opposite category of "+cat);
+            return "Document";
         }
 
         /**
@@ -564,7 +564,8 @@ function Tinaviz(args) {
                 }
             }
             // get and set the new category to display
-            var next_cat = this.getOppositeCategory( this.get(view, "category/category"));
+            
+            var next_cat = this.getOppositeCategory( this.get(view, "category/category") );
             this.set(view, "category/category", next_cat);
             // touch and centers the view
             this.touch();
