@@ -120,12 +120,14 @@
                     <div class="yui-b">
                     <div class="yui-gc">
                         <!-- LEFT MAIN COLUMN-->
-                        <div id="vizdiv" class="yui-u first">
+                        <div class="yui-u first">
+                            <div id="appletInfo" class="appletInfo">Please wait while loading..</div>
+                            <div id="vizdiv"></div>
                         </div>
                         <!-- RIGHT MAIN COLUMN-->
                         <div id="infodiv" class="yui-u">
                             <h3>Current selection <a href="#" id="toggle-unselect"></a></h3>
-                            <div>
+                            <div id="node_details" class="accord_entry">
                             <!--
                                 <div id="node_unselect" class="fg-buttonset">
                                         <a href="#"
@@ -139,17 +141,20 @@
                                 <div id="node_contents" class="ui-widget-content ui-corner-all">  </div>
                             </div>
                             <h3>All nodes</h3>
-                            <div id="node_list">
-                                <table id="node_table" class="ui-widget-content ui-corner-all">
-                                <thead>
-                                <tr>
-                                    <th>List of all nodes of the current category<span class="ui-icon ui-icon-help icon-right" title="click on a label to switch to its meso view"></span></th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                </tbody>
-                                </table>
-                            </div>
+                            <div>
+                                <div id="node_list" class="accord_entry">
+                                
+                                    <table id="node_table" class="">
+                                    <thead>
+                                    <tr>
+                                        <th>List of all nodes of the current category<span class="ui-icon ui-icon-help icon-right" title="click on a label to switch to its meso view"></span></th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                    </table>
+                                </div>
+                            </div> <!-- accordion 2 -->
                         </div><!-- / INFODIV -->
                     </div><!-- end of yui-gc -->
                     </div><!-- end of yui-b -->

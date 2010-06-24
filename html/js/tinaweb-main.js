@@ -31,6 +31,7 @@ function getScreenHeight() {
 }
 
 
+
 var tinaviz = {};
     
 $(document).ready(function(){
@@ -48,25 +49,25 @@ $(document).ready(function(){
     
         var infodiv =  InfoDiv('infodiv');
         tinaviz.infodiv = infodiv;
-      
-      
+
+        /***************** SET SIZES *****************/
         var infoDivWidth = 390;
-        
+     
         var w = getScreenWidth() - infoDivWidth - 30;
         var h = getScreenHeight() - $("#hd").height() - $("#ft").height() - 60;
         
-        tinaviz.size(w, h);
-        
-        // auto-adjusting infodiv 
-        $("#infodiv").css('height', ""+(tinaviz.height - 40)+"px");
+        $("#infodiv").css('height', ""+(h - 12)+"px");
         $("#infodiv").css('width', ""+(infoDivWidth)+"px");
-        $("#node_list").css('height', ""+(tinaviz.height - 40)+"px");
-        $("#node_list").css('overflow', "auto");
-
+        
+        $(".accord_entry").css('height', ""+(h - 70)+"px");
+        /*********************************************/
+        
+        
         $("#infodiv").accordion({
-            fillSpace: false,
+            fillSpace: true,
             autoHeight: false,
             clearStyle: true, // keep it to true for tinaweb
+            animated: 'easyslide',
         });
 
         infodiv.reset();
@@ -106,16 +107,21 @@ $(document).ready(function(){
 	    //tinaviz.readGraphJava("macro", "FET60bipartite_graph_cooccurrences_.gexf");
 	    tinaviz.readGraphJava("macro", "bipartite_graph_bipartite_map_bionet_2004_2007_g.gexf_.gexf");
 
+        // todo: should be asynchronous
         // init the node list with ngrams
 	    tinaviz.updateNodes( "macro", "NGram" );
 
         // cache the document list
 	    tinaviz.getNodes( "macro", "Document" );
-
-        $("#waitMessage").hide();
+       
         
 	    infodiv.display_current_category();
 	    infodiv.display_current_view();
+	  
+	    
+	    // magic trick to make the visualization appear only at the end
+        $("#appletInfo").hide();
+	    tinaviz.size(w, h);
     });
 
     //No text selection on elements with a class of 'noSelect'
@@ -334,12 +340,24 @@ $(document).ready(function(){
         tinaviz.toggleCategory("current");
     });
 
-   $('#waitMessage').effect('pulsate', {}, 'fast');
+   $('#appletInfo').effect('pulsate', {}, 'fast');
 
     $(window).bind('resize', function() {
-        if (tinaviz.isEnabled()) {
-            $("#infodiv").css( 'height', getScreenHeight() - $("#hd").height() - $("#ft").height() - 60);
-            tinaviz.size(getScreenWidth() - 450, getScreenHeight() - $("#hd").height() - $("#ft").height() - 60);
-        }
+        if (!tinaviz.isEnabled()) return; 
+
+        /***************** SET SIZES *****************/
+        var infoDivWidth = 390;
+     
+        var w = getScreenWidth() - infoDivWidth - 30;
+        var h = getScreenHeight() - $("#hd").height() - $("#ft").height() - 60;
+        
+        $("#infodiv").css('height', ""+(h - 12)+"px");
+        $("#infodiv").css('width', ""+(infoDivWidth)+"px");
+        
+        $(".accord_entry").css('height', ""+(h - 70)+"px");
+        /*********************************************/
+       
+        tinaviz.size(w, h);
+        
     });
 });
