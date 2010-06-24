@@ -1,5 +1,5 @@
 #!/bin/sh
 cp ../tinaviz/js/tinaviz.js html/js/tinaviz/
-cp ../tinaviz/dist/tinaviz.jar html/js/tinaviz/
+cp ../tinaviz/dist/tinaviz-all.jar html/js/tinaviz/
 cd html
 chromium-browser index.html
