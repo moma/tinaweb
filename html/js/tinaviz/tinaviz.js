@@ -468,7 +468,7 @@ function Tinaviz(args) {
                 type: "GET",
                 dataType: "text",
                 beforeSend: function() {/* $('#waitMessage').show(); */},
-                error: function() { /*$('#waitMessage').show(); */},
+                error: function() { this.readGraphJava(view, graphURL); },
                 success: function(gexf) {
                    applet.getSession().updateFromString(view,gexf);
                    //$('#waitMessage').hide();
