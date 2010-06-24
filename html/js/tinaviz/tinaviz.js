@@ -57,15 +57,21 @@ function Tinaviz(args) {
             var path = this.path;
             var context = this.context;
             var engine = this.engine;
+            //var archives = path+'tinaviz.jar,'+path+'core.jar,'+path+'colt.jar,'+path+'concurrent.jar,'+path+'applet-launcher.jar';
+            // archive="'+path+'tinaviz.jar,'+path+'core.jar,'+path+'itext.jar,'+path+'pdf.jar,'+path+'colt.jar,'+path+'concurrent.jar,'+path+'applet-launcher.jar" 
+            var archives = path+'tinaviz-all.jar';
+            
+            
+            
             return '<!--[if !IE]> --> \
                             <object id="tinaviz" \
                                         classid="java:org.jdesktop.applet.util.JNLPAppletLauncher" \
                                         type="application/x-java-applet" \
-                                        archive="'+path+'tinaviz.jar,'+path+'core.jar,'+path+'itext.jar,'+path+'pdf.jar,'+path+'colt.jar,'+path+'concurrent.jar,'+path+'applet-launcher.jar" \
-                                        width="10" height="10" \
-                                        standby="Loading Processing software..." > \
+                                        archive="'+archives+'" \
+                                        width="1" height="1" \
+                                        standby="Loading Tinaviz..." > \
  \
-                              <param name="archive" value="'+path+'tinaviz.jar,'+path+'core.jar,'+path+'itext.jar,'+path+'pdf.jar,'+path+'colt.jar,'+path+'concurrent.jar,'+path+'applet-launcher.jar" /> \
+                              <param name="archive" value="'+archives+'" /> \
                               <param name="mayscript" value="true" /> \
                               <param name="scriptable" value="true" /> \
  \
@@ -90,7 +96,7 @@ function Tinaviz(args) {
  \
                                 <param name="code" \
                                    value="org.jdesktop.applet.util.JNLPAppletLauncher" /> \
-                                <param name="archive" value="'+path+'tinaviz.jar,'+path+'core.jar,'+path+'itext.jar,'+path+'pdf.jar,'+path+'colt.jar,'+path+'concurrent.jar,'+path+'applet-launcher.jar" />\
+                                <param name="archive" value="'+archives+'" />\
                                 <param name="mayscript" value="true" /> \
                                 <param name="scriptable" value="true" /> \
  \
@@ -136,7 +142,7 @@ function Tinaviz(args) {
         this.bindFilter= function(name, path, view) {
             if (applet == null) return;
             if (view == null) return applet.getSession().addFilter(name, path);
-            return applet.getView(view).addFilter(name, path);
+            return applet.getViewName(view).addFilter(name, path);
         }
 
         /*
@@ -174,7 +180,7 @@ function Tinaviz(args) {
         /*
          * Gets the the view level name
          */
-        this.getView = function(view) {
+        this.getViewName = function(view) {
             if (applet == null) return;
             return applet.getView().getName();
         }
@@ -487,7 +493,7 @@ function Tinaviz(args) {
          */
         this.toggleLabels = function() {
             if (applet == null) return;
-            return applet.getView().toggleLabels();
+            return applet.getViewName().toggleLabels();
         }
 
         /*
@@ -495,7 +501,7 @@ function Tinaviz(args) {
          */
         this.toggleNodes = function() {
             if (applet == null) return;
-            return applet.getView().toggleNodes();
+            return applet.getViewName().toggleNodes();
         }
 
         /*
@@ -503,7 +509,7 @@ function Tinaviz(args) {
          */
         this.toggleEdges = function() {
             if (applet == null) return;
-            return applet.getView().toggleLinks();
+            return applet.getViewName().toggleLinks();
         }
 
         /*
@@ -511,7 +517,7 @@ function Tinaviz(args) {
          */
         this.togglePause = function() {
             if (applet == null) return;
-            return applet.getView().togglePause();
+            return applet.getViewName().togglePause();
         }
 
         /*
@@ -519,7 +525,7 @@ function Tinaviz(args) {
          */
         this.toggleHD = function() {
             if (applet == null) return;
-            return applet.getView().toggleHD();
+            return applet.getViewName().toggleHD();
         }
         /*
         * Get the opposite category name (the NOT DISPLAYED one)
@@ -538,7 +544,7 @@ function Tinaviz(args) {
          */
         this.toggleCategory = function(view) {
             if (applet == null) return;
-            if (this.getView()=="macro") {
+            if (this.getViewName()=="macro") {
                 if (this.infodiv.neighbours !== undefined) {
                     // adds neighbours (from opposite categ) to the selection
                     if (this.infodiv.neighbours.length > 1) {
@@ -584,7 +590,7 @@ function Tinaviz(args) {
 
         this.toggleView= function() {
             var current_cat = this.get("current","category/category");
-            if (this.getView() == "macro") {
+            if (this.getViewName() == "macro") {
                 // check if selection is empty
                 if (Object.size(this.infodiv.selection) != 0) {
                     this.set("meso", "category/category", current_cat);
@@ -593,7 +599,7 @@ function Tinaviz(args) {
                 } else {
                     alert("please first select some nodes before switching to meso level");
                 }
-            } else if (this.getView() == "meso") {
+            } else if (this.getViewName() == "meso") {
                 this.set("macro", "category/category", current_cat);
                 this.setView("macro");
                 this.updateNodes("macro", current_cat);
@@ -613,7 +619,7 @@ function Tinaviz(args) {
         */
         this.unselect= function() {
             if (applet == null) return;
-            if (this.getView() == "meso") {
+            if (this.getViewName() == "meso") {
                 applet.unselectCurrent();
             } else {
                 applet.unselect();
@@ -621,7 +627,7 @@ function Tinaviz(args) {
 
 
             this.infodiv.reset();
-            //if (this.getView() == "meso") {
+            //if (this.getViewName() == "meso") {
                // this.setView("macro");
                 //tinaviz.resetLayoutCounter();
                 

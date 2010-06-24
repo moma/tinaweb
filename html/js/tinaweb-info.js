@@ -73,7 +73,7 @@ function InfoDiv(divid) {
     * dispatch current category displayed
     */
     display_current_category: function() {
-        var current_view = tinaviz.getView();
+        var current_view = tinaviz.getViewName();
         var current_cat = tinaviz.get("current","category/category");
         if (current_cat !== undefined)
             var opposite = this.categories[tinaviz.getOppositeCategory(current_cat)];
@@ -90,7 +90,7 @@ function InfoDiv(divid) {
     * dispatch current view displayed
     */
     display_current_view: function() {
-        var current_view = tinaviz.getView();
+        var current_view = tinaviz.getViewName();
         tinaviz.logNormal( current_view );
         if (current_view !== undefined) {
             var level = $("#level");

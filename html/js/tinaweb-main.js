@@ -104,8 +104,8 @@ $(document).ready(function(){
 	    meso.filter("NodeFunction", "radiusByWeight");
 	    meso.filter("Output", "output");
 
-	    //tinaviz.readGraphJava("macro", "FET60bipartite_graph_cooccurrences_.gexf");
-	    tinaviz.readGraphJava("macro", "bipartite_graph_bipartite_map_bionet_2004_2007_g.gexf_.gexf");
+	    tinaviz.readGraphJava("macro", "FET60bipartite_graph_cooccurrences_.gexf");
+	    //tinaviz.readGraphJava("macro", "bipartite_graph_bipartite_map_bionet_2004_2007_g.gexf_.gexf");
 
         // todo: should be asynchronous
         // init the node list with ngrams
@@ -241,11 +241,12 @@ $(document).ready(function(){
         values: [0, 100],
         animate: true,
         slide: function(event, ui) {
-            tinaviz.set("current", "edgeWeight/min", ui.values[0] / 100.0);
-            tinaviz.set("current", "edgeWeight/max", ui.values[1] / 100.0);
-            tinaviz.resetLayoutCounter();
-            tinaviz.touch();
-            if (tinaviz.getView()=="meso") tinaviz.autoCentering();
+            var view = tinaviz.view();
+            view.set("edgeWeight/min", ui.values[0] / 100.0);
+            view.set("edgeWeight/max", ui.values[1] / 100.0);
+            view.resetLayoutCounter();
+            view.commitProperties();
+            if (tinaviz.getViewName()=="meso") tinaviz.autoCentering();
         }
     });
 
@@ -254,11 +255,12 @@ $(document).ready(function(){
         values: [0, 100],
         animate: true,
         slide: function(event, ui) {
-            tinaviz.set("current", "nodeWeight/min", ui.values[0] / 100.0);
-            tinaviz.set("current", "nodeWeight/max", ui.values[1] / 100.0);
-            tinaviz.resetLayoutCounter();
-            tinaviz.touch();
-            if (tinaviz.getView()=="meso") tinaviz.autoCentering();
+            var view = tinaviz.view();
+            view.set("nodeWeight/min", ui.values[0] / 100.0);
+            view.set("nodeWeight/max", ui.values[1] / 100.0);
+            view.resetLayoutCounter();
+            view.commitProperties();
+            if (tinaviz.getViewName()=="meso") tinaviz.autoCentering();
         }
     });
 
@@ -267,9 +269,9 @@ $(document).ready(function(){
         max: 100.0,// precision/size
         animate: true,
         slide: function(event, ui) {
-            tinaviz.set("current", "output/nodeSizeRatio", ui.value / 100.0);
-            //tinaviz.resetLayoutCounter();
-            tinaviz.touch();
+            var view = tinaviz.view();
+            view.set("output/nodeSizeRatio", ui.value / 100.0);
+            view.commitProperties();
         }}
     );
 
@@ -278,8 +280,9 @@ $(document).ready(function(){
         max: 300.0, // max disk radius, in pixel
         animate: true,
         slide: function(event, ui) {
-            tinaviz.set("current", "selection/radius", ui.value);
-            tinaviz.touch();
+            var view = tinaviz.view();
+            view.set("selection/radius", ui.value);
+            view.commitProperties();
         }
     });
 
