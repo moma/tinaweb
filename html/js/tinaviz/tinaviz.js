@@ -612,8 +612,11 @@ function Tinaviz(args) {
         
         
         this.view=function(v) {
-            return applet.view(v);
+            var view = applet.view(v);
+            if (view==null) alert("warning, view is null!");
+            return view;
         }
+        
         /*
         * Manually unselects all nodes
         */
