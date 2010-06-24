@@ -104,7 +104,7 @@ $(document).ready(function(){
 	    meso.filter("NodeFunction", "radiusByWeight");
 	    meso.filter("Output", "output");
 
-	    tinaviz.readGraphJava("macro", "FET60bipartite_graph_cooccurrences_.gexf");
+	    tinaviz.readGraphAJAX("macro", "FET60bipartite_graph_cooccurrences_.gexf");
 	    //tinaviz.readGraphJava("macro", "bipartite_graph_bipartite_map_bionet_2004_2007_g.gexf_.gexf");
 
         // todo: should be asynchronous

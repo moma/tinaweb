@@ -458,7 +458,7 @@ function Tinaviz(args) {
             var sPath = document.location.href;
             var gexfURL = sPath.substring(0, sPath.lastIndexOf('/') + 1) + graphURL;
             applet.getSession().updateFromURI(view,gexfURL);
-            $('#waitMessage').hide();
+            //$('#waitMessage').hide();
         }
 
         this.readGraphAJAX= function(view,graphURL) {
@@ -467,11 +467,11 @@ function Tinaviz(args) {
                 url: graphURL,
                 type: "GET",
                 dataType: "text",
-                beforeSend: function() { $('#waitMessage').show(); },
-                error: function() { $('#waitMessage').show(); },
+                beforeSend: function() {/* $('#waitMessage').show(); */},
+                error: function() { /*$('#waitMessage').show(); */},
                 success: function(gexf) {
                    applet.getSession().updateFromString(view,gexf);
-                   $('#waitMessage').hide();
+                   //$('#waitMessage').hide();
                }
             });
         }
