@@ -68,9 +68,11 @@ body {
     font-size: 12pt;
 }
 
+/*
 .tinaviz_node {
+    overflow: auto;
     border: none;
-}
+}*/
 
 #node_table {
     border: none;

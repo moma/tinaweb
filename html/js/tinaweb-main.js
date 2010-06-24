@@ -48,20 +48,28 @@ $(document).ready(function(){
     
         var infodiv =  InfoDiv('infodiv');
         tinaviz.infodiv = infodiv;
+      
+      
+        var infoDivWidth = 390;
         
+        var w = getScreenWidth() - infoDivWidth - 30;
+        var h = getScreenHeight() - $("#hd").height() - $("#ft").height() - 60;
         
-        // auto-adjusting infodiv height
-        $(infodiv.id).css('height', tinaviz.height - 40);
+        tinaviz.size(w, h);
+        
+        // auto-adjusting infodiv 
+        $("#infodiv").css('height', ""+(tinaviz.height - 40)+"px");
+        $("#infodiv").css('width', ""+(infoDivWidth)+"px");
+        $("#node_list").css('height', ""+(tinaviz.height - 40)+"px");
+        $("#node_list").css('overflow', "auto");
 
-        $(infodiv.id).accordion({
-            fillSpace: true,
+        $("#infodiv").accordion({
+            fillSpace: false,
+            autoHeight: false,
+            clearStyle: true, // keep it to true for tinaweb
         });
 
         infodiv.reset();
-
-        var w = getScreenWidth() - 390;
-        var h = getScreenHeight() - $("#hd").height() - $("#ft").height() - 60;
-        tinaviz.size(w, h);
 
         tinaviz.setView("macro");
 
