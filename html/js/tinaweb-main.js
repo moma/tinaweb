@@ -104,7 +104,7 @@ $(document).ready(function(){
 	    meso.filter("NodeFunction", "radiusByWeight");
 	    meso.filter("Output", "output");
 
-	    tinaviz.readGraphJava("macro", "French_bipartite_graph.gexf");
+	    tinaviz.readGraphAJAX("macro", "French_bipartite_graph.gexf");
 
         // todo: should be asynchronous
         // init the node list with ngrams
