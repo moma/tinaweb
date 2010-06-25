@@ -1,4 +1,18 @@
- 
+//      This program is free software; you can redistribute it and/or modify
+//      it under the terms of the GNU General Public License as published by
+//      the Free Software Foundation; either version 2 of the License, or
+//      (at your option) any later version.
+//
+//      This program is distributed in the hope that it will be useful,
+//      but WITHOUT ANY WARRANTY; without even the implied warranty of
+//      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//      GNU General Public License for more details.
+//
+//      You should have received a copy of the GNU General Public License
+//      along with this program; if not, write to the Free Software
+//      Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+//      MA 02110-1301, USA.
+
 
 
 function Tinaviz(args) {
@@ -8,7 +22,7 @@ function Tinaviz(args) {
         height: 0
     };
     for (x in args) { opts[x] = args[x] };
-    
+
     // PRIVATE MEMBERS
     var wrapper = null;
     var applet = null;
@@ -16,7 +30,7 @@ function Tinaviz(args) {
     var cbsRun = {};
 
     var callbackReady = function () {};
-  
+
     // PUBLIC MEMBERS
     this.isReady = 0;
     this.infodiv = null;
@@ -27,7 +41,7 @@ function Tinaviz(args) {
     this.path = opts.path;
     this.engine = opts.engine;
     this.context = opts.context;
-    
+
     this.init= function() {
         wrapper = $("#tinaviz")[0]; // we need to get the html tag immediately
         if (wrapper == null) {
@@ -50,19 +64,19 @@ function Tinaviz(args) {
      }
 
      this.ready=function(cb) {
-		callbackReady = cb;
-	 }
+        callbackReady = cb;
+     }
 
      this.getHTML = function() {
             var path = this.path;
             var context = this.context;
             var engine = this.engine;
             //var archives = path+'tinaviz.jar,'+path+'core.jar,'+path+'colt.jar,'+path+'concurrent.jar,'+path+'applet-launcher.jar';
-            // archive="'+path+'tinaviz.jar,'+path+'core.jar,'+path+'itext.jar,'+path+'pdf.jar,'+path+'colt.jar,'+path+'concurrent.jar,'+path+'applet-launcher.jar" 
+            // archive="'+path+'tinaviz.jar,'+path+'core.jar,'+path+'itext.jar,'+path+'pdf.jar,'+path+'colt.jar,'+path+'concurrent.jar,'+path+'applet-launcher.jar"
             var archives = path+'tinaviz-all.jar';
-            
-            
-            
+
+
+
             return '<!--[if !IE]> --> \
                             <object id="tinaviz" \
                                         classid="java:tinaviz.Main" \
@@ -128,9 +142,9 @@ function Tinaviz(args) {
                               <!--[if !IE]> -->\
                             </object>\
                             <!--<![endif]-->';
-        
+
         }
-        
+
         /************************
          * Core applet methods
          *
@@ -198,7 +212,7 @@ function Tinaviz(args) {
             }
         }
 
-        
+
         /*
          *  Adds a node to the current selection
          *  callback is boolean activating this.selected() callback
@@ -406,7 +420,7 @@ function Tinaviz(args) {
             data = $.parseJSON(attr);
             this.infodiv.reset();
             var neighbours = this.infodiv.update(view, data);
-   
+
             // left == selecteghbourd a node
             if ( mouse == "left" ) {
                 //this.nodeLeftClicked(view,data);
@@ -482,7 +496,7 @@ function Tinaviz(args) {
         }
 
 
-        
+
         /***********************************
          *
          * Manual actions controler system
@@ -550,21 +564,21 @@ function Tinaviz(args) {
                     if (this.infodiv.neighbours.length > 1) {
                         for(var i=0; i<this.infodiv.neighbours.length; i++) {
                             //this.logNormal(neighbours[i].id);
-			    if (i==this.infodiv.neighbours.length) {
-                            	this.selectFromId(this.infodiv.neighbours[i].id, true);
-			    } else {
-				 this.selectFromId(this.infodiv.neighbours[i].id, false);
-		            }
+                if (i==this.infodiv.neighbours.length) {
+                                this.selectFromId(this.infodiv.neighbours[i].id, true);
+                } else {
+                 this.selectFromId(this.infodiv.neighbours[i].id, false);
+                    }
                         }
-                       
-                    } 
+
+                    }
                     else if (this.infodiv.neighbours.length == 1) {
                         this.selectFromId(this.infodiv.neighbours[0].id, true);
-                    } 
+                    }
                 }
             }
             // get and set the new category to display
-            
+
             var next_cat = this.getOppositeCategory( this.get(view, "category/category") );
             this.set(view, "category/category", next_cat);
             // touch and centers the view
@@ -606,18 +620,18 @@ function Tinaviz(args) {
                 this.updateNodes("macro", current_cat);
             }
         }
-        
+
         this.session=function() {
             return applet.session();
         }
-        
-        
+
+
         this.view=function(v) {
             var view = applet.view(v);
             if (view==null) alert("warning, view is null!");
             return view;
         }
-        
+
         /*
         * Manually unselects all nodes
         */
@@ -634,7 +648,7 @@ function Tinaviz(args) {
             //if (this.getViewName() == "meso") {
                // this.setView("macro");
                 //tinaviz.resetLayoutCounter();
-                
+
                 //this.autoCentering();
             //}
             //this.touch("current"); // don't touch, so we do not redraw the graph
@@ -735,9 +749,9 @@ function Tinaviz(args) {
             $('#tinaviz').css('height',height);
         }
     //};
-    
-        
- 
+
+
+
     this.tag.html( this.getHTML() );
 }
 
