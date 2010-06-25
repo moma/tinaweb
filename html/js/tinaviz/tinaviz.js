@@ -415,7 +415,6 @@ function Tinaviz(args) {
          */
         this.selected = function(view, attr, mouse) {
             if (attr == null) return;
-            //this.logNormal("selected");
             // always updates infodiv
             data = $.parseJSON(attr);
             this.infodiv.reset();
@@ -563,7 +562,6 @@ function Tinaviz(args) {
                     // adds neighbours (from opposite categ) to the selection
                     if (this.infodiv.neighbours.length > 1) {
                         for(var i=0; i<this.infodiv.neighbours.length; i++) {
-                            //this.logNormal(neighbours[i].id);
                 if (i==this.infodiv.neighbours.length) {
                                 this.selectFromId(this.infodiv.neighbours[i].id, true);
                 } else {
@@ -660,6 +658,10 @@ function Tinaviz(args) {
          */
         this.getNodes = function(view, category) {
             if (applet == null) return;
+            // DEBUGGING
+
+            this.logNormal( "node list received from applet " + applet.getNodes(view, category) );
+
             this.infodiv.data[category] = $.parseJSON( applet.getNodes(view, category) );
             return this.infodiv.data[category];
         }
@@ -669,8 +671,9 @@ function Tinaviz(args) {
         this.updateNodes = function(view, category)  {
             if ( category == this.infodiv.last_category ) return;
             this.infodiv.display_current_category();
-            if (this.infodiv.data[category] === undefined)
+            if (this.infodiv.data[category] === undefined) {
                 this.infodiv.updateNodeList( this.getNodes( view, category ), category );
+            }
             else
                 this.infodiv.updateNodeList( this.infodiv.data[category], category );
         }
