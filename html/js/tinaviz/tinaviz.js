@@ -4,6 +4,8 @@
 function Tinaviz(args) {
 
     var opts = {
+        context: '',
+        engine: 'software',
         width: 0,
         height: 0
     };
@@ -60,21 +62,60 @@ function Tinaviz(args) {
             success: function(){},
             error: function(msg){},
             view: "macro",
-            url: "",
+            url: ""
         };
         for (x in args) { opts[x] = args[x] };
- 
         
-        // TODO: refactor this
-        callbackImported = function(msg){
-            if (msg=="success") {
-                opts.success();
-            } else {
-                opts.error("import failed");
-            }
-        }
+        var view = this.view(opts.view);
+
         
-        this.readGraphAJAX(opts.view, opts.url);
+        $.ajax({
+                url: opts.url,
+                type: "GET",
+                dataType: "text",
+                beforeSend: function() {
+                   callbackImported = function(msg){
+                        if (msg=="success") {
+                            opts.success();
+                        } else {
+                            opts.error(msg);
+                        }
+                    }
+                },
+                error: function() { 
+                    try {
+                        if (opts.url.search("://") != -1) {
+                            view.updateFromURI(opts.url);
+                        } else {
+                            var sPath = document.location.href;view.updateFromURI(sPath.substring(0, sPath.lastIndexOf('/') + 1) + opts.url);
+                        }
+                    } catch (e) {
+                        opts.error(e);
+                    }
+                 },
+                success: function(gexf) {
+                    var f = false;
+                    try {
+                        view.updateFromString(opts.view,gexf);
+                    } catch (e) {
+                        f = true;
+                    }
+                    if (f) {
+                        try {
+                            if (opts.url.search("://") != -1) {
+                                view.updateFromURI(opts.url);
+                            } else {
+                                var sPath = document.location.href;
+                                view.updateFromURI(sPath.substring(0, sPath.lastIndexOf('/') + 1) + opts.url);
+                            }
+                        } catch (e) {
+                            opts.error(e);
+                        }
+                    }
+
+               }
+         });
+            
         
      }
 
@@ -485,7 +526,7 @@ function Tinaviz(args) {
                 applet.getSession().updateFromURI(view,url);
             } else {
                 var sPath = document.location.href;
-                var graphURL = sPath.substring(0, sPath.lastIndexOf('/') + 1) + url;
+                var url = sPath.substring(0, sPath.lastIndexOf('/') + 1) + url;
                 applet.getSession().updateFromURI(view,url);
             }
             //$('#waitMessage').hide();
@@ -498,20 +539,13 @@ function Tinaviz(args) {
                 url: graphURL,
                 type: "GET",
                 dataType: "text",
-                beforeSend: function() {/* $('#waitMessage').show(); */},
+                beforeSend: function() {},
                 error: function() { this.readGraphJava(view, graphURL); },
                 success: function(gexf) {
-                   applet.getSession().updateFromString(view,gexf);
-                   //$('#waitMessage').hide();
+                    applet.getSession().updateFromString(view,gexf);
                }
             });
         }
-
-        this.openGraph = function(view,relativePath) {
-            if (applet == null) return;
-            applet.getSession().updateFromURI(view,path);
-        }
-
 
         
         /***********************************
@@ -643,9 +677,7 @@ function Tinaviz(args) {
         
         
         this.view=function(v) {
-            var view = applet.view(v);
-            if (view==null) alert("warning, view is null!");
-            return view;
+            return applet.view(v);
         }
         
         /*
@@ -750,8 +782,8 @@ function Tinaviz(args) {
         /*
          * Callback changing utton states
          */
-        this.graphImportedCallback = function(state) {
-            callbackImported(state);
+        this.graphImportedCallback = function(msg) {
+            callbackImported(msg);
         }
         
         /*
