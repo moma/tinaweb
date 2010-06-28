@@ -52,11 +52,7 @@ $(document).ready(function(){
 
     tinaviz = new Tinaviz({
         tag: $("#vizdiv"),
-        path: "js/tinaviz/",
-        context: "",
-        engine: "software",
-        width: 0,
-        height: 0
+        path: "js/tinaviz/"
     });
 
     tinaviz.ready(function(){
@@ -85,8 +81,10 @@ $(document).ready(function(){
         });
 
         infodiv.reset();
-
-        tinaviz.setView("macro");
+        
+        var defaultView = "macro";
+        
+        tinaviz.setView(defaultView);
 
         var session = tinaviz.session();
         var macro = tinaviz.view("macro");
@@ -118,24 +116,30 @@ $(document).ready(function(){
         meso.filter("NodeFunction", "radiusByWeight");
         meso.filter("Output", "output");
 
-        tinaviz.readGraphAJAX("macro", "FET60bipartite_graph_cooccurrences_.gexf");
         //tinaviz.readGraphJava("macro", "bipartite_graph_bipartite_map_bionet_2004_2007_g.gexf_.gexf");
+        $("#appletInfo").html("Loading graph..");
+        
+        tinaviz.open({
+            view: defaultView,
+            url: "FET60bipartite_graph_cooccurrences_.gexf", // "bipartite_graph_bipartite_map_bionet_2004_2007_g.gexf_.gexf"
+            success: function() {
+                // init the node list with ngrams
+                tinaviz.updateNodes( defaultView, "NGram" );
 
-        // todo: should be asynchronous
-        // init the node list with ngrams
-        tinaviz.updateNodes( "macro", "NGram" );
+                // cache the document list
+                tinaviz.getNodes(defaultView, "Document" );
 
-        // cache the document list
-        tinaviz.getNodes( "macro", "Document" );
+                infodiv.display_current_category();
+                infodiv.display_current_view();
+        
+                $("#appletInfo").hide();
+                tinaviz.size(w, h);
+            },
+            error: function(msg) {
+                $("#appletInfo").html("Error, couldn't load graph: "+msg);
+            }
+        });
 
-
-        infodiv.display_current_category();
-        infodiv.display_current_view();
-
-
-        // magic trick to make the visualization appear only at the end
-        $("#appletInfo").hide();
-        tinaviz.size(w, h);
     });
 
     //No text selection on elements with a class of 'noSelect'
@@ -375,6 +379,5 @@ $(document).ready(function(){
         /*********************************************/
 
         tinaviz.size(w, h);
-
     });
 });
