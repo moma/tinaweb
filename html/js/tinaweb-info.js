@@ -1,3 +1,19 @@
+//      This program is free software; you can redistribute it and/or modify
+//      it under the terms of the GNU General Public License as published by
+//      the Free Software Foundation; either version 2 of the License, or
+//      (at your option) any later version.
+//
+//      This program is distributed in the hope that it will be useful,
+//      but WITHOUT ANY WARRANTY; without even the implied warranty of
+//      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//      GNU General Public License for more details.
+//
+//      You should have received a copy of the GNU General Public License
+//      along with this program; if not, write to the Free Software
+//      Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+//      MA 02110-1301, USA.
+
+
 /**
  * Generic GUI Components used by both TinaSoft Desktop and TinaWeb
 
@@ -37,7 +53,6 @@ function decodeJSON(encvalue) {
  * Asynchronously displays of node list
  */
 function displayNodeRow(label, id, category) {
-    //console.console.log("inserting "+label);
     $("#node_table > tbody").append(
         $("<tr></tr>").append(
             $("<td id='"+id+"'></td>").text(label).click( function(eventObject) {
@@ -91,7 +106,6 @@ function InfoDiv(divid) {
     */
     display_current_view: function() {
         var current_view = tinaviz.getViewName();
-        tinaviz.logNormal( current_view );
         if (current_view !== undefined) {
             var level = $("#level");
         level.empty().html(current_view + " level <span class='ui-icon ui-icon-help icon-right' title='></span>");
@@ -154,7 +168,7 @@ function InfoDiv(divid) {
                     tempcloud[nbid]['degree']++;
                 // pushes a node if belongs to the opposite category
                 else if (this.selection[nodeid]['category'] != nb[nbid]['category']) {
-                    //tinaviz.logNormal("adding to tag cloud : "+decodeJSON(nb[nbid]['label']));
+
                     tempcloud[nbid] = {
                         'id': nbid,
                         'label' : decodeJSON(nb[nbid]['label']),
@@ -166,7 +180,7 @@ function InfoDiv(divid) {
             }
         }
         var sorted_tags = this.alphabeticListSort( Object.values( tempcloud ), 'label' );
-        //tinaviz.logNormal(sorted_tags);
+
         /* some display sizes const */
         var sizecoef = 15;
         var const_doc_tag = 12;
@@ -184,7 +198,6 @@ function InfoDiv(divid) {
                 var attached_id = tagid;
                 var attached_cat =  tag['category'];
                 tagspan.click( function() {
-                    //tinaviz.logNormal("clicked on " + tagid + " - " +tag['label']);
                     //switch to meso view
                     tinaviz.viewMeso(attached_id, attached_cat);
                 });
@@ -221,7 +234,7 @@ function InfoDiv(divid) {
      */
     updateInfo: function(lastselection) {
         var current_cat = tinaviz.get("current", "category/category");
-        tinaviz.logNormal("current category = "+current_cat);
+        //tinaviz.logNormal("updateInfo for current category = "+current_cat);
         var labelinnerdiv = $("<div></div>");
         var contentinnerdiv = $("<div></div>");
         for(var id in lastselection) {

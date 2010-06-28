@@ -1,3 +1,17 @@
+//      This program is free software; you can redistribute it and/or modify
+//      it under the terms of the GNU General Public License as published by
+//      the Free Software Foundation; either version 2 of the License, or
+//      (at your option) any later version.
+//
+//      This program is distributed in the hope that it will be useful,
+//      but WITHOUT ANY WARRANTY; without even the implied warranty of
+//      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//      GNU General Public License for more details.
+//
+//      You should have received a copy of the GNU General Public License
+//      along with this program; if not, write to the Free Software
+//      Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+//      MA 02110-1301, USA.
 
 var deployJava={debug:null,firefoxJavaVersion:null,myInterval:null,preInstallJREList:null,returnPage:null,brand:null,locale:null,installType:null,EAInstallEnabled:false,EarlyAccessURL:null,getJavaURL:'http://java.sun.com/webapps/getjava/BrowserRedirect?host=java.com',appleRedirectPage:'http://www.apple.com/support/downloads/',oldMimeType:'application/npruntime-scriptable-plugin;DeploymentToolkit',mimeType:'application/java-deployment-toolkit',launchButtonPNG:'http://java.sun.com/products/jfc/tsc/articles/swing2d/webstart.png',browserName:null,browserName2:null,getJREs:function(){var list=new Array();if(deployJava.isPluginInstalled()){var plugin=deployJava.getPlugin();var VMs=plugin.jvms;for(var i=0;i<VMs.getLength();i++){list[i]=VMs.get(i).version;}}else{var browser=deployJava.getBrowser();if(browser=='MSIE'){if(deployJava.testUsingActiveX('1.7.0')){list[0]='1.7.0';}else if(deployJava.testUsingActiveX('1.6.0')){list[0]='1.6.0';}else if(deployJava.testUsingActiveX('1.5.0')){list[0]='1.5.0';}else if(deployJava.testUsingActiveX('1.4.2')){list[0]='1.4.2';}else if(deployJava.testForMSVM()){list[0]='1.1';}}else if(browser=='Netscape Family'){deployJava.getJPIVersionUsingMimeType();if(deployJava.firefoxJavaVersion!=null){list[0]=deployJava.firefoxJavaVersion;}else if(deployJava.testUsingMimeTypes('1.7')){list[0]='1.7.0';}else if(deployJava.testUsingMimeTypes('1.6')){list[0]='1.6.0';}else if(deployJava.testUsingMimeTypes('1.5')){list[0]='1.5.0';}else if(deployJava.testUsingMimeTypes('1.4.2')){list[0]='1.4.2';}else if(deployJava.browserName2=='Safari'){if(deployJava.testUsingPluginsArray('1.7.0')){list[0]='1.7.0';}else if(deployJava.testUsingPluginsArray('1.6')){list[0]='1.6.0';}else if(deployJava.testUsingPluginsArray('1.5')){list[0]='1.5.0';}else if(deployJava.testUsingPluginsArray('1.4.2')){list[0]='1.4.2';}}}}
 if(deployJava.debug){for(var i=0;i<list.length;++i){alert('We claim to have detected Java SE '+list[i]);}}

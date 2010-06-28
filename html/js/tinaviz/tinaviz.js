@@ -16,6 +16,7 @@ function Tinaviz(args) {
     var cbsRun = {};
 
     var callbackReady = function () {};
+    var callbackImported = function(success) {};
   
     // PUBLIC MEMBERS
     this.isReady = 0;
@@ -52,6 +53,31 @@ function Tinaviz(args) {
      this.ready=function(cb) {
 		callbackReady = cb;
 	 }
+	 
+     this.open=function(args) {
+    
+        var opts = {
+            success: function(){},
+            error: function(msg){},
+            view: "macro",
+            url: "",
+        };
+        for (x in args) { opts[x] = args[x] };
+ 
+        
+        // TODO: refactor this
+        callbackImported = function(msg){
+            if (msg=="success") {
+                opts.success();
+            } else {
+                opts.error("import failed");
+            }
+        }
+        
+        this.readGraphAJAX(opts.view, opts.url);
+        
+     }
+
 
      this.getHTML = function() {
             var path = this.path;
@@ -136,14 +162,6 @@ function Tinaviz(args) {
          *
          ************************/
 
-        /*
-         * Core method communicating with the applet
-         */
-        this.bindFilter= function(name, path, view) {
-            if (applet == null) return;
-            if (view == null) return applet.getSession().addFilter(name, path);
-            return applet.getViewName(view).addFilter(name, path);
-        }
 
         /*
          * Core method communicating with the applet
@@ -185,6 +203,14 @@ function Tinaviz(args) {
             return applet.getView().getName();
         }
 
+        /*
+         * Gets the the view level name
+         */
+        this.getViewName = function(view) {
+            if (applet == null) return;
+            return applet.getView().getName();
+        }
+        
         /*
          * Commits the applet's parameters
          * Accept an optional callback to give some reaction to events
@@ -452,14 +478,19 @@ function Tinaviz(args) {
          ************************/
 
         // TODO: use a cross-browser compatible way of getting the current URL
-        this.readGraphJava= function(view,graphURL) {
+        this.readGraphJava= function(view,url) {
             // window.location.href
             // window.location.pathname
-            var sPath = document.location.href;
-            var gexfURL = sPath.substring(0, sPath.lastIndexOf('/') + 1) + graphURL;
-            applet.getSession().updateFromURI(view,gexfURL);
+            if (graph.search("://") != -1) {
+                applet.getSession().updateFromURI(view,url);
+            } else {
+                var sPath = document.location.href;
+                var graphURL = sPath.substring(0, sPath.lastIndexOf('/') + 1) + url;
+                applet.getSession().updateFromURI(view,url);
+            }
             //$('#waitMessage').hide();
         }
+
 
         this.readGraphAJAX= function(view,graphURL) {
             if (applet == null) return;
@@ -492,8 +523,7 @@ function Tinaviz(args) {
          * hide/show labels
          */
         this.toggleLabels = function() {
-            if (applet == null) return;
-            return applet.getViewName().toggleLabels();
+            return this.view().toggleLabels();
         }
 
         /*
@@ -501,7 +531,7 @@ function Tinaviz(args) {
          */
         this.toggleNodes = function() {
             if (applet == null) return;
-            return applet.getViewName().toggleNodes();
+            return this.view().toggleNodes();
         }
 
         /*
@@ -509,7 +539,7 @@ function Tinaviz(args) {
          */
         this.toggleEdges = function() {
             if (applet == null) return;
-            return applet.getViewName().toggleLinks();
+            return this.view().toggleLinks();
         }
 
         /*
@@ -517,7 +547,7 @@ function Tinaviz(args) {
          */
         this.togglePause = function() {
             if (applet == null) return;
-            return applet.getViewName().togglePause();
+            return this.view().togglePause();
         }
 
         /*
@@ -525,7 +555,7 @@ function Tinaviz(args) {
          */
         this.toggleHD = function() {
             if (applet == null) return;
-            return applet.getViewName().toggleHD();
+            return this.view().toggleHD();
         }
         /*
         * Get the opposite category name (the NOT DISPLAYED one)
@@ -716,7 +746,14 @@ function Tinaviz(args) {
                 }
             );
         }
-
+        
+        /*
+         * Callback changing utton states
+         */
+        this.graphImportedCallback = function(state) {
+            callbackImported(state);
+        }
+        
         /*
          * PUBLIC METHOD, AUTOMATIC RESIZE THE APPLET
          */
