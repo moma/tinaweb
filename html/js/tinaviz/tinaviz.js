@@ -151,22 +151,16 @@ function Tinaviz(args) {
                               <param name="boxbgcolor" value="#FFFFFF" /> \
                               <param name="progressbar" value="true" /> \
                               <!--<param name="noddraw.check" value="true">--> \
- \
-                              <param name="subapplet.classname" value="tinaviz.Main" /> \
-                              <param name="subapplet.displayname" valuefg-buttonset-multi ="tinaviz.Main" /> \
- \
                                 <param name="engine" value="'+engine+'" /> \
                                 <param name="js_context" value="'+context+'" /> \
  \
                               <!--<![endif]--> \
  \
-                              <object id="tinaviz" \
-                                          classid="clsid:CAFEEFAC-0016-0000-FFFF-ABCDEFFEDCBA" \
-                                  width="10" height="10" \
+                              <object id="tinaviz" classid="clsid:CAFEEFAC-0016-0000-FFFF-ABCDEFFEDCBA" \
+                                  width="1" height="1" \
                                   standby="Loading Processing software..."  > \
  \
-                                <param name="code" \
-                                   value="tinaviz.Main" /> \
+                                <param name="code" value="tinaviz.Main" /> \
                                 <param name="archive" value="'+archives+'" />\
                                 <param name="mayscript" value="true" /> \
                                 <param name="scriptable" value="true" /> \
@@ -176,10 +170,6 @@ function Tinaviz(args) {
                                 <param name="boxbgcolor" value="#FFFFFF" /> \
                                 <param name="progressbar" value="true" /> \
                                 <!--<param name="noddraw.check" value="true">--> \
- \
-                                <param name="subapplet.classname" value="tinaviz.Main" /> \
-                                <param name="subapplet.displayname" value="tinaviz.Main" /> \
- \
                                 <param name="engine" value="'+engine+'" /> \
                                 <param name="js_context" value="'+context+'" />\
                                 \
