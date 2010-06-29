@@ -37,11 +37,15 @@ function Tinaviz(args) {
             alert("Error: couldn't get the applet!");
             return;
         }
-        if (typeof wrapper.getSubApplet == 'function') {
-            applet = wrapper.getSubApplet();
-        } else {
+        /*if (typeof wrapper.getSubApplet == 'function') {
+            try {
+                applet = wrapper.getSubApplet();
+            } catch(e) {
+                applet = wrapper;
+            }
+        } else {*/
             applet = wrapper;
-        }
+        //}
 
         if (applet == null) {
             alert("Error: couldn't get the applet!");
