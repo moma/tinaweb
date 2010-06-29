@@ -100,7 +100,7 @@ function Tinaviz(args) {
                 success: function(gexf) {
                     var f = false;
                     try {
-                        view.updateFromString(opts.view,gexf);
+                        view.updateFromString(gexf);
                     } catch (e) {
                         f = true;
                     }
