@@ -499,14 +499,24 @@ function Tinaviz(args) {
 
             var view = this.view(viewName);
             
-            var reply = {};
+            var reply = {
+                nodes: []
+            };
             
             reply.name = viewName;
             
             // we construct our new style "view" object
             
+            for (node in view.getNodesArray()) {
+                var n = { edges: [] };
+                for (w in node.getWeightsArray()) {
+                    n.edges.append({ weight: w });
+                }
+                reply["nodes"].append(n);
+            }
+            
             reply.get = function(arg) {
-                view.get(arg);
+                return view.get(arg);
             };
             
             

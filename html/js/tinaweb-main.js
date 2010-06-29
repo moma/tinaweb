@@ -55,140 +55,6 @@ $(document).ready(function(){
         path: "js/tinaviz/"
     });
 
-    tinaviz.ready(function(){
-
-        var infodiv =  InfoDiv('infodiv');
-        tinaviz.infodiv = infodiv;
-
-        /***************** SET SIZES *****************/
-        var infoDivWidth = 390;
-
-        var w = getScreenWidth() - infoDivWidth - 30;
-        var h = getScreenHeight() - $("#hd").height() - $("#ft").height() - 60;
-
-        $("#infodiv").css('height', ""+(h - 12)+"px");
-        $("#infodiv").css('width', ""+(infoDivWidth)+"px");
-
-        $(".accord_entry").css('height', ""+(h - 70)+"px");
-        /*********************************************/
-
-
-        $("#infodiv").accordion({
-            fillSpace: true,
-            autoHeight: false,
-            clearStyle: true, // keep it to true for tinaweb
-            animated: 'easyslide',
-        });
-
-        infodiv.reset();
-        
-        var defaultView = "macro";
-        
-        tinaviz.setView(defaultView);
-
-        var session = tinaviz.session();
-        var macro = tinaviz.view("macro");
-        var meso = tinaviz.view("meso");
-
-        session.set("edgeWeight/min", 0.0);
-        session.set("edgeWeight/max", 1.0);
-        session.set("nodeWeight/min", 0.0);
-        session.set("nodeWeight/max", 1.0);
-        session.set("category/category", "NGram");
-        session.set("output/nodeSizeMin", 5.0);
-        session.set("output/nodeSizeMax", 20.0);
-        session.set("output/nodeSizeRatio", 50.0/100.0);
-        session.set("selection/radius", 1.0);
-
-        macro.filter("Category", "category");
-        macro.filter("NodeWeightRange", "nodeWeight");
-        macro.filter("EdgeWeightRange", "edgeWeight");
-        macro.filter("NodeFunction", "radiusByWeight");
-        macro.filter("Output", "output");
-
-        meso.filter("SubGraphCopyStandalone", "category");
-        meso.set("category/source", "macro");
-        meso.set("category/category", "Document");
-        meso.set("category/mode", "keep");
-
-        meso.filter("NodeWeightRangeHack", "nodeWeight");
-        meso.filter("EdgeWeightRangeHack", "edgeWeight");
-        meso.filter("NodeFunction", "radiusByWeight");
-        meso.filter("Output", "output");
-
-        //tinaviz.readGraphJava("macro", "bipartite_graph_bipartite_map_bionet_2004_2007_g.gexf_.gexf");
-        $("#appletInfo").html("Loading graph..");
-        
-        tinaviz.open({
-            view: defaultView,
-            url: "FET60bipartite_graph_cooccurrences_.gexf", // "bipartite_graph_bipartite_map_bionet_2004_2007_g.gexf_.gexf"
-            success: function() {
-                // init the node list with ngrams
-                tinaviz.updateNodes( defaultView, "NGram" );
-
-                // cache the document list
-                tinaviz.getNodes(defaultView, "Document" );
-
-                infodiv.display_current_category();
-                infodiv.display_current_view();
-        
-                $("#appletInfo").hide();
-                tinaviz.size(w, h);
-            },
-            error: function(msg) {
-                $("#appletInfo").html("Error, couldn't load graph: "+msg);
-            }
-        });
-        
-        // new system for event handling
-        tinaviz.event({
-        
-            // if the view has changed
-            viewChanged: function(view) {
-            
-                tinaviz.autoCentering();
-                /*if (view=="macro") {
-                    $("#toggle-project").button('enable');
-                } else if (view=="meso") {
-                    $("#toggle-project").button('disable');
-                }*/
-
-                // update the buttons
-                $("#sliderEdgeWeight").slider( "option", "values", [
-                    view.get("edgeWeight/min"),
-                    view.get("edgeWeight/max")*100
-                ]);
-                $("#sliderNodeWeight").slider( "option", "values", [
-                    view.get("nodeWeight/min"),
-                    view.get("nodeWeight/max")*100
-                ]);
-                tinaviz.infodiv.display_current_category();
-                tinaviz.infodiv.display_current_view();
-            
-                if (view.name == "meso") {
-                    // TODO check selection
-                    // if selection has edges with edge of all the same weight, we disable the filter
-                    var weight = null;
-                    for (node in view.nodes) {
-                        for (out in node.outputs) {
-                            if (weight == null) {
-                                weight = out.weight;
-                            }
-                            else {
-                                if (weight != out.weight) {
-                                    $("#sliderEdgeWeight").slider( "option", "disabled", false );
-                                    return;
-                                }
-                            }
-                        }
-                    }
-                    $("#sliderEdgeWeight").slider( "option", "disabled", true );
-                }
-            }
-        });
-        
-
-    });
 
     //No text selection on elements with a class of 'noSelect'
 
@@ -307,11 +173,14 @@ $(document).ready(function(){
         values: [0, 100],
         animate: true,
         slide: function(event, ui) {
+            alert("test");
             var view = tinaviz.view();
+            alert("view: "+view);
             view.set("edgeWeight/min", ui.values[0] / 100.0);
             view.set("edgeWeight/max", ui.values[1] / 100.0);
             view.resetLayoutCounter();
             view.commitProperties();
+            alert("commited");
             if (tinaviz.getViewName()=="meso") tinaviz.autoCentering();
         }
     });
@@ -428,4 +297,133 @@ $(document).ready(function(){
 
         tinaviz.size(w, h);
     });
+    
+    tinaviz.ready(function(){
+
+        var infodiv =  InfoDiv('infodiv');
+        tinaviz.infodiv = infodiv;
+
+        /***************** SET SIZES *****************/
+        var infoDivWidth = 390;
+
+        var w = getScreenWidth() - infoDivWidth - 30;
+        var h = getScreenHeight() - $("#hd").height() - $("#ft").height() - 60;
+
+        $("#infodiv").css('height', ""+(h - 12)+"px");
+        $("#infodiv").css('width', ""+(infoDivWidth)+"px");
+
+        $(".accord_entry").css('height', ""+(h - 70)+"px");
+        /*********************************************/
+
+
+        $("#infodiv").accordion({
+            fillSpace: true,
+            autoHeight: false,
+            clearStyle: true, // keep it to true for tinaweb
+            animated: 'easyslide',
+        });
+
+        infodiv.reset();
+        
+        var defaultView = "macro";
+        
+        tinaviz.setView(defaultView);
+
+        var session = tinaviz.session();
+        var macro = tinaviz.view("macro");
+        var meso = tinaviz.view("meso");
+
+        session.set("edgeWeight/min", 0.0);
+        session.set("edgeWeight/max", 1.0);
+        session.set("nodeWeight/min", 0.0);
+        session.set("nodeWeight/max", 1.0);
+        session.set("category/category", "NGram");
+        session.set("output/nodeSizeMin", 5.0);
+        session.set("output/nodeSizeMax", 20.0);
+        session.set("output/nodeSizeRatio", 50.0/100.0);
+        session.set("selection/radius", 1.0);
+
+        macro.filter("Category", "category");
+        macro.filter("NodeWeightRange", "nodeWeight");
+        macro.filter("EdgeWeightRange", "edgeWeight");
+        macro.filter("NodeFunction", "radiusByWeight");
+        macro.filter("Output", "output");
+
+        meso.filter("SubGraphCopyStandalone", "category");
+        meso.set("category/source", "macro");
+        meso.set("category/category", "Document");
+        meso.set("category/mode", "keep");
+
+        meso.filter("NodeWeightRangeHack", "nodeWeight");
+        meso.filter("EdgeWeightRangeHack", "edgeWeight");
+        meso.filter("NodeFunction", "radiusByWeight");
+        meso.filter("Output", "output");
+
+        //tinaviz.readGraphJava("macro", "bipartite_graph_bipartite_map_bionet_2004_2007_g.gexf_.gexf");
+        $("#appletInfo").html("Loading graph..");
+        
+        tinaviz.open({
+            view: defaultView,
+            url: "FET60bipartite_graph_cooccurrences_.gexf", // "bipartite_graph_bipartite_map_bionet_2004_2007_g.gexf_.gexf"
+            success: function() {
+                // init the node list with ngrams
+                tinaviz.updateNodes( defaultView, "NGram" );
+
+                // cache the document list
+                tinaviz.getNodes(defaultView, "Document" );
+
+                infodiv.display_current_category();
+                infodiv.display_current_view();
+        
+                $("#appletInfo").hide();
+                tinaviz.size(w, h);
+            },
+            error: function(msg) {
+                $("#appletInfo").html("Error, couldn't load graph: "+msg);
+            }
+        });
+        
+        tinaviz.event({
+        
+            viewChanged: function(view) {
+
+                tinaviz.autoCentering();
+
+                $("#sliderEdgeWeight").slider( "option", "values", [
+                    parseInt( view.get("edgeWeight/min") ),
+                    parseInt(view.get("edgeWeight/max")) *100 
+                ]);
+                $("#sliderNodeWeight").slider( "option", "values", [
+                    parseInt(view.get("nodeWeight/min") ),
+                    parseInt(view.get("nodeWeight/max")) *100 
+                ]);
+                tinaviz.infodiv.display_current_category();
+                tinaviz.infodiv.display_current_view();
+                var disable = false;
+                if (view.name == "meso") {
+                    // TODO check selection
+                    // if selection has edges with edge of all the same weight, we disable the filter
+                    var weight = null;
+                    for (node in view.nodes) {
+                        for (out in node.outputs) {
+                            if (weight == null) {
+                                weight = out.weight;
+                            }
+                            else {
+                                if (weight != out.weight) {
+                                    disable = false;
+                                    return;
+                                }
+                            }
+                        }
+                    }
+                    disable = true;
+                } 
+                $("#sliderEdgeWeight").slider( "option", "disabled", disable );
+            }
+        });
+        
+
+    });
+
 });
