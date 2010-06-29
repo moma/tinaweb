@@ -19,6 +19,7 @@ function Tinaviz(args) {
 
     var callbackReady = function () {};
     var callbackImported = function(success) {};
+    var callbackViewChanged = function(view) {};
   
     // PUBLIC MEMBERS
     this.isReady = 0;
@@ -122,7 +123,16 @@ function Tinaviz(args) {
             
         
      }
-
+     this.event=function(args) {
+    
+        var opts = {
+            viewChanged: function(view){}
+        };
+        for (x in args) { opts[x] = args[x] };
+   
+        callbackViewChanged = opts.viewChanged;
+        
+     }
 
      this.getHTML = function() {
             var path = this.path;
@@ -484,27 +494,33 @@ function Tinaviz(args) {
         /**
         * Callback after CHANGING THE VIEW LEVEL
         */
-        this.switchedTo = function(view, selected) {
+        this.switchedTo = function(viewName, selected) {
             if (applet == null) return;
 
-            this.autoCentering();
-            /*if (view=="macro") {
-                $("#toggle-project").button('enable');
-            } else if (view=="meso") {
-                $("#toggle-project").button('disable');
-            }*/
-
-            // update the buttons
-            $("#sliderEdgeWeight").slider( "option", "values", [
-                this.get(view, "edgeWeight/min"),
-                this.get(view, "edgeWeight/max")*100
-            ]);
-            $("#sliderNodeWeight").slider( "option", "values", [
-                this.get(view, "nodeWeight/min"),
-                this.get(view, "nodeWeight/max")*100
-            ]);
-            this.infodiv.display_current_category();
-            this.infodiv.display_current_view();
+            var view = this.view(viewName);
+            
+            var reply = {
+                nodes: []
+            };
+            
+            reply.name = viewName;
+            
+            // we construct our new style "view" object
+            
+            for (node in view.getNodesArray()) {
+                var n = { edges: [] };
+                for (w in node.getWeightsArray()) {
+                    n.edges.append({ weight: w });
+                }
+                reply["nodes"].append(n);
+            }
+            
+            reply.get = function(arg) {
+                return view.get(arg);
+            };
+            
+            
+            callbackViewChanged(reply);
         }
         /************************
          *
