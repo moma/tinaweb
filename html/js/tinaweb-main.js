@@ -139,6 +139,54 @@ $(document).ready(function(){
                 $("#appletInfo").html("Error, couldn't load graph: "+msg);
             }
         });
+        
+        // new system for event handling
+        tinaviz.event({
+        
+            // if the view has changed
+            viewChanged: function(view) {
+            
+                tinaviz.autoCentering();
+                /*if (view=="macro") {
+                    $("#toggle-project").button('enable');
+                } else if (view=="meso") {
+                    $("#toggle-project").button('disable');
+                }*/
+
+                // update the buttons
+                $("#sliderEdgeWeight").slider( "option", "values", [
+                    view.get("edgeWeight/min"),
+                    view.get("edgeWeight/max")*100
+                ]);
+                $("#sliderNodeWeight").slider( "option", "values", [
+                    view.get("nodeWeight/min"),
+                    view.get("nodeWeight/max")*100
+                ]);
+                tinaviz.infodiv.display_current_category();
+                tinaviz.infodiv.display_current_view();
+            
+                if (view.name == "meso") {
+                    // TODO check selection
+                    // if selection has edges with edge of all the same weight, we disable the filter
+                    var weight = null;
+                    for (node in view.nodes) {
+                        for (out in node.outputs) {
+                            if (weight == null) {
+                                weight = out.weight;
+                            }
+                            else {
+                                if (weight != out.weight) {
+                                    $("#sliderEdgeWeight").slider( "option", "disabled", false );
+                                    return;
+                                }
+                            }
+                        }
+                    }
+                    $("#sliderEdgeWeight").slider( "option", "disabled", true );
+                }
+            }
+        });
+        
 
     });
 
