@@ -233,6 +233,11 @@ function InfoDiv(divid) {
      * updates the label and content DOM divs
      */
     updateInfo: function(lastselection) {
+    
+        var decHTMLifEnc = function(str){
+            return str.replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>');
+        }
+    
         var current_cat = tinaviz.get("current", "category/category");
         //tinaviz.logNormal("updateInfo for current category = "+current_cat);
         var labelinnerdiv = $("<div></div>");
@@ -244,8 +249,8 @@ function InfoDiv(divid) {
                 labelinnerdiv.append( $("<b></b>").html(decodeJSON(node.label)) );
                 // displays contents only if it's a document
                 if ( node.category == 'Document' && node.content != null ) {
-                    contentinnerdiv.append( $("<b></b>").html(decodeJSON(node.label)) );
-                    contentinnerdiv.append( $("<p></p>").html(decodeJSON(node.content)) );
+                    contentinnerdiv.append( $("<b></b>").html( decHTMLifEnc( decodeJSON(node.label ) ) ) );
+                    contentinnerdiv.append( $("<p></p>").html( decHTMLifEnc( decodeJSON(node.content ) ) ) );
                 }
             }
         }
