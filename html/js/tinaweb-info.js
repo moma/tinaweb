@@ -162,13 +162,18 @@ function InfoDiv(divid) {
         for (var nodeid in this.selection) {
             // gets the full neighbourhood for the tag cloud
             var nb = tinaviz.getNeighbourhood(viewLevel,nodeid);
-            var taglist = new Array();
+
+            alert("over-writing tinaviz 2be selected");
+            tinaviz.toBeSelected = new Array();
             for (var nbid in nb) {
+
                 if ( tempcloud[nbid] !== undefined )
                     tempcloud[nbid]['degree']++;
                 // pushes a node if belongs to the opposite category
                 else if (this.selection[nodeid]['category'] != nb[nbid]['category']) {
-
+                    tinaviz.toBeSelected.push(nbid);
+                    alert("pushing "+nbid+" to tinaviz.toBeSelected, new size is "+tinaviz.toBeSelected.length);
+                     
                     tempcloud[nbid] = {
                         'id': nbid,
                         'label' : decodeJSON(nb[nbid]['label']),
@@ -178,6 +183,9 @@ function InfoDiv(divid) {
                     };
                 }
             }
+            
+           alert("final size of tinaviz.toBeSelected is "+tinaviz.toBeSelected.length);
+            
         }
         var sorted_tags = this.alphabeticListSort( Object.values( tempcloud ), 'label' );
 
@@ -265,9 +273,7 @@ function InfoDiv(divid) {
             this.reset();
     },
 
-    /*
-     * updates the infodiv contents
-     */
+    /*     */
     update: function(view, lastselection) {
         if ( Object.size ( lastselection ) == 0 ) {
             this.reset();
@@ -283,7 +289,7 @@ function InfoDiv(divid) {
      */
     reset: function() {
         this.unselect_button.hide();
-        this.label.empty().append($("<h2></h2>").html("empty selection"));
+        this.label.empty().append($("<h2></h2>").html("Empty selection"));
         this.contents.empty().append($("<h4></h4>").html("click on a node to begin exploration"));
         this.cloud.empty();
         this.selection = {};
