@@ -3,6 +3,13 @@
 
 function Tinaviz(args) {
 
+    var openDefaults = {
+            success: function(){},
+            error: function(msg){},
+            view: "macro",
+            url: ""
+    };
+                            
     var opts = {
         context: '',
         engine: 'software',
@@ -54,51 +61,61 @@ function Tinaviz(args) {
      }
 
      this.ready=function(cb) {
+        // TODO: if not ready, append to the callbacks
+        // if ready, execute asynchronously
+        
 		callbackReady = cb;
 	 }
 	 
      this.open=function(args) {
-    
-        var opts = {
-            success: function(){},
-            error: function(msg){},
-            view: "macro",
-            url: ""
-        };
-        for (x in args) { opts[x] = args[x] };
+        
+        var opts = {};
+        
+        // initialize using default values
+        for (x in openDefaults) { opts[x] = openDefaults[x]; };
+        
+        // overload using parameters values
+        for (x in args) { opts[x] = args[x]; };
+        
+        if (args["url"] === undefined) {
+          for (x in opts) { openDefaults[x] = opts[x]; };
+        
+        }
         
         var view = this.view(opts.view);
 
-        
+        callbackImported = function(msg){
+            if (msg=="success") { opts.success(); } else { opts.error(msg); }
+        };
+                
+        if (args["url"] === undefined) {
+            return;
+        }
+        alert("loading "+args.url);
         $.ajax({
                 url: opts.url,
                 type: "GET",
                 dataType: "text",
-                beforeSend: function() {
-                   callbackImported = function(msg){
-                        if (msg=="success") {
-                            opts.success();
-                        } else {
-                            opts.error(msg);
-                        }
-                    }
-                },
                 error: function() { 
                     try {
                         if (opts.url.search("://") != -1) {
                             view.updateFromURI(opts.url);
                         } else {
-                            var sPath = document.location.href;view.updateFromURI(sPath.substring(0, sPath.lastIndexOf('/') + 1) + opts.url);
+                            var sPath = document.location.href;
+                            view.updateFromURI(sPath.substring(0, sPath.lastIndexOf('/') + 1) + opts.url);
                         }
                     } catch (e) {
+                        console.error("CATCHED JAVA ERROR "+e);
                         opts.error(e);
                     }
                  },
                 success: function(gexf) {
                     var f = false;
+                    console.log("success, calling updateFromString");
                     try {
                         view.updateFromString(gexf);
                     } catch (e) {
+                        Console.error("CATCHED JAVA ERROR "+e);
                         f = true;
                     }
                     if (f) {
@@ -110,6 +127,7 @@ function Tinaviz(args) {
                                 view.updateFromURI(sPath.substring(0, sPath.lastIndexOf('/') + 1) + opts.url);
                             }
                         } catch (e) {
+                            console.error("CATCHED JAVA ERROR "+e);
                             opts.error(e);
                         }
                     }
@@ -120,7 +138,6 @@ function Tinaviz(args) {
         
      }
      this.event=function(args) {
-    
         var opts = {
             viewChanged: function(view){},
             categoryChanged: function(view){}
@@ -129,21 +146,18 @@ function Tinaviz(args) {
    
         callbackViewChanged = opts.viewChanged;
         callbackCategoryChanged = opts.categoryChanged;
-        
      }
 
      this.getHTML = function() {
             var path = this.path;
             var context = this.context;
             var engine = this.engine;
-            //var archives = path+'tinaviz.jar,'+path+'core.jar,'+path+'colt.jar,'+path+'concurrent.jar,'+path+'applet-launcher.jar';
-            // archive="'+path+'tinaviz.jar,'+path+'core.jar,'+path+'itext.jar,'+path+'pdf.jar,'+path+'colt.jar,'+path+'concurrent.jar,'+path+'applet-launcher.jar" 
+
             var archives = path+'tinaviz-all.jar';
             
             var brand = "true";
             if (!this.branding) brand = "false";
 
-            
             return '<!--[if !IE]> --> \
                             <object id="tinaviz" \
                                         classid="java:tinaviz.Main" \
