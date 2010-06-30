@@ -173,14 +173,11 @@ $(document).ready(function(){
         values: [0, 100],
         animate: true,
         slide: function(event, ui) {
-            alert("test");
             var view = tinaviz.view();
-            alert("view: "+view);
             view.set("edgeWeight/min", ui.values[0] / 100.0);
             view.set("edgeWeight/max", ui.values[1] / 100.0);
             view.resetLayoutCounter();
             view.commitProperties();
-            alert("commited");
             if (tinaviz.getViewName()=="meso") tinaviz.autoCentering();
         }
     });
