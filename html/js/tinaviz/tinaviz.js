@@ -159,7 +159,7 @@ function Tinaviz(args) {
                               <!--<param name="noddraw.check" value="true">--> \
                                 <param name="engine" value="'+engine+'" /> \
                                 <param name="js_context" value="'+context+'" /> \
- \
+                                <param name="root_prefix" value="'+path+'" /> \
                               <!--<![endif]--> \
  \
                               <object id="tinaviz" classid="clsid:CAFEEFAC-0016-0000-FFFF-ABCDEFFEDCBA" \
@@ -178,7 +178,7 @@ function Tinaviz(args) {
                                 <!--<param name="noddraw.check" value="true">--> \
                                 <param name="engine" value="'+engine+'" /> \
                                 <param name="js_context" value="'+context+'" />\
-                                \
+                                <param name="root_prefix" value="'+path+'" /> \
 \
                                 <p>\
                                     <strong>\
@@ -544,7 +544,7 @@ function Tinaviz(args) {
                 var sPath = document.location.href;
                 var url = sPath.substring(0, sPath.lastIndexOf('/') + 1) + url;
                 applet.getSession().updateFromURI(view,url);
-            }
+            }P2D
             //$('#waitMessage').hide();
         }
 
