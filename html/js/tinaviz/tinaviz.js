@@ -23,7 +23,7 @@ function Tinaviz(args) {
   
     // PUBLIC MEMBERS
     this.isReady = 0;
-    this.infodiv = null;
+    this.infodiv = {};
 
     this.height = opts.height;
     this.width = opts.width;
@@ -32,21 +32,15 @@ function Tinaviz(args) {
     this.engine = opts.engine;
     this.context = opts.context;
     
+    
     this.init= function() {
         wrapper = $("#tinaviz")[0]; // we need to get the html tag immediately
         if (wrapper == null) {
             alert("Error: couldn't get the applet!");
             return;
         }
-        /*if (typeof wrapper.getSubApplet == 'function') {
-            try {
-                applet = wrapper.getSubApplet();
-            } catch(e) {
-                applet = wrapper;
-            }
-        } else {*/
-            applet = wrapper;
-        //}
+
+        applet = wrapper;
 
         if (applet == null) {
             alert("Error: couldn't get the applet!");
@@ -126,11 +120,13 @@ function Tinaviz(args) {
      this.event=function(args) {
     
         var opts = {
-            viewChanged: function(view){}
+            viewChanged: function(view){},
+            categoryChanged: function(view){}
         };
         for (x in args) { opts[x] = args[x] };
    
         callbackViewChanged = opts.viewChanged;
+        callbackCategoryChanged = opts.categoryChanged;
         
      }
 
@@ -490,16 +486,12 @@ function Tinaviz(args) {
                 this.leftDoubleClicked(view, data);
             }
         }
-
-        /**
-        * Callback after CHANGING THE VIEW LEVEL
-        */
-        this.switchedTo = function(viewName, selected) {
-            if (applet == null) return;
-
+        
+        this.constructNewViewObject = function(viewName) {
             var view = this.view(viewName);
             
             var reply = {
+                category: view.get("category/category"),
                 nodes: []
             };
             
@@ -520,8 +512,22 @@ function Tinaviz(args) {
             };
             
             
-            callbackViewChanged(reply);
+            //console.dir(reply);
+            
+            return reply;
         }
+
+        /**
+        * Callback after CHANGING THE VIEW LEVEL
+        */
+        this.switchedTo = function(viewName, selected) {
+            if (applet == null) return;
+
+            var view = this.constructNewViewObject(viewName);
+            callbackViewChanged(view);
+        }
+        
+
         /************************
          *
          * I/O system
@@ -532,7 +538,7 @@ function Tinaviz(args) {
         this.readGraphJava= function(view,url) {
             // window.location.href
             // window.location.pathname
-            if (graph.search("://") != -1) {
+            if (url.search("://") != -1) {
                 applet.getSession().updateFromURI(view,url);
             } else {
                 var sPath = document.location.href;
@@ -618,23 +624,32 @@ function Tinaviz(args) {
          */
         this.toggleCategory = function(view) {
             if (applet == null) return;
+            
+
             if (this.getViewName()=="macro") {
+                //console.log("infodiv neighbours:" + this.infodiv.neighbours);
+                //console.dir(this.infodiv.neighbours);
                 if (this.infodiv.neighbours !== undefined) {
+                    //console.log("infodiv neighbours:" + this.infodiv.neighbours);
+                    //console.dir(this.infodiv.neighbours);
                     // adds neighbours (from opposite categ) to the selection
                     if (this.infodiv.neighbours.length > 1) {
+                        //console.log("infodiv neighbours:" + this.infodiv.neighbours);
+                        //console.dir(this.infodiv.neighbours);
                         for(var i=0; i<this.infodiv.neighbours.length; i++) {
-                            //this.logNormal(neighbours[i].id);
-			    if (i==this.infodiv.neighbours.length) {
+                            this.logNormal(neighbours[i].id);
+                            if (i==this.infodiv.neighbours.length) {
+                                //alert("selecting neighbour "+this.infodiv.neighbours[i].id);
                             	this.selectFromId(this.infodiv.neighbours[i].id, true);
-			    } else {
-				 this.selectFromId(this.infodiv.neighbours[i].id, false);
-		            }
-                        }
-                       
-                    } 
-                    else if (this.infodiv.neighbours.length == 1) {
+                            } else {
+                                //alert("toggleCategory 3!!");
+                                this.selectFromId(this.infodiv.neighbours[i].id, false);
+                            }
+                        }  
+                    } else if (this.infodiv.neighbours.length == 1) {
+                        //alert("selecting single neighbour "+this.infodiv.neighbours[i].id);
                         this.selectFromId(this.infodiv.neighbours[0].id, true);
-                    } 
+                    }
                 }
             }
             // get and set the new category to display

@@ -318,12 +318,12 @@ $(document).ready(function(){
 
         $("#infodiv").accordion({
             fillSpace: true,
-            autoHeight: false,
-            clearStyle: true, // keep it to true for tinaweb
+           // autoHeight: false,
+            //clearStyle: true, // keep it to true for tinaweb
             animated: 'easyslide',
         });
 
-        infodiv.reset();
+        tinaviz.infodiv.reset();
         
         var defaultView = "macro";
         
@@ -372,8 +372,8 @@ $(document).ready(function(){
                 // cache the document list
                 tinaviz.getNodes(defaultView, "Document" );
 
-                infodiv.display_current_category();
-                infodiv.display_current_view();
+                tinaviz.infodiv.display_current_category();
+                tinaviz.infodiv.display_current_view();
         
                 $("#appletInfo").hide();
                 tinaviz.size(w, h);
@@ -399,6 +399,7 @@ $(document).ready(function(){
                 ]);
                 tinaviz.infodiv.display_current_category();
                 tinaviz.infodiv.display_current_view();
+                
                 var disable = false;
                 if (view.name == "meso") {
                     // TODO check selection
