@@ -6,6 +6,7 @@ function Tinaviz(args) {
     var opts = {
         context: '',
         engine: 'software',
+        branding: true,
         width: 0,
         height: 0
     };
@@ -31,6 +32,7 @@ function Tinaviz(args) {
     this.path = opts.path;
     this.engine = opts.engine;
     this.context = opts.context;
+    this.branding= opts.branding;
     
     
     this.init= function() {
@@ -138,7 +140,9 @@ function Tinaviz(args) {
             // archive="'+path+'tinaviz.jar,'+path+'core.jar,'+path+'itext.jar,'+path+'pdf.jar,'+path+'colt.jar,'+path+'concurrent.jar,'+path+'applet-launcher.jar" 
             var archives = path+'tinaviz-all.jar';
             
-            
+            var brand = "true";
+            if (!this.branding) brand = "false";
+
             
             return '<!--[if !IE]> --> \
                             <object id="tinaviz" \
@@ -160,6 +164,7 @@ function Tinaviz(args) {
                                 <param name="engine" value="'+engine+'" /> \
                                 <param name="js_context" value="'+context+'" /> \
                                 <param name="root_prefix" value="'+path+'" /> \
+                                <param name="branding_icon" value="'+brand+'" /> \
                               <!--<![endif]--> \
  \
                               <object id="tinaviz" classid="clsid:CAFEEFAC-0016-0000-FFFF-ABCDEFFEDCBA" \
@@ -179,7 +184,7 @@ function Tinaviz(args) {
                                 <param name="engine" value="'+engine+'" /> \
                                 <param name="js_context" value="'+context+'" />\
                                 <param name="root_prefix" value="'+path+'" /> \
-\
+                                <param name="branding_icon" value="'+brand+'" /> \
                                 <p>\
                                     <strong>\
                                         This browser does not have a Java Plug-in.\
