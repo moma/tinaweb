@@ -3,9 +3,17 @@
 
 function Tinaviz(args) {
 
+    var openDefaults = {
+            success: function(){},
+            error: function(msg){},
+            view: "macro",
+            url: ""
+    };
+                            
     var opts = {
         context: '',
         engine: 'software',
+        branding: true,
         width: 0,
         height: 0
     };
@@ -23,7 +31,7 @@ function Tinaviz(args) {
   
     // PUBLIC MEMBERS
     this.isReady = 0;
-    this.infodiv = null;
+    this.infodiv = {};
 
     this.height = opts.height;
     this.width = opts.width;
@@ -31,6 +39,8 @@ function Tinaviz(args) {
     this.path = opts.path;
     this.engine = opts.engine;
     this.context = opts.context;
+    this.branding= opts.branding;
+    
     
     this.init= function() {
         wrapper = $("#tinaviz")[0]; // we need to get the html tag immediately
@@ -38,15 +48,8 @@ function Tinaviz(args) {
             alert("Error: couldn't get the applet!");
             return;
         }
-        /*if (typeof wrapper.getSubApplet == 'function') {
-            try {
-                applet = wrapper.getSubApplet();
-            } catch(e) {
-                applet = wrapper;
-            }
-        } else {*/
-            applet = wrapper;
-        //}
+
+        applet = wrapper;
 
         if (applet == null) {
             alert("Error: couldn't get the applet!");
@@ -58,51 +61,61 @@ function Tinaviz(args) {
      }
 
      this.ready=function(cb) {
+        // TODO: if not ready, append to the callbacks
+        // if ready, execute asynchronously
+        
 		callbackReady = cb;
 	 }
 	 
      this.open=function(args) {
-    
-        var opts = {
-            success: function(){},
-            error: function(msg){},
-            view: "macro",
-            url: ""
-        };
-        for (x in args) { opts[x] = args[x] };
+        
+        var opts = {};
+        
+        // initialize using default values
+        for (x in openDefaults) { opts[x] = openDefaults[x]; };
+        
+        // overload using parameters values
+        for (x in args) { opts[x] = args[x]; };
+        
+        if (args["url"] === undefined) {
+          for (x in opts) { openDefaults[x] = opts[x]; };
+        
+        }
         
         var view = this.view(opts.view);
 
-        
+        callbackImported = function(msg){
+            if (msg=="success") { opts.success(); } else { opts.error(msg); }
+        };
+                
+        if (args["url"] === undefined) {
+            return;
+        }
+        alert("loading "+args.url);
         $.ajax({
                 url: opts.url,
                 type: "GET",
                 dataType: "text",
-                beforeSend: function() {
-                   callbackImported = function(msg){
-                        if (msg=="success") {
-                            opts.success();
-                        } else {
-                            opts.error(msg);
-                        }
-                    }
-                },
                 error: function() { 
                     try {
                         if (opts.url.search("://") != -1) {
                             view.updateFromURI(opts.url);
                         } else {
-                            var sPath = document.location.href;view.updateFromURI(sPath.substring(0, sPath.lastIndexOf('/') + 1) + opts.url);
+                            var sPath = document.location.href;
+                            view.updateFromURI(sPath.substring(0, sPath.lastIndexOf('/') + 1) + opts.url);
                         }
                     } catch (e) {
+                        console.error("CATCHED JAVA ERROR "+e);
                         opts.error(e);
                     }
                  },
                 success: function(gexf) {
                     var f = false;
+                    console.log("success, calling updateFromString");
                     try {
                         view.updateFromString(gexf);
                     } catch (e) {
+                        Console.error("CATCHED JAVA ERROR "+e);
                         f = true;
                     }
                     if (f) {
@@ -114,6 +127,7 @@ function Tinaviz(args) {
                                 view.updateFromURI(sPath.substring(0, sPath.lastIndexOf('/') + 1) + opts.url);
                             }
                         } catch (e) {
+                            console.error("CATCHED JAVA ERROR "+e);
                             opts.error(e);
                         }
                     }
@@ -124,26 +138,26 @@ function Tinaviz(args) {
         
      }
      this.event=function(args) {
-    
         var opts = {
-            viewChanged: function(view){}
+            viewChanged: function(view){},
+            categoryChanged: function(view){}
         };
         for (x in args) { opts[x] = args[x] };
    
         callbackViewChanged = opts.viewChanged;
-        
+        callbackCategoryChanged = opts.categoryChanged;
      }
 
      this.getHTML = function() {
             var path = this.path;
             var context = this.context;
             var engine = this.engine;
-            //var archives = path+'tinaviz.jar,'+path+'core.jar,'+path+'colt.jar,'+path+'concurrent.jar,'+path+'applet-launcher.jar';
-            // archive="'+path+'tinaviz.jar,'+path+'core.jar,'+path+'itext.jar,'+path+'pdf.jar,'+path+'colt.jar,'+path+'concurrent.jar,'+path+'applet-launcher.jar" 
+
             var archives = path+'tinaviz-all.jar';
             
-            
-            
+            var brand = "true";
+            if (!this.branding) brand = "false";
+
             return '<!--[if !IE]> --> \
                             <object id="tinaviz" \
                                         classid="java:tinaviz.Main" \
@@ -163,7 +177,8 @@ function Tinaviz(args) {
                               <!--<param name="noddraw.check" value="true">--> \
                                 <param name="engine" value="'+engine+'" /> \
                                 <param name="js_context" value="'+context+'" /> \
- \
+                                <param name="root_prefix" value="'+path+'" /> \
+                                <param name="branding_icon" value="'+brand+'" /> \
                               <!--<![endif]--> \
  \
                               <object id="tinaviz" classid="clsid:CAFEEFAC-0016-0000-FFFF-ABCDEFFEDCBA" \
@@ -182,8 +197,8 @@ function Tinaviz(args) {
                                 <!--<param name="noddraw.check" value="true">--> \
                                 <param name="engine" value="'+engine+'" /> \
                                 <param name="js_context" value="'+context+'" />\
-                                \
-\
+                                <param name="root_prefix" value="'+path+'" /> \
+                                <param name="branding_icon" value="'+brand+'" /> \
                                 <p>\
                                     <strong>\
                                         This browser does not have a Java Plug-in.\
@@ -490,16 +505,12 @@ function Tinaviz(args) {
                 this.leftDoubleClicked(view, data);
             }
         }
-
-        /**
-        * Callback after CHANGING THE VIEW LEVEL
-        */
-        this.switchedTo = function(viewName, selected) {
-            if (applet == null) return;
-
+        
+        this.constructNewViewObject = function(viewName) {
             var view = this.view(viewName);
             
             var reply = {
+                category: view.get("category/category"),
                 nodes: []
             };
             
@@ -520,8 +531,22 @@ function Tinaviz(args) {
             };
             
             
-            callbackViewChanged(reply);
+            //console.dir(reply);
+            
+            return reply;
         }
+
+        /**
+        * Callback after CHANGING THE VIEW LEVEL
+        */
+        this.switchedTo = function(viewName, selected) {
+            if (applet == null) return;
+
+            var view = this.constructNewViewObject(viewName);
+            callbackViewChanged(view);
+        }
+        
+
         /************************
          *
          * I/O system
@@ -532,13 +557,13 @@ function Tinaviz(args) {
         this.readGraphJava= function(view,url) {
             // window.location.href
             // window.location.pathname
-            if (graph.search("://") != -1) {
+            if (url.search("://") != -1) {
                 applet.getSession().updateFromURI(view,url);
             } else {
                 var sPath = document.location.href;
                 var url = sPath.substring(0, sPath.lastIndexOf('/') + 1) + url;
                 applet.getSession().updateFromURI(view,url);
-            }
+            }P2D
             //$('#waitMessage').hide();
         }
 
@@ -618,23 +643,32 @@ function Tinaviz(args) {
          */
         this.toggleCategory = function(view) {
             if (applet == null) return;
+            
+
             if (this.getViewName()=="macro") {
+                //console.log("infodiv neighbours:" + this.infodiv.neighbours);
+                //console.dir(this.infodiv.neighbours);
                 if (this.infodiv.neighbours !== undefined) {
+                    //console.log("infodiv neighbours:" + this.infodiv.neighbours);
+                    //console.dir(this.infodiv.neighbours);
                     // adds neighbours (from opposite categ) to the selection
                     if (this.infodiv.neighbours.length > 1) {
+                        //console.log("infodiv neighbours:" + this.infodiv.neighbours);
+                        //console.dir(this.infodiv.neighbours);
                         for(var i=0; i<this.infodiv.neighbours.length; i++) {
-                            //this.logNormal(neighbours[i].id);
-			    if (i==this.infodiv.neighbours.length) {
+                            this.logNormal(neighbours[i].id);
+                            if (i==this.infodiv.neighbours.length) {
+                                //alert("selecting neighbour "+this.infodiv.neighbours[i].id);
                             	this.selectFromId(this.infodiv.neighbours[i].id, true);
-			    } else {
-				 this.selectFromId(this.infodiv.neighbours[i].id, false);
-		            }
-                        }
-                       
-                    } 
-                    else if (this.infodiv.neighbours.length == 1) {
+                            } else {
+                                //alert("toggleCategory 3!!");
+                                this.selectFromId(this.infodiv.neighbours[i].id, false);
+                            }
+                        }  
+                    } else if (this.infodiv.neighbours.length == 1) {
+                        //alert("selecting single neighbour "+this.infodiv.neighbours[i].id);
                         this.selectFromId(this.infodiv.neighbours[0].id, true);
-                    } 
+                    }
                 }
             }
             // get and set the new category to display
