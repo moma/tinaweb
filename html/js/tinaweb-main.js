@@ -79,7 +79,8 @@ $(document).ready(function(){
 
         var infodiv =  InfoDiv('infodiv');
         tinaviz.infodiv = infodiv;
-
+        tinaviz.infodiv.reset();
+        
         /***************** SET SIZES *****************/
         var infoDivWidth = 390;
 
@@ -99,8 +100,6 @@ $(document).ready(function(){
             //clearStyle: true, // keep it to true for tinaweb
             animated: 'easyslide',
         });
-
-        tinaviz.infodiv.reset();
         
         var defaultView = "macro";
         

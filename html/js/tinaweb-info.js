@@ -162,13 +162,16 @@ function InfoDiv(divid) {
         for (var nodeid in this.selection) {
             // gets the full neighbourhood for the tag cloud
             var nb = tinaviz.getNeighbourhood(viewLevel,nodeid);
-            var taglist = new Array();
+
+            //alert("over-writing tinaviz 2be selected");
             for (var nbid in nb) {
+
                 if ( tempcloud[nbid] !== undefined )
                     tempcloud[nbid]['degree']++;
                 // pushes a node if belongs to the opposite category
                 else if (this.selection[nodeid]['category'] != nb[nbid]['category']) {
-
+                    alert("pushing "+nbid+" to tinaviz.toBeSelected, new size is "+tinaviz.toBeSelected.length);
+                     
                     tempcloud[nbid] = {
                         'id': nbid,
                         'label' : decodeJSON(nb[nbid]['label']),
@@ -178,6 +181,7 @@ function InfoDiv(divid) {
                     };
                 }
             }
+               
         }
         var sorted_tags = this.alphabeticListSort( Object.values( tempcloud ), 'label' );
 
@@ -233,6 +237,11 @@ function InfoDiv(divid) {
      * updates the label and content DOM divs
      */
     updateInfo: function(lastselection) {
+    
+        var decHTMLifEnc = function(str){
+            return str.replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>');
+        }
+    
         var current_cat = tinaviz.get("current", "category/category");
         //tinaviz.logNormal("updateInfo for current category = "+current_cat);
         var labelinnerdiv = $("<div></div>");
@@ -244,8 +253,8 @@ function InfoDiv(divid) {
                 labelinnerdiv.append( $("<b></b>").html(decodeJSON(node.label)) );
                 // displays contents only if it's a document
                 if ( node.category == 'Document' && node.content != null ) {
-                    contentinnerdiv.append( $("<b></b>").html(decodeJSON(node.label)) );
-                    contentinnerdiv.append( $("<p></p>").html(decodeJSON(node.content)) );
+                    contentinnerdiv.append( $("<b></b>").html( decHTMLifEnc( decodeJSON(node.label ) ) ) );
+                    contentinnerdiv.append( $("<p></p>").html( decHTMLifEnc( decodeJSON(node.content ) ) ) );
                 }
             }
         }
@@ -260,9 +269,7 @@ function InfoDiv(divid) {
             this.reset();
     },
 
-    /*
-     * updates the infodiv contents
-     */
+    /*     */
     update: function(view, lastselection) {
         if ( Object.size ( lastselection ) == 0 ) {
             this.reset();
@@ -278,7 +285,7 @@ function InfoDiv(divid) {
      */
     reset: function() {
         this.unselect_button.hide();
-        this.label.empty().append($("<h2></h2>").html("empty selection"));
+        this.label.empty().append($("<h2></h2>").html("Empty selection"));
         this.contents.empty().append($("<h4></h4>").html("click on a node to begin exploration"));
         this.cloud.empty();
         this.selection = {};
