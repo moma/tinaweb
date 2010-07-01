@@ -661,7 +661,7 @@ function Tinaviz(args) {
                 // gets the full neighbourhood for the tag cloud
                 var nb = tinaviz.getNeighbourhood(this.getViewLevel(),nodeid);
 
-                alert("line 664");
+                // alert("line 664");
 
                 for (var nbid in nb) {
 
@@ -670,13 +670,13 @@ function Tinaviz(args) {
                     // pushes a node if belongs to the opposite category
                     } else if (this.selection[nodeid]['category'] != nb[nbid]['category']) {
                         tinaviz.toBeSelected.push(nbid);
-                        alert("pushing "+nbid+" to tinaviz.toBeSelected, new size is "+tinaviz.toBeSelected.length);
+                        // alert("pushing "+nbid+" to tinaviz.toBeSelected, new size is "+tinaviz.toBeSelected.length);
                     }
                 }
             }
             
             
-            alert("we are in toggle category, number of 'toBeSelected':"+tinaviz.toBeSelected.length);
+            //alert("we are in toggle category, number of 'toBeSelected':"+tinaviz.toBeSelected.length);
             
             var i = 0;
             for (var nbid in tinaviz.toBeSelected) {   
