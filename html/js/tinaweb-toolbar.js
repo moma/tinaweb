@@ -224,8 +224,9 @@ $(document).ready(function(){
                 // empty the selection, and ask the applet to select opposite nodes
                 var i = 0;
                 tinaviz.infodiv.selection = {};
-                for (var nbid in tinaviz.infodiv.oppositeSelection) {       
-                    tinaviz.selectFromId(nbid, (++i == tinaviz.infodiv.oppositeSelection.length));
+                for (var nbid in tinaviz.infodiv.oppositeSelection) {  
+                    var cb = (++i == tinaviz.infodiv.oppositeSelection.length);
+                    tinaviz.selectFromId(tinaviz.infodiv.oppositeSelection[nbid], cb);
                 }
             }
             tinaviz.infodiv.display_current_category();

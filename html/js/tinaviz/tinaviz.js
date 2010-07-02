@@ -11,11 +11,13 @@ function Tinaviz(args) {
     };
                             
     var opts = {
-        context: '',
+        context: "",
         engine: 'software',
         branding: true,
         width: 0,
-        height: 0
+        height: 0,
+        chrome: false,
+        root: "",
     };
     for (x in args) { opts[x] = args[x] };
     
@@ -122,6 +124,8 @@ function Tinaviz(args) {
     this.engine = opts.engine;
     this.context = opts.context;
     this.branding= opts.branding;
+    this.chrome = opts.chrome;
+    this.root = opts.root;
     
     
     this.init= function() {
@@ -234,25 +238,47 @@ function Tinaviz(args) {
             var path = this.path;
             var context = this.context;
             var engine = this.engine;
+            var chrome = this.chrome;
+            var root = this.root;
 
+            
+
+    /*
+        var DIR_SERVICE = new Components.Constructor("@mozilla.org/file/directory_service;1", "nsIProperties");
+    var path = (new DIR_SERVICE()).get("AChrom", Components.interfaces.nsIFile).path;
+    var appletPath;
+    if (path.search(/\\/) != -1) { appletPath = path + "\\content\\applet\\index.html" }
+    else { appletPath = path + "/content/applet/index.html" }
+    var appletFile = Components.classes["@mozilla.org/file/local;1"].createInstance(Components.interfaces.nsILocalFile);
+    appletFile.initWithPath(appletPath);
+    var appletURL = Components.classes["@mozilla.org/network/protocol;1?name=file"].createInstance(Components.interfaces.nsIFileProtocolHandler).getURLSpecFromFile(appletFile);
+    var iframehtml = '<iframe id="vizframe" name="vizframe" class="vizframe" allowtransparency="false" scrolling="no"  frameborder="1" src="'+appletURL+'"></iframe>';
+    window.setTimeout("$('#container').html('"+iframehtml+"');", 2000);
+    */
+    // id="vizframe" name="vizframe" class="vizframe" allowtransparency="false" scrolling="no"  frameborder="1" 
+    
+    
+    
             var archives = path+'tinaviz-all.jar';
             
             var brand = "true";
             if (!this.branding) brand = "false";
+            
+            //alert("PATH: "+path);
 
-            return '<!--[if !IE]> --> \
+            var appletTag = '<!--[if !IE]> --> \
                             <object id="tinaviz" \
                                         classid="java:tinaviz.Main" \
                                         type="application/x-java-applet" \
                                         archive="'+archives+'" \
-                                        width="1" height="1" \
+                                        width="10" height="10" \
                                         standby="Loading Tinaviz..." > \
  \
                               <param name="archive" value="'+archives+'" /> \
                               <param name="mayscript" value="true" /> \
                               <param name="scriptable" value="true" /> \
  \
-                              <param name="image" value="css/branding/appletLoading.gif" /> \
+                              <!--<param name="image" value="css/branding/appletLoading.gif" />--> \
                                 <param name="boxmessage" value="Loading TinaViz..." /> \
                               <param name="boxbgcolor" value="#FFFFFF" /> \
                               <param name="progressbar" value="true" /> \
@@ -264,7 +290,7 @@ function Tinaviz(args) {
                               <!--<![endif]--> \
  \
                               <object id="tinaviz" classid="clsid:CAFEEFAC-0016-0000-FFFF-ABCDEFFEDCBA" \
-                                  width="1" height="1" \
+                                  width="10" height="10" \
                                   standby="Loading Processing software..."  > \
  \
                                 <param name="code" value="tinaviz.Main" /> \
@@ -272,7 +298,7 @@ function Tinaviz(args) {
                                 <param name="mayscript" value="true" /> \
                                 <param name="scriptable" value="true" /> \
  \
-                              <param name="image" value="css/branding/appletLoading.gif" /> \
+                              <!--<param name="image" value="css/branding/appletLoading.gif" /> --> \
                                 <param name="boxmessage" value="Loading TinaViz..." /> \
                                 <param name="boxbgcolor" value="#FFFFFF" /> \
                                 <param name="progressbar" value="true" /> \
@@ -296,6 +322,10 @@ function Tinaviz(args) {
                               <!--[if !IE]> -->\
                             </object>\
                             <!--<![endif]-->';
+                            
+                            
+              return appletTag;
+               
         
         }
         
@@ -833,7 +863,6 @@ function Tinaviz(args) {
             }
         }
 
-
         /****************************************
          *
          * HTML VIZ DIV ADJUSTING/ACTION
@@ -844,6 +873,7 @@ function Tinaviz(args) {
          * Dynamic div width
          */
          this.size= function(width, height) {
+            if (wrapper == null || applet == null) return;
             $('#tinaviz').css("height",""+(height)+"px");
             $('#tinaviz').css("width",""+(width)+"px");
             wrapper.height = height;
@@ -870,24 +900,7 @@ function Tinaviz(args) {
             callbackImported(msg);
         }
         
-        /*
-         * PUBLIC METHOD, AUTOMATIC RESIZE THE APPLET
-         */
-        this.auto_resize = function() {
-           this.size(this.getWidth(), this.getHeight());
-        }
 
-        /*
-         * PRIVATE METHOD, RESIZE THE APPLET
-         */
-        this.size= function(width, height) {
-            if (wrapper == null || applet == null) return;
-            wrapper.width = width;
-            wrapper.height = height;
-            $('#tinaviz').css('width',width);
-            $('#tinaviz').css('height',height);
-        }
-    //};
     
         
  
