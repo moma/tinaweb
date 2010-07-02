@@ -444,13 +444,7 @@ function Tinaviz(args) {
         * Search and select nodes
         */
         this.searchNodes= function(label, type) {
-            if (applet == null) return {};
-            var matchlist = this.getNodesByLabel(label, type);
-            for (var i = 0; i < matchlist.length; i++ ) {
-                applet.selectFromId( decodeJSON( matchlist[i]['id'] ), true );
-                // todo: auto center!!
-                //applet.
-            }
+            if (applet!=null) applet.selectNodesByLabel(label, type);
         }
 
         /*
