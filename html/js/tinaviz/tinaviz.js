@@ -19,14 +19,83 @@ function Tinaviz(args) {
     };
     for (x in args) { opts[x] = args[x] };
     
-    var views = {
+    // todo: replace by 'view'
+    this.current = {
+    
+            name: 'macro',
+            
+            // TODO put current viz manipulation methods here
+            set: function(key,value) { return applet.view().set(key,value) },
+            get: function(key) { return applet.view().get(key) },   
+            commitProperties: function() { return applet.view().commitProperties() },
+               
+            category: "NGram",
+            
+            filters: [
+                {},
+                {}
+               // { filter 1.. }
+            
+            ]
+    };
+        
+    this.views = {
         macro: {
-            DocumentLayoutCounter: 0,
-            NGramLayoutCounter: 0,
+            name: 'macro',
+        
+            // setters/getters used for communication with the applet
+            set: function(key,value) { return applet.view('macro').set(key,value) },
+            get: function(key) { return applet.view('macro').get(key) },   
+            commitProperties: function() { return applet.view('macro').commitProperties() },
+               
+            selection: new Array(),
+            
+            categories: {
+                Document: {
+                    layout: {
+                        iter: 0,
+                        // TODO
+                        // put other layout parameters here
+                    }
+                },
+                NGram: {
+                    layout: {
+                        iter: 0,
+                        // TODO
+                        // put other layout parameters here
+                    }
+                }
+            },
+            filters: []
         },
         meso: {
-            DocumentLayoutCounter: 0,
-            NGramLayoutCounter: 0,
+            name: 'meso',
+            
+            // setters/getters used for communication with the applet
+            set: function(key,value) { return applet.view('meso').set(key,value) },
+            get: function(key) { return applet.view('meso').get(key) },   
+            commitProperties: function() { return applet.view('meso').commitProperties() },
+            
+            
+            selection: new Array(),
+            
+            categories: {
+                Document: {
+                    layout: {
+                        iter: 0,
+                        // TODO
+                        // put other layout parameters here
+                    }
+                },
+                NGram: {
+                    layout: {
+                        iter: 0,
+                        // TODO
+                        // put other layout parameters here
+                    }
+                }
+            },
+            filters: []
         }
     };
     
@@ -35,11 +104,11 @@ function Tinaviz(args) {
     var applet = null;
     var cbsAwait = {};
     var cbsRun = {};
-    var toBeSelected = new Array();
+    this.toBeSelected = new Array();
 
-    var callbackReady = function () {};
-    var callbackImported = function(success) {};
-    var callbackViewChanged = function(view) {};
+    this.callbackReady = function () {};
+    this.callbackImported = function(success) {};
+    this.callbackViewChanged = function(view) {};
   
     // PUBLIC MEMBERS
     this.isReady = 0;
@@ -118,13 +187,13 @@ function Tinaviz(args) {
                             view.updateFromURI(sPath.substring(0, sPath.lastIndexOf('/') + 1) + opts.url);
                         }
                     } catch (e) {
-                        console.error("CATCHED JAVA ERROR "+e);
+                        alert("Couldn't import graph: "+e);
                         opts.error(e);
                     }
                  },
                 success: function(gexf) {
                     var f = false;
-                    alert("success, calling updateFromString");
+                    // alert("success, calling updateFromString");
                     try {
                         view.updateFromString(gexf);
                     } catch (e) {
@@ -140,7 +209,7 @@ function Tinaviz(args) {
                                 view.updateFromURI(sPath.substring(0, sPath.lastIndexOf('/') + 1) + opts.url);
                             }
                         } catch (e) {
-                            console.error("CATCHED JAVA ERROR "+e);
+                        alert("Couldn't import graph: "+e);
                             opts.error(e);
                         }
                     }
@@ -241,23 +310,24 @@ function Tinaviz(args) {
          */
         this.dispatchProperty= function(key,value) {
             if (applet == null) return;
-            return applet.set("all",key,value);
+            for (view in this.views) {
+                this.views[view].set(key, value);
+            }
         }
 
         /*
          * Core method communicating with the applet
          */
-        this.set= function(view,key,value) {
-            if (applet == null) return;
-            return applet.set(view,key,value);
+        this.set= function(key,value) {
+            return applet.set(key,value);
         }
 
         /*
          * Core method communicating with the applet
          */
-        this.get= function(view,key) {
+        this.get= function(key) {
             if (applet == null) return;
-            return applet.get(view,key);
+            return applet.get(key);
         }
 
         /*
@@ -266,6 +336,7 @@ function Tinaviz(args) {
         this.setView = function(view) {
             if (applet == null) return;
             applet.setView(view);
+            
         }
 
         /*
@@ -309,8 +380,7 @@ function Tinaviz(args) {
 
         this.resetLayoutCounter= function(view) {
             if (applet == null) return;
-            // TODO switch to the other view
-            applet.resetLayoutCounter();
+            applet.view(view).set("layout/iter",0);
         }
 
   /*
@@ -483,7 +553,7 @@ function Tinaviz(args) {
          *  Callback of double left clics
          */
         this.leftDoubleClicked = function(view, data) {
-            var category = this.get("current", "category/category");
+            var category = this.get("category/category");
             for (var id in data) {
                 this.viewMeso(decodeJSON(id), category);
                 break;
@@ -649,54 +719,6 @@ function Tinaviz(args) {
             return "Document";
         }
 
-        /**
-         * Manually toggles the category
-         */
-        this.toggleCategory = function(view) {
-            if (applet == null) return;
-            
-            tinaviz.toBeSelected = new Array();
-                        
-            for (var nodeid in this.selection) {
-                // gets the full neighbourhood for the tag cloud
-                var nb = tinaviz.getNeighbourhood(this.getViewLevel(),nodeid);
-
-                // alert("line 664");
-
-                for (var nbid in nb) {
-
-                    if ( tempcloud[nbid] !== undefined ) {
-                        //tempcloud[nbid]['degree']++;
-                    // pushes a node if belongs to the opposite category
-                    } else if (this.selection[nodeid]['category'] != nb[nbid]['category']) {
-                        tinaviz.toBeSelected.push(nbid);
-                        // alert("pushing "+nbid+" to tinaviz.toBeSelected, new size is "+tinaviz.toBeSelected.length);
-                    }
-                }
-            }
-            
-            
-            //alert("we are in toggle category, number of 'toBeSelected':"+tinaviz.toBeSelected.length);
-            
-            var i = 0;
-            for (var nbid in tinaviz.toBeSelected) {   
-                i = i + 1;                        
-                if (i==toBeSelected.length) {
-                    tinaviz.selectFromId(nbid, true);
-                } else {
-                    tinaviz.selectFromId(nbid, false);
-                }
-            }
-            
-            // get and set the new category to display
-            var next_cat = this.getOppositeCategory( this.get(view, "category/category") );
-            this.set(view, "category/category", next_cat);
-            // touch and centers the view
-            this.touch();
-            this.autoCentering();
-            // updates the node list table
-            this.updateNodes(view, next_cat);
-        }
 
         /**
          * Manually toggles the view to meso given an id
@@ -706,7 +728,7 @@ function Tinaviz(args) {
             this.unselect();
             this.selectFromId(id, true);
             // sets the category of the graph
-            this.set("meso", "category/category", category);
+            this.views.meso.set("category/category", category);
             //this.set("macro", "category/category", category);
             this.setView("meso");
             this.touch("meso");
@@ -714,21 +736,22 @@ function Tinaviz(args) {
         }
 
         this.toggleView= function() {
-            var current_cat = this.get("current","category/category");
+            var current_cat = this.get("category/category");
             if (this.getViewName() == "macro") {
                 // check if selection is empty
                 if (Object.size(this.infodiv.selection) != 0) {
-                    this.set("meso", "category/category", current_cat);
+                    this.views.meso.set("category/category", current_cat);
                     this.setView("meso");
                     this.updateNodes("meso", current_cat);
                 } else {
                     alert("please first select some nodes before switching to meso level");
                 }
             } else if (this.getViewName() == "meso") {
-                this.set("macro", "category/category", current_cat);
+                this.views.macro.set("category/category", current_cat);
                 this.setView("macro");
                 this.updateNodes("macro", current_cat);
             }
+           
         }
         
         this.session=function() {
@@ -762,6 +785,7 @@ function Tinaviz(args) {
             //this.touch("current"); // don't touch, so we do not redraw the graph
         }
 
+        
 
         /*
          *  Retrieves list of nodes

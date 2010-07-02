@@ -103,11 +103,10 @@ $(document).ready(function(){
         values: [0, 100],
         animate: true,
         slide: function(event, ui) {
-            var view = tinaviz.view();
-            view.set("edgeWeight/min", ui.values[0] / 100.0);
-            view.set("edgeWeight/max", ui.values[1] / 100.0);
-            view.resetLayoutCounter();
-            view.commitProperties();
+            tinaviz.current.set("edgeWeight/min", ui.values[0] / 100.0);
+            tinaviz.current.set("edgeWeight/max", ui.values[1] / 100.0);
+            tinaviz.current.set("layout/iter", 0);
+            tinaviz.current.commitProperties();
             if (tinaviz.getViewName()=="meso") tinaviz.autoCentering();
         }
     });
@@ -117,11 +116,10 @@ $(document).ready(function(){
         values: [0, 100],
         animate: true,
         slide: function(event, ui) {
-            var view = tinaviz.view();
-            view.set("nodeWeight/min", ui.values[0] / 100.0);
-            view.set("nodeWeight/max", ui.values[1] / 100.0);
-            view.resetLayoutCounter();
-            view.commitProperties();
+            tinaviz.current.set("nodeWeight/min", ui.values[0] / 100.0);
+            tinaviz.current.set("nodeWeight/max", ui.values[1] / 100.0);
+            tinaviz.current.set("layout/iter", 0);
+            tinaviz.current.commitProperties();
             if (tinaviz.getViewName()=="meso") tinaviz.autoCentering();
         }
     });
@@ -131,9 +129,8 @@ $(document).ready(function(){
         max: 100.0,// precision/size
         animate: true,
         slide: function(event, ui) {
-            var view = tinaviz.view();
-            view.set("output/nodeSizeRatio", ui.value / 100.0);
-            view.commitProperties();
+            tinaviz.current.set("output/nodeSizeRatio", ui.value / 100.0);
+            tinaviz.current.commitProperties();
         }}
     );
 
@@ -142,9 +139,8 @@ $(document).ready(function(){
         max: 300.0, // max disk radius, in pixel
         animate: true,
         slide: function(event, ui) {
-            var view = tinaviz.view();
-            view.set("selection/radius", ui.value);
-            view.commitProperties();
+            tinaviz.current.set("selection/radius", ui.value);
+            tinaviz.current.commitProperties();
         }
     });
 
@@ -202,7 +198,38 @@ $(document).ready(function(){
             primary: 'ui-icon-arrows'
         },
     }).click(function(event) {
-        tinaviz.toggleCategory("current");
+        /**
+         * Manually toggles the category, and do the bipartite work
+         */
+
+            var viewName = tinaviz.getViewName();
+            var view = tinaviz.views[viewName];
+            // get and set the new category to display
+            var cat = view.get("category/category");
+
+            var next_cat = tinaviz.getOppositeCategory( cat );
+
+            // update the node list
+            tinaviz.updateNodes(viewName, next_cat);
+            
+            // update the algorithm 
+            view.categories[cat].layout.iter = view.get("layout/iter");
+            view.set("layout/iter", view.categories[next_cat].layout.iter);
+            view.set("category/category", next_cat);
+            view.commitProperties();
+            
+            tinaviz.autoCentering();
+
+            if (viewName=="macro") {
+                // empty the selection, and ask the applet to select opposite nodes
+                var i = 0;
+                tinaviz.infodiv.selection = {};
+                for (var nbid in tinaviz.infodiv.oppositeSelection) {       
+                    tinaviz.selectFromId(nbid, (++i == tinaviz.infodiv.oppositeSelection.length));
+                }
+            }
+            tinaviz.infodiv.display_current_category();
+        
     });
 
 });
