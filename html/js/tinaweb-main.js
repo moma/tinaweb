@@ -61,7 +61,7 @@ var tinaviz = {};
 
 $(document).ready(function(){
     
-    $("#title").html("FET Open projects explorer");
+    $("#title").html("<h1>FET Open projects explorer</h1>");
 
     tinaviz = new Tinaviz({
         tag: $("#vizdiv"),

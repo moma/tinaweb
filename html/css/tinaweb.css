@@ -78,10 +78,6 @@ body {
     text-align: left;
 }
 
-.bigTitle {
-    font-size: 20px;
-}
-
 /* each sliders positioned relatively to their parent */
 .slider {
     float: left;
