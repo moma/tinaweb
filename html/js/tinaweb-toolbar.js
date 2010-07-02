@@ -66,13 +66,12 @@ $(document).ready(function(){
     $("#level").button({
         text: true,
         icons: {
-            //primary: null,
-            secondary: 'ui-icon-help'
+            primary: 'ui-icon-help'
         }
     }).click( function(eventObject) {
         tinaviz.toggleView();
     });
-
+  $("#level").attr("title","click to switch the level");
     $("#search_button").button({
         text: false,
         icons: {

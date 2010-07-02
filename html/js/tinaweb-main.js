@@ -166,27 +166,30 @@ $(document).ready(function(){
                 tinaviz.infodiv.display_current_category();
                 tinaviz.infodiv.display_current_view();
                 
-                var disable = false;
+                var showFilter = false;
+                
                 if (view.name == "meso") {
+                
                     // TODO check selection
                     // if selection has edges with edge of all the same weight, we disable the filter
                     var weight = null;
                     for (node in view.nodes) {
+                        alert("node:"+node);
                         for (out in node.outputs) {
+                            alert("node weight:"+out.weight);
                             if (weight == null) {
                                 weight = out.weight;
                             }
                             else {
                                 if (weight != out.weight) {
-                                    disable = false;
-                                    return;
+                                    showFilter = true;
+                                    break;
                                 }
                             }
                         }
                     }
-                    disable = true;
                 } 
-                $("#sliderEdgeWeight").slider( "option", "disabled", disable );
+                $("#sliderEdgeWeight").slider( "option", "disabled", false );
             }
         });
         
