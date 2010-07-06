@@ -50,7 +50,6 @@ var resize = function() {
         var size = { w: getScreenWidth() - infoDivWidth - 30,
                       h: getScreenHeight() - $("#hd").height() - $("#ft").height() - 60 };
 
-        $("#infodiv").css('height', ""+(size.h - 12)+"px");
         $("#infodiv").css('width', ""+(infoDivWidth)+"px");
 
         $(".accord_entry").css('height', ""+(size.h - 70)+"px");
@@ -174,9 +173,9 @@ $(document).ready(function(){
                     // if selection has edges with edge of all the same weight, we disable the filter
                     var weight = null;
                     for (node in view.nodes) {
-                        alert("node:"+node);
+                        //alert("node:"+node);
                         for (out in node.outputs) {
-                            alert("node weight:"+out.weight);
+                            //alert("node weight:"+out.weight);
                             if (weight == null) {
                                 weight = out.weight;
                             }

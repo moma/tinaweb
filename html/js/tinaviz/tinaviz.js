@@ -16,7 +16,7 @@ function Tinaviz(args) {
         branding: true,
         width: 0,
         height: 0,
-        chrome: false,
+        xulrunner: false,
         root: "",
     };
     for (x in args) { opts[x] = args[x] };
@@ -123,13 +123,20 @@ function Tinaviz(args) {
     this.path = opts.path;
     this.engine = opts.engine;
     this.context = opts.context;
-    this.branding= opts.branding;
-    this.chrome = opts.chrome;
+    this.branding = opts.branding;
+    this.xulrunner = opts.xulrunner;
     this.root = opts.root;
+    
+    // constant
+    this.iframeFileName = "iframe.html";
     
     
     this.init= function() {
-        wrapper = $("#tinaviz")[0]; // we need to get the html tag immediately
+        if (this.xulrunner == true) {
+            wrapper = $('#vizframe').contents().find("#tinaviz")[0];
+        } else {
+            wrapper = $("#tinaviz")[0];
+        }
         if (wrapper == null) {
             alert("Error: couldn't get the applet!");
             return;
@@ -242,29 +249,14 @@ function Tinaviz(args) {
             var root = this.root;
 
             
-
-    /*
-        var DIR_SERVICE = new Components.Constructor("@mozilla.org/file/directory_service;1", "nsIProperties");
-    var path = (new DIR_SERVICE()).get("AChrom", Components.interfaces.nsIFile).path;
-    var appletPath;
-    if (path.search(/\\/) != -1) { appletPath = path + "\\content\\applet\\index.html" }
-    else { appletPath = path + "/content/applet/index.html" }
-    var appletFile = Components.classes["@mozilla.org/file/local;1"].createInstance(Components.interfaces.nsILocalFile);
-    appletFile.initWithPath(appletPath);
-    var appletURL = Components.classes["@mozilla.org/network/protocol;1?name=file"].createInstance(Components.interfaces.nsIFileProtocolHandler).getURLSpecFromFile(appletFile);
-    var iframehtml = '<iframe id="vizframe" name="vizframe" class="vizframe" allowtransparency="false" scrolling="no"  frameborder="1" src="'+appletURL+'"></iframe>';
-    window.setTimeout("$('#container').html('"+iframehtml+"');", 2000);
-    */
-    // id="vizframe" name="vizframe" class="vizframe" allowtransparency="false" scrolling="no"  frameborder="1" 
-    
-    
-    
             var archives = path+'tinaviz-all.jar';
             
             var brand = "true";
             if (!this.branding) brand = "false";
             
             //alert("PATH: "+path);
+            
+
 
             var appletTag = '<!--[if !IE]> --> \
                             <object id="tinaviz" \
@@ -857,7 +849,13 @@ function Tinaviz(args) {
             }
         }
 
-        /****************************************
+
+        this.xulrunnerHack = function() {
+            alert("iframe has loaded");
+            $('body', $('#vizframe').contents()).html( this.getHTML() );
+        }
+        
+        /**************************************** this.tag
          *
          * HTML VIZ DIV ADJUSTING/ACTION
          *
@@ -870,6 +868,10 @@ function Tinaviz(args) {
             if (wrapper == null || applet == null) return;
             $('#tinaviz').css("height",""+(height)+"px");
             $('#tinaviz').css("width",""+(width)+"px");
+            if (this.xulrunner == true) {
+                $('#vizframe').css("height",""+(height)+"px");
+                $('#vizframe').css("width",""+(width)+"px");
+            }
             wrapper.height = height;
             wrapper.width = width;
          }
@@ -894,10 +896,32 @@ function Tinaviz(args) {
             callbackImported(msg);
         }
         
-
-    
+    if (this.xulrunner == true) {
+        // re-configure the context
+        this.context = "parent."+this.context;
         
- 
-    this.tag.html( this.getHTML() );
+        var url = this.root+this.iframeFileName;
+
+        // insert an iframe
+        // this.tag.html('<iframe id="xulrunner_hack_iframe" name="xulrunner_hack_iframe" class="xulrunner_hack_iframe" allowtransparency="false" scrolling="no" frameborder="1" src="'+url+'"></iframe>');
+        //this.tag.
+        // insert our applet in the iframe
+        //console.dir( $("#xulrunner_hack_iframe").contents() );
+        this.tag.append('<iframe id="vizframe" name="vizframe" class="vizframe" allowtransparency="false" scrolling="no" frameborder="0" src="" style="float:left; width:0px; height:0px; border:0px;"></iframe>');
+        $('#vizframe').attr('src', url);
+        
+    /* does not work :(
+        $('#vizframe').load(function() {
+            alert("iframe loaded");
+            $('body', $('#vizframe').contents()).html('Hello World!');
+    });*/
+
+        
+
+        //$("#xulrunner_hack_iframe").contents().find("container").html ( this.getHTML() );
+    } else {
+        this.tag.html( this.getHTML() );
+    }
+    
 }
 
