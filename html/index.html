@@ -35,6 +35,9 @@
 
         <!-- TINAVIZ -->
         <script type="text/javascript" src="js/tinaviz/tinaviz.js" language="javascript"></script>
+        
+        <!-- WE USE TINAWEB UTILS-->
+        <script type="text/javascript" src="js/tinaweb-utils.js" language="javascript"></script>
 
         <!-- WE USE TINAWEB INFO PANEL -->
         <script type="text/javascript" src="js/tinaweb-info.js" language="javascript"></script>
@@ -44,18 +47,19 @@
 
         <!-- WE USE TINAWEB INFO PANEL -->
         <script type="text/javascript" src="js/tinaweb-main.js" language="javascript"></script>
-
+        
+        <!-- UNCOMMENT THE FOLLOWING LINE TO ENABLE DEBUG -->
+        <!--<script type="text/javascript" src="js/firebug-lite/firebug-lite-beta.js" language="javascript"></script>-->
+        
         <!-- JQUERY UI CSS -->
         <link type="text/css" rel="stylesheet" href="css/eggplant/jquery-ui-1.8.1.custom.css"/>
-
-        <!-- Combo-handled YUI CSS files: -->
-        <link rel="stylesheet" type="text/css" href="css/grids-min.css">
 
         <!--TINASOFT CSS -->
         <link type="text/css" rel="stylesheet" href="css/tinaweb.css"/>
 
     </head>
     <body>
+      
         <div id="doc3" class="yui-t5 ui-widget">
             <div id="hd"  class="ui-widget">
                 <div id="hdb">
@@ -129,60 +133,62 @@
                         <!--</div>-->
                         <button id="toggle-autoCentering" class="fg-button toolbar-right">recenter</button>
                         <form id="search" action="#" class="toolbar-right">
-                            <input id="search_input" type="text" value="">
+                            <input id="search_input" type="text" value="" />
                             <button id="search_button" class="fg-button">search</button>
                         </form>
-                        </div> <!-- End of BUTTON SET -->
 
                     </div><!-- End of htoolbar -->
-                   <!--<div style="clear:both;"></div>-->
                 </div><!-- End of hdb -->
             </div><!-- End of hd -->
+            
             <div id="bd">
                 <div id="yui-main">
                     <div class="yui-b">
-                    <div class="yui-gc">
-                        <!-- LEFT MAIN COLUMN-->
-                        <div class="yui-u first">
-                            <div id="appletInfo" class="appletInfo">Please wait while loading..</div>
-                            <div id="vizdiv"></div>
-                        </div>
-                        <!-- RIGHT MAIN COLUMN-->
-                        <div id="infodiv" class="yui-u">
-                            <h3>Current selection <a href="#" id="toggle-unselect"></a></h3>
-                            <div id="node_details" class="accord_entry">
-                            <!--
-                                <div id="node_unselect" class="fg-buttonset">
-                                        <a href="#"
-                                            id="toggle-unselect"
-                                            class="fg-button ui-state-default fg-button-icon-left ui-priority-primary ui-corner-all"
-                                           title="unselect"><span class="ui-icon ui-icon-close"></span></a>
-                                </div>-->
-                                <!--<div style="clear:both;"></div>-->
-                                <div id="node_label" class="ui-widget-header ui-corner-all"></div>
-                                <div id="node_neighbourhood" class="ui-widget-content ui-corner-all"></div>
-                                <div id="node_contents" class="ui-widget-content ui-corner-all">  </div>
-                            </div>
-                            <h3>All nodes</h3>
-                            <div>
-                                <div id="node_list" class="accord_entry">
+						<div class="yui-gc">
+							<!-- LEFT MAIN COLUMN-->
+							<div id="appletdiv" class="yui-u first">
+								<div id="appletInfo" class="appletInfo">Please wait while loading..</div>
+								<div id="vizdiv"></div>
+							</div>
+							<!-- RIGHT MAIN COLUMN-->
+							<div id="infodivparent">
+								<div id="infodiv" class="yui-u">
+									<h3><a href="#">Current selection</a> <a href="#" id="toggle-unselect"></a></h3>
+									<div id="node_details">
+									<!--
+										<div id="node_unselect" class="fg-buttonset">
+												<a href="#"
+													id="toggle-unselect"
+													class="fg-button ui-state-default fg-button-icon-left ui-priority-primary ui-corner-all"
+												   title="unselect"><span class="ui-icon ui-icon-close"></span></a>
+										</div>-->
+										<!--<div style="clear:both;"></div>-->
+										<div id="node_label" class="ui-widget-header ui-corner-all"></div>
+										<div id="node_neighbourhood" class="ui-widget-content ui-corner-all"></div>
+										<div id="node_contents" class="ui-widget-content ui-corner-all">  </div>
+									</div>
+									<h3><a href="#">All nodes</a></h3>
+									<div>
+										<div id="node_list">
 
-                                    <table id="node_table" class="">
-                                    <thead>
-                                    <tr>
-                                        <th>List of all nodes of the current category<span class="ui-icon ui-icon-help icon-right" title="click on a label to switch to its meso view"></span></th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    </tbody>
-                                    </table>
-                                </div>
-                            </div> <!-- accordion 2 -->
-                        </div><!-- / INFODIV -->
-                    </div><!-- end of yui-gc -->
+											<table id="node_table">
+											<thead>
+											<tr>
+												<th>List of all nodes of the current category<span class="ui-icon ui-icon-help icon-right" title="click on a label to switch to its meso view"></span></th>
+											</tr>
+											</thead>
+											<tbody>
+											</tbody>
+											</table>
+										</div>
+									</div> <!-- accordion 2 -->
+								</div><!-- /infodiv  -->
+							</div><!-- / INFODIVPARENT -->
+						</div><!-- end of yui-gc -->
                     </div><!-- end of yui-b -->
                 </div><!-- end of yui-main -->
-            </div>
+            </div><!-- end of bd -->
+            <div style="clear: both;"></div>
             <div id="ft" class="ui-widget ui-widget-header ui-corner-all">
                 <p class="ui-corner-all" style="margin: 0;">Copyright MOMA, CREA, CNRS - 2009, 2010, 2011.</p>
                 <p class="ui-widget-content ui-corner-all" style="margin: 0;">
@@ -190,7 +196,7 @@
                 Our partners : <img src="css/branding/partners_small.jpg" height=15px/>
                 Our softwares : <a href="http://tinasoft.eu/"><img src="css/branding/get-tinasoft.png" height=15px/></a>
                 </p>
-            </div>
-
+            </div><!-- end of ft -->
+        </div><!-- end of doc3 -->
     </body>
 </html>

@@ -15,9 +15,7 @@ function Tinaviz(args) {
         engine: 'software',
         branding: true,
         width: 0,
-        height: 0,
-        xulrunner: false,
-        root: "",
+        height: 0
     };
     for (x in args) { opts[x] = args[x] };
     
@@ -124,8 +122,7 @@ function Tinaviz(args) {
     this.engine = opts.engine;
     this.context = opts.context;
     this.branding = opts.branding;
-    this.xulrunner = opts.xulrunner;
-    this.root = opts.root;
+
     
     // constant
     this.iframeFileName = "iframe.html";
@@ -220,7 +217,7 @@ function Tinaviz(args) {
                                 view.updateFromURI(sPath.substring(0, sPath.lastIndexOf('/') + 1) + opts.url);
                             }
                         } catch (e) {
-                        alert("Couldn't import graph: "+e);
+                            alert("Couldn't import graph: "+e);
                             opts.error(e);
                         }
                     }
@@ -237,26 +234,19 @@ function Tinaviz(args) {
         };
         for (x in args) { opts[x] = args[x] };
    
-        callbackViewChanged = opts.viewChanged;
-        callbackCategoryChanged = opts.categoryChanged;
+        this.callbackViewChanged = opts.viewChanged;
+        this.callbackCategoryChanged = opts.categoryChanged;
      }
 
      this.getHTML = function() {
             var path = this.path;
             var context = this.context;
             var engine = this.engine;
-            var chrome = this.chrome;
-            var root = this.root;
 
-            
             var archives = path+'tinaviz-all.jar';
             
             var brand = "true";
-            if (!this.branding) brand = "false";
-            
-            //alert("PATH: "+path);
-            
-
+            if (this.branding == false) brand = "false";
 
             var appletTag = '<!--[if !IE]> --> \
                             <object id="tinaviz" \
@@ -279,6 +269,8 @@ function Tinaviz(args) {
                                 <param name="js_context" value="'+context+'" /> \
                                 <param name="root_prefix" value="'+path+'" /> \
                                 <param name="branding_icon" value="'+brand+'" /> \
+                                <param name="classloader_cache" value="false" /> \
+                                <!--<param name="separate_jvm" value="true" />--> \
                               <!--<![endif]--> \
  \
                               <object id="tinaviz" classid="clsid:CAFEEFAC-0016-0000-FFFF-ABCDEFFEDCBA" \
@@ -299,6 +291,8 @@ function Tinaviz(args) {
                                 <param name="js_context" value="'+context+'" />\
                                 <param name="root_prefix" value="'+path+'" /> \
                                 <param name="branding_icon" value="'+brand+'" /> \
+                                <param name="classloader_cache" value="false" /> \
+                                <!--<param name="separate_jvm" value="true" />--> \
                                 <p>\
                                     <strong>\
                                         This browser does not have a Java Plug-in.\
@@ -312,20 +306,16 @@ function Tinaviz(args) {
                               </object>\
 \
                               <!--[if !IE]> -->\
-                            </object>\
-                            <!--<![endif]-->';
-                            
-                            
+                            </applet>\
+                            <!--<![endif]-->';       
               return appletTag;
                
-        
         }
         
         /************************
          * Core applet methods
          *
          ************************/
-
 
         /*
          * Core method communicating with the applet
@@ -640,7 +630,7 @@ function Tinaviz(args) {
             if (applet == null) return;
 
             var view = this.constructNewViewObject(viewName);
-            callbackViewChanged(view);
+            this.callbackViewChanged(view);
         }
         
 
@@ -849,11 +839,6 @@ function Tinaviz(args) {
             }
         }
 
-
-        this.xulrunnerHack = function() {
-            alert("iframe has loaded");
-            $('body', $('#vizframe').contents()).html( this.getHTML() );
-        }
         
         /**************************************** this.tag
          *
@@ -868,10 +853,6 @@ function Tinaviz(args) {
             if (wrapper == null || applet == null) return;
             $('#tinaviz').css("height",""+(height)+"px");
             $('#tinaviz').css("width",""+(width)+"px");
-            if (this.xulrunner == true) {
-                $('#vizframe').css("height",""+(height)+"px");
-                $('#vizframe').css("width",""+(width)+"px");
-            }
             wrapper.height = height;
             wrapper.width = width;
          }
@@ -896,32 +877,8 @@ function Tinaviz(args) {
             callbackImported(msg);
         }
         
-    if (this.xulrunner == true) {
-        // re-configure the context
-        this.context = "parent."+this.context;
-        
-        var url = this.root+this.iframeFileName;
-
-        // insert an iframe
-        // this.tag.html('<iframe id="xulrunner_hack_iframe" name="xulrunner_hack_iframe" class="xulrunner_hack_iframe" allowtransparency="false" scrolling="no" frameborder="1" src="'+url+'"></iframe>');
-        //this.tag.
-        // insert our applet in the iframe
-        //console.dir( $("#xulrunner_hack_iframe").contents() );
-        this.tag.append('<iframe id="vizframe" name="vizframe" class="vizframe" allowtransparency="false" scrolling="no" frameborder="0" src="" style="float:left; width:0px; height:0px; border:0px;"></iframe>');
-        $('#vizframe').attr('src', url);
-        
-    /* does not work :(
-        $('#vizframe').load(function() {
-            alert("iframe loaded");
-            $('body', $('#vizframe').contents()).html('Hello World!');
-    });*/
-
-        
-
-        //$("#xulrunner_hack_iframe").contents().find("container").html ( this.getHTML() );
-    } else {
+   
         this.tag.html( this.getHTML() );
-    }
     
 }
 
