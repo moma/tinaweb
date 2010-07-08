@@ -13,48 +13,6 @@
 //      Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 //      MA 02110-1301, USA.
 
- /* useful for fullscreen mode */
-function getScreenWidth() {
-    var x = 0;
-    if (self.innerHeight) {
-            x = self.innerWidth;
-    }
-    else if (document.documentElement && document.documentElement.clientHeight) {
-            x = document.documentElement.clientWidth;
-    }
-    else if (document.body) {
-            x = document.body.clientWidth;
-    }
-    return x;
-}
-
-/* useful for fullscreen mode */
-function getScreenHeight() {
-    var y = 0;
-    if (self.innerHeight) {
-        y = self.innerHeight;
-    }
-    else if (document.documentElement && document.documentElement.clientHeight) {
-        y = document.documentElement.clientHeight;
-    }
-    else if (document.body) {
-        y = document.body.clientHeight;
-    }
-
-    return y;
-}
-
-var resize = function() {
-        var infoDivWidth = 390;
-
-        var size = { w: getScreenWidth() - infoDivWidth - 30,
-                      h: getScreenHeight() - $("#hd").height() - $("#ft").height() - 60 };
-
-        $("#infodiv").css('width', ""+(infoDivWidth)+"px");
-
-        $(".accord_entry").css('height', ""+(size.h - 70)+"px");
-        return size;
-};
 
 var tinaviz = {};
 
@@ -84,8 +42,7 @@ $(document).ready(function(){
         tinaviz.size(size.w, size.h);
 
         $("#infodiv").accordion({
-            fillSpace: true,
-            animated: 'easyslide',
+            fillSpace: true
         });
         
         var defaultView = "macro";

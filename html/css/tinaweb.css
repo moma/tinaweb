@@ -15,20 +15,7 @@
 .fg-button { margin:0 4px 0 0; text-decoration:none; position: relative; text-align: center; }
 .sliders { margin:0 4px 0 0; text-decoration:none; position: relative; text-align: center; }
 .icon-right { float: right; }
-./*fg-button .ui-icon { position: absolute; top: 50%; margin-top: -8px; left: 50%; margin-left: -8px; }*/
 
-/* remove extra button width in IE */
-/*button.fg-button { width:auto; overflow:visible; }*/
-
-/*.fg-button-icon-left { padding-left: 2.1em; }
-.fg-button-icon-right { padding-right: 2.1em; }
-.fg-button-icon-left .ui-icon { right: auto; left: .2em; margin-left: 0; }
-.fg-button-icon-right .ui-icon { left: auto; right: .2em; margin-left: 0; }
-
-.fg-button-icon-solo { display:block; width:8px; text-indent: -9999px; } */    /* solo icon buttons must have block properties for the text-indent to work */
-
-/*.fg-buttonset { float:left; }*/
-/*.fg-buttonset .fg-button { float: left; }*/
 .fg-buttonset-single .fg-button,
 .fg-buttonset-multi .fg-button { margin-right: -1px;}
 
@@ -36,8 +23,6 @@
 
 .fg-toolbar .fg-buttonset { margin: 1,5em; padding-left: 1px; }
 .sliders { margin: 1,5em; padding-left: 30px; border: 1px;}
-/*.fg-toolbar .fg-button { font-size: 1em;  }*/
-
 
 
 body {
@@ -48,28 +33,27 @@ body {
     margin: 7px;
 }
 
-
-
 #toggle-unselect {
-    height:0;
-    left:25px;
-    position:absolute;
-    top:0;
-    width:0;
+    /*height:0;*/
+    right:25px;
+    position:relative;
+    /*top:0;
+    width:0;*/
+}
+
+#appletdiv {
+	float: left;
 }
 
 #infodiv {
     margin: 4px 9px;
+    float: right;
     /*height: 90%;*/
     /*overflow: auto;*/
 }
 
 #node_label {
     font-size: 12pt;
-}
-
-#accord_entry {
-    overflow: auto;
 }
 
 #node_table {
@@ -107,18 +91,6 @@ body {
 }
 
 
-.detailtext {
+/*.detailtext {
     color: #000000;
-}
-
-
-/*.toolbardiv {
-    padding:12px;
-    width: 600px;
-}
-
-#toolbar {
-    padding: 12px 3px;
-    font-family: "Trebuchet MS", "Arial", "Helvetica", "Verdana", "sans-serif";
 }*/
-

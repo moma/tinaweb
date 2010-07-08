@@ -19,35 +19,6 @@
 
  *
  */
-/*
- * utility modifying the Object prototype
- * to get its lenght
- */
-Object.size = function(obj) {
-    var size = 0, key;
-    for (key in obj) {
-        if (obj.hasOwnProperty(key)) size++;
-    }
-    return size;
-};
-/*
- * utility returning a list
- * from the values of a given object
- */
-Object.values = function(obj) {
-    var values = new Array();
-    for (key in obj) {
-        values.push(obj[key]);
-    }
-    return values;
-};
-
-function decodeJSON(encvalue) {
-    if (encvalue !== undefined)
-        return decodeURIComponent(encvalue).replace(/\+/g, " ").replace(/%21/g, "!").replace(/%27/g, "'").replace(/%28/g, "(").replace(/%29/g, ")").replace(/%2A/g, "*");
-    else
-        return "";
-};
 
 /*
  * Asynchronously displays of node list
