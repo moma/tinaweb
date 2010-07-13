@@ -34,10 +34,11 @@ body {
 }
 
 #toggle-unselect {
-    display:inline-block;
-    left:120px;
-    position:relative;
-    top:-13px;
+    float:right;
+    margin: 7px;
+    position:absolute;
+    right: 0px;
+    top: 0px;
 }
 
 #appletdiv {
@@ -89,10 +90,4 @@ body {
     font-size: 20px;
 }
 
-.ui-accordion .ui-accordion-header a {
-padding:0;
-}
 
-/*.detailtext {
-    color: #000000;
-}*/
