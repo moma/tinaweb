@@ -2,7 +2,7 @@
 
 - **authors**: 
  - [Julian Bilcke](http://github.com/jbilcke) (Java,JS) 
- - [David Chavalarias](http://github.com/davidchavalarias) (Algorithms)
+ - [David Chavalarias](http://chavalarias.com) (Algorithms & Spec.)
  - [Elias Showk](hhttp://github.com/elishowk) (JS, Python)
 
 ##I. What is it?
