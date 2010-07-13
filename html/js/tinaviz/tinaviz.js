@@ -387,6 +387,7 @@ function Tinaviz(args) {
          */
         this.selectFromId = function(id, callback) {
             if (applet == null) return;
+            if (id===undefined) return;
             return applet.selectFromId(id,callback);
         }
 
@@ -606,14 +607,21 @@ function Tinaviz(args) {
             
             reply.name = viewName;
             
-            // we construct our new style "view" object
-            
-            for (node in view.getNodesArray()) {
+            // we add some additionnal steps
+			// to be compatible with old LiveConnect
+			// implementations
+			
+            var i = 0;
+			var nodesArray = view.getNodesArray();
+            for (i=0;i<nodesArray.length;i++) {
+				node = nodesArray[i];
                 var n = { edges: [] };
-                for (w in node.getWeightsArray()) {
-                    n.edges.append({ weight: w });
+				var edgesArray = node.getWeightsArray();
+				var j = 0;
+                for (j=0;edgesArray.length;j++) {
+                    n.edges.append({ weight: edgesArray[j] });
                 }
-                reply["nodes"].append(n);
+                reply.nodes.append(n);
             }
             
             reply.get = function(arg) {

@@ -226,7 +226,7 @@ function InfoDiv(divid) {
                 this.selection[id] = lastselection[id];
                 labelinnerdiv.append( $("<b></b>").html(decodeJSON(node.label)) );
                 // displays contents only if it's a document
-                if ( node.category == 'Document' && node.content != null ) {
+                if ( node.content != null ) {
                     contentinnerdiv.append( $("<b></b>").html( decHTMLifEnc( decodeJSON(node.label ) ) ) );
                     contentinnerdiv.append( $("<p></p>").html( decHTMLifEnc( decodeJSON(node.content ) ) ) );
                 }

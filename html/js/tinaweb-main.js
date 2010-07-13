@@ -45,23 +45,41 @@ $(document).ready(function(){
             fillSpace: true
         });
         
-        var defaultView = "macro";
+        var prefs = {    
+            gexf: "French_bipartite_graph.gexf",
+            view: "macro",
+            category: "NGram",
+            node_id: "",
+            search: "",
+            magnify: "0.5",
+            cursor_size: "1.0",
+            edge_filter_min: "0.0",
+            edge_filter_max: "1.0",
+            node_filter_min: "0.0",
+            node_filter_max: "1.0"
+            
+        };
+        var urlVars = getUrlVars();
+        for (x in urlVars) {
+            prefs[x] = urlVars[x];
+        }
         
-        tinaviz.setView(defaultView);
+        tinaviz.setView(prefs.view);
 
         var session = tinaviz.session();
         var macro = tinaviz.view("macro");
         var meso = tinaviz.view("meso");
 
-        session.set("edgeWeight/min", 0.0);
-        session.set("edgeWeight/max", 1.0);
-        session.set("nodeWeight/min", 0.0);
-        session.set("nodeWeight/max", 1.0);
-        session.set("category/category", "NGram");
+        session.set("edgeWeight/min", parseFloat(prefs.edge_filter_min));
+        session.set("edgeWeight/max", parseFloat(prefs.edge_filter_max));
+        session.set("nodeWeight/min", parseFloat(prefs.node_filter_min));
+        session.set("nodeWeight/max", parseFloat(prefs.node_filter_max));
+        session.set("category/category", prefs.category);
         session.set("output/nodeSizeMin", 5.0);
         session.set("output/nodeSizeMax", 20.0);
-        session.set("output/nodeSizeRatio", 50.0/100.0);
-        session.set("selection/radius", 1.0);
+        session.set("output/nodeSizeRatio", parseFloat(prefs.magnify));
+        session.set("selection/radius", parseFloat(prefs.cursor_size));
+
 
         macro.filter("Category", "category");
         macro.filter("NodeWeightRange", "nodeWeight");
@@ -85,15 +103,43 @@ $(document).ready(function(){
         tinaviz.open({
             success: function() {
              // init the node list with ngrams
-             tinaviz.updateNodes( defaultView, "NGram" );
+             tinaviz.updateNodes( prefs.view, prefs.category );
 
              // cache the document list
-             tinaviz.getNodes(defaultView, "Document" );
+             tinaviz.getNodes( prefs.view, "Document" );
+             
+             var view = tinaviz.view();
 
+              // initialize the sliders
+              $("#sliderNodeSize").slider( "option", "value", 
+                    parseInt(view.get("output/nodeSizeRatio")) *100 
+              );
+              $("#sliderSelectionZone").slider( "option", "value", 
+                    parseInt(view.get("selection/radius")) * 100 
+              );
+              $("#sliderEdgeWeight").slider( "option", "values", [
+                    parseInt( view.get("edgeWeight/min") ),
+                    parseInt(view.get("edgeWeight/max")) *100 
+              ]);
+              $("#sliderNodeWeight").slider( "option", "values", [
+                    parseInt(view.get("nodeWeight/min") ),
+                    parseInt(view.get("nodeWeight/max")) *100 
+             ]);
+                
              tinaviz.infodiv.display_current_category();
              tinaviz.infodiv.display_current_view();
                         
              $("#appletInfo").hide();
+                       
+             if (prefs.node_id != "") {
+                tinaviz.selectFromId( prefs.node_id, true );
+             }
+             
+             if (prefs.search != "") {
+                $("#search_input").val(prefs.search);
+                 tinaviz.searchNodes(prefs.search, "containsIgnoreCase");
+             }
+
            },
            error: function(msg) {
              $("#appletInfo").html("Error, couldn't load graph: "+msg);
@@ -101,8 +147,9 @@ $(document).ready(function(){
         });
                 
         tinaviz.open({
-            view: defaultView,
-            url: "French_bipartite_graph.gexf",
+            view: prefs.view,
+            url: prefs.gexf
+
         });
         
         tinaviz.event({
