@@ -48,7 +48,7 @@ $(document).ready(function(){
         var prefs = {    
             gexf: "French_bipartite_graph.gexf",
             view: "macro",
-            category: "NGram",
+            category: "Document",
             node_id: "",
             search: "",
             magnify: "0.5",
@@ -96,7 +96,9 @@ $(document).ready(function(){
         meso.filter("EdgeWeightRangeHack", "edgeWeight");
         meso.filter("NodeFunction", "radiusByWeight");
         meso.filter("Output", "output");
-
+        
+        toolbar.init();
+    
         //tinaviz.readGraphJava("macro", "bipartite_graph_bipartite_map_bionet_2004_2007_g.gexf_.gexf");
         $("#appletInfo").html("Loading graph..");
 
