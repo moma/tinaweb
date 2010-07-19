@@ -89,8 +89,6 @@ var toolbar = {
 };
 
 toolbar.init = function() {
-    // binds the click event to tinaviz.searchNodes()
-    alert("initializing toolbar..");
     
     $("search").val(toolbar.values.search);
     
@@ -283,7 +281,6 @@ toolbar.updateButton = function(button, state) {
 toolbar.update = function(vals) {
     console.dir(vals);
     
-    alert("updating toolbar..");
     for (v in vals) {
         toolbar.values[v] = vals[v];
     }
