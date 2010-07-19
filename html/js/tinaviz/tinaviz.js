@@ -14,6 +14,7 @@ function Tinaviz(args) {
         context: "",
         engine: 'software',
         branding: true,
+        pause: false,
         width: 0,
         height: 0
     };
@@ -115,6 +116,7 @@ function Tinaviz(args) {
     this.infodiv = {};
 
 
+	this.opts = opts;
     this.height = opts.height;
     this.width = opts.width;
     this.tag = opts.tag;
@@ -146,10 +148,16 @@ function Tinaviz(args) {
             return;
         }
         this.applet = applet;
+        
+        this.setupDefaults();
+        
         callbackReady(this);
         this.isReady = 1;
      }
-
+     this.setupDefaults=function() {
+		// setup defaults
+        this.setPause(opts.pause); 
+	 }
      this.ready=function(cb) {
         // TODO: if not ready, append to the callbacks
         // if ready, execute asynchronously
@@ -713,7 +721,11 @@ function Tinaviz(args) {
             if (applet == null) return;
             return this.view().togglePause();
         }
-
+        this.setPause = function(value) {
+            if (applet == null) return;
+            return this.view().setPause(value);
+        }
+        
         /*
          * toggles HD rendering
          */
@@ -869,13 +881,7 @@ function Tinaviz(args) {
          * Callback changing utton states
          */
         this.buttonStateCallback = function(button, enabled) {
-            $(document).ready(
-                function() {
-                    // state = "disable"; if (enabled) { state = "enable"; }
-                    $("#toggle-"+button).toggleClass("ui-state-active", enabled);
-                    //$("#toggle-"+button).button(state);
-                }
-            );
+            toolbar.updateButton(button, enabled);
         }
         
         /*

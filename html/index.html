@@ -66,7 +66,7 @@
                     <div id="htoolbar" class="toolbardiv fg-toolbar ui-widget-header ui-corner-all ui-helper-clearfix">
                         <div id="title" class="noSelect"></div>
                         
-                        <button id="toggle-paused" class="fg-button toolbar-left">pause</button>
+                        <button id="toggle-paused" class="fg-button toolbar-left">play</button>
                         <button id="toggle-switch" class="fg-button toolbar-left">switch category</button>
                         <button id="level" class="fg-button toolbar-left">macro</button>
                         <!-- TEMPORARY DISABLED - FOR THE ONLINE VERSION -->
@@ -161,10 +161,19 @@
 												   title="unselect"><span class="ui-icon ui-icon-close"></span></a>
 										</div>-->
 										<!--<div style="clear:both;"></div>-->
+										
+                    <!-- Modif David inversion des accordéon + ajout-->
 										<div id="node_label" class="ui-widget-header ui-corner-all"></div>
 										<div id="node_neighbourhood" class="ui-widget-content ui-corner-all"></div>
 										<div id="node_contents" class="ui-widget-content ui-corner-all">  </div>
-									</div>
+									</div>  <!-- /accordion 1 -->
+									 <h3><a href="#">Global Web Searches</a></h3>
+                  <div>
+                  <div id="resources">
+                  
+                  </div>
+                  <div id="node_neighbourhoodForSearch" class="ui-widget-content ui-corner-all"></div>
+                  </div> <!-- /accordion 2 -->
 									<h3><a href="#">All nodes</a></h3>
 									<div>
 										<div id="node_list">
@@ -179,8 +188,9 @@
 											</tbody>
 											</table>
 										</div>
-									</div> <!-- accordion 2 -->
+									</div> <!-- accordion 3 -->
 								</div><!-- /infodiv  -->
+								
 							</div><!-- / INFODIVPARENT -->
 						</div><!-- end of yui-gc -->
                     </div><!-- end of yui-b -->

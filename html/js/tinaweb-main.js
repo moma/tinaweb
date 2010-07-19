@@ -48,7 +48,7 @@ $(document).ready(function(){
         var prefs = {    
             gexf: "FET60bipartite_graph_cooccurrences_.gexf",
             view: "macro",
-            category: "NGram",
+            category: "Document",
             node_id: "",
             search: "",
             magnify: "0.5",

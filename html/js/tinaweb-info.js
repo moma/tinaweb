@@ -48,6 +48,8 @@ function InfoDiv(divid) {
     label : $( "#node_label" ),
     contents : $( "#node_contents" ),
     cloud : $( "#node_neighbourhood" ),
+    /// Modif David
+    cloudForSearch : $( "#node_neighbourhoodForSearch" ),
     unselect_button: $( "#toggle-unselect" ),
     table: $("#node_table > tbody"),
     data: {},
@@ -67,9 +69,9 @@ function InfoDiv(divid) {
             //$("#title_acc_1").text("current selection of "+ this.categories[current_cat]);
         if (opposite !== undefined)
             if (current_view == "macro")
-                $("#toggle-switch").button("option", "label", "switch to "+ opposite);
+                $("#toggle-switch").button("option", "label", this.categories[current_cat]);
             else
-                $("#toggle-switch").button("option", "label", "view " + opposite + " neighbours");
+                $("#toggle-switch").button("option", "label", this.categories[current_cat] + " neighbours");
         else
             $("#toggle-switch").button("option", "label", "switch category");
     },
@@ -134,12 +136,9 @@ function InfoDiv(divid) {
         var toBe = new Array();
         for (var nodeid in this.selection) {
             // gets the full neighbourhood for the tag cloud
-            var nb = tinaviz.getNeighbourhood(viewLevel,nodeid);
-
-            
+            var nb = tinaviz.getNeighbourhood(viewLevel,nodeid); 
             //alert("over-writing tinaviz 2be selected");
             for (var nbid in nb) {
-
                 if ( tempcloud[nbid] !== undefined )
                     tempcloud[nbid]['degree']++;
                 // pushes a node if belongs to the opposite category
@@ -157,9 +156,36 @@ function InfoDiv(divid) {
                
         }
         this.oppositeSelection = toBe;
-        var sorted_tags = this.alphabeticListSort( Object.values( tempcloud ), 'label' );
-
+        var sorted_tags = this.alphabeticListSort( Object.values( tempcloud ), 'label' );             
         /* some display sizes const */
+
+        /// Modif david
+        
+                        $("#resources").empty();
+        var Googlerequests = "http://www.google.com/#q=";
+        var PubMedrequests = "http://www.ncbi.nlm.nih.gov/pubmed?term=";
+        var requests="";
+        for (var i = 0; i < sorted_tags.length; i++) {
+            var tag = sorted_tags[i];
+            tagLabel=tag.label;
+            tagLabel=jQuery.trim(tagLabel);
+            requests = requests + "%22" + tagLabel.replace(" ","+") + "%22";
+            if (i < sorted_tags.length - 1) requests = requests + "+AND+";
+            }
+
+        var current_cat = tinaviz.get("category/category");  /// category courante
+        ///alert(current_cat)    
+        if (current_cat !== undefined){    
+                var oppositeRealName = this.categories[tinaviz.getOppositeCategory(current_cat)];
+                if (oppositeRealName !== undefined){
+            /// nom affiché
+                //alert(oppositeRealName) ;
+                      if ((oppositeRealName == "NGram")|(oppositeRealName == "keywords")|(oppositeRealName == "Keywords")|(oppositeRealName == "Terms")|(oppositeRealName == "Communities"))
+                      $("#resources").append(
+                      "<a href=\""+(Googlerequests+requests)+"\" alt=\"search on google\" target=\"_BLANK\"><img src=\"css/branding/google.png\" /></a> "+" <a href=\""+(PubMedrequests+requests)+"\" alt=\"search on PubMed\" target=\"_BLANK\"><img src=\"css/branding/pubmed.png\" /></a>"
+                      );
+                }
+        }
         var sizecoef = 15;
         var const_doc_tag = 12;
         var tooltip = "";
@@ -203,8 +229,15 @@ function InfoDiv(divid) {
         }
         // updates the main cloud  div
         this.cloud.empty();
-        this.cloud.append( '<h3>selection related to <span class="ui-icon ui-icon-help icon-right" title="'+tooltip+'"></span></h3>' );
+        this.cloud.append( '<h3>selection related to <span class="ui-icon ui-icon-help icon-right" title="'+tooltip+'"></span></h3>' );        
         this.cloud.append( tagcloud );
+        //var tagcloudForSearch=tagcloud;
+        /// Modif David
+        this.cloudForSearch.empty();
+        //this.cloudForSearch.append( '<h3>Search for the following terms: <span class="ui-icon ui-icon-help icon-right" title="'+tooltip+'"></span></h3>' );        
+        this.cloudForSearch.append(tagcloud.clone());
+                                                   
+        
     },
 
     /*
@@ -226,10 +259,33 @@ function InfoDiv(divid) {
                 this.selection[id] = lastselection[id];
                 labelinnerdiv.append( $("<b></b>").html(decodeJSON(node.label)) );
                 // displays contents only if it's a document
-                if ( node.content != null ) {
-                    contentinnerdiv.append( $("<b></b>").html( decHTMLifEnc( decodeJSON(node.label ) ) ) );
-                    contentinnerdiv.append( $("<p></p>").html( decHTMLifEnc( decodeJSON(node.content ) ) ) );
-                }
+                // MODIF DAVID
+                var current_cat = tinaviz.get("category/category");  /// category courante
+                if (current_cat !== undefined){    
+                  
+                        var CurrentCategRealName = this.categories[current_cat];   /// nom affiché
+                        var contentinnerdivTitle=jQuery.trim(decHTMLifEnc( decodeJSON(node.label )));
+                        contentinnerdiv.append( $("<b></b>").html( contentinnerdivTitle ) );
+                        contentinnerdivTitle=contentinnerdivTitle.replace(" ","+");                     
+                        WikicontentinnerdivTitle=contentinnerdivTitle.replace("+","_");  
+                        
+                      if ( node.content != null ) {
+                      contentinnerdiv.append( $("<p></p>").html( decHTMLifEnc( decodeJSON(node.content ) ) ) );
+                  }
+                  
+                  
+                        if (CurrentCategRealName == "projects"){  
+                         contentinnerdiv.append( $("<p></p>").html( "<a href=http://www.google.com/#hl=en&source=hp&q=%20" + contentinnerdivTitle + "%20 align=middle target=blank height=15 width=15> <img src=css/branding/google.png height=15 width=15> </a><a href=http://en.wikipedia.org/wiki/" + contentinnerdivTitle + " align=middle target=blank height=15 width=15> <img src=css/branding/wikipedia.png height=15 width=15> </a><a href=http://www.flickr.com/search/?w=all&q=" + contentinnerdivTitle + " align=middle target=blank height=15 width=15> <img src=css/branding/flickr.png height=15 width=15> </a>") );
+                        } 
+                         if ((CurrentCategRealName == "NGram")|(CurrentCategRealName == "keywords")|(CurrentCategRealName == "Keywords")|(CurrentCategRealName == "Terms")|(CurrentCategRealName == "Communities")){  
+                         contentinnerdiv.append( $("<p></p>").html( "<a href=http://www.google.com/#hl=en&source=hp&q=%20" + contentinnerdivTitle + "%20 align=middle target=blank height=15 width=15> <img src=css/branding/google.png height=15 width=15> </a><a href=http://en.wikipedia.org/wiki/" + WikicontentinnerdivTitle + " align=middle target=blank height=15 width=15> <img src=css/branding/wikipedia.png height=15 width=15> </a><a href=http://www.flickr.com/search/?w=all&q=" + contentinnerdivTitle + " align=middle target=blank height=15 width=15> <img src=css/branding/flickr.png height=15 width=15> </a>") ); } 
+   
+                      if ((CurrentCategRealName == "Scholars")|(CurrentCategRealName == "People")|(CurrentCategRealName == "scholars")){  
+                             contentinnerdiv.append( $("<p></p>").html( "<a href=http://www.google.com/#hl=en&source=hp&q=%20" + contentinnerdivTitle + "%20 align=middle target=blank height=15 width=15> <img src=css/branding/google.png height=15 width=15> </a>"+"<a href=http://scholar.google.com/scholar?q=%20" + contentinnerdivTitle + "%20 align=middle target=blank height=15 width=15> <img src=css/branding/googleScholars.png height=15 width=15> </a>") );
+                      }            
+                      // FIN MODIF DAVID
+                     
+              }
             }
         }
         if (Object.size( this.selection ) != 0) {
@@ -258,6 +314,8 @@ function InfoDiv(divid) {
      * Resets the entire infodiv
      */
     reset: function() {
+        this.cloudForSearch.empty();
+        $("#resources").empty();
         this.unselect_button.hide();
         this.label.empty().append($("<h2></h2>").html("Empty selection"));
         this.contents.empty().append($("<h4></h4>").html("click on a node to begin exploration"));
@@ -297,3 +355,14 @@ function InfoDiv(divid) {
 
 
 
+function stp(fld) {
+var res = "";
+var c = 0;
+for (i=0; i<fld.length; i++) {
+  if (fld.charAt(i) != " " || c > 0) {
+    res += fld.charAt(i);
+    if (fld.charAt(i) != " ") c = res.length;
+    }
+  }
+return res.substr(0,c);
+}

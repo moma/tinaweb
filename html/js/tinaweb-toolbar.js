@@ -18,6 +18,16 @@ var tinaviz = {};
 
 $(document).ready(function(){
 
+    // SLIDERS INIT
+    $.extend($.ui.slider.defaults, {
+        //range: "min",
+        min: 0,
+        max: 100,
+        value: 100.0,
+        animate: true,
+        orientation: "horizontal",
+    });
+
     //No text selection on elements with a class of 'noSelect'
 
     $(function(){
@@ -40,10 +50,50 @@ $(document).ready(function(){
     }, function() {
         $(this).css('cursor','auto');
     });
+    
+});
 
+var toolbar = {
 
+    values: {
+    
+        search: "",
+        
+        sliders: {
+        
+            magnify: 0.5,
+            
+            cursor_size: 0.5,
+        
+            nodeFilter: {
+                min: 0.0,
+                max: 1.0
+            },
+            
+            edgeFilter: {
+                min: 0.0,
+                max: 1.0
+            }
+        },
+        buttons: {
+        
+            pause: false,
+            showNodes: true,
+            showEdges: true,
+            hd: false
+        
+        }
+    
+    }
+
+};
+
+toolbar.init = function() {
     // binds the click event to tinaviz.searchNodes()
-
+    alert("initializing toolbar..");
+    
+    $("search").val(toolbar.values.search);
+    
     $("#search").submit(function() {
       var txt = $("#search_input").val();
       if (txt=="") {
@@ -86,20 +136,10 @@ $(document).ready(function(){
           }
     });
 
-    // SLIDERS INIT
-    $.extend($.ui.slider.defaults, {
-        //range: "min",
-        min: 0,
-        max: 100,
-        value: 100.0,
-        animate: true,
-        orientation: "horizontal",
-    });
-
     // MACRO SLIDERS
     $("#sliderEdgeWeight").slider({
         range: true,
-        values: [0, 100],
+        values: [toolbar.values.sliders.edgeFilter.min, toolbar.values.sliders.edgeFilter.max * 100.0],
         animate: true,
         slide: function(event, ui) {
             tinaviz.current.set("edgeWeight/min", ui.values[0] / 100.0);
@@ -112,7 +152,7 @@ $(document).ready(function(){
 
     $("#sliderNodeWeight").slider({
         range: true,
-        values: [0, 100],
+        values: [toolbar.values.sliders.nodeFilter.min, toolbar.values.sliders.nodeFilter.max * 100.0],
         animate: true,
         slide: function(event, ui) {
             tinaviz.current.set("nodeWeight/min", ui.values[0] / 100.0);
@@ -124,7 +164,7 @@ $(document).ready(function(){
     });
 
     $("#sliderNodeSize").slider({
-        value: 50.0,
+        value: toolbar.values.sliders.magnify * 100.0,
         max: 100.0,// precision/size
         animate: true,
         slide: function(event, ui) {
@@ -134,7 +174,7 @@ $(document).ready(function(){
     );
 
     $("#sliderSelectionZone").slider({
-        value: 1.0,
+        value: toolbar.values.sliders.cursor_size,
         max: 300.0, // max disk radius, in pixel
         animate: true,
         slide: function(event, ui) {
@@ -232,4 +272,42 @@ $(document).ready(function(){
         
     });
 
-});
+};
+
+toolbar.updateButton = function(button, state) {
+
+    toolbar.values.buttons[button] = state;
+     $("#toggle-"+button).toggleClass("ui-state-active", state);
+};
+
+toolbar.update = function(vals) {
+    console.dir(vals);
+    
+    alert("updating toolbar..");
+    for (v in vals) {
+        toolbar.values[v] = vals[v];
+    }
+    
+    // simple shortcut
+    var values = toolbar.values;
+    
+        for (v in vals) {
+        toolbar.values[v] = vals[v];
+    }
+    $("#search_input").val(values.search);
+
+	console.log(values);
+    // initialize the sliders
+    alert("gettings values");
+    $("#sliderNodeSize").slider( "option", "value", values.magnify * 100.0 );
+    $("#sliderSelectionZone").slider( "option", "value", values.cursor_size * 100.0 );
+    $("#sliderEdgeWeight").slider( "option", "values", [
+        values.sliders.edgeFilter.min,
+        values.sliders.edgeFilter.max * 100.0
+    ]);
+    $("#sliderNodeWeight").slider( "option", "values", [
+        values.sliders.nodeFilter.min,
+        values.sliders.nodeFilter.max * 100.0 
+    ]);
+    
+};
