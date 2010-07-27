@@ -12,6 +12,7 @@ function Tinaviz(args) {
                             
     var opts = {
         context: "",
+        path: "",
         engine: 'software',
         branding: true,
         pause: false,
@@ -19,6 +20,7 @@ function Tinaviz(args) {
         height: 0
     };
     for (x in args) { opts[x] = args[x] };
+
     
     // todo: replace by 'view'
     this.current = {
@@ -120,11 +122,11 @@ function Tinaviz(args) {
     this.height = opts.height;
     this.width = opts.width;
     this.tag = opts.tag;
-    this.path = opts.path;
+    this.path = opts.path + "js/tinaviz/";
+    this.htmlPath = opts.path;
     this.engine = opts.engine;
     this.context = opts.context;
     this.branding = opts.branding;
-
     
     // constant
     this.iframeFileName = "iframe.html";
