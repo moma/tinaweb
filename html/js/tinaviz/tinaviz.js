@@ -170,7 +170,7 @@ function Tinaviz(args) {
 		callbackReady = cb;
 	 }
 	 this.getPath=function() {
-	    return path;
+	    return this.path;
 	 }
      this.open=function(args) {
         
