@@ -122,8 +122,9 @@ function Tinaviz(args) {
     this.height = opts.height;
     this.width = opts.width;
     this.tag = opts.tag;
-    this.path = opts.path + "js/tinaviz/";
-    this.htmlPath = opts.path;
+    this.path = opts.path;
+    
+    this.libPath = this.path + "js/tinaviz/";
     this.engine = opts.engine;
     this.context = opts.context;
     this.branding = opts.branding;
@@ -249,7 +250,7 @@ function Tinaviz(args) {
      }
 
      this.getHTML = function() {
-            var path = this.path;
+            var path = this.libPath;
             var context = this.context;
             var engine = this.engine;
 

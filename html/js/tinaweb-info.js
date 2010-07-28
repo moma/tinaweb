@@ -182,7 +182,7 @@ function InfoDiv(divid) {
                 //alert(oppositeRealName) ;
                       if ((oppositeRealName == "NGram")|(oppositeRealName == "keywords")|(oppositeRealName == "Keywords")|(oppositeRealName == "Terms")|(oppositeRealName == "Communities"))
                       $("#resources").append(
-                      "<a href=\""+(Googlerequests+requests)+"\" alt=\"search on google\" target=\"_BLANK\"><img src=\"css/branding/google.png\" /></a> "+" <a href=\""+(PubMedrequests+requests)+"\" alt=\"search on PubMed\" target=\"_BLANK\"><img src=\"css/branding/pubmed.png\" /></a>"
+                      '<a href="'+(Googlerequests+requests)+'" alt="search on google" target="_BLANK"><img src="'+tinaviz.path+'css/branding/google.png" /></a> '+' <a href="'+(PubMedrequests+requests)+'" alt="search on PubMed" target="_BLANK"><img src="'+tinaviz.path+'css/branding/pubmed.png" /></a>'
                       );
                 }
         }
@@ -275,13 +275,13 @@ function InfoDiv(divid) {
                   
                   
                         if (CurrentCategRealName == "projects"){  
-                         contentinnerdiv.append( $("<p></p>").html( "<a href=http://www.google.com/#hl=en&source=hp&q=%20" + contentinnerdivTitle + "%20 align=middle target=blank height=15 width=15> <img src=css/branding/google.png height=15 width=15> </a><a href=http://en.wikipedia.org/wiki/" + contentinnerdivTitle + " align=middle target=blank height=15 width=15> <img src=css/branding/wikipedia.png height=15 width=15> </a><a href=http://www.flickr.com/search/?w=all&q=" + contentinnerdivTitle + " align=middle target=blank height=15 width=15> <img src=css/branding/flickr.png height=15 width=15> </a>") );
+                         contentinnerdiv.append( $("<p></p>").html( '<a href="'+tinaviz.path+'http://www.google.com/#hl=en&source=hp&q=%20' + contentinnerdivTitle + '%20" align=middle target=blank height=15 width=15> <img src="'+tinaviz.path+'css/branding/google.png" height=15 width=15> </a><a href="http://en.wikipedia.org/wiki/' + contentinnerdivTitle + '" align=middle target=blank height=15 width=15> <img src="'+tinaviz.path+'css/branding/wikipedia.png" height=15 width=15> </a><a href="http://www.flickr.com/search/?w=all&q=' + contentinnerdivTitle + '" align=middle target=blank height=15 width=15> <img src="'+tinaviz.path+'css/branding/flickr.png" height=15 width=15> </a>') );
                         } 
                          if ((CurrentCategRealName == "NGram")|(CurrentCategRealName == "keywords")|(CurrentCategRealName == "Keywords")|(CurrentCategRealName == "Terms")|(CurrentCategRealName == "Communities")){  
-                         contentinnerdiv.append( $("<p></p>").html( "<a href=http://www.google.com/#hl=en&source=hp&q=%20" + contentinnerdivTitle + "%20 align=middle target=blank height=15 width=15> <img src=css/branding/google.png height=15 width=15> </a><a href=http://en.wikipedia.org/wiki/" + WikicontentinnerdivTitle + " align=middle target=blank height=15 width=15> <img src=css/branding/wikipedia.png height=15 width=15> </a><a href=http://www.flickr.com/search/?w=all&q=" + contentinnerdivTitle + " align=middle target=blank height=15 width=15> <img src=css/branding/flickr.png height=15 width=15> </a>") ); } 
+                         contentinnerdiv.append( $("<p></p>").html( '<a href="http://www.google.com/#hl=en&source=hp&q=%20' + contentinnerdivTitle + '%20" align=middle target=blank height=15 width=15> <img src="'+tinaviz.path+'css/branding/google.png" height=15 width=15> </a><a href="http://en.wikipedia.org/wiki/' + WikicontentinnerdivTitle + '" align=middle target=blank height=15 width=15> <img src="'+tinaviz.path+'css/branding/wikipedia.png" height=15 width=15> </a><a href="http://www.flickr.com/search/?w=all&q=' + contentinnerdivTitle + '" align=middle target=blank height=15 width=15> <img src="'+tinaviz.path+'css/branding/flickr.png" height=15 width=15> </a>') ); } 
    
                       if ((CurrentCategRealName == "Scholars")|(CurrentCategRealName == "People")|(CurrentCategRealName == "scholars")){  
-                             contentinnerdiv.append( $("<p></p>").html( "<a href=http://www.google.com/#hl=en&source=hp&q=%20" + contentinnerdivTitle + "%20 align=middle target=blank height=15 width=15> <img src=css/branding/google.png height=15 width=15> </a>"+"<a href=http://scholar.google.com/scholar?q=%20" + contentinnerdivTitle + "%20 align=middle target=blank height=15 width=15> <img src=css/branding/googleScholars.png height=15 width=15> </a>") );
+                             contentinnerdiv.append( $("<p></p>").html( '<a href="http://www.google.com/#hl=en&source=hp&q=%20' + contentinnerdivTitle + '%20" align=middle target=blank height=15 width=15> <img src="'+tinaviz.path+'css/branding/google.png" height=15 width=15> </a>'+'<a href="http://scholar.google.com/scholar?q=%20' + contentinnerdivTitle + '%20" align=middle target=blank height=15 width=15> <img src="'+tinaviz.path+'css/branding/googleScholars.png" height=15 width=15> </a>') );
                       }            
                       // FIN MODIF DAVID
                      
