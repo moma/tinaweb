@@ -6,6 +6,7 @@ function Tinaviz(args) {
     var openDefaults = {
             success: function(){},
             error: function(msg){},
+            clear: true,
             view: "macro",
             url: ""
     };
@@ -123,11 +124,12 @@ function Tinaviz(args) {
     this.width = opts.width;
     this.tag = opts.tag;
     this.path = opts.path;
-    
+
     this.libPath = this.path + "js/tinaviz/";
     this.engine = opts.engine;
     this.context = opts.context;
     this.branding = opts.branding;
+    
     
     // constant
     this.iframeFileName = "iframe.html";
@@ -167,7 +169,9 @@ function Tinaviz(args) {
         
 		callbackReady = cb;
 	 }
-	 
+	 this.getPath=() {
+	    return path;
+	 }
      this.open=function(args) {
         
         var opts = {};
@@ -181,6 +185,10 @@ function Tinaviz(args) {
         if (args["url"] === undefined) {
           for (x in opts) { openDefaults[x] = opts[x]; };
         
+        }
+        
+        if (opts.clear) {
+            applet.clear();
         }
         
         var view = this.view(opts.view);
