@@ -1,4 +1,4 @@
- 
+
 
 
 function Tinaviz(args) {
@@ -10,7 +10,7 @@ function Tinaviz(args) {
             view: "macro",
             url: ""
     };
-                            
+
     var opts = {
         context: "",
         path: "",
@@ -22,38 +22,38 @@ function Tinaviz(args) {
     };
     for (x in args) { opts[x] = args[x] };
 
-    
+
     // todo: replace by 'view'
     this.current = {
-    
+
             name: 'macro',
-            
+
             // TODO put current viz manipulation methods here
             set: function(key,value) { return applet.view().set(key,value) },
-            get: function(key) { return applet.view().get(key) },   
+            get: function(key) { return applet.view().get(key) },
             commitProperties: function() { return applet.view().commitProperties() },
-               
+
             category: "NGram",
-            
+
             filters: [
                 {},
                 {}
                // { filter 1.. }
-            
+
             ]
     };
-        
+
     this.views = {
         macro: {
             name: 'macro',
-        
+
             // setters/getters used for communication with the applet
             set: function(key,value) { return applet.view('macro').set(key,value) },
-            get: function(key) { return applet.view('macro').get(key) },   
+            get: function(key) { return applet.view('macro').get(key) },
             commitProperties: function() { return applet.view('macro').commitProperties() },
-               
+
             selection: new Array(),
-            
+
             categories: {
                 Document: {
                     layout: {
@@ -74,15 +74,15 @@ function Tinaviz(args) {
         },
         meso: {
             name: 'meso',
-            
+
             // setters/getters used for communication with the applet
             set: function(key,value) { return applet.view('meso').set(key,value) },
-            get: function(key) { return applet.view('meso').get(key) },   
+            get: function(key) { return applet.view('meso').get(key) },
             commitProperties: function() { return applet.view('meso').commitProperties() },
-            
-            
+
+
             selection: new Array(),
-            
+
             categories: {
                 Document: {
                     layout: {
@@ -102,7 +102,7 @@ function Tinaviz(args) {
             filters: []
         }
     };
-    
+
     // PRIVATE MEMBERS
     var wrapper = null;
     var applet = null;
@@ -113,13 +113,13 @@ function Tinaviz(args) {
     this.callbackReady = function () {};
     this.callbackImported = function(success) {};
     this.callbackViewChanged = function(view) {};
-  
+
     // PUBLIC MEMBERS
     this.isReady = 0;
     this.infodiv = {};
 
 
-	this.opts = opts;
+    this.opts = opts;
     this.height = opts.height;
     this.width = opts.width;
     this.tag = opts.tag;
@@ -129,12 +129,12 @@ function Tinaviz(args) {
     this.engine = opts.engine;
     this.context = opts.context;
     this.branding = opts.branding;
-    
-    
+
+
     // constant
     this.iframeFileName = "iframe.html";
-    
-    
+
+
     this.init= function() {
         if (this.xulrunner == true) {
             wrapper = $('#vizframe').contents().find("#tinaviz")[0];
@@ -153,51 +153,51 @@ function Tinaviz(args) {
             return;
         }
         this.applet = applet;
-        
+
         this.setupDefaults();
-        
+
         callbackReady(this);
         this.isReady = 1;
      }
      this.setupDefaults=function() {
-		// setup defaults
-        this.setPause(opts.pause); 
-	 }
+        // setup defaults
+        this.setPause(opts.pause);
+     }
      this.ready=function(cb) {
         // TODO: if not ready, append to the callbacks
         // if ready, execute asynchronously
-        
-		callbackReady = cb;
-	 }
-	 this.getPath=function() {
-	    return this.path;
-	 }
+
+        callbackReady = cb;
+     }
+     this.getPath=function() {
+        return this.path;
+     }
      this.open=function(args) {
-        
+
         var opts = {};
-        
+
         // initialize using default values
         for (x in openDefaults) { opts[x] = openDefaults[x]; };
-        
+
         // overload using parameters values
         for (x in args) { opts[x] = args[x]; };
-        
+
         if (args["url"] === undefined) {
           for (x in opts) { openDefaults[x] = opts[x]; };
-        
+
         }
-        
+
         if (opts.clear) {
             this.current.set("layout/iter", 0);
             applet.clear();
         }
-        
+
         var view = this.view(opts.view);
 
         callbackImported = function(msg){
             if (msg=="success") { opts.success(); } else { opts.error(msg); }
         };
-                
+
         if (args["url"] === undefined) {
             return;
         }
@@ -206,7 +206,7 @@ function Tinaviz(args) {
                 url: opts.url,
                 type: "GET",
                 dataType: "text",
-                error: function() { 
+                error: function() {
                     try {
                         if (opts.url.search("://") != -1) {
                             view.updateFromURI(opts.url);
@@ -244,8 +244,8 @@ function Tinaviz(args) {
 
                }
          });
-            
-        
+
+
      }
      this.event=function(args) {
         var opts = {
@@ -253,7 +253,7 @@ function Tinaviz(args) {
             categoryChanged: function(view){}
         };
         for (x in args) { opts[x] = args[x] };
-   
+
         this.callbackViewChanged = opts.viewChanged;
         this.callbackCategoryChanged = opts.categoryChanged;
      }
@@ -264,7 +264,7 @@ function Tinaviz(args) {
             var engine = this.engine;
 
             var archives = path+'tinaviz-all.jar';
-            
+
             var brand = "true";
             if (this.branding == false) brand = "false";
 
@@ -327,11 +327,11 @@ function Tinaviz(args) {
 \
                               <!--[if !IE]> -->\
                             </applet>\
-                            <!--<![endif]-->';       
+                            <!--<![endif]-->';
               return appletTag;
-               
+
         }
-        
+
         /************************
          * Core applet methods
          *
@@ -368,7 +368,7 @@ function Tinaviz(args) {
         this.setView = function(view) {
             if (applet == null) return;
             applet.setView(view);
-            
+
         }
 
         /*
@@ -386,7 +386,7 @@ function Tinaviz(args) {
             if (applet == null) return;
             return applet.getView().getName();
         }
-        
+
         /*
          * Commits the applet's parameters
          * Accept an optional callback to give some reaction to events
@@ -400,7 +400,7 @@ function Tinaviz(args) {
             }
         }
 
-        
+
         /*
          *  Adds a node to the current selection
          *  callback is boolean activating this.selected() callback
@@ -602,7 +602,7 @@ function Tinaviz(args) {
             data = $.parseJSON(attr);
             this.infodiv.reset();
             this.infodiv.update(view, data);
-   
+
             // left == selecteghbourd a node
             if ( mouse == "left" ) {
                 //this.nodeLeftClicked(view,data);
@@ -615,39 +615,39 @@ function Tinaviz(args) {
                 this.leftDoubleClicked(view, data);
             }
         }
-        
+
         this.constructNewViewObject = function(viewName) {
             var view = this.view(viewName);
-            
+
             var reply = {
                 layoutCounter: 0,
                 category: view.get("category/category"),
                 nodes: []
             };
-            
+
             reply.name = viewName;
-            
+
             // we add some additionnal steps
-			// to be compatible with old LiveConnect
-			// implementations
-			
+            // to be compatible with old LiveConnect
+            // implementations
+
             var i = 0;
-			var nodesArray = view.getNodesArray();
+            var nodesArray = view.getNodesArray();
             for (i=0;i<nodesArray.length;i++) {
-				node = nodesArray[i];
+                node = nodesArray[i];
                 var n = { edges: [] };
-				var edgesArray = node.getWeightsArray();
-				var j = 0;
+                var edgesArray = node.getWeightsArray();
+                var j = 0;
                 for (j=0;edgesArray.length;j++) {
                     n.edges.append({ weight: edgesArray[j] });
                 }
                 reply.nodes.append(n);
             }
-            
+
             reply.get = function(arg) {
                 return view.get(arg);
             };
-            
+
             return reply;
         }
 
@@ -660,7 +660,7 @@ function Tinaviz(args) {
             var view = this.constructNewViewObject(viewName);
             this.callbackViewChanged(view);
         }
-        
+
 
         /************************
          *
@@ -697,7 +697,7 @@ function Tinaviz(args) {
             });
         }
 
-        
+
         /***********************************
          *
          * Manual actions controler system
@@ -737,7 +737,7 @@ function Tinaviz(args) {
             if (applet == null) return;
             return this.view().setPause(value);
         }
-        
+
         /*
          * toggles HD rendering
          */
@@ -789,18 +789,18 @@ function Tinaviz(args) {
                 this.setView("macro");
                 this.updateNodes("macro", current_cat);
             }
-           
+
         }
-        
+
         this.session=function() {
             return applet.session();
         }
-        
-        
+
+
         this.view=function(v) {
             return applet.view(v);
         }
-        
+
         /*
         * Manually unselects all nodes
         */
@@ -817,13 +817,13 @@ function Tinaviz(args) {
             //if (this.getViewName() == "meso") {
                // this.setView("macro");
                 //tinaviz.resetLayoutCounter();
-                
+
                 //this.autoCentering();
             //}
             //this.touch("current"); // don't touch, so we do not redraw the graph
         }
 
-        
+
 
         /*
          *  Retrieves list of nodes
@@ -839,7 +839,7 @@ function Tinaviz(args) {
         this.updateNodes = function(view, category)  {
             if ( category == this.infodiv.last_category ) return;
             this.infodiv.display_current_category();
-            if (this.infodiv.data[category] === undefined)
+            if (this.infodiv.data[category] === undefined || this.infodiv.data[category].length == 0)
                 this.infodiv.updateNodeList( this.getNodes( view, category ), category );
             else
                 this.infodiv.updateNodeList( this.infodiv.data[category], category );
@@ -871,7 +871,7 @@ function Tinaviz(args) {
             }
         }
 
-        
+
         /**************************************** this.tag
          *
          * HTML VIZ DIV ADJUSTING/ACTION
@@ -895,16 +895,16 @@ function Tinaviz(args) {
         this.buttonStateCallback = function(button, enabled) {
             toolbar.updateButton(button, enabled);
         }
-        
+
         /*
          * Callback changing utton states
          */
         this.graphImportedCallback = function(msg) {
             callbackImported(msg);
         }
-        
-   
+
+
         this.tag.html( this.getHTML() );
-    
+
 }
 
