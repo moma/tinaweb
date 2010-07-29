@@ -188,7 +188,7 @@ function Tinaviz(args) {
         }
         
         if (opts.clear) {
-            current.set("layout/iter", 0);
+            this.current.set("layout/iter", 0);
             applet.clear();
         }
         
