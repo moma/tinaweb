@@ -585,6 +585,9 @@ function Tinaviz(args) {
                 this.viewMeso(decodeJSON(id), category);
                 break;
             }
+            this.current.set("layout/iter", 0);
+            this.current.commitProperties();
+            this.autoCentering();
             /*if (view =="macro") {
             }
             if (view == "meso") {
@@ -602,8 +605,7 @@ function Tinaviz(args) {
             data = $.parseJSON(attr);
             this.infodiv.reset();
             this.infodiv.update(view, data);
-
-            // left == selecteghbourd a node
+            // left == selected a node
             if ( mouse == "left" ) {
                 //this.nodeLeftClicked(view,data);
             }
