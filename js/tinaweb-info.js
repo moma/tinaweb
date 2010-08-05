@@ -134,17 +134,19 @@ function InfoDiv(divid) {
         /* builds aggregated tag object */
         if (Object.size( this.selection ) == 0) return;
         var tempcloud = {};
-        var toBe = new Array();
+
         for (var nodeid in this.selection) {
             // gets the full neighbourhood for the tag cloud
             var nb = tinaviz.getNeighbourhood(viewLevel,nodeid);
-            //alert("over-writing tinaviz 2be selected");
+            console.log("tinaviz.getNeighbourhood returned");
+            console.log(nb);
             for (var nbid in nb) {
                 if ( tempcloud[nbid] !== undefined )
                     tempcloud[nbid]['degree']++;
                 // pushes a node if belongs to the opposite category
                 else if (this.selection[nodeid]['category'] != nb[nbid]['category']) {
-                    toBe.push(nbid);
+                    console.log("updateTagCloud adding to tempcloud");
+                    this.oppositeSelection.push(nbid);
                     tempcloud[nbid] = {
                         'id': nbid,
                         'label' : decodeJSON(nb[nbid]['label']),
@@ -156,7 +158,7 @@ function InfoDiv(divid) {
             }
 
         }
-        this.oppositeSelection = toBe;
+
         var sorted_tags = this.alphabeticListSort( Object.values( tempcloud ), 'label' );
         /* some display sizes const */
 
@@ -167,9 +169,8 @@ function InfoDiv(divid) {
         var requests="";
         for (var i = 0; i < sorted_tags.length; i++) {
             var tag = sorted_tags[i];
-            tagLabel=tag.label;
-            tagLabel=jQuery.trim(tagLabel);
-            requests = requests + "%22" + tagLabel.replace(" ","+") + "%22";
+            tagLabel=decodeJSON(tag.label);
+            requests = requests + "%22" + tagLabel.replace(/ /g,"+") + "%22";
             if (i < sorted_tags.length - 1) requests = requests + "+AND+";
             }
 
@@ -262,8 +263,8 @@ function InfoDiv(divid) {
             // ERROR : MISSING CATEGORY in the node list returned from Tinaviz !!!!
             if (node.category == current_cat)  {
                 // prepares label and content to be displayed
-                var label = jQuery.trim(decodeJSON(node.label));
-                var content = jQuery.trim(decodeJSON(node.content));
+                var label = decodeJSON(node.label);
+                var content = decodeJSON(node.content);
                 // add node to selection cache
                 this.selection[id] = lastselection[id];
                 labelinnerdiv.append( $("<b></b>").text(label).html() );
@@ -281,7 +282,7 @@ function InfoDiv(divid) {
                         contentinnerdiv.append( $("<p></p>").text( content ).html() );
                     }
                     // TODO : move this code to a special "web request function"
-                    var SearchQuery=label.replace(" ","+");
+                    var SearchQuery=label.replace(/ /g,"+");
                     //var WikiQuery=label.replace("+","_");
 
                     // TODO : use this.category var to identify categories from object configuration
