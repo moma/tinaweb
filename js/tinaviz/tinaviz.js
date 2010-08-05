@@ -6,6 +6,8 @@ function Tinaviz(args) {
     var openDefaults = {
             success: function(){},
             error: function(msg){},
+            before: function(){},
+            after: function(){},
             clear: true,
             view: "macro",
             url: ""
@@ -191,7 +193,7 @@ function Tinaviz(args) {
             this.current.set("layout/iter", 0);
             applet.clear();
         }
-
+        
         var view = this.view(opts.view);
 
         callbackImported = function(msg){
@@ -201,6 +203,9 @@ function Tinaviz(args) {
         if (args["url"] === undefined) {
             return;
         }
+        
+        if (opts.before) opts.before();
+        
         //alert("loading "+args.url);
         $.ajax({
                 url: opts.url,

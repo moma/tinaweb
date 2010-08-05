@@ -251,8 +251,8 @@ function InfoDiv(divid) {
         /*var decHTMLifEnc = function(str){
             return str.replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>');
         }*/
-        console.log("displaying label ");
-        console.log( lastselection );
+        //console.log("displaying label ");
+        //console.log( lastselection );
 
         var current_cat = tinaviz.get("category/category");
         var labelinnerdiv = $("<div></div>");
