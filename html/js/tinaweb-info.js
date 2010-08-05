@@ -49,7 +49,8 @@ function InfoDiv(divid) {
     contents : $( "#node_contents" ),
     cloud : $( "#node_neighbourhood" ),
     /// Modif David
-    cloudForSearch : $( "#node_neighbourhoodForSearch" ),
+    cloudForSearch : $( "#node_neighbourhoodCopy" ),
+    cloudSearch: $("#node_neighbourhoodForSearch"),
     unselect_button: $( "#toggle-unselect" ),
     table: $("#node_table > tbody"),
     data: {},
@@ -160,8 +161,7 @@ function InfoDiv(divid) {
         /* some display sizes const */
 
         /// Modif david
-
-                        $("#resources").empty();
+        this.cloudSearch.empty();
         var Googlerequests = "http://www.google.com/#q=";
         var PubMedrequests = "http://www.ncbi.nlm.nih.gov/pubmed?term=";
         var requests="";
@@ -178,12 +178,19 @@ function InfoDiv(divid) {
         if (current_cat !== undefined){
                 var oppositeRealName = this.categories[tinaviz.getOppositeCategory(current_cat)];
                 if (oppositeRealName !== undefined){
-            /// nom affiché
+                /// nom affiché
                 //alert(oppositeRealName) ;
-                      if ((oppositeRealName == "NGram")|(oppositeRealName == "keywords")|(oppositeRealName == "Keywords")|(oppositeRealName == "Terms")|(oppositeRealName == "Communities"))
-                      $("#resources").append(
-                      '<a href="'+(Googlerequests+requests)+'" alt="search on google" target="_BLANK"><img src="'+tinaviz.getPath()+'css/branding/google.png" /></a> '+' <a href="'+(PubMedrequests+requests)+'" alt="search on PubMed" target="_BLANK"><img src="'+tinaviz.getPath()+'css/branding/pubmed.png" /></a>'
-                      );
+                if ((oppositeRealName == "NGram")|(oppositeRealName == "keywords")|(oppositeRealName == "Keywords")|(oppositeRealName == "Terms")|(oppositeRealName == "Communities"))
+                    this.cloudSearch.append(
+                        '<a href="'+(Googlerequests+requests)
+                        +'" alt="search on google" target="_BLANK"><img src="'
+                        +tinaviz.getPath()
+                        +'css/branding/google.png" /></a> '
+                        +' <a href="'+(PubMedrequests+requests)
+                        +'" alt="search on PubMed" target="_BLANK"><img src="'
+                        +tinaviz.getPath()
+                        +'css/branding/pubmed.png" /></a>'
+                    );
                 }
         }
         var sizecoef = 15;
@@ -229,15 +236,11 @@ function InfoDiv(divid) {
         }
         // updates the main cloud  div
         this.cloud.empty();
-        this.cloud.append( '<h3>selection related to <span class="ui-icon ui-icon-help icon-right" title="'+tooltip+'"></span></h3>' );
+        this.cloud.append( '<h3>selection related to '+ oppositeRealName + ': <span class="ui-icon ui-icon-help icon-right" title="'+tooltip+'"></span></h3>' );
         this.cloud.append( tagcloud );
-        //var tagcloudForSearch=tagcloud;
-        /// Modif David
         this.cloudForSearch.empty();
-        //this.cloudForSearch.append( '<h3>Search for the following terms: <span class="ui-icon ui-icon-help icon-right" title="'+tooltip+'"></span></h3>' );
-        this.cloudForSearch.append(tagcloud.clone());
-
-
+        this.cloudForSearch.append( '<h3>Global search on '+ oppositeRealName + ': <span class="ui-icon ui-icon-help icon-right" title="'+tooltip+'"></span></h3>' );
+        this.cloudForSearch.append( tagcloud );
     },
 
    /*
@@ -378,15 +381,28 @@ function InfoDiv(divid) {
      * Resets the entire infodiv
      */
     reset: function() {
-        this.cloudForSearch.empty();
-        $("#resources").empty();
         this.unselect_button.hide();
         this.label.empty().append($("<h2></h2>").html("Empty selection"));
         this.contents.empty().append($("<h4></h4>").html("click on a node to begin exploration"));
 
         this.contents.empty().append($("<h4></h4>").html(
-         "<h2>Navigation tips</h2>"+"<p align='left'>"
-   +"<br/>"+"<i>Basic interactions</i><br/><br/>"+"Click on a node to select/unselect and get its information.  In case of multiple selection, the button <img src='"+tinaviz.getPath()+"css/branding/unselect.png' alt='unselect' align='top' height=20/>  clears all selections.<br/><br/>The switch button <img src='"+tinaviz.getPath()+"css/branding/switch.png' alt='switch' align='top' height=20 /> allows to change the view type."+"<br/><br/>"+"<i>Graph manipulation</i><br/><br/>"+"Link and node sizes indicate their strength.<br/><br/> To fold/unfold the graph (keep only strong links or weak links), use the 'edges filter' sliders.<br/><br/> To select a more of less specific area of the graph, use the 'nodes filter' slider.</b><br/><br/>"+"<i>Micro/Macro view</i><br/><br/>To explore the neighborhood of a selection, either double click on the selected nodes, either click on the macro/meso level button. Zoom out in meso view return to macro view.<br/><br/>  "+"Click on the 'all nodes' tab below to view the full clickable list of nodes.<br/><br/>Find additional tips with mouse over the question marks."+"</p>"));
+                "<h2>Navigation tips</h2>"+"<p align='left'>"
+                +"<br/>"
+                +"<i>Basic interactions</i><br/><br/>"
+                +"Click on a node to select/unselect and get its information.  In case of multiple selection, the button <img src='"
+                +tinaviz.getPath()
+                +"css/branding/unselect.png' alt='unselect' align='top' height=20/>  clears all selections.<br/><br/>The switch button <img src='"
+                +tinaviz.getPath()+"css/branding/switch.png' alt='switch' align='top' height=20 /> allows to change the view type."
+                +"<br/><br/>"
+                +"<i>Graph manipulation</i><br/><br/>"
+                +"Link and node sizes indicate their strength.<br/><br/> To fold/unfold the graph (keep only strong links or weak links), use the 'edges filter' sliders.<br/><br/> To select a more of less specific area of the graph, use the 'nodes filter' slider.</b><br/><br/>"
+                +"<i>Micro/Macro view</i><br/><br/>To explore the neighborhood of a selection, either double click on the selected nodes, either click on the macro/meso level button. Zoom out in meso view return to macro view.<br/><br/>  "+"Click on the 'all nodes' tab below to view the full clickable list of nodes.<br/><br/>Find additional tips with mouse over the question marks."
+                +"</p>"
+            )
+        );
+
+        this.cloudForSearch.empty();
+        this.cloudSearch.empty();
 
         this.cloud.empty();
         this.selection = {};
@@ -420,15 +436,20 @@ function InfoDiv(divid) {
 };
 
 
-
+/*
+ * WHAT IS IT ?????
+ * DOCUMENTATION REQUIRED
+ */
 function stp(fld) {
-var res = "";
-var c = 0;
-for (i=0; i<fld.length; i++) {
-  if (fld.charAt(i) != " " || c > 0) {
-    res += fld.charAt(i);
-    if (fld.charAt(i) != " ") c = res.length;
+    var res = "";
+    var c = 0;
+    for (i=0; i<fld.length; i++) {
+        if (fld.charAt(i) != " " || c > 0) {
+            res += fld.charAt(i);
+            if (fld.charAt(i) != " ") {
+                c = res.length;
+            }
+        }
     }
-  }
-return res.substr(0,c);
+    return res.substr(0,c);
 }
