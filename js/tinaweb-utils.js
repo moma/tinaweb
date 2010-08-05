@@ -42,9 +42,31 @@ Object.values = function(obj) {
     return values;
 };
 
+/*
+ * To html entities
+ */
+function htmlEncode(value){
+    return $('<div/>').text(value).html();
+}
+
+/*
+ * From html entities to normal text
+ */
+function htmlDecode(value){
+    return $('<div/>').html(value).text();
+}
+
+/*
+ * Cleaning and decode entities of a value from a Json
+ */
 function decodeJSON(encvalue) {
     if (encvalue !== undefined)
-        return decodeURIComponent(encvalue).replace(/\+/g, " ").replace(/%21/g, "!").replace(/%27/g, "'").replace(/%28/g, "(").replace(/%29/g, ")").replace(/%2A/g, "*");
+        return jQuery.trim(decodeURIComponent(encvalue)
+            .replace(/\+/g, " ").replace(/%21/g, "!")
+            .replace(/%27/g, "'").replace(/%28/g, "(")
+            .replace(/%29/g, ")").replace(/%2A/g, "*")
+            .replace(/\"/g,"'")
+        );
     else
         return "";
 };
@@ -87,7 +109,7 @@ var resize = function() {
 
         var size = { w: getScreenWidth() - infoDivWidth - 55,
                       h: getScreenHeight() - $("#hd").height() - $("#ft").height() - 60 };
-                      
+
         $("#appletdiv").css('width', size.w);
         $("#infodiv").css('width', infoDivWidth);
         $("#infodivparent").css('height', size.h);
