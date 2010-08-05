@@ -14,10 +14,8 @@ dist
 dist/*
 build/*
 */build
-html/java/old_*
+java/old_*
 tinasoft-*.*
 *.tar.gz
 *.zip
-src/js/fetopen.js
-src/projects_en.html
-src/projects_en_files/*
+graphs/
