@@ -248,11 +248,9 @@ function InfoDiv(divid) {
      */
     updateInfo: function(lastselection) {
 
-        /*var decHTMLifEnc = function(str){
+        var decHTMLifEnc = function(str){
             return str.replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>');
-        }*/
-        //console.log("displaying label ");
-        //console.log( lastselection );
+        }
 
         var current_cat = tinaviz.get("category/category");
         var labelinnerdiv = $("<div></div>");
@@ -263,10 +261,10 @@ function InfoDiv(divid) {
             if (node.category == current_cat)  {
                 // prepares label and content to be displayed
                 var label = jQuery.trim(decodeJSON(node.label));
-                var content = jQuery.trim(decodeJSON(node.content));
+                var content = decHTMLifEnc(jQuery.trim(decodeJSON(node.content)));
                 // add node to selection cache
                 this.selection[id] = lastselection[id];
-                labelinnerdiv.append( $("<b></b>").text(label).html() );
+                labelinnerdiv.append( $("<b></b>").html(label) );
                 // displays contents only if it's a document
 
                 // MODIF DAVID
@@ -275,10 +273,10 @@ function InfoDiv(divid) {
                     //var contentinnerdivTitle=jQuery.trim(decHTMLifEnc( ));
 
                     // jQuery.text automaticcally html encode characters
-                    contentinnerdiv.append( $("<b></b>").text( label ).html() );
+                    contentinnerdiv.append( $("<b></b>").html( label ) );
 
                     if ( node.content != null ) {
-                        contentinnerdiv.append( $("<p></p>").text( content ).html() );
+                        contentinnerdiv.append( $("<p></p>").html( content ) );
                     }
                     // TODO : move this code to a special "web request function"
                     var SearchQuery=label.replace(" ","+");
