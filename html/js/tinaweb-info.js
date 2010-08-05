@@ -136,7 +136,7 @@ function InfoDiv(divid) {
         var toBe = new Array();
         for (var nodeid in this.selection) {
             // gets the full neighbourhood for the tag cloud
-            var nb = tinaviz.getNeighbourhood(viewLevel,nodeid); 
+            var nb = tinaviz.getNeighbourhood(viewLevel,nodeid);
             //alert("over-writing tinaviz 2be selected");
             for (var nbid in nb) {
                 if ( tempcloud[nbid] !== undefined )
@@ -153,14 +153,14 @@ function InfoDiv(divid) {
                     };
                 }
             }
-               
+
         }
         this.oppositeSelection = toBe;
-        var sorted_tags = this.alphabeticListSort( Object.values( tempcloud ), 'label' );             
+        var sorted_tags = this.alphabeticListSort( Object.values( tempcloud ), 'label' );
         /* some display sizes const */
 
         /// Modif david
-        
+
                         $("#resources").empty();
         var Googlerequests = "http://www.google.com/#q=";
         var PubMedrequests = "http://www.ncbi.nlm.nih.gov/pubmed?term=";
@@ -174,8 +174,8 @@ function InfoDiv(divid) {
             }
 
         var current_cat = tinaviz.get("category/category");  /// category courante
-        ///alert(current_cat)    
-        if (current_cat !== undefined){    
+        ///alert(current_cat)
+        if (current_cat !== undefined){
                 var oppositeRealName = this.categories[tinaviz.getOppositeCategory(current_cat)];
                 if (oppositeRealName !== undefined){
             /// nom affiché
@@ -229,63 +229,123 @@ function InfoDiv(divid) {
         }
         // updates the main cloud  div
         this.cloud.empty();
-        this.cloud.append( '<h3>selection related to <span class="ui-icon ui-icon-help icon-right" title="'+tooltip+'"></span></h3>' );        
+        this.cloud.append( '<h3>selection related to <span class="ui-icon ui-icon-help icon-right" title="'+tooltip+'"></span></h3>' );
         this.cloud.append( tagcloud );
         //var tagcloudForSearch=tagcloud;
         /// Modif David
         this.cloudForSearch.empty();
-        //this.cloudForSearch.append( '<h3>Search for the following terms: <span class="ui-icon ui-icon-help icon-right" title="'+tooltip+'"></span></h3>' );        
+        //this.cloudForSearch.append( '<h3>Search for the following terms: <span class="ui-icon ui-icon-help icon-right" title="'+tooltip+'"></span></h3>' );
         this.cloudForSearch.append(tagcloud.clone());
-                                                   
-        
+
+
     },
 
-    /*
+   /*
      * updates the label and content DOM divs
      */
     updateInfo: function(lastselection) {
-    
-        var decHTMLifEnc = function(str){
+
+        /*var decHTMLifEnc = function(str){
             return str.replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>');
-        }
-    
+        }*/
+        console.log("displaying label ");
+        console.log( lastselection );
+
         var current_cat = tinaviz.get("category/category");
-        //tinaviz.logNormal("updateInfo for current category = "+current_cat);
         var labelinnerdiv = $("<div></div>");
         var contentinnerdiv = $("<div></div>");
         for(var id in lastselection) {
             var node = lastselection[id];
+            // ERROR : MISSING CATEGORY in the node list returned from Tinaviz !!!!
             if (node.category == current_cat)  {
+                // prepares label and content to be displayed
+                var label = jQuery.trim(decodeJSON(node.label));
+                var content = jQuery.trim(decodeJSON(node.content));
+                // add node to selection cache
                 this.selection[id] = lastselection[id];
-                labelinnerdiv.append( $("<b></b>").html(decodeJSON(node.label)) );
+                labelinnerdiv.append( $("<b></b>").text(label).html() );
                 // displays contents only if it's a document
+
                 // MODIF DAVID
                 var current_cat = tinaviz.get("category/category");  /// category courante
-                if (current_cat !== undefined){    
-                  
-                        var CurrentCategRealName = this.categories[current_cat];   /// nom affiché
-                        var contentinnerdivTitle=jQuery.trim(decHTMLifEnc( decodeJSON(node.label )));
-                        contentinnerdiv.append( $("<b></b>").html( contentinnerdivTitle ) );
-                        contentinnerdivTitle=contentinnerdivTitle.replace(" ","+");                     
-                        WikicontentinnerdivTitle=contentinnerdivTitle.replace("+","_");  
-                        
-                      if ( node.content != null ) {
-                      contentinnerdiv.append( $("<p></p>").html( decHTMLifEnc( decodeJSON(node.content ) ) ) );
-                  }
-                  
-                  
-                        if (CurrentCategRealName == "projects"){  
-                         contentinnerdiv.append( $("<p></p>").html( '<a href="'+tinaviz.getPath()+'http://www.google.com/#hl=en&source=hp&q=%20' + contentinnerdivTitle + '%20" align=middle target=blank height=15 width=15> <img src="'+tinaviz.getPath()+'css/branding/google.png" height=15 width=15> </a><a href="http://en.wikipedia.org/wiki/' + contentinnerdivTitle + '" align=middle target=blank height=15 width=15> <img src="'+tinaviz.getPath()+'css/branding/wikipedia.png" height=15 width=15> </a><a href="http://www.flickr.com/search/?w=all&q=' + contentinnerdivTitle + '" align=middle target=blank height=15 width=15> <img src="'+tinaviz.getPath()+'css/branding/flickr.png" height=15 width=15> </a>') );
-                        } 
-                         if ((CurrentCategRealName == "NGram")|(CurrentCategRealName == "keywords")|(CurrentCategRealName == "Keywords")|(CurrentCategRealName == "Terms")|(CurrentCategRealName == "Communities")){  
-                         contentinnerdiv.append( $("<p></p>").html( '<a href="http://www.google.com/#hl=en&source=hp&q=%20' + contentinnerdivTitle + '%20" align=middle target=blank height=15 width=15> <img src="'+tinaviz.getPath()+'css/branding/google.png" height=15 width=15> </a><a href="http://en.wikipedia.org/wiki/' + WikicontentinnerdivTitle + '" align=middle target=blank height=15 width=15> <img src="'+tinaviz.getPath()+'css/branding/wikipedia.png" height=15 width=15> </a><a href="http://www.flickr.com/search/?w=all&q=' + contentinnerdivTitle + '" align=middle target=blank height=15 width=15> <img src="'+tinaviz.getPath()+'css/branding/flickr.png" height=15 width=15> </a>') ); } 
-   
-                      if ((CurrentCategRealName == "Scholars")|(CurrentCategRealName == "People")|(CurrentCategRealName == "scholars")){  
-                             contentinnerdiv.append( $("<p></p>").html( '<a href="http://www.google.com/#hl=en&source=hp&q=%20' + contentinnerdivTitle + '%20" align=middle target=blank height=15 width=15> <img src="'+tinaviz.getPath()+'css/branding/google.png" height=15 width=15> </a>'+'<a href="http://scholar.google.com/scholar?q=%20' + contentinnerdivTitle + '%20" align=middle target=blank height=15 width=15> <img src="'+tinaviz.getPath()+'css/branding/googleScholars.png" height=15 width=15> </a>') );
-                      }            
-                      // FIN MODIF DAVID
-                     
-              }
+                if (current_cat !== undefined) {
+                    //var contentinnerdivTitle=jQuery.trim(decHTMLifEnc( ));
+
+                    // jQuery.text automaticcally html encode characters
+                    contentinnerdiv.append( $("<b></b>").text( label ).html() );
+
+                    if ( node.content != null ) {
+                        contentinnerdiv.append( $("<p></p>").text( content ).html() );
+                    }
+                    // TODO : move this code to a special "web request function"
+                    var SearchQuery=label.replace(" ","+");
+                    //var WikiQuery=label.replace("+","_");
+
+                    // TODO : use this.category var to identify categories from object configuration
+                    var CurrentCategRealName = this.categories[current_cat];   /// nom affiché
+
+                    if (CurrentCategRealName == "projects"){
+
+                        // TODO : avoid injecting to much html : write constant in index.html,
+                        //      manage hide/shows with this.update() and this.reset(),
+                        //      then use $("#anchor_id").attr("href",SearchQuery)
+                        contentinnerdiv.append(
+                            $("<p></p>").html(
+                                '<a href="'
+                                + tinaviz.getPath()
+                                +'http://www.google.com/#hl=en&source=hp&q=%20'
+                                + SearchQuery
+                                + '%20" align=middle target=blank height=15 width=15> <img src="'
+                                + tinaviz.getPath()
+                                +'css/branding/google.png" height=15 width=15> </a><a href="http://en.wikipedia.org/wiki/'
+                                + SearchQuery
+                                + '" align=middle target=blank height=15 width=15> <img src="'
+                                + tinaviz.getPath()
+                                +'css/branding/wikipedia.png" height=15 width=15> </a><a href="http://www.flickr.com/search/?w=all&q='
+                                + SearchQuery
+                                + '" align=middle target=blank height=15 width=15> <img src="'
+                                + tinaviz.getPath()
+                                +'css/branding/flickr.png" height=15 width=15> </a>'
+                            )
+                        );
+                    }
+                    if ((CurrentCategRealName == "NGram")|(CurrentCategRealName == "keywords")|(CurrentCategRealName == "Keywords")|(CurrentCategRealName == "Terms")|(CurrentCategRealName == "Communities")) {
+                        contentinnerdiv.append(
+                            $("<p></p>").html(
+                                '<a href="http://www.google.com/#hl=en&source=hp&q=%20'
+                                + SearchQuery
+                                + '%20" align=middle target=blank height=15 width=15> <img src="'
+                                + tinaviz.getPath()
+                                +'css/branding/google.png" height=15 width=15> </a><a href="http://en.wikipedia.org/wiki/'
+                                + SearchQuery
+                                + '" align=middle target=blank height=15 width=15> <img src="'
+                                + tinaviz.getPath()
+                                +'css/branding/wikipedia.png" height=15 width=15> </a><a href="http://www.flickr.com/search/?w=all&q='
+                                + SearchQuery
+                                + '" align=middle target=blank height=15 width=15> <img src="'
+                                + tinaviz.getPath()
+                                +'css/branding/flickr.png" height=15 width=15> </a>'
+                            )
+                        );
+                    }
+                    if ((CurrentCategRealName == "Scholars")|(CurrentCategRealName == "People")|(CurrentCategRealName == "scholars")){
+                        contentinnerdiv.append(
+                            $("<p></p>").html(
+                                '<a href="http://www.google.com/#hl=en&source=hp&q=%20'
+                                + SearchQuery
+                                + '%20" align=middle target=blank height=15 width=15> <img src="'
+                                + tinaviz.getPath()+'css/branding/google.png" height=15 width=15> </a>'
+                                +'<a href="http://scholar.google.com/scholar?q=%20'
+                                + SearchQuery
+                                + '%20" align=middle target=blank height=15 width=15> <img src="'
+                                + tinaviz.getPath()
+                                +'css/branding/googleScholars.png" height=15 width=15> </a>'
+                            )
+                        );
+                    }
+                    // FIN MODIF DAVID
+
+                }
             }
         }
         if (Object.size( this.selection ) != 0) {
@@ -295,11 +355,15 @@ function InfoDiv(divid) {
             this.label.append( this.alphabeticJquerySort( labelinnerdiv, "b", ", &nbsp;" ));
             this.contents.append( contentinnerdiv );
         }
-        else
+        else {
             this.reset();
+        }
     },
 
-    /*     */
+    /*
+     * Main method recceiving a new node selection
+     * and dispatching infodiv updates
+     * */
     update: function(view, lastselection) {
         if ( Object.size ( lastselection ) == 0 ) {
             this.reset();
@@ -321,16 +385,18 @@ function InfoDiv(divid) {
         this.contents.empty().append($("<h4></h4>").html("click on a node to begin exploration"));
 
         this.contents.empty().append($("<h4></h4>").html(
-         "<h2>Navigation tips</h2>"+"<p align='left'>"                                                                                                                    
+         "<h2>Navigation tips</h2>"+"<p align='left'>"
    +"<br/>"+"<i>Basic interactions</i><br/><br/>"+"Click on a node to select/unselect and get its information.  In case of multiple selection, the button <img src='"+tinaviz.getPath()+"css/branding/unselect.png' alt='unselect' align='top' height=20/>  clears all selections.<br/><br/>The switch button <img src='"+tinaviz.getPath()+"css/branding/switch.png' alt='switch' align='top' height=20 /> allows to change the view type."+"<br/><br/>"+"<i>Graph manipulation</i><br/><br/>"+"Link and node sizes indicate their strength.<br/><br/> To fold/unfold the graph (keep only strong links or weak links), use the 'edges filter' sliders.<br/><br/> To select a more of less specific area of the graph, use the 'nodes filter' slider.</b><br/><br/>"+"<i>Micro/Macro view</i><br/><br/>To explore the neighborhood of a selection, either double click on the selected nodes, either click on the macro/meso level button. Zoom out in meso view return to macro view.<br/><br/>  "+"Click on the 'all nodes' tab below to view the full clickable list of nodes.<br/><br/>Find additional tips with mouse over the question marks."+"</p>"));
 
         this.cloud.empty();
         this.selection = {};
-        this.oppositeSelection = {};
+        this.oppositeSelection = new Array(),
         this.neighbours = {};
+        this.data = {};
+        this.last_category = "";
+
         return;
     },
-
     /*
      * Init the node list
      */
