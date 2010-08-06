@@ -1,5 +1,4 @@
 #!/bin/sh
-cp ../tinaviz/js/tinaviz.js html/js/tinaviz/
-cp ../tinaviz/dist/tinaviz-all.jar html/js/tinaviz/
-cd html
+cp ../tinaviz/js/tinaviz.js js/tinaviz/
+cp ../tinaviz/dist/tinaviz-all.jar js/tinaviz/
 firefox index.html

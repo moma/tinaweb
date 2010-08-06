@@ -21,8 +21,7 @@ $(document).ready(function(){
     $("#title").html("<h1>FET Open projects explorer</h1>");
 
     tinaviz = new Tinaviz({
-        tag: $("#vizdiv"),
-        path: "js/tinaviz/"
+        tag: $("#vizdiv")
     });
 
    $('#appletInfo').effect('pulsate', {}, 'fast');
