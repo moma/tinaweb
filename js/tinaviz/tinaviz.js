@@ -493,7 +493,7 @@ function Tinaviz(args) {
          */
         this.getNodeAttributes = function(id) {
             if (applet == null) return;
-            return $.parseJSON( applet.getNodesAttributes(id) );
+            return $.parseJSON( applet.getNodeAttributes(id) );
         }
 
         /*
