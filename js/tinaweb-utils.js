@@ -43,6 +43,20 @@ Object.values = function(obj) {
 };
 
 /*
+ * Tri alphabetique
+ */
+
+function  alphabeticListSort(listitems,textkey) {
+        listitems.sort(function(a, b) {
+            var compA = a[textkey].toUpperCase();
+            var compB = b[textkey].toUpperCase();
+            return (compA < compB) ? -1 : (compA > compB) ? 1 : 0;
+        })
+        return listitems;
+
+    };
+
+/*
  * To html entities
  */
 function htmlEncode(value){

@@ -49,8 +49,8 @@ function InfoDiv(divid) {
     contents : $( "#node_contents" ),
     cloud : $( "#node_neighbourhood" ),
     /// Modif David
-    cloudForSearch : $( "#node_neighbourhoodCopy" ),
     cloudSearch: $("#node_neighbourhoodForSearch"),
+    cloudForSearch : $( "#node_neighbourhoodCopy" ),
     unselect_button: $( "#toggle-unselect" ),
     table: $("#node_table > tbody"),
     data: {},
@@ -98,15 +98,6 @@ function InfoDiv(divid) {
         }
     },
 
-    alphabeticListSort: function( listitems, textkey ) {
-        listitems.sort(function(a, b) {
-            var compA = a[textkey].toUpperCase();
-            var compB = b[textkey].toUpperCase();
-            return (compA < compB) ? -1 : (compA > compB) ? 1 : 0;
-        })
-        return listitems;
-
-    },
 
     /*
      * Generic sorting DOM lists
@@ -134,19 +125,20 @@ function InfoDiv(divid) {
         /* builds aggregated tag object */
         if (Object.size( this.selection ) == 0) return;
         var tempcloud = {};
-
+        var toBe = new Array();
         for (var nodeid in this.selection) {
             // gets the full neighbourhood for the tag cloud
             var nb = tinaviz.getNeighbourhood(viewLevel,nodeid);
-            console.log("tinaviz.getNeighbourhood returned");
-            console.log(nb);
+            //console.log("tinaviz.getNeighbourhood returned");
+            //console.log(nb);
             for (var nbid in nb) {
                 if ( tempcloud[nbid] !== undefined )
                     tempcloud[nbid]['degree']++;
                 // pushes a node if belongs to the opposite category
                 else if (this.selection[nodeid]['category'] != nb[nbid]['category']) {
-                    console.log("updateTagCloud adding to tempcloud");
-                    this.oppositeSelection.push(nbid);
+                    //console.log("updateTagCloud adding to tempcloud");
+                    //this.oppositeSelection.push(nbid); //
+                    toBe.push(nbid);
                     tempcloud[nbid] = {
                         'id': nbid,
                         'label' : decodeJSON(nb[nbid]['label']),
@@ -159,7 +151,8 @@ function InfoDiv(divid) {
 
         }
 
-        var sorted_tags = this.alphabeticListSort( Object.values( tempcloud ), 'label' );
+         this.oppositeSelection = toBe;
+        var sorted_tags = alphabeticListSort( Object.values( tempcloud ), 'label' );
         /* some display sizes const */
 
         /// Modif david
@@ -169,7 +162,10 @@ function InfoDiv(divid) {
         var requests="";
         for (var i = 0; i < sorted_tags.length; i++) {
             var tag = sorted_tags[i];
-            tagLabel=decodeJSON(tag.label);
+            //tagLabel=decodeJSON(tag.label);
+            tagLabel=tag.label;
+            tagLabel=jQuery.trim(tagLabel);
+            //
             requests = requests + "%22" + tagLabel.replace(/ /g,"+") + "%22";
             if (i < sorted_tags.length - 1) requests = requests + "+AND+";
             }
@@ -235,15 +231,13 @@ function InfoDiv(divid) {
             if (i != sorted_tags.length-1 && sorted_tags.length > 1)
                 tagcloud.append(", &nbsp;");
         }
-        // updates the main cloud  div
+         // updates the main cloud  div
         this.cloud.empty();
         this.cloud.append( '<h3>selection related to '+ oppositeRealName + ': <span class="ui-icon ui-icon-help icon-right" title="'+tooltip+'"></span></h3>' );
-
-        this.cloudForSearch.empty();
+        this.cloud.append( tagcloud );
+        this.cloudForSearch.empty();        
         this.cloudForSearch.append( '<h3>Global search on '+ oppositeRealName + ': <span class="ui-icon ui-icon-help icon-right" title="'+tooltip+'"></span></h3>' );
-        
-        tagcloud.appendTo(this.cloud);
-        tagcloud.clone(false).find("*").removeAttr("id").appendTo(this.cloudForSearch);
+        this.cloudForSearch.append( tagcloud.clone());
         
     },
 
@@ -264,7 +258,9 @@ function InfoDiv(divid) {
             // ERROR : MISSING CATEGORY in the node list returned from Tinaviz !!!!
             if (node.category == current_cat)  {
                 // prepares label and content to be displayed
-                var label = decodeJSON(node.label);
+                //var label = decodeJSON(node.label);
+                var label = jQuery.trim(decodeJSON(node.label)); 
+                //
                 var content = decHTMLifEnc(decodeJSON(node.content));
 
                 // add node to selection cache
