@@ -42,35 +42,43 @@ Object.values = function(obj) {
     return values;
 };
 
-/*
- * To html entities
- */
-function htmlEncode(value){
-    return $('<div/>').text(value).html();
-}
-
-/*
- * From html entities to normal text
- */
-function htmlDecode(value){
-    return $('<div/>').html(value).text();
-}
-
-/*
- * Cleaning and decode entities of a value from a Json
- */
 function decodeJSON(encvalue) {
     if (encvalue !== undefined)
-        return jQuery.trim(decodeURIComponent(encvalue)
-            .replace(/\+/g, " ").replace(/%21/g, "!")
-            .replace(/%27/g, "'").replace(/%28/g, "(")
-            .replace(/%29/g, ")").replace(/%2A/g, "*")
-            .replace(/\"/g,"'")
-        );
+        return decodeURIComponent(encvalue).replace(/\+/g, " ").replace(/%21/g, "!").replace(/%27/g, "'").replace(/%28/g, "(").replace(/%29/g, ")").replace(/%2A/g, "*");
     else
         return "";
 };
 
+function content2html(content){
+    var vars = [],  htmlstring, hash;
+    var titles= [];
+    titles[0]='<b>Lost:</b>';
+    titles[1]='<b>New:</b>';
+    var htmlstring=$("");
+    var hashes = content.split('§'); // obsolet and new terms
+    for(var i = 0; i < hashes.length; i++){    
+        htmlstring.html(titles[i]);
+        hash = hashes[i].split(','); // list of terms
+        for(var j = 0; j < hash.length; j++){
+            //alert(hash[j])
+            var node=tinaviz.getNodeAttributes(hash[j]);         
+            htmlstring.html(decodeJSON(node['label']));
+            //alert(decodeJSON(node['label']));
+        }
+        htmlstring.html("<br/>");      
+    }
+    return htmlstring;
+};
+
+function  alphabeticListSort(listitems,textkey) {
+        listitems.sort(function(a, b) {
+            var compA = a[textkey].toUpperCase();
+            var compB = b[textkey].toUpperCase();
+            return (compA < compB) ? -1 : (compA > compB) ? 1 : 0;
+        })
+        return listitems;
+
+    };
 
 /* useful for fullscreen mode */
 
@@ -109,7 +117,7 @@ var resize = function() {
 
         var size = { w: getScreenWidth() - infoDivWidth - 55,
                       h: getScreenHeight() - $("#hd").height() - $("#ft").height() - 60 };
-
+                      
         $("#appletdiv").css('width', size.w);
         $("#infodiv").css('width', infoDivWidth);
         $("#infodivparent").css('height', size.h);
@@ -139,7 +147,7 @@ return undefined;if(type=="number"||type=="boolean")
 return o+"";if(type=="string")
 return $.quoteString(o);if(type=='object')
 {if(typeof o.toJSON=="function")
-return $.toJSON(o.toJSON());if(o.constructor===Date)
+return $0.toJSON(o.toJSON());if(o.constructor===Date)
 {var month=o.getUTCMonth()+1;if(month<10)month='0'+month;var day=o.getUTCDate();if(day<10)day='0'+day;var year=o.getUTCFullYear();var hours=o.getUTCHours();if(hours<10)hours='0'+hours;var minutes=o.getUTCMinutes();if(minutes<10)minutes='0'+minutes;var seconds=o.getUTCSeconds();if(seconds<10)seconds='0'+seconds;var milli=o.getUTCMilliseconds();if(milli<100)milli='0'+milli;if(milli<10)milli='0'+milli;return'"'+year+'-'+month+'-'+day+'T'+
 hours+':'+minutes+':'+seconds+'.'+milli+'Z"';}
 if(o.constructor===Array)

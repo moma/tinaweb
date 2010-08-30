@@ -416,6 +416,7 @@ function Tinaviz(args) {
             return applet.selectFromId(id,callback);
         }
 
+
         this.resetLayoutCounter= function(view) {
             if (applet == null) return;
             applet.view(view).set("layout/iter",0);
@@ -493,9 +494,12 @@ function Tinaviz(args) {
          */
         this.getNodeAttributes = function(id) {
             if (applet == null) return;
-            return $.parseJSON( applet.getNodesAttributes(id) );
+            return $.parseJSON( applet.getNodeAttributes(id) );
         }
 
+      
+        
+        
         /*
          * Gets the list of neighbours for a given node
          */
