@@ -191,6 +191,7 @@ $(document).ready(function(){
                             } 
                         } 
                     } 
+
                 } 
                 $("#sliderEdgeWeight").slider( "option", "disabled", false ); 
             } 

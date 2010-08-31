@@ -44,10 +44,15 @@ Object.values = function(obj) {
 
 function decodeJSON(encvalue) {
     if (encvalue !== undefined)
-        return decodeURIComponent(encvalue).replace(/\+/g, " ").replace(/%21/g, "!").replace(/%27/g, "'").replace(/%28/g, "(").replace(/%29/g, ")").replace(/%2A/g, "*");
+        return jQuery.trim(decodeURIComponent(encvalue)
+            .replace(/\+/g, " ").replace(/%21/g, "!")
+            .replace(/%27/g, "'").replace(/%28/g, "(")
+            .replace(/%29/g, ")").replace(/%2A/g, "*")
+            .replace(/\"/g,"'")
+            );
     else
         return "";
-};
+}
 
 function content2html(content){
     var vars = [],  htmlstring, hash;
@@ -68,7 +73,7 @@ function content2html(content){
         htmlstring.html("<br/>");      
     }
     return htmlstring;
-};
+}
 
 function  alphabeticListSort(listitems,textkey) {
     listitems.sort(function(a, b) {
@@ -78,7 +83,7 @@ function  alphabeticListSort(listitems,textkey) {
     })
     return listitems;
 
-};
+}
 
 /* useful for fullscreen mode */
 
@@ -119,7 +124,6 @@ var resize = function() {
         w: getScreenWidth() - infoDivWidth - 55,
         h: getScreenHeight() - $("#hd").height() - $("#ft").height() - 60
     };
-                      
     $("#appletdiv").css('width', size.w);
     $("#infodiv").css('width', infoDivWidth);
     $("#infodivparent").css('height', size.h);
@@ -160,7 +164,8 @@ function getUrlVars()
 
         {
             if(typeof o.toJSON=="function")
-                return $0.toJSON(o.toJSON());
+                return $.toJSON(o.toJSON());
+            
             if(o.constructor===Date)
 
             {

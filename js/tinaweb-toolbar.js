@@ -186,21 +186,6 @@ toolbar.init = function() {
         }
     });
 
-    /** DISABLED **
-    $("#toggle-showLabels").click(function(event) {
-        tinaviz.toggleLabels();
-    });
-
-    $("#toggle-showNodes").click(function(event) {
-        tinaviz.toggleNodes();
-    });
-
-    $("#toggle-showEdges").click(function(event) {
-        tinaviz.toggleEdges();
-    });
-
-    **/
-
     $("#toggle-paused").button({
         icons: {
             primary:'ui-icon-pause'
@@ -280,6 +265,7 @@ toolbar.init = function() {
             }
         }
         tinaviz.infodiv.display_current_category();
+
         
     });
 
