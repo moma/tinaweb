@@ -13,7 +13,7 @@
 //      Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 //      MA 02110-1301, USA.
 
- /* useful for fullscreen mode */
+/* useful for fullscreen mode */
 var tinaviz = {};
 
 $(document).ready(function(){
@@ -36,9 +36,13 @@ $(document).ready(function(){
                 if($.browser.mozilla){//Firefox $("#sliderEdgeWeight")
                     $(this).css('MozUserSelect','none');
                 } else if($.browser.msie) {//IE
-                    $(this).bind('selectstart',function(){return false;});
+                    $(this).bind('selectstart',function(){
+                        return false;
+                    });
                 } else {//Opera, etc.
-                    $(this).mousedown(function(){return false;});
+                    $(this).mousedown(function(){
+                        return false;
+                    });
                 }
             });
         });
@@ -93,13 +97,13 @@ toolbar.init = function() {
     $("search").val(toolbar.values.search);
     
     $("#search").submit(function() {
-      var txt = $("#search_input").val();
-      if (txt=="") {
+        var txt = $("#search_input").val();
+        if (txt=="") {
             tinaviz.unselect();
-      } else {
+        } else {
             tinaviz.searchNodes(txt, "containsIgnoreCase");
-      }
-      return false;
+        }
+        return false;
     });
     /*
     $("#search").keypress(function() {
@@ -119,19 +123,19 @@ toolbar.init = function() {
     }).click( function(eventObject) {
         tinaviz.toggleView();
     });
-  $("#level").attr("title","click to switch the level");
+    $("#level").attr("title","click to switch the level");
     $("#search_button").button({
         text: false,
         icons: {
             primary: 'ui-icon-search'
         }
     }).click( function(eventObject) {
-          var txt = $("#search_input").val();
-          if (txt=="") {
-                tinaviz.unselect();
-          } else {
-                tinaviz.searchNodes(txt, "containsIgnoreCase");
-          }
+        var txt = $("#search_input").val();
+        if (txt=="") {
+            tinaviz.unselect();
+        } else {
+            tinaviz.searchNodes(txt, "containsIgnoreCase");
+        }
     });
 
     // MACRO SLIDERS
@@ -168,20 +172,21 @@ toolbar.init = function() {
         slide: function(event, ui) {
             tinaviz.current.set("output/nodeSizeRatio", ui.value / 100.0);
             tinaviz.current.commitProperties();
-        }}
+        }
+    }
     );
 
-    $("#sliderSelectionZone").slider({
-        value: toolbar.values.sliders.cursor_size,
-        max: 300.0, // max disk radius, in pixel
-        animate: true,
-        slide: function(event, ui) {
-            tinaviz.current.set("selection/radius", ui.value);
-            tinaviz.current.commitProperties();
-        }
-    });
+$("#sliderSelectionZone").slider({
+    value: toolbar.values.sliders.cursor_size,
+    max: 300.0, // max disk radius, in pixel
+    animate: true,
+    slide: function(event, ui) {
+        tinaviz.current.set("selection/radius", ui.value);
+        tinaviz.current.commitProperties();
+    }
+});
 
-    /** DISABLED **
+/** DISABLED **
     $("#toggle-showLabels").click(function(event) {
         tinaviz.toggleLabels();
     });
@@ -196,86 +201,94 @@ toolbar.init = function() {
 
     **/
 
-    $("#toggle-paused").button({
-        icons: {primary:'ui-icon-pause'},
-        text: true,
-        label: "pause",
-    })
-    .click(function(event) {
-        tinaviz.togglePause();
-        var p = $("#toggle-paused");
-        if( p.button('option','icons')['primary'] == 'ui-icon-pause'  ) {
-            p.button('option','icons',{'primary':'ui-icon-play'});
-            p.button('option','label',"play");
-        } else {
-            p.button('option','icons',{'primary':'ui-icon-pause'});
-            p.button('option','label',"pause");
-        }
-    });
+$("#toggle-paused").button({
+    icons: {
+        primary:'ui-icon-pause'
+    },
+    text: true,
+    label: "pause",
+})
+.click(function(event) {
+    tinaviz.togglePause();
+    var p = $("#toggle-paused");
+    if( p.button('option','icons')['primary'] == 'ui-icon-pause'  ) {
+        p.button('option','icons',{
+            'primary':'ui-icon-play'
+        });
+        p.button('option','label',"play");
+    } else {
+        p.button('option','icons',{
+            'primary':'ui-icon-pause'
+        });
+        p.button('option','label',"pause");
+    }
+});
 
-    $("#toggle-unselect").button({
-        icons: {primary:'ui-icon-close'},
-    }).click(function(event) {
-        tinaviz.unselect();
-    });
+$("#toggle-unselect").button({
+    icons: {
+        primary:'ui-icon-close'
+    },
+}).click(function(event) {
+    tinaviz.unselect();
+});
 
-    $("#toggle-autoCentering").button({
-        text: true,
-        icons: {
-            primary: 'ui-icon-home'
-        }
-    })
-    .click(function(event) {
-        tinaviz.autoCentering();
-    });
+$("#toggle-autoCentering").button({
+    text: true,
+    icons: {
+        primary: 'ui-icon-home'
+    }
+})
+.click(function(event) {
+    tinaviz.autoCentering();
+});
 
-    $("#toggle-switch").button({
-        text: true,
-        icons: {
-            primary: 'ui-icon-arrows'
-        },
-    }).click(function(event) {
-        /**
+$("#toggle-switch").button({
+    text: true,
+    icons: {
+        primary: 'ui-icon-arrows'
+    },
+}).click(function(event) {
+    /**
          * Manually toggles the category, and do the bipartite work
          */
 
-            var viewName = tinaviz.getViewName();
-            var view = tinaviz.views[viewName];
-            // get and set the new category to display
-            var cat = view.get("category/category");
+    var viewName = tinaviz.getViewName();
+    var view = tinaviz.views[viewName];
+    // get and set the new category to display
+    var cat = view.get("category/category");
 
-            var next_cat = tinaviz.getOppositeCategory( cat );
+    var next_cat = tinaviz.getOppositeCategory( cat );
 
-            // update the node list
-            tinaviz.updateNodes(viewName, next_cat);
+    // update the node list
+    tinaviz.updateNodes(viewName, next_cat);
             
-            // update the algorithm 
-            view.categories[cat].layout.iter = view.get("layout/iter");
-            view.set("layout/iter", view.categories[next_cat].layout.iter);
-            view.set("category/category", next_cat);
-            view.commitProperties();
+    // update the algorithm 
+    view.categories[cat].layout.iter = view.get("layout/iter");
+    view.set("layout/iter", view.categories[next_cat].layout.iter);
+    view.set("category/category", next_cat);
+    view.commitProperties();
             
-            tinaviz.autoCentering();
+    tinaviz.autoCentering();
 
-            if (viewName=="macro") {
-                // empty the selection, and ask the applet to select opposite nodes
-                var i = 0;
-                tinaviz.infodiv.selection = {};
-                for (var nbid in tinaviz.infodiv.oppositeSelection) {  
-                    var cb = (++i == tinaviz.infodiv.oppositeSelection.length);
-                    tinaviz.selectFromId(tinaviz.infodiv.oppositeSelection[nbid], cb);
-                }
-            }
-            tinaviz.infodiv.display_current_category();
+    if (viewName=="macro") {
+        // empty the selection, and ask the applet to select opposite nodes
+        var i = 0;
+        tinaviz.infodiv.selection = {};
+        for (var nbid in tinaviz.infodiv.oppositeSelection) {  
+            var cb = (++i == tinaviz.infodiv.oppositeSelection.length);
+            tinaviz.selectFromId(tinaviz.infodiv.oppositeSelection[nbid], cb);
+        }
+    }
+    tinaviz.infodiv.display_current_category();
         
-    });
+});
 
 };
 
 toolbar.updateButton = function(button, state) {
 
     toolbar.values.buttons[button] = state;
-     $("#toggle-"+button).toggleClass("ui-state-active", state);
+    $("#toggle-"+button).toggleClass("ui-state-active", state);
 };
 
 toolbar.update = function(vals) {
@@ -288,12 +301,12 @@ toolbar.update = function(vals) {
     // simple shortcut
     var values = toolbar.values;
     
-        for (v in vals) {
+    for (v in vals) {
         toolbar.values[v] = vals[v];
     }
     $("#search_input").val(values.search);
 
-	console.log(values);
+    console.log(values);
     // initialize the sliders
     alert("gettings values");
     $("#sliderNodeSize").slider( "option", "value", values.magnify * 100.0 );
@@ -301,10 +314,10 @@ toolbar.update = function(vals) {
     $("#sliderEdgeWeight").slider( "option", "values", [
         values.sliders.edgeFilter.min,
         values.sliders.edgeFilter.max * 100.0
-    ]);
+        ]);
     $("#sliderNodeWeight").slider( "option", "values", [
         values.sliders.nodeFilter.min,
         values.sliders.nodeFilter.max * 100.0 
-    ]);
+        ]);
     
 };
