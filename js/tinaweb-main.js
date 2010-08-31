@@ -24,7 +24,7 @@ $(document).ready(function(){
         tag: $("#vizdiv")
     });
 
-   $('#appletInfo').effect('pulsate', {}, 'fast');
+    $('#appletInfo').effect('pulsate', {}, 'fast');
 
     $(window).bind('resize', function() {
         var size = resize();
@@ -103,48 +103,48 @@ $(document).ready(function(){
 
         tinaviz.open({
             success: function() {
-             // init the node list with ngrams
-             tinaviz.updateNodes( prefs.view, prefs.category );
+                // init the node list with ngrams
+                tinaviz.updateNodes( prefs.view, prefs.category );
 
-             // cache the document list
-             tinaviz.getNodes( prefs.view, "Document" );
+                // cache the document list
+                tinaviz.getNodes( prefs.view, "Document" );
              
-             var view = tinaviz.view();
+                var view = tinaviz.view();
 
-              // initialize the sliders
-              $("#sliderNodeSize").slider( "option", "value", 
+                // initialize the sliders
+                $("#sliderNodeSize").slider( "option", "value", 
                     parseInt(view.get("output/nodeSizeRatio")) *100 
-              );
-              $("#sliderSelectionZone").slider( "option", "value", 
+                    );
+                $("#sliderSelectionZone").slider( "option", "value", 
                     parseInt(view.get("selection/radius")) * 100 
-              );
-              $("#sliderEdgeWeight").slider( "option", "values", [
+                    );
+                $("#sliderEdgeWeight").slider( "option", "values", [
                     parseInt( view.get("edgeWeight/min") ),
                     parseInt(view.get("edgeWeight/max")) *100 
-              ]);
-              $("#sliderNodeWeight").slider( "option", "values", [
+                    ]);
+                $("#sliderNodeWeight").slider( "option", "values", [
                     parseInt(view.get("nodeWeight/min") ),
                     parseInt(view.get("nodeWeight/max")) *100 
-             ]);
+                    ]);
                 
-             tinaviz.infodiv.display_current_category();
-             tinaviz.infodiv.display_current_view();
+                tinaviz.infodiv.display_current_category();
+                tinaviz.infodiv.display_current_view();
                         
-             $("#appletInfo").hide();
+                $("#appletInfo").hide();
                        
-             if (prefs.node_id != "") {
-                tinaviz.selectFromId( prefs.node_id, true );
-             }
+                if (prefs.node_id != "") {
+                    tinaviz.selectFromId( prefs.node_id, true );
+                }
              
-             if (prefs.search != "") {
-                $("#search_input").val(prefs.search);
-                 tinaviz.searchNodes(prefs.search, "containsIgnoreCase");
-             }
+                if (prefs.search != "") {
+                    $("#search_input").val(prefs.search);
+                    tinaviz.searchNodes(prefs.search, "containsIgnoreCase");
+                }
 
-           },
-           error: function(msg) {
-             $("#appletInfo").html("Error, couldn't load graph: "+msg);
-           }
+            },
+            error: function(msg) {
+                $("#appletInfo").html("Error, couldn't load graph: "+msg);
+            }
         });
                 
         tinaviz.open({
@@ -161,11 +161,11 @@ $(document).ready(function(){
                 $("#sliderEdgeWeight").slider( "option", "values", [
                     parseInt( view.get("edgeWeight/min") ),
                     parseInt(view.get("edgeWeight/max")) *100 
-                ]);
+                    ]);
                 $("#sliderNodeWeight").slider( "option", "values", [
                     parseInt(view.get("nodeWeight/min") ),
                     parseInt(view.get("nodeWeight/max")) *100 
-                ]);
+                    ]);
                 tinaviz.infodiv.display_current_category();
                 tinaviz.infodiv.display_current_view();
                 
