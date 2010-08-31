@@ -69,7 +69,7 @@ function decodeJSON(encvalue) {
         );
     else
         return "";
-};
+}
 
 
 /* useful for fullscreen mode */

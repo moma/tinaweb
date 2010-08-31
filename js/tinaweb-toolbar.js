@@ -25,7 +25,7 @@ $(document).ready(function(){
         max: 100,
         value: 100.0,
         animate: true,
-        orientation: "horizontal",
+        orientation: "horizontal"
     });
 
     //No text selection on elements with a class of 'noSelect'
@@ -199,7 +199,7 @@ toolbar.init = function() {
     $("#toggle-paused").button({
         icons: {primary:'ui-icon-pause'},
         text: true,
-        label: "pause",
+        label: "pause"
     })
     .click(function(event) {
         tinaviz.togglePause();
@@ -214,7 +214,7 @@ toolbar.init = function() {
     });
 
     $("#toggle-unselect").button({
-        icons: {primary:'ui-icon-close'},
+        icons: {primary:'ui-icon-close'}
     }).click(function(event) {
         tinaviz.unselect();
     });
@@ -233,7 +233,7 @@ toolbar.init = function() {
         text: true,
         icons: {
             primary: 'ui-icon-arrows'
-        },
+        }
     }).click(function(event) {
         /**
          * Manually toggles the category, and do the bipartite work
