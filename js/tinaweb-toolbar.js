@@ -25,7 +25,7 @@ $(document).ready(function(){
         max: 100,
         value: 100.0,
         animate: true,
-        orientation: "horizontal",
+        orientation: "horizontal"
     });
 
     //No text selection on elements with a class of 'noSelect'
@@ -176,17 +176,17 @@ toolbar.init = function() {
     }
     );
 
-$("#sliderSelectionZone").slider({
-    value: toolbar.values.sliders.cursor_size,
-    max: 300.0, // max disk radius, in pixel
-    animate: true,
-    slide: function(event, ui) {
-        tinaviz.current.set("selection/radius", ui.value);
-        tinaviz.current.commitProperties();
-    }
-});
+    $("#sliderSelectionZone").slider({
+        value: toolbar.values.sliders.cursor_size,
+        max: 300.0, // max disk radius, in pixel
+        animate: true,
+        slide: function(event, ui) {
+            tinaviz.current.set("selection/radius", ui.value);
+            tinaviz.current.commitProperties();
+        }
+    });
 
-/** DISABLED **
+    /** DISABLED **
     $("#toggle-showLabels").click(function(event) {
         tinaviz.toggleLabels();
     });
@@ -201,87 +201,87 @@ $("#sliderSelectionZone").slider({
 
     **/
 
-$("#toggle-paused").button({
-    icons: {
-        primary:'ui-icon-pause'
-    },
-    text: true,
-    label: "pause",
-})
-.click(function(event) {
-    tinaviz.togglePause();
-    var p = $("#toggle-paused");
-    if( p.button('option','icons')['primary'] == 'ui-icon-pause'  ) {
-        p.button('option','icons',{
-            'primary':'ui-icon-play'
-        });
-        p.button('option','label',"play");
-    } else {
-        p.button('option','icons',{
-            'primary':'ui-icon-pause'
-        });
-        p.button('option','label',"pause");
-    }
-});
+    $("#toggle-paused").button({
+        icons: {
+            primary:'ui-icon-pause'
+        },
+        text: true,
+        label: "pause"
+    })
+    .click(function(event) {
+        tinaviz.togglePause();
+        var p = $("#toggle-paused");
+        if( p.button('option','icons')['primary'] == 'ui-icon-pause'  ) {
+            p.button('option','icons',{
+                'primary':'ui-icon-play'
+            });
+            p.button('option','label',"play");
+        } else {
+            p.button('option','icons',{
+                'primary':'ui-icon-pause'
+            });
+            p.button('option','label',"pause");
+        }
+    });
 
-$("#toggle-unselect").button({
-    icons: {
-        primary:'ui-icon-close'
-    },
-}).click(function(event) {
-    tinaviz.unselect();
-});
+    $("#toggle-unselect").button({
+        icons: {
+            primary:'ui-icon-close'
+        }
+    }).click(function(event) {
+        tinaviz.unselect();
+    });
 
-$("#toggle-autoCentering").button({
-    text: true,
-    icons: {
-        primary: 'ui-icon-home'
-    }
-})
-.click(function(event) {
-    tinaviz.autoCentering();
-});
+    $("#toggle-autoCentering").button({
+        text: true,
+        icons: {
+            primary: 'ui-icon-home'
+        }
+    })
+    .click(function(event) {
+        tinaviz.autoCentering();
+    });
 
-$("#toggle-switch").button({
-    text: true,
-    icons: {
-        primary: 'ui-icon-arrows'
-    },
-}).click(function(event) {
-    /**
+    $("#toggle-switch").button({
+        text: true,
+        icons: {
+            primary: 'ui-icon-arrows'
+        }
+    }).click(function(event) {
+        /**
          * Manually toggles the category, and do the bipartite work
          */
 
-    var viewName = tinaviz.getViewName();
-    var view = tinaviz.views[viewName];
-    // get and set the new category to display
-    var cat = view.get("category/category");
+        var viewName = tinaviz.getViewName();
+        var view = tinaviz.views[viewName];
+        // get and set the new category to display
+        var cat = view.get("category/category");
 
-    var next_cat = tinaviz.getOppositeCategory( cat );
+        var next_cat = tinaviz.getOppositeCategory( cat );
 
-    // update the node list
-    tinaviz.updateNodes(viewName, next_cat);
+        // update the node list
+        tinaviz.updateNodes(viewName, next_cat);
             
-    // update the algorithm 
-    view.categories[cat].layout.iter = view.get("layout/iter");
-    view.set("layout/iter", view.categories[next_cat].layout.iter);
-    view.set("category/category", next_cat);
-    view.commitProperties();
+        // update the algorithm 
+        view.categories[cat].layout.iter = view.get("layout/iter");
+        view.set("layout/iter", view.categories[next_cat].layout.iter);
+        view.set("category/category", next_cat);
+        view.commitProperties();
             
-    tinaviz.autoCentering();
+        tinaviz.autoCentering();
 
-    if (viewName=="macro") {
-        // empty the selection, and ask the applet to select opposite nodes
-        var i = 0;
-        tinaviz.infodiv.selection = {};
-        for (var nbid in tinaviz.infodiv.oppositeSelection) {  
-            var cb = (++i == tinaviz.infodiv.oppositeSelection.length);
-            tinaviz.selectFromId(tinaviz.infodiv.oppositeSelection[nbid], cb);
+        if (viewName=="macro") {
+            // empty the selection, and ask the applet to select opposite nodes
+            var i = 0;
+            tinaviz.infodiv.selection = {};
+            for (var nbid in tinaviz.infodiv.oppositeSelection) {  
+                var cb = (++i == tinaviz.infodiv.oppositeSelection.length);
+                tinaviz.selectFromId(tinaviz.infodiv.oppositeSelection[nbid], cb);
+            }
         }
-    }
-    tinaviz.infodiv.display_current_category();
+        tinaviz.infodiv.display_current_category();
         
-});
+    });
 
 };
 

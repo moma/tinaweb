@@ -32,7 +32,7 @@ function displayNodeRow(label, id, category) {
             }) 
             ) 
         ); 
-}; 
+}
  
  
 /* 
@@ -56,7 +56,7 @@ function InfoDiv(divid) {
         data: {}, 
         categories: { 
             'NGram' : 'Terms', 
-            'Document' : 'Communities', 
+            'Document' : 'Communities'
         }, 
         last_category: "", 
         /* 
@@ -143,7 +143,7 @@ function InfoDiv(divid) {
                             'label' : decodeJSON(nb[nbid]['label']), 
                             'degree' : 1, 
                             'occurrences': parseInt(nb[nbid]['occurrences']), 
-                            'category': decodeJSON(nb[nbid]['category']), 
+                            'category': decodeJSON(nb[nbid]['category'])
                         }; 
                     } 
                 } 
@@ -428,10 +428,10 @@ function InfoDiv(divid) {
                     })(); 
                 } 
             } 
-        }, 
+        }
  
     } // end of return 
-}; 
+}
  
  
 /* 

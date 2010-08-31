@@ -206,55 +206,55 @@ function getUrlVars()
         }
     };
     
-$.evalJSON=function(src)
-
-{
-    if(typeof(JSON)=='object'&&JSON.parse)
-        return JSON.parse(src);
-    return eval("("+src+")");
-};
-
-$.secureEvalJSON=function(src)
-
-{
-    if(typeof(JSON)=='object'&&JSON.parse)
-        return JSON.parse(src);
-    var filtered=src;
-    filtered=filtered.replace(/\\["\\\/bfnrtu]/g,'@');
-    filtered=filtered.replace(/"[^"\\\n\r]*"|true|false|null|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?/g,']');
-    filtered=filtered.replace(/(?:^|:|,)(?:\s*\[)+/g,'');
-    if(/^[\],:{}\s]*$/.test(filtered))
-        return eval("("+src+")");else
-        throw new SyntaxError("Error parsing JSON, source is not valid.");
-};
-
-$.quoteString=function(string)
-
-{
-    if(string.match(_escapeable))
+    $.evalJSON=function(src)
 
     {
-        return'"'+string.replace(_escapeable,function(a)
+        if(typeof(JSON)=='object'&&JSON.parse)
+            return JSON.parse(src);
+        return eval("("+src+")");
+    };
+
+    $.secureEvalJSON=function(src)
+
+    {
+        if(typeof(JSON)=='object'&&JSON.parse)
+            return JSON.parse(src);
+        var filtered=src;
+        filtered=filtered.replace(/\\["\\\/bfnrtu]/g,'@');
+        filtered=filtered.replace(/"[^"\\\n\r]*"|true|false|null|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?/g,']');
+        filtered=filtered.replace(/(?:^|:|,)(?:\s*\[)+/g,'');
+        if(/^[\],:{}\s]*$/.test(filtered))
+            return eval("("+src+")");else
+            throw new SyntaxError("Error parsing JSON, source is not valid.");
+    };
+
+    $.quoteString=function(string)
+
+    {
+        if(string.match(_escapeable))
 
         {
-            var c=_meta[a];
-            if(typeof c==='string')return c;
-            c=a.charCodeAt();
-            return'\\u00'+Math.floor(c/16).toString(16)+(c%16).toString(16);
-        })+'"';
-    }
-    return'"'+string+'"';
-};
+            return'"'+string.replace(_escapeable,function(a)
 
-var _escapeable=/["\\\x00-\x1f\x7f-\x9f]/g;
-var _meta={
-    '\b':'\\b',
-    '\t':'\\t',
-    '\n':'\\n',
-    '\f':'\\f',
-    '\r':'\\r',
-    '"':'\\"',
-    '\\':'\\\\'
-};
+            {
+                    var c=_meta[a];
+                    if(typeof c==='string')return c;
+                    c=a.charCodeAt();
+                    return'\\u00'+Math.floor(c/16).toString(16)+(c%16).toString(16);
+                })+'"';
+        }
+        return'"'+string+'"';
+    };
+
+    var _escapeable=/["\\\x00-\x1f\x7f-\x9f]/g;
+    var _meta={
+        '\b':'\\b',
+        '\t':'\\t',
+        '\n':'\\n',
+        '\f':'\\f',
+        '\r':'\\r',
+        '"':'\\"',
+        '\\':'\\\\'
+    };
 
 })(jQuery);
