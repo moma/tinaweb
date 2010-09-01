@@ -60,14 +60,26 @@ function content2html(content){
     titles[0]='<b>Lost:</b>';
     titles[1]='<b>New:</b>';
     var htmlstring=$("");
-    var hashes = content.split('§'); // obsolet and new terms
+    // %2b = ,
+    // %2c = +
+    //alert(content);
+    console.log("content:"+content);
+    var hashes = content.split('_'); // obsolet and new terms
+
     for(var i = 0; i < hashes.length; i++){    
         htmlstring.html(titles[i]);
-        hash = hashes[i].split(','); // list of terms
+        //alert("hashes i:"+[i]);
+        if (hashes[i]=='.') continue;
+        hash = hashes[i].split('-'); // list of terms
         for(var j = 0; j < hash.length; j++){
-            //alert(hash[j])
-            var node=tinaviz.getNodeAttributes(hash[j]);         
-            htmlstring.html(decodeJSON(node['label']));
+            //alert("hash j:"+hash[j]);
+            //var node=tinaviz.getNodeAttributes(hash[j]);    
+            var node=tinaviz.getNodeAttributes("macro",hash[j]);   
+            //alert("here");
+            console.log("received from node attributes(50) = "+node);
+            console.dir(node);
+            
+            htmlstring.html(node['label']);
         //alert(decodeJSON(node['label']));
         }
         htmlstring.html("<br/>");      

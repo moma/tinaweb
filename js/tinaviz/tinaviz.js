@@ -259,7 +259,7 @@ function Tinaviz(args) {
                 try {
                     view.openString(gexf, opts.clear);
                 } catch (e) {
-                    console.error("CATCHED JAVA ERROR "+e);
+                    console.log("Couldn't load graph using openString, trying with openURI..");
                     f = true;
                 }
                 if (f) {
@@ -520,9 +520,11 @@ function Tinaviz(args) {
     /*
          *  Gets attributes o a given node
          */
-    this.getNodeAttributes = function(id) {
+    this.getNodeAttributes = function(view,id) {
         if (applet == null) return {};
-        return $.parseJSON( applet.getNodesAttributes(id) );
+        return $.parseJSON(
+            applet.getNodeAttributes(view,id)
+        );
     }
 
     /*
