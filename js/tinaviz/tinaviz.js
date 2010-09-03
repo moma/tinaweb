@@ -281,6 +281,11 @@ function Tinaviz(args) {
 
 
     }
+    
+    this.setLayout=function(name) {
+        this.set("layout/name", name);
+    }
+    
     this.event=function(args) {
         var opts = {
             viewChanged: function(view){},
@@ -479,10 +484,13 @@ function Tinaviz(args) {
 
     /*
         * Search and select nodes
+        * matchView: macro,meso,current
+        * targetView: macro,meso,current
         */
-    this.searchNodes= function(label, type) {
-        if (applet!=null) applet.selectNodesByLabel(label, type);
+    this.searchNodes= function(matchLabel, matchCategory, matchView, matchType, targetView) {
+        if (applet!=null) applet.selectNodesByLabel(matchLabel, matchCategory, matchView, matchType, targetView);
     }
+
 
     /*
         * Highlight nodes
@@ -772,8 +780,10 @@ function Tinaviz(args) {
         this.updateNodes("meso", category);
     }
 
+    this.getCategory= function() { return this.get("category/category"); }
+    this.setCategory= function(value) { return this.set("category/category", value); }
     this.toggleView= function() {
-        var current_cat = this.get("category/category");
+        var current_cat = this.getCategory();
         if (this.getViewName() == "macro") {
             // check if selection is empty
             if (Object.size(this.infodiv.selection) != 0) {
