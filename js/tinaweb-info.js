@@ -41,6 +41,7 @@ function displayNodeRow(label, id, category) {
 function InfoDiv(divid) {
 
     return {
+
         id: divid,
         selection : {},
         neighbours : {},
@@ -98,6 +99,7 @@ function InfoDiv(divid) {
             }
         },
 
+
         alphabeticListSort: function( listitems, textkey ) {
             listitems.sort(function(a, b) {
                 var compA = a[textkey].toUpperCase();
@@ -107,6 +109,7 @@ function InfoDiv(divid) {
             return listitems;
 
         },
+
 
         /*
      * Generic sorting DOM lists
@@ -172,6 +175,7 @@ function InfoDiv(divid) {
                 tagLabel=decodeJSON(tag.label);
                 requests = requests + "%22" + tagLabel.replace(/ /g,"+") + "%22";
                 if (i < sorted_tags.length - 1) requests = requests + "+AND+";
+
             }
 
             var current_cat = tinaviz.get("category/category");  /// category courante
@@ -233,8 +237,9 @@ function InfoDiv(divid) {
                 // appends the final tag to the cloud paragraph
                 tagcloud.append(tagspan);
                 if (i != sorted_tags.length-1 && sorted_tags.length > 1)
-                    tagcloud.append(", &nbsp;");
+                    tagcloud.append($("<span>, &nbsp;</span>"));
             }
+
             // updates the main cloud  div
             this.cloud.empty();
             this.cloud.append( '<h3>selection related to '+ oppositeRealName + ': <span class="ui-icon ui-icon-help icon-right" title="'+tooltip+'"></span></h3>' );
@@ -244,7 +249,7 @@ function InfoDiv(divid) {
         
             tagcloud.appendTo(this.cloud);
             tagcloud.clone(false).find("*").removeAttr("id").appendTo(this.cloudForSearch);
-        
+
         },
 
         /*
@@ -265,8 +270,8 @@ function InfoDiv(divid) {
                 if (node.category == current_cat)  {
                     // prepares label and content to be displayed
                     var label = decodeJSON(node.label);
-                    var content = decHTMLifEnc(decodeJSON(node.content));
-
+                    //var content = decHTMLifEnc(decodeJSON(node.content));
+                    var content = content2html(node.content);
                     // add node to selection cache
                     this.selection[id] = lastselection[id];
                     labelinnerdiv.append( $("<b></b>").html(label) );
@@ -355,8 +360,6 @@ function InfoDiv(divid) {
                                     )
                                 );
                         }
-                    // FIN MODIF DAVID
-
                     }
                 }
             }
