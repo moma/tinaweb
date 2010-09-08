@@ -45,7 +45,7 @@ $(document).ready(function(){
         });
         
         var prefs = {    
-            gexf: "FET60bipartite_graph_cooccurrences_.gexf",
+            gexf: "Phylo_map_bionet_2004_2007_g.gexf",
             view: "macro",
             category: "Document",
             node_id: "",

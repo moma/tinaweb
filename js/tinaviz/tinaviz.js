@@ -1,6 +1,4 @@
 
-
-
 function Tinaviz(args) {
 
     var openDefaults = {
@@ -140,7 +138,6 @@ function Tinaviz(args) {
     this.isReady = 0;
     this.infodiv = {};
 
-
     this.opts = opts;
     this.height = opts.height;
     this.width = opts.width;
@@ -151,11 +148,7 @@ function Tinaviz(args) {
     this.engine = opts.engine;
     this.context = opts.context;
     this.branding = opts.branding;
-
-
-    // constant
     this.iframeFileName = "iframe.html";
-
 
     this.init= function() {
         if (this.xulrunner == true) {
@@ -239,7 +232,8 @@ function Tinaviz(args) {
         $.ajax({
             url: opts.url,
             type: "GET",
-            dataType: "text",
+            dataType: "text", // if we use 'text', we need to disable cache
+            cache: "false", //
             error: function() {
                 try {
                     if (opts.url.search("://") != -1) {
@@ -291,7 +285,9 @@ function Tinaviz(args) {
             viewChanged: function(view){},
             categoryChanged: function(view){}
         };
-        for (x in args) {opts[x]=args[x]}
+        for (x in args) {
+            opts[x]=args[x]
+        }
 
         this.callbackViewChanged = opts.viewChanged;
         this.callbackCategoryChanged = opts.categoryChanged;
@@ -368,17 +364,11 @@ function Tinaviz(args) {
                             </applet>\
                             <!--<![endif]-->';
         return appletTag;
-
     }
 
-    /************************
-         * Core applet methods
-         *
-         ************************/
-
-    /*
-         * Core method communicating with the applet
-         */
+    /**
+     * Core method communicating with the applet
+     */
     this.dispatchProperty= function(key,value) {
         if (applet == null) return;
         for (view in this.views) {
@@ -386,45 +376,35 @@ function Tinaviz(args) {
         }
     }
 
-    /*
-         * Core method communicating with the applet
-         */
+    /**
+     * Core method communicating with the applet
+     */
     this.set= function(key,value) {
         return applet.set(key,value);
     }
 
-    /*
-         * Core method communicating with the applet
-         */
+    /**
+     * Core method communicating with the applet
+     */
     this.get = function(key) {
-        if (applet == null) return;
         return applet.get(key);
     }
 
-    /*
-         * Commands switching between view levels
-         */
+    /**
+     * Commands switching between view levels
+     */
     this.setView = function(view) {
         if (applet == null) return;
         applet.setView(view);
-
     }
 
-    /*
-         * Gets the the view level name
-         */
+    /**
+     * Gets the the view level name
+     */
     this.getViewName = function(view) {
-        if (applet == null) return;
         return applet.getView().getName();
     }
 
-    /*
-         * Gets the the view level name
-         */
-    this.getViewName = function(view) {
-        if (applet == null) return;
-        return applet.getView().getName();
-    }
 
     /*
          * Commits the applet's parameters
@@ -532,7 +512,7 @@ function Tinaviz(args) {
         if (applet == null) return {};
         return $.parseJSON(
             applet.getNodeAttributes(view,id)
-        );
+            );
     }
 
     /*
@@ -705,8 +685,6 @@ function Tinaviz(args) {
         * Callback after CHANGING THE VIEW LEVEL
         */
     this.switchedTo = function(viewName, selected) {
-        if (applet == null) return;
-
         var view = this.constructNewViewObject(viewName);
         this.callbackViewChanged(view);
     }
@@ -720,7 +698,6 @@ function Tinaviz(args) {
          * hide/show nodes
          */
     this.toggleNodes = function() {
-        if (applet == null) return;
         return this.view().toggleNodes();
     }
 
@@ -728,7 +705,6 @@ function Tinaviz(args) {
      * hide/show edges
      */
     this.toggleEdges = function() {
-        if (applet == null) return;
         return this.view().toggleLinks();
     }
 
@@ -736,12 +712,10 @@ function Tinaviz(args) {
      * play/pause layout engine
      */
     this.togglePause = function() {
-        if (applet == null) return;
         return this.view().togglePause();
     }
     
     this.setPause = function(value) {
-        if (applet == null) return;
         return this.view().setPause(value);
     }
 
@@ -749,7 +723,6 @@ function Tinaviz(args) {
      * toggles HD rendering
      */
     this.toggleHD = function() {
-        if (applet == null) return;
         return this.view().toggleHD();
     }
     /**
@@ -766,8 +739,8 @@ function Tinaviz(args) {
 
 
     /**
-         * Manually toggles the view to meso given an id
-         */
+     * Manually toggles the view to meso given an id
+     */
     this.viewMeso = function(id, category) {
         // selects unique node
         this.unselect();
@@ -780,8 +753,12 @@ function Tinaviz(args) {
         this.updateNodes("meso", category);
     }
 
-    this.getCategory= function() { return this.get("category/category"); }
-    this.setCategory= function(value) { return this.set("category/category", value); }
+    this.getCategory= function() {
+        return this.get("category/category");
+    }
+    this.setCategory= function(value) {
+        return this.set("category/category", value);
+    }
     this.toggleView= function() {
         var current_cat = this.getCategory();
         if (this.getViewName() == "macro") {
@@ -810,11 +787,10 @@ function Tinaviz(args) {
         return applet.view(v);
     }
 
-    /*
-        * Manually unselects all nodes
-        */
+    /**
+     * Manually unselects all nodes
+     */
     this.unselect= function() {
-        if (applet == null) return;
         if (this.getViewName() == "meso") {
             applet.unselectCurrent();
         } else {
@@ -833,19 +809,17 @@ function Tinaviz(args) {
     }
 
 
-
-    /*
-         *  Retrieves list of nodes
-         *  nodes = tinaviz.getNodes("macro", "NGram")
-         */
+    /**
+     *  Retrieves list of nodes
+     *  nodes = tinaviz.getNodes("macro", "NGram")
+     */
     this.getNodes = function(view, category) {
-        if (applet == null) return;
         this.infodiv.data[category] = $.parseJSON( applet.getNodes(view, category) );
         return this.infodiv.data[category];
     }
-    /*
-         *  Fires the update of node list cache and display
-         */
+    /**
+     *  Fires the update of node list cache and display
+     */
     this.updateNodes = function(view, category)  {
         if ( category == this.infodiv.last_category ) return;
         this.infodiv.display_current_category();
@@ -856,10 +830,9 @@ function Tinaviz(args) {
     }
 
 
-
-    /*
-         *  Try to log an error with firebug otherwise alert it
-         */
+    /**
+     *  Try to log an error with firebug otherwise alert it
+     */
     this.logError= function(msg) {
         try {
             console.error(msg);
@@ -869,9 +842,10 @@ function Tinaviz(args) {
             return;
         }
     }
-    /*
-         *  Try to log an normal msg with firebug otherwise returns
-         */
+    
+    /**
+     *  Try to log an normal msg with firebug otherwise returns
+     */
     this.logNormal = function(msg) {
         try {
             console.log(msg);
@@ -882,15 +856,15 @@ function Tinaviz(args) {
     }
 
 
-    /**************************************** this.tag
-         *
-         * HTML VIZ DIV ADJUSTING/ACTION
-         *
-         ****************************************/
-
-    /*
-         * Dynamic div width
-         */
+    /**************************************** 
+     *
+     * HTML VIZ DIV ADJUSTING/ACTION
+     *
+     ****************************************/
+    
+    /**
+     * Dynamic div width
+     */
     this.size= function(width, height) {
         if (wrapper == null || applet == null) return;
         $('#tinaviz').css("height",""+(height)+"px");
@@ -899,22 +873,20 @@ function Tinaviz(args) {
         wrapper.width = width;
     }
 
-    /*
-         * Callback changing utton states
-         */
+    /**
+     * Callback changing utton states
+     */
     this.buttonStateCallback = function(button, enabled) {
         toolbar.updateButton(button, enabled);
     }
 
-    /*
-         * Callback changing utton states
-         */
+    /**
+     * Callback changing utton states
+     */
     this.graphImportedCallback = function(msg) {
         callbackImported(msg);
     }
 
-
     this.tag.html( this.getHTML() );
-
 }
 
