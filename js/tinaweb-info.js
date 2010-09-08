@@ -227,13 +227,16 @@ function InfoDiv(divid) {
                 if (i != sorted_tags.length-1 && sorted_tags.length > 1)
                     tagcloud.append(", &nbsp;");
             }
-            // updates the main cloud  div
+
             this.cloud.empty();
             this.cloud.append( '<h3>selection related to '+ oppositeRealName + ': <span class="ui-icon ui-icon-help icon-right" title="'+tooltip+'"></span></h3>' );
-            this.cloud.append( tagcloud );
+
             this.cloudForSearch.empty();
             this.cloudForSearch.append( '<h3>Global search on '+ oppositeRealName + ': <span class="ui-icon ui-icon-help icon-right" title="'+tooltip+'"></span></h3>' );
-            this.cloudForSearch.append( tagcloud.clone());
+        
+            tagcloud.appendTo(this.cloud);
+            tagcloud.clone(false).find("*").removeAttr("id").appendTo(this.cloudForSearch);
+
         },
 
         /*
@@ -274,7 +277,6 @@ function InfoDiv(divid) {
                     // displays contents only if it's a document
 
                     // MODIF DAVID
-                    var current_cat = tinaviz.get("category/category");  /// category courante
                     if (current_cat !== undefined) {
                         //var contentinnerdivTitle=jQuery.trim(decHTMLifEnc( ));
 

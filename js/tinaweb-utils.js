@@ -42,18 +42,6 @@ Object.values = function(obj) {
     return values;
 };
 
-function decodeJSON(encvalue) {
-    if (encvalue !== undefined)
-        return jQuery.trim(decodeURIComponent(encvalue)
-            .replace(/\+/g, " ").replace(/%21/g, "!")
-            .replace(/%27/g, "'").replace(/%28/g, "(")
-            .replace(/%29/g, ")").replace(/%2A/g, "*")
-            .replace(/\"/g,"'")
-            );
-    else
-        return "";
-}
-
 function content2html(content){
     var vars = [],  htmlstring, hash;
     var titles= [];
@@ -76,7 +64,7 @@ function content2html(content){
             //var node=tinaviz.getNodeAttributes(hash[j]);    
             var node=tinaviz.getNodeAttributes("macro",hash[j]);   
             //alert("here");
-            console.log("received from node attributes(50) = "+node);
+            console.log("received from node attributes = "+node);
             console.dir(node);
             
             htmlstring.html(node['label']);
@@ -87,6 +75,10 @@ function content2html(content){
     return htmlstring;
 }
 
+/*
+ * Tri alphabetique
+ */
+
 function  alphabeticListSort(listitems,textkey) {
     listitems.sort(function(a, b) {
         var compA = a[textkey].toUpperCase();
@@ -96,6 +88,38 @@ function  alphabeticListSort(listitems,textkey) {
     return listitems;
 
 }
+
+/*
+ * To html entities
+ */
+function htmlEncode(value){
+    return $('<div/>').text(value).html();
+}
+
+/*
+ * From html entities to normal text
+ */
+function htmlDecode(value){
+    return $('<div/>').html(value).text();
+}
+
+/*
+ * Cleaning and decode entities of a value from a Json
+ */
+
+function decodeJSON(encvalue) {
+    if (encvalue !== undefined)
+        return jQuery.trim(decodeURIComponent(encvalue)
+            .replace(/\+/g, " ").replace(/%21/g, "!")
+            .replace(/%27/g, "'").replace(/%28/g, "(")
+            .replace(/%29/g, ")").replace(/%2A/g, "*")
+            .replace(/\"/g,"'")
+            );
+    else
+        return "";
+}
+
+
 
 /* useful for fullscreen mode */
 
@@ -158,9 +182,7 @@ function getUrlVars()
 
 /* JSON PLUGIN FOR JQUERY - http://code.google.com/p/jquery-json */
 (function($){
-    $.toJSON=function(o)
-
-    {
+    $.toJSON=function(o) {
         if(typeof(JSON)=='object'&&JSON.stringify)
             return JSON.stringify(o);
         var type=typeof(o);
@@ -232,6 +254,7 @@ function getUrlVars()
     };
 
     $.secureEvalJSON=function(src)
+
 
     {
         if(typeof(JSON)=='object'&&JSON.parse)

@@ -101,7 +101,14 @@ toolbar.init = function() {
         if (txt=="") {
             tinaviz.unselect();
         } else {
-            tinaviz.searchNodes(txt, "containsIgnoreCase");
+            // earchNodes= function(matchLabel, matchCategory, matchView, matchType, targetView)
+            var cat = tinaviz.getCategory();
+            if (cat=="Document") {
+                var cat2 = tinaviz.getOppositeCategory(cat);
+                tinaviz.searchNodes(txt,cat2, "current", "containsIgnoreCase", "visualization");
+            } else {
+                tinaviz.searchNodes(txt, cat, "current", "containsIgnoreCase", "visualization");
+            }
         }
         return false;
     });
@@ -184,6 +191,12 @@ toolbar.init = function() {
             tinaviz.current.set("selection/radius", ui.value);
             tinaviz.current.commitProperties();
         }
+
+    });
+
+    /** DISABLED **
+    $("#toggle-showLabels").click(function(event) {
+        tinaviz.toggleLabels();
     });
 
     $("#toggle-paused").button({
@@ -217,6 +230,41 @@ toolbar.init = function() {
         tinaviz.unselect();
     });
 
+
+    **/
+
+    $("#toggle-paused").button({
+        icons: {
+            primary:'ui-icon-pause'
+        },
+        text: true,
+        label: "pause"
+    })
+    .click(function(event) {
+        tinaviz.togglePause();
+        var p = $("#toggle-paused");
+        if( p.button('option','icons')['primary'] == 'ui-icon-pause'  ) {
+            p.button('option','icons',{
+                'primary':'ui-icon-play'
+            });
+            p.button('option','label',"play");
+        } else {
+            p.button('option','icons',{
+                'primary':'ui-icon-pause'
+            });
+            p.button('option','label',"pause");
+        }
+    });
+
+    $("#toggle-unselect").button({
+        icons: {
+            primary:'ui-icon-close'
+        }
+    }).click(function(event) {
+        tinaviz.unselect();
+    });
+
+
     $("#toggle-autoCentering").button({
         text: true,
         icons: {
@@ -246,7 +294,7 @@ toolbar.init = function() {
 
         // update the node list
         tinaviz.updateNodes(viewName, next_cat);
-            
+        
         // update the algorithm 
         view.categories[cat].layout.iter = view.get("layout/iter");
         view.set("layout/iter", view.categories[next_cat].layout.iter);
@@ -265,8 +313,6 @@ toolbar.init = function() {
             }
         }
         tinaviz.infodiv.display_current_category();
-
-        
     });
 
 };
