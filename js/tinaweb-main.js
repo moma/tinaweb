@@ -45,7 +45,7 @@ $(document).ready(function(){
         });
         
         var prefs = {    
-            gexf: "Phylo_map_bionet_2004_2007_g.gexf",
+            gexf: "FET60bipartite_graph_cooccurrences_.gexf",
             view: "macro",
             category: "Document",
             node_id: "",
@@ -55,7 +55,8 @@ $(document).ready(function(){
             edge_filter_min: "0.0",
             edge_filter_max: "1.0",
             node_filter_min: "0.0",
-            node_filter_max: "1.0"
+            node_filter_max: "1.0",
+            layout: "tinaforce"
             
         };
         var urlVars = getUrlVars();
@@ -78,7 +79,7 @@ $(document).ready(function(){
         session.set("output/nodeSizeMax", 20.0);
         session.set("output/nodeSizeRatio", parseFloat(prefs.magnify));
         session.set("selection/radius", parseFloat(prefs.cursor_size));
-
+        session.set("layout/name", prefs.layout)
 
         macro.filter("Category", "category");
         macro.filter("NodeWeightRange", "nodeWeight");
@@ -98,7 +99,6 @@ $(document).ready(function(){
         
         toolbar.init();
     
-        //tinaviz.readGraphJava("macro", "bipartite_graph_bipartite_map_bionet_2004_2007_g.gexf_.gexf");
         $("#appletInfo").html("Loading graph..");
 
         tinaviz.open({
@@ -149,11 +149,38 @@ $(document).ready(function(){
                 
         tinaviz.open({
             view: prefs.view,
-            url: prefs.gexf
+            url: prefs.gexf,
+            layout: prefs.layout
         });
         
         tinaviz.event({
         
+            /*
+             * selection.viewName  : string = 'macro'|'meso'
+             * selection.mouseMode : strong = 'left'|'doubleLeft'|'right'|'doubleRight'
+             * selection.data      : strong = { ... }
+             * 
+             **/
+            selectionChanged: function(selection) {
+                tinaviz.infodiv.reset();
+                if ( selection.mouseMode == "left" ) {
+                // nothing to do
+                } else if ( selection.mouseMode == "right" ) {
+                // nothing to do
+                } else if (selection.mouseMode == "doubleLeft") {
+                    var macroCategory = tinaviz.views.macro.get("category/category");
+                    console.log("selected doubleLeft ("+selection.viewName+","+selection.data+")");
+                    tinaviz.views.meso.set("category/category", macroCategory);
+                    if (selection.viewName == "macro") {
+                        tinaviz.setView("meso");
+                    }
+                    tinaviz.updateNodes("meso", macroCategory);
+                    tinaviz.views.meso.set("layout/iter", 0);
+                    tinaviz.views.meso.commitProperties();
+                    tinaviz.autoCentering();
+                }
+                tinaviz.infodiv.update(selection.viewName, selection.data);
+            },
             viewChanged: function(view) {
 
                 tinaviz.autoCentering();
@@ -196,8 +223,7 @@ $(document).ready(function(){
             }
         });
         
-        
-
+       
     });
 
 });

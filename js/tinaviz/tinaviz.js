@@ -8,7 +8,8 @@ function Tinaviz(args) {
         after: function(){},
         clear: true,
         view: "macro",
-        url: ""
+        url: "",
+        layout: "tinaforce"
     };
 
     var opts = {
@@ -133,6 +134,7 @@ function Tinaviz(args) {
     this.callbackReady = function () {};
     this.callbackImported = function(success) {};
     this.callbackViewChanged = function(view) {};
+    this.callbackSelectionChanged = function(view) {};
 
     // PUBLIC MEMBERS
     this.isReady = 0;
@@ -207,13 +209,16 @@ function Tinaviz(args) {
             }
         }
 
+        var view = this.view(opts.view);
+        
         if (opts.clear) {
             this.current.set("layout/iter", 0);
         //applet.clear();
         }
         
-        var view = this.view(opts.view);
-
+        if (opts.layout) {
+            this.current.set("layout/name", opts.layout)
+        }
         callbackImported = function(msg){
             if (msg=="success") {
                 opts.success();
@@ -283,7 +288,8 @@ function Tinaviz(args) {
     this.event=function(args) {
         var opts = {
             viewChanged: function(view){},
-            categoryChanged: function(view){}
+            categoryChanged: function(view){},
+            selectionChanged: function(selection){}
         };
         for (x in args) {
             opts[x]=args[x]
@@ -291,6 +297,7 @@ function Tinaviz(args) {
 
         this.callbackViewChanged = opts.viewChanged;
         this.callbackCategoryChanged = opts.categoryChanged;
+        this.callbackSelectionChanged = opts.selectionChanged;
     }
 
     this.getHTML = function() {
@@ -544,9 +551,9 @@ function Tinaviz(args) {
         delete cbsRun[i];
     }
     /**
-         * Put a callback for the "await" list to the "run" list
-         *
-         */
+     * Put a callback for the "await" list to the "run" list
+     *
+     */
     this.activateCb=function(id) {
         cbsRun[id] = cbsAwait[id];
         delete cbsAwait[id];
@@ -554,16 +561,16 @@ function Tinaviz(args) {
     }
 
     /**
-         * How the callback system works:
-         *
-         * When the client call the "touch()" method, an update of the current view is
-         * scheduled by the applet, then the id of the new revision will be stored together
-         * with a callback address, by the javascript.
-         *
-         * As soon as the current view will reach this revision (or a greater one) the
-         * corresponding callback(s) will be called, then removed from the stack.
-         *
-         */
+     * How the callback system works:
+     *
+     * When the client call the "touch()" method, an update of the current view is
+     * scheduled by the applet, then the id of the new revision will be stored together
+     * with a callback address, by the javascript.
+     *
+     * As soon as the current view will reach this revision (or a greater one) the
+     * corresponding callback(s) will be called, then removed from the stack.
+     *
+     */
     this.cbSync=function(id) {
         for (i in cbsAwait) {
             if (i<=id) {
@@ -572,74 +579,17 @@ function Tinaviz(args) {
         }
     }
 
-    /********************************
-         *
-         * Mouse Callback system
-         *
-         ********************************/
-
-    /*
-         *  Callback of right clics
-         */
-    this.nodeRightClicked = function(view, data) {
-        if (applet == null) return;
-    //if (view == "meso") {
-    //this.toggleCategory(view);
-    //}
-    }
-
-    /*
-         *  Callback of left clics
-         */
-    this.nodeLeftClicked = function(view, data) {
-        if ( data == null ) return;
-    // copies the category from view to meso
-    //if (view == "meso") {
-    //this.toggleCategory(view);
-    //this.set("meso", "category/category", this.get(view, "category/category"));
-    //}
-    }
-
-    /*
-         *  Callback of double left clics
-         */
-    this.leftDoubleClicked = function(view, data) {
-        var category = this.get("category/category");
-        for (var id in data) {
-            this.viewMeso(decodeJSON(id), category);
-            break;
-        }
-        this.current.set("layout/iter", 0);
-        this.current.commitProperties();
-        this.autoCentering();
-    /*if (view =="macro") {
-            }
-            if (view == "meso") {
-                //this.toggleCategory(view);
-            }*/
-    }
-
-    /*
-         *  Callback of a node selection/clics
-         */
+    /** 
+     * Callback for clicks on nodes
+     * 
+     * @param view 
+     * @param attr
+     * @param mouse
+     * @return
+     */
     this.selected = function(view, attr, mouse) {
-        if (attr == null) return;
-        //this.logNormal("selected");
-        // always updates infodiv
-        data = $.parseJSON(attr);
-        this.infodiv.reset();
-        this.infodiv.update(view, data);
-        // left == selected a node
-        if ( mouse == "left" ) {
-        //this.nodeLeftClicked(view,data);
-        }
-        //right == unselected a node
-        else if ( mouse == "right" ) {
-        //this.nodeRightClicked(view,data);
-        }
-        else if (mouse == "doubleLeft") {
-            this.leftDoubleClicked(view, data);
-        }
+        var data = $.parseJSON(attr);
+        this.callbackSelectionChanged({'viewName':view,'data':data,'mouseMode':mouse})
     }
 
     this.constructNewViewObject = function(viewName) {
@@ -743,6 +693,7 @@ function Tinaviz(args) {
      */
     this.viewMeso = function(id, category) {
         // selects unique node
+        console.log("calling viewMeso("+id+","+category+")");
         this.unselect();
         this.selectFromId(id, true);
         // sets the category of the graph
