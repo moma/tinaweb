@@ -24,8 +24,6 @@ $(document).ready(function(){
         tag: $("#vizdiv")
     });
 
-    $('#appletInfo').effect('pulsate', {}, 'fast');
-
     $(window).bind('resize', function() {
         var size = resize();
         tinaviz.size(size.w, size.h);
@@ -98,15 +96,19 @@ $(document).ready(function(){
         meso.filter("Output", "output");
         
         toolbar.init();
-    
-        $("#appletInfo").html("Loading graph..");
 
         tinaviz.open({
+            before: function() {
+                $('#appletInfo').show();
+                $('#appletInfo').html("please wait while loading the graph..");
+                $('#appletInfo').effect('pulsate', {}, 'fast');
+                tinaviz.infodiv.reset();
+            },
             success: function() {
                 // init the node list with ngrams
                 tinaviz.updateNodes( prefs.view, prefs.category );
 
-                // cache the document list
+                // cache the document list.hide
                 tinaviz.getNodes( prefs.view, "Document" );
              
                 var view = tinaviz.view();
@@ -129,9 +131,7 @@ $(document).ready(function(){
                 
                 tinaviz.infodiv.display_current_category();
                 tinaviz.infodiv.display_current_view();
-                        
-                $("#appletInfo").hide();
-                       
+     
                 if (prefs.node_id != "") {
                     tinaviz.selectFromId( prefs.node_id, true );
                 }
@@ -140,7 +140,8 @@ $(document).ready(function(){
                     $("#search_input").val(prefs.search);
                     tinaviz.searchNodes(prefs.search, "containsIgnoreCase");
                 }
-
+                        
+                $("#appletInfo").hide();
             },
             error: function(msg) {
                 $("#appletInfo").html("Error, couldn't load graph: "+msg);

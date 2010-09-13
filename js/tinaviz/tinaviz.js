@@ -132,6 +132,7 @@ function Tinaviz(args) {
     this.toBeSelected = new Array();
 
     this.callbackReady = function () {};
+    this.callbackBeforeImport = function() {};
     this.callbackImported = function(success) {};
     this.callbackViewChanged = function(view) {};
     this.callbackSelectionChanged = function(view) {};
@@ -231,7 +232,9 @@ function Tinaviz(args) {
             return;
         }
         
-        if (opts.before) opts.before();
+        callbackBeforeImport = opts.before;
+
+        callbackBeforeImport();
         
         //alert("loading "+args.url);
         $.ajax({
