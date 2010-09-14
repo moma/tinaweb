@@ -103,12 +103,12 @@ toolbar.init = function() {
         } else {
             // earchNodes= function(matchLabel, matchCategory, matchView, matchType, targetView)
             var cat = tinaviz.getCategory();
-            if (cat=="Document") {
+            /*if (cat=="Document") {
                 var cat2 = tinaviz.getOppositeCategory(cat);
                 tinaviz.searchNodes(txt,cat2, "current", "containsIgnoreCase", "visualization");
-            } else {
-                tinaviz.searchNodes(txt, cat, "current", "containsIgnoreCase", "visualization");
-            }
+            } else {*/
+                tinaviz.searchNodes(txt, cat, "containsIgnoreCase", "current");
+           // }
         }
         return false;
     });

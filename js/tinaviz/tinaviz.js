@@ -474,11 +474,10 @@ function Tinaviz(args) {
 
     /*
         * Search and select nodes
-        * matchView: macro,meso,current
-        * targetView: macro,meso,current
+        * viewToSearch: visualization,macro,meso,current
         */
-    this.searchNodes= function(matchLabel, matchCategory, matchView, matchType, targetView) {
-        if (applet!=null) applet.selectNodesByLabel(matchLabel, matchCategory, matchView, matchType, targetView);
+    this.searchNodes= function(matchLabel, matchCategory,  matchType, viewToSearch) {
+       applet.selectNodesByLabel(matchLabel, matchCategory, matchType, viewToSearch);
     }
 
 
@@ -486,7 +485,6 @@ function Tinaviz(args) {
         * Highlight nodes
         */
     this.highlightNodes= function(label, type) {
-        if (applet == null) return {};
         var matchlist = this.getNodesByLabel(label, type);
         for (var i = 0; i < matchlist.length; i++ ) {
             applet.highlightFromId( decodeJSON( matchlist[i]['id'] ) );
@@ -529,8 +527,23 @@ function Tinaviz(args) {
          * Gets the list of neighbours for a given node
          */
     this.getNeighbourhood = function(view,id) {
-        if (applet == null) return {};
         return $.parseJSON( applet.getNeighbourhood(view,id) );
+    }
+    
+    this.getNeighboursFromDatabase = function(id) {
+        var elem = id.split('::');  
+        console.log("var data = TinaService.getNgrams("+elem[1]+");");
+
+        TinaService.getNGrams(
+        0,
+        elem[1],
+        {
+            success: function(data) {
+                 console.log("var data = "+data+";");
+            }
+        }
+    );
+
     }
 
 
@@ -601,7 +614,7 @@ function Tinaviz(args) {
         var reply = {
             layoutCounter: 0,
             category: view.get("category/category"),
-            nodes: []
+            nodes: new Array()
         };
 
         reply.name = viewName;
@@ -611,21 +624,30 @@ function Tinaviz(args) {
         // implementations
 
         var i = 0;
+        
+        /*
         var nodesArray = view.getNodesArray();
-        for (i=0;i<nodesArray.length;i++) {
+        for (i=0;i < nodesArray.length;i++) {
             node = nodesArray[i];
             var n = {
-                edges: []
+                edges: new Array()
             };
+            console.log("creating the reply:"+node);
+            console.dir(node);
+            if (node===undefined) {
+                console.log("node was undefined");
+            } else {
             var edgesArray = node.getWeightsArray();
-            var j = 0;
-            for (j=0;edgesArray.length;j++) {
-                n.edges.append({
-                    weight: edgesArray[j]
-                });
+                var j = 0;
+                for (j=0;edgesArray.length;j++) {
+                    n.edges.push({
+                        weight: edgesArray[j]
+                    });
+                }
             }
-            reply.nodes.append(n);
+            reply.nodes.push(n);
         }
+         */
 
         reply.get = function(arg) {
             return view.get(arg);
