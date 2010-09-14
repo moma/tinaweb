@@ -54,7 +54,8 @@ $(document).ready(function(){
             edge_filter_max: "1.0",
             node_filter_min: "0.0",
             node_filter_max: "1.0",
-            layout: "tinaforce"
+            layout: "tinaforce",
+            edge_rendering: "curve"
             
         };
         var urlVars = getUrlVars();
@@ -77,7 +78,9 @@ $(document).ready(function(){
         session.set("output/nodeSizeMax", 20.0);
         session.set("output/nodeSizeRatio", parseFloat(prefs.magnify));
         session.set("selection/radius", parseFloat(prefs.cursor_size));
-        session.set("layout/name", prefs.layout)
+        session.set("layout/algorithm", prefs.layout)
+        session.set("rendering/edge/shape", prefs.edge_rendering);
+        session.set("data/source", "gexf");
 
         macro.filter("Category", "category");
         macro.filter("NodeWeightRange", "nodeWeight");
