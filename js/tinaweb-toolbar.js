@@ -92,36 +92,53 @@ var toolbar = {
 
 };
 
+
+toolbar.lastSearch = "";
+toolbar.checkSearchForm = function() {
+      var txt = $("#search_input").val();
+      if (txt != toolbar.lastSearch) {
+            tinaviz.unselect();
+           toolbar.lastSearch = txt;   
+          if (txt=="") {
+             tinaviz.searchNodes("", "", "", "", false);
+          } else {
+              var cat = tinaviz.getCategory();
+               tinaviz.searchNodes(txt, cat, "containsIgnoreCase", "current", true);
+          }
+      }
+   setTimeout("toolbar.checkSearchForm()",200);
+};
+
 toolbar.init = function() {
     
     $("search").val(toolbar.values.search);
     
     $("#search").submit(function() {
+        /*
         var txt = $("#search_input").val();
+         tinaviz.unselect();
+         
         if (txt=="") {
-            tinaviz.unselect();
+
         } else {
             // earchNodes= function(matchLabel, matchCategory, matchView, matchType, targetView)
             var cat = tinaviz.getCategory();
-            if (cat=="Document") {
-                var cat2 = tinaviz.getOppositeCategory(cat);
-                tinaviz.searchNodes(txt,cat2, "current", "containsIgnoreCase", "visualization");
-            } else {
-                tinaviz.searchNodes(txt, cat, "current", "containsIgnoreCase", "visualization");
-            }
+            //if (cat=="Document") {
+            //    var cat2 = tinaviz.getOppositeCategory(cat);
+            //    tinaviz.searchNodes(txt,cat2, "current", "containsIgnoreCase", "visualization");
+            //} else {
+                tinaviz.searchNodes(txt, cat, "containsIgnoreCase", "current");
+           // }
         }
+        */
         return false;
     });
+    
     /*
     $("#search").keypress(function() {
-      var txt = $("#search_input").val();
-      if (txt=="") {
-        tinaviz.unselect();
-      } else {
-           tinaviz.highlightNodes(txt, "containsIgnoreCase");
-      }
-    });
-    */
+       // toolbar.checkSearchForm();
+    });*/
+ 
     $("#level").button({
         text: true,
         icons: {
@@ -315,6 +332,7 @@ toolbar.init = function() {
         tinaviz.infodiv.display_current_category();
     });
 
+    toolbar.checkSearchForm();
 };
 
 toolbar.updateButton = function(button, state) {

@@ -50,7 +50,7 @@ function InfoDiv(divid) {
         cloud : $( "#node_neighbourhood" ), 
         /// Modif David 
         cloudSearch: $("#node_neighbourhoodForSearch"), 
-        cloudForSearch : $( "#node_neighbourhoodCopy" ), 
+        cloudSearchCopy : $( "#node_neighbourhoodCopy" ), 
         unselect_button: $( "#toggle-unselect" ), 
         table: $("#node_table > tbody"), 
         data: {}, 
@@ -170,21 +170,20 @@ function InfoDiv(divid) {
             ///alert(current_cat) 
             if (current_cat !== undefined){ 
                 var oppositeRealName = this.categories[tinaviz.getOppositeCategory(current_cat)]; 
-                if (oppositeRealName !== undefined){ 
-                    /// nom affiché 
-                    //alert(oppositeRealName) ; 
-                    if ((oppositeRealName == "NGram")|(oppositeRealName == "keywords")|(oppositeRealName == "Keywords")|(oppositeRealName == "Terms")|(oppositeRealName == "Communities")) 
-                        this.cloudSearch.append( 
-                            '<a href="'+(Googlerequests+requests) 
-                            +'" alt="search on google" target="_BLANK"><img src="' 
-                            +tinaviz.getPath() 
-                            +'css/branding/google.png" /></a> ' 
-                            +' <a href="'+(PubMedrequests+requests) 
-                            +'" alt="search on PubMed" target="_BLANK"><img src="' 
-                            +tinaviz.getPath() 
-                            +'css/branding/pubmed.png" /></a>' 
-                            ); 
-                } 
+                if (oppositeRealName !== undefined){  
+                    var tmp="";
+                    tmp = "Search on: <a href=\"";
+                    tmp += Googlerequests;
+                    tmp +=requests;
+                    tmp +='" alt="search on google" target="_BLANK"><img src="' 
+                    tmp +=tinaviz.getPath() 
+                    tmp +='css/branding/google.png" />Google</a> &nbsp;' 
+                    tmp +=' <a href="'+PubMedrequests+requests 
+                    tmp +='" alt="search on PubMed" target="_BLANK"><img src="' 
+                    tmp +=tinaviz.getPath() 
+                    tmp +='css/branding/pubmed.png" />Pubmed</a>' ;
+                    this.cloudSearch.append(tmp); 
+                }
             } 
             var sizecoef = 15; 
             var const_doc_tag = 12; 
@@ -231,9 +230,9 @@ function InfoDiv(divid) {
             this.cloud.empty(); 
             this.cloud.append( '<h3>selection related to '+ oppositeRealName + ': <span class="ui-icon ui-icon-help icon-right" title="'+tooltip+'"></span></h3>' ); 
             this.cloud.append( tagcloud ); 
-            this.cloudForSearch.empty(); 
-            this.cloudForSearch.append( '<h3>Global search on '+ oppositeRealName + ': <span class="ui-icon ui-icon-help icon-right" title="'+tooltip+'"></span></h3>' ); 
-            this.cloudForSearch.append( tagcloud.clone()); 
+            this.cloudSearchCopy.empty(); 
+            this.cloudSearchCopy.append( '<h3>Global search on '+ oppositeRealName + ': <span class="ui-icon ui-icon-help icon-right" title="'+tooltip+'"></span></h3>' ); 
+            this.cloudSearchCopy.append( tagcloud.clone()); 
         }, 
  
         /* 
@@ -399,7 +398,7 @@ function InfoDiv(divid) {
                 ) 
             ); 
  
-            this.cloudForSearch.empty(); 
+            this.cloudSearchCopy.empty(); 
             this.cloudSearch.empty(); 
  
             this.cloud.empty(); 
