@@ -476,8 +476,8 @@ function Tinaviz(args) {
         * Search and select nodes
         * viewToSearch: visualization,macro,meso,current
         */
-    this.searchNodes= function(matchLabel, matchCategory,  matchType, viewToSearch) {
-       applet.selectNodesByLabel(matchLabel, matchCategory, matchType, viewToSearch);
+    this.searchNodes= function(matchLabel, matchCategory,  matchType, viewToSearch, center) {
+       applet.selectNodesByLabel(matchLabel, matchCategory, matchType, viewToSearch, center);
     }
 
 
