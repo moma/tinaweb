@@ -98,7 +98,7 @@ $(document).ready(function(){
         meso.filter("NodeFunction", "radiusByWeight");
         meso.filter("Output", "output");
         
-        oolbar.init();
+        toolbar.init();
 
         tinaviz.open({
             before: function() {
