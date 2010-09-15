@@ -321,6 +321,11 @@ toolbar.init = function() {
         tinaviz.autoCentering();
 
         if (viewName=="macro") {
+            if (cat == "Document") {
+                view.set("rendering/edge/shape","straight");
+            } else {
+                 view.set("rendering/edge/shape","curve");
+            }
             // empty the selection, and ask the applet to select opposite nodes
             var i = 0;
             tinaviz.infodiv.selection = {};
@@ -328,6 +333,8 @@ toolbar.init = function() {
                 var cb = (++i == tinaviz.infodiv.oppositeSelection.length);
                 tinaviz.selectFromId(tinaviz.infodiv.oppositeSelection[nbid], cb);
             }
+        } else if (view=="meso") {
+            view.set("rendering/edge/shape","curve");
         }
         tinaviz.infodiv.display_current_category();
     });
