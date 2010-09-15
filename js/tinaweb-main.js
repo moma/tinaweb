@@ -201,7 +201,6 @@ $(document).ready(function(){
                 tinaviz.infodiv.display_current_view();
                 
                 var showFilter = false;
-                
                 if (view.name == "meso") {
                 
                     // TODO check selection
@@ -222,8 +221,12 @@ $(document).ready(function(){
                             }
                         }
                     }
+                    
                 } 
                 $("#sliderEdgeWeight").slider( "option", "disabled", false );
+            },
+            categoryChanged: function() {
+
             }
         });
         
