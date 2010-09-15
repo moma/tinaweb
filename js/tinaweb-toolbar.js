@@ -321,7 +321,7 @@ toolbar.init = function() {
         tinaviz.autoCentering();
 
         if (viewName=="macro") {
-            if (cat == "Document") {
+            if (next_cat == "Document") {
                 view.set("rendering/edge/shape","straight");
             } else {
                  view.set("rendering/edge/shape","curve");
@@ -333,7 +333,7 @@ toolbar.init = function() {
                 var cb = (++i == tinaviz.infodiv.oppositeSelection.length);
                 tinaviz.selectFromId(tinaviz.infodiv.oppositeSelection[nbid], cb);
             }
-        } else if (view=="meso") {
+        } else if (viewName=="meso") {
             view.set("rendering/edge/shape","curve");
         }
         tinaviz.infodiv.display_current_category();

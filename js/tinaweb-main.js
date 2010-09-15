@@ -202,8 +202,16 @@ $(document).ready(function(){
 
                 var showFilter = false;
 
-                if (view.name == "meso") {
-
+                
+                if (view.name == "macro") {
+                    if (view.get("category/category")=="Document") {
+                        view.set("rendering/edge/shape","straight");
+                    } else {
+                        view.set("rendering/edge/shape","curve");
+                    }
+                } else if (view.name == "meso") {
+                    view.set("rendering/edge/shape","curve");
+              
                     // TODO check selection
                     // if selection has edges with edge of all the same weight, we disable the filter
                     var weight = null;
