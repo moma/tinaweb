@@ -173,7 +173,7 @@ $(document).ready(function(){
                 // nothing to do
                 } else if (selection.mouseMode == "doubleLeft") {
                     var macroCategory = tinaviz.views.macro.get("category/category");
-                    console.log("selected doubleLeft ("+selection.viewName+","+selection.data+")");
+                    //console.log("selected doubleLeft ("+selection.viewName+","+selection.data+")");
                     tinaviz.views.meso.set("category/category", macroCategory);
                     if (selection.viewName == "macro") {
                         tinaviz.setView("meso");
@@ -201,7 +201,6 @@ $(document).ready(function(){
                 tinaviz.infodiv.display_current_view();
                 
                 var showFilter = false;
-                
                 if (view.name == "meso") {
                 
                     // TODO check selection
@@ -222,8 +221,12 @@ $(document).ready(function(){
                             }
                         }
                     }
+                    
                 } 
                 $("#sliderEdgeWeight").slider( "option", "disabled", false );
+            },
+            categoryChanged: function() {
+
             }
         });
         
