@@ -13,7 +13,6 @@
 //      Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 //      MA 02110-1301, USA.
 
-
 var tinaviz = {};
 
 $(document).ready(function(){
@@ -184,6 +183,7 @@ $(document).ready(function(){
                     tinaviz.autoCentering();
                 }
                 tinaviz.infodiv.update(selection.viewName, selection.data);
+                
             },
             viewChanged: function(view) {
 
@@ -201,17 +201,8 @@ $(document).ready(function(){
                 tinaviz.infodiv.display_current_view();
 
                 var showFilter = false;
-
-                
-                if (view.name == "macro") {
-                    if (view.get("category/category")=="Document") {
-                        view.set("rendering/edge/shape","straight");
-                    } else {
-                        view.set("rendering/edge/shape","curve");
-                    }
-                } else if (view.name == "meso") {
-                    view.set("rendering/edge/shape","curve");
-              
+  
+                if (view.name == "meso") {
                     // TODO check selection
                     // if selection has edges with edge of all the same weight, we disable the filter
                     var weight = null;

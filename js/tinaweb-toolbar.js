@@ -95,18 +95,18 @@ var toolbar = {
 
 toolbar.lastSearch = "";
 toolbar.checkSearchForm = function() {
-      var txt = $("#search_input").val();
-      if (txt != toolbar.lastSearch) {
-            tinaviz.unselect();
-           toolbar.lastSearch = txt;   
-          if (txt=="") {
-             tinaviz.searchNodes("", "", "", "", false);
-          } else {
-              var cat = tinaviz.getCategory();
-               tinaviz.searchNodes(txt, cat, "containsIgnoreCase", "current", true);
-          }
-      }
-   setTimeout("toolbar.checkSearchForm()",200);
+    var txt = $("#search_input").val();
+    if (txt != toolbar.lastSearch) {
+        tinaviz.unselect();
+        toolbar.lastSearch = txt;   
+        if (txt=="") {
+            tinaviz.searchNodes("", "", "", "", false);
+        } else {
+            var cat = tinaviz.getCategory();
+            tinaviz.searchNodes(txt, cat, "containsIgnoreCase", "current", true);
+        }
+    }
+    setTimeout("toolbar.checkSearchForm()",200);
 };
 
 toolbar.init = function() {
@@ -319,13 +319,8 @@ toolbar.init = function() {
         view.commitProperties();
             
         tinaviz.autoCentering();
-
+        
         if (viewName=="macro") {
-            if (next_cat == "Document") {
-                view.set("rendering/edge/shape","straight");
-            } else {
-                 view.set("rendering/edge/shape","curve");
-            }
             // empty the selection, and ask the applet to select opposite nodes
             var i = 0;
             tinaviz.infodiv.selection = {};
@@ -333,8 +328,6 @@ toolbar.init = function() {
                 var cb = (++i == tinaviz.infodiv.oppositeSelection.length);
                 tinaviz.selectFromId(tinaviz.infodiv.oppositeSelection[nbid], cb);
             }
-        } else if (viewName=="meso") {
-            view.set("rendering/edge/shape","curve");
         }
         tinaviz.infodiv.display_current_category();
     });
