@@ -57,9 +57,10 @@ function content2html(content){
     var hashes = content.split('_'); // obsolet and new terms
 
     for(var i = 0; i < hashes.length; i++){    
-        htmlstring += titles[i];
+        
         //alert("hashes i:"+[i]);
         if (hashes[i]=='.') continue;
+        htmlstring += titles[i];
         hash = hashes[i].split('-'); // list of terms
         for(var j = 0; j < hash.length; j++){
             //alert("hash j:"+hash[j]);
@@ -70,7 +71,8 @@ function content2html(content){
             //console.dir(node);
             //alert('label=' + node.label);
             //alert(node['label']);
-            htmlstring+= "<a href=# onClick='javascript:" + tinaviz.open({view:'macro',gexf:'toto.gexf'})" " node.label.replace("+", " ")+", ";
+            htmlstring+= node.label.replace(/\+/g," ")+", ";
+            //htmlstring+= "<a href=# onClick='javascript:" + tinaviz.open({view:'macro',gexf:'toto.gexf'})" " node.label.replace("+", " ")+", ";
         //alert(decodeJSON(node['label']));
         }
         htmlstring += "<br/>";
