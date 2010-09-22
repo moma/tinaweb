@@ -47,9 +47,9 @@ Object.values = function(obj) {
 function content2html(content){
     var vars = [],  htmlstring, hash;
     var titles= [];
-    titles[0]='<b>Lost:</b>';
-    titles[1]='<b>New:</b>';
-    var htmlstring=$("");
+    titles[0]='<b>Lost: </b>';
+    titles[1]='<b>New: </b>';
+    var htmlstring="";
     // %2b = ,
     // %2c = +
     //alert(content);
@@ -57,22 +57,23 @@ function content2html(content){
     var hashes = content.split('_'); // obsolet and new terms
 
     for(var i = 0; i < hashes.length; i++){    
-        htmlstring.html(titles[i]);
+        htmlstring += titles[i];
         //alert("hashes i:"+[i]);
         if (hashes[i]=='.') continue;
         hash = hashes[i].split('-'); // list of terms
         for(var j = 0; j < hash.length; j++){
             //alert("hash j:"+hash[j]);
             //var node=tinaviz.getNodeAttributes(hash[j]);    
-            var node=tinaviz.getNodeAttributes("macro",hash[j]);   
+            var node=tinaviz.getNodeAttributes("macro",'N::'+hash[j]);
             //alert("here");
-            console.log("received from node attributes = "+node);
-            console.dir(node);
-            
-            htmlstring.html(node['label']);
+            //console.log("received from node attributes = "+node);
+            //console.dir(node);
+            //alert('label=' + node.label);
+            //alert(node['label']);
+            htmlstring+= "<a href=# onClick='javascript:" + tinaviz.open({view:'macro',gexf:'toto.gexf'})" " node.label.replace("+", " ")+", ";
         //alert(decodeJSON(node['label']));
         }
-        htmlstring.html("<br/>");      
+        htmlstring += "<br/>";
     }
     return htmlstring;
 }
