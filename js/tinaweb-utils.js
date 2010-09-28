@@ -70,8 +70,8 @@ function content2html(content){
             //console.log("received from node attributes = "+node);
             //console.dir(node);
             //alert('label=' + node.label);
-            //alert(node['label']);
-            htmlstring+= node.label.replace(/\+/g," ")+", ";
+            console.log(node.label);
+            htmlstring+= htmlDecode(node.label.replace(/\+/g," "))+", ";
             //htmlstring+= "<a href=# onClick='javascript:" + tinaviz.open({view:'macro',gexf:'toto.gexf'})" " node.label.replace("+", " ")+", ";
         //alert(decodeJSON(node['label']));
         }

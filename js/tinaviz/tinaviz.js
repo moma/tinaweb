@@ -261,7 +261,7 @@ function Tinaviz(args) {
                 try {
                     view.openString(gexf, opts.clear);
                 } catch (e) {
-                    console.log("Couldn't load graph using openString, trying with openURI..");
+                    //console.log("Couldn't load graph using openString, trying with openURI..");
                     f = true;
                 }
                 if (f) {
@@ -532,14 +532,14 @@ function Tinaviz(args) {
     
     this.getNeighboursFromDatabase = function(id) {
         var elem = id.split('::');  
-        console.log("var data = TinaService.getNgrams("+elem[1]+");");
+        //console.log("var data = TinaService.getNgrams("+elem[1]+");");
 
         TinaService.getNGrams(
         0,
         elem[1],
         {
             success: function(data) {
-                 console.log("var data = "+data+";");
+                 //console.log("var data = "+data+";");
             }
         }
     );
@@ -632,10 +632,10 @@ function Tinaviz(args) {
             var n = {
                 edges: new Array()
             };
-            console.log("creating the reply:"+node);
-            console.dir(node);
+            //console.log("creating the reply:"+node);
+            //console.dir(node);
             if (node===undefined) {
-                console.log("node was undefined");
+                //console.log("node was undefined");
             } else {
             var edgesArray = node.getWeightsArray();
                 var j = 0;
@@ -718,7 +718,7 @@ function Tinaviz(args) {
      */
     this.viewMeso = function(id, category) {
         // selects unique node
-        console.log("calling viewMeso("+id+","+category+")");
+        //console.log("calling viewMeso("+id+","+category+")");
         this.unselect();
         this.selectFromId(id, true);
         // sets the category of the graph
@@ -811,7 +811,7 @@ function Tinaviz(args) {
      */
     this.logError= function(msg) {
         try {
-            console.error(msg);
+            //console.error(msg);
         }
         catch (e){
             alert(msg);
@@ -824,7 +824,7 @@ function Tinaviz(args) {
      */
     this.logNormal = function(msg) {
         try {
-            console.log(msg);
+            //console.log(msg);
         }
         catch (e) {
             return;
