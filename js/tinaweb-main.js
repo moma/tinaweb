@@ -66,8 +66,8 @@ $(document).ready(function(){
         tinaviz.setView(prefs.view);
 
         var session = tinaviz.session();
-        var macro = tinaviz.view("macro");
-        var meso = tinaviz.view("meso");
+        var macro = tinaviz.views.macro;
+        var meso = tinaviz.views.meso;
 
         session.set("edgeWeight/min", parseFloat(prefs.edge_filter_min));
         session.set("edgeWeight/max", parseFloat(prefs.edge_filter_max));
@@ -85,7 +85,7 @@ $(document).ready(function(){
         macro.filter("Category", "category");
         macro.filter("NodeWeightRange", "nodeWeight");
         macro.filter("EdgeWeightRange", "edgeWeight");
-        macro.filter("NodeFunction", "radiusByWeight");
+        macro.filter("NodeFunction", "radiusByWeight");       
         macro.filter("Output", "output");
 
         meso.filter("SubGraphCopyStandalone", "category");
@@ -114,7 +114,7 @@ $(document).ready(function(){
                 // cache the document list.hide
                 tinaviz.getNodes( prefs.view, "Document" );
              
-                var view = tinaviz.view();
+                var view = tinaviz.views.current;
 
                 // initialize the sliders
                 $("#sliderNodeSize").slider( "option", "value", 
@@ -172,15 +172,15 @@ $(document).ready(function(){
                 } else if ( selection.mouseMode == "right" ) {
                 // nothing to do
                 } else if (selection.mouseMode == "doubleLeft") {
-                    var macroCategory = tinaviz.views.macro.get("category/category");
+                    var macroCategory = tinaviz.views.macro.category();
                     //console.log("selected doubleLeft ("+selection.viewName+","+selection.data+")");
-                    tinaviz.views.meso.set("category/category", macroCategory);
+                    tinaviz.views.meso.category(macroCategory);
                     if (selection.viewName == "macro") {
                         tinaviz.setView("meso");
                     }
                     tinaviz.updateNodes("meso", macroCategory);
                     tinaviz.views.meso.set("layout/iter", 0);
-                    tinaviz.views.meso.commitProperties();
+                    tinaviz.views.meso.commit();
                     tinaviz.autoCentering();
                 }
                 tinaviz.infodiv.update(selection.viewName, selection.data);
@@ -201,7 +201,7 @@ $(document).ready(function(){
                 tinaviz.infodiv.display_current_view();
                 
                 var showFilter = false;
-                if (view.name == "meso") {
+                if (view.getName() == "meso") {
                 
                     // TODO check selection
                     // if selection has edges with edge of all the same weight, we disable the filter

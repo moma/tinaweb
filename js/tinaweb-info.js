@@ -63,8 +63,8 @@ function InfoDiv(divid) {
 * dispatch current category displayed 
 */ 
         display_current_category: function() { 
-            var current_view = tinaviz.getViewName(); 
-            var current_cat = tinaviz.get("category/category"); 
+            var current_view = tinaviz.views.current.name(); 
+            var current_cat = tinaviz.views.current.category();
             if (current_cat !== undefined) 
                 var opposite = this.categories[tinaviz.getOppositeCategory(current_cat)]; 
             //$("#title_acc_1").text("current selection of "+ this.categories[current_cat]); 
@@ -80,7 +80,7 @@ function InfoDiv(divid) {
 * dispatch current view displayed 
 */ 
         display_current_view: function() { 
-            var current_view = tinaviz.getViewName(); 
+            var current_view = tinaviz.views.current.name(); 
             if (current_view !== undefined) { 
                 var level = $("#level"); 
                 level.button('option','label',current_view + " level"); 
@@ -166,7 +166,7 @@ function InfoDiv(divid) {
                 if (i < sorted_tags.length - 1) requests = requests + "+AND+"; 
             } 
  
-            var current_cat = tinaviz.get("category/category");  /// category courante 
+            var current_cat = tinaviz.views.current.category();  /// category courante 
             ///alert(current_cat) 
             if (current_cat !== undefined){ 
                 var oppositeRealName = this.categories[tinaviz.getOppositeCategory(current_cat)]; 
@@ -244,7 +244,7 @@ function InfoDiv(divid) {
                 return str.replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>'); 
             } 
  
-            var current_cat = tinaviz.get("category/category"); 
+            var current_cat = tinaviz.views.current.category();
             var labelinnerdiv = $("<div></div>"); 
             var contentinnerdiv = $("<div></div>"); 
             for(var id in lastselection) { 
@@ -267,7 +267,6 @@ function InfoDiv(divid) {
                     // displays contents only if it's a document 
  
                     // MODIF DAVID 
-                    var current_cat = tinaviz.get("category/category");  /// category courante 
                     if (current_cat !== undefined) { 
                         //var contentinnerdivTitle=jQuery.trim(decHTMLifEnc( )); 
  
