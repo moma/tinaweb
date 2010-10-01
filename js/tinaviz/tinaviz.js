@@ -2,6 +2,7 @@
 /**
      *  Try to log an error with firebug otherwise alert it
      */
+    /*
 function logError (msg) {
     try {
         console.error(msg);
@@ -11,10 +12,13 @@ function logError (msg) {
         return;
     }
 }
-    
+    */
+   
+   
 /**
      *  Try to log an normal msg with firebug otherwise returns
      */
+    /*
 function logNormal (msg) {
     try {
         console.log(msg);
@@ -22,7 +26,7 @@ function logNormal (msg) {
     catch (e) {
         return;
     }
-}
+}*/
 
 function Tinaviz(args) {
 
@@ -324,7 +328,7 @@ function Tinaviz(args) {
                 try {
                     view.openString(gexf, opts.clear);
                 } catch (e) {
-                    logNormal("Couldn't load graph using openString, trying with openURI..");
+                    // logNormal("Couldn't load graph using openString, trying with openURI..");
                     f = true;
                 }
                 if (f) {
@@ -575,14 +579,15 @@ function Tinaviz(args) {
     
     this.getNeighboursFromDatabase = function(id) {
         var elem = id.split('::');  
-        logNormal("var data = TinaService.getNgrams("+elem[1]+");");
+        //logNormal("var data = TinaService.getNgrams("+elem[1]+");");
 
         TinaService.getNGrams(
             0,
             elem[1],
             {
                 success: function(data) {
-                    logNormal("var data = "+data+";");
+                    //
+                    //logNormal("var data = "+data+";");
                 }
             }
             );
@@ -765,7 +770,7 @@ function Tinaviz(args) {
      */
     this.viewMeso = function(id, category) {
         // selects unique node
-        logNormal("calling viewMeso("+id+","+category+")");
+        //logNormal("calling viewMeso("+id+","+category+")");
         this.unselect();
         this.selectFromId(id, true);
         // sets the category of the graph
