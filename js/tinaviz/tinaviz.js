@@ -1,33 +1,4 @@
 
-/**
-     *  Try to log an error with firebug otherwise alert it
-     */
-    /*
-function logError (msg) {
-    try {
-        console.error(msg);
-    }
-    catch (e){
-        alert(msg);
-        return;
-    }
-}
-    */
-   
-   
-/**
-     *  Try to log an normal msg with firebug otherwise returns
-     */
-    /*
-function logNormal (msg) {
-    try {
-        console.log(msg);
-    }
-    catch (e) {
-        return;
-    }
-}*/
-
 function Tinaviz(args) {
 
     var openDefaults = {
@@ -69,19 +40,19 @@ function Tinaviz(args) {
                 return applet.getView().get(key);
             },
             commit: function() {
-                return applet.getView().commit();
+                applet.commit();
             },
 
             category: function(x) {
                 if (x===undefined || x==null) {
-                    alert(applet.getView().getString("category/category"));
+                    //alert(applet.getView().getString("category/category"));
                     return applet.getView().getString("category/category");
                 } else {
                     applet.getView().set("category/category", x);
                 }
             },
             filter: function(x,y) {
-                return applet.getView().filter(x,y);
+                applet.getView().filter(x,y);
             },
             
             categories: {
@@ -108,13 +79,13 @@ function Tinaviz(args) {
 
             // setters/getters used for communication with the applet
             set: function(key,value) {
-                return applet.getView('macro').set(key,value);
+                applet.getView('macro').set(key,value);
             },
             get: function(key) {
                 return applet.getView('macro').get(key);
             },
             commit: function() {
-                return applet.getView('macro').commit();
+                applet.getView('macro').commit();
             },
             category: function(x) {
                 if (x===undefined || x==null) {
@@ -143,7 +114,7 @@ function Tinaviz(args) {
             },
             
             filter: function(x,y) {
-                return applet.getView('macro').filter(x,y);
+                applet.getView('macro').filter(x,y);
             }
         },
         meso: {
@@ -153,13 +124,13 @@ function Tinaviz(args) {
 
             // setters/getters used for communication with the applet
             set: function(key,value) {
-                return applet.getView('meso').set(key,value);
+                applet.getView('meso').set(key,value);
             },
             get: function(key) {
                 return applet.getView('meso').get(key);
             },
             commit: function() {
-                return applet.getView('meso').commit();
+                applet.getView('meso').commit();
             },
             
             category: function(x) {
@@ -189,7 +160,7 @@ function Tinaviz(args) {
                 }
             }, 
             filter: function(x,y) {
-                return applet.getView('meso').filter(x,y);
+                applet.getView('meso').filter(x,y);
             }
         }
     };
@@ -455,7 +426,7 @@ function Tinaviz(args) {
      * Set a value to all views
      */
     this.set = function(key,value) {
-        return applet.getSession().set(key,value);
+        applet.getSession().set(key,value);
     }
     
     /**
@@ -513,7 +484,6 @@ function Tinaviz(args) {
         * Search nodes
         */
     this.getNodesByLabel = function(label, type) {
-        if (applet == null) return {};
         if (label.length < 3) return {};
         return $.parseJSON( applet.getNodesByLabel(label, type));
     }
@@ -541,7 +511,6 @@ function Tinaviz(args) {
     }
 
     this.commitCallback= function(view, cb) {
-        if (applet == null) return;
         if (view==null) {
             applet.commit();
         }
@@ -556,8 +525,7 @@ function Tinaviz(args) {
         * recenter the graph
         */
     this.autoCentering= function() {
-        if (applet == null) return false;
-        return applet.autoCentering();
+        applet.autoCentering();
     }
 
     /*
@@ -586,8 +554,8 @@ function Tinaviz(args) {
             elem[1],
             {
                 success: function(data) {
-                    //
-                    //logNormal("var data = "+data+";");
+                //
+                //logNormal("var data = "+data+";");
                 }
             }
             );
@@ -743,9 +711,46 @@ function Tinaviz(args) {
     }
     
     this.setPause = function(value) {
-        return applet.getView().setPause(value);
+        applet.getView().setPause(value);
     }
 
+    /**
+     * Called by the applet
+     */
+    this.logNormal = function(msg) {
+        try {
+            console.log(msg);
+        }
+        catch (e){
+            return;
+        }
+    }
+    
+    /**
+     * Called by the applet
+     */
+    this.logDebug = function(msg) {
+        try {
+            console.log(msg);
+        }
+        catch (e){
+            return;
+        }
+    }
+    
+    /**
+     * Called by the applet
+     */
+    this.logError = function(msg) {
+        try {
+            console.error(msg);
+        }
+        catch (e){
+            alert(msg);
+            return;
+        }
+    }
+    
     /**
      * toggles HD rendering
      */
@@ -785,7 +790,7 @@ function Tinaviz(args) {
         return this.get("category/category");
     }
     this.setCategory= function(value) {
-        return this.set("category/category", value);
+        this.set("category/category", value);
     }
     this.toggleView= function() {
         var current_cat = this.getCategory();

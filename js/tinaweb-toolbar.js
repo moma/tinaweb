@@ -172,7 +172,7 @@ toolbar.init = function() {
             tinaviz.set("edgeWeight/max", ui.values[1] / 100.0);
             tinaviz.set("layout/iter", 0);
             tinaviz.commit();
-            if (tinaviz.current.name()=="meso") tinaviz.autoCentering();
+            if (tinaviz.views.current.name()=="meso") tinaviz.autoCentering();
         }
     });
 
@@ -185,7 +185,7 @@ toolbar.init = function() {
             tinaviz.set("nodeWeight/max", ui.values[1] / 100.0);
             tinaviz.set("layout/iter", 0);
             tinaviz.commit();
-            if (tinaviz.current.name()=="meso") tinaviz.autoCentering();
+            if (tinaviz.views.current.name()=="meso") tinaviz.autoCentering();
         }
     });
 
