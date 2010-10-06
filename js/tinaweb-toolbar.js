@@ -285,7 +285,7 @@ toolbar.init = function() {
 
         // update the node list
         tinaviz.updateNodes(view.name(), next_cat);
-        alert(cat);
+
         // update the algorithm
         view.categories[cat].layout.iter = view.get("layout/iter");
         view.set("layout/iter", view.categories[next_cat].layout.iter);
@@ -333,7 +333,7 @@ toolbar.update = function(vals) {
 
     console.log(values);
     // initialize the sliders
-    alert("gettings values");
+    //alert("gettings values");
     $("#sliderNodeSize").slider( "option", "value", values.magnify * 100.0 );
     $("#sliderSelectionZone").slider( "option", "value", values.cursor_size * 100.0 );
     $("#sliderEdgeWeight").slider( "option", "values", [

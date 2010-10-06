@@ -68,6 +68,8 @@ $(document).ready(function(){
         var session = tinaviz.session();
         var macro = tinaviz.views.macro;
         var meso = tinaviz.views.meso;
+        
+        session.add("nodes/0/keywords", "newKeyword");
 
         session.set("edgeWeight/min", parseFloat(prefs.edge_filter_min));
         session.set("edgeWeight/max", parseFloat(prefs.edge_filter_max));

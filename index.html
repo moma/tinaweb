@@ -29,6 +29,8 @@
 
         <!-- JQUERY UI -->
         <script type="text/javascript" src="js/jquery-ui/jquery-ui-1.8.min.js" language="javascript"></script>
+        <script src='js/star-rating/jquery.rating.js' type="text/javascript" language="javascript"></script> 
+        <link href='js/star-rating/jquery.rating.css' type="text/css" rel="stylesheet"/> 
 
         <!-- TINAVIZ -->
         <script type="text/javascript" src="js/tinaviz/tinaviz.js" language="javascript"></script>
@@ -88,7 +90,7 @@
                                 <div id="sliderNodeWeight"></div>
                             </div>
                         </div>
-                        
+
                         <button id="toggle-autoCentering" class="fg-button toolbar-right">center</button>
                         <form id="search" action="#" class="toolbar-right">
                             <input id="search_input" type="text" value="" />
@@ -140,7 +142,81 @@
                                                 </tbody>
                                             </table>
                                         </div>
-                                    </div> <!-- accordion 3 -->
+                                    </div> <!-- /accordion 3 -->
+                                    <h3><a href="#">Properties</a></h3>
+                                    <div>
+                                        <div id="node_properties" class="ui-widget-content ui-corner-all">
+
+                                            <form>
+                                                <table id="attributeTable">
+                                                    <tr>
+                                                        <th>Co-occurrences</th>
+                                                        <td>1</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th>Rate</th>
+
+                                                        <td valign="top" width="180"> 
+                                                            <input name="adv1" type="radio" class="star {half:true}"/> 
+                                                            <input name="adv1" type="radio" class="star {half:true}"/> 
+                                                            <input name="adv1" type="radio" class="star {half:true}"/> 
+                                                            <input name="adv1" type="radio" class="star {half:true}"/> 
+                                                            <input name="adv1" type="radio" class="star {half:true}" checked="checked"/> 
+                                                            <input name="adv1" type="radio" class="star {half:true}"/> 
+                                                            <input name="adv1" type="radio" class="star {half:true}"/> 
+                                                            <input name="adv1" type="radio" class="star {half:true}"/> 
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </form>
+                                        </div>
+
+                                    </div> <!-- /accordion 4 -->
+
+                                    <h3><a href="#">Visualization</a></h3>
+                                    <div>
+                                        <div id="node_visualization" class="ui-widget-content ui-corner-all">
+
+                                            <form>
+                                                <table id="mappingTable">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Attribute</th>
+                                                            <td>Map to</td>
+                                                        </tr>
+                                                    </thead>
+                                                    <tr>
+                                                        <th>Occurrences</th>
+                                                        <td><select>
+                                                                <option>size</option>
+                                                                <option>color</option>
+                                                                <option> </option>
+                                                            </select>
+                                                        </td>
+                                                    </tr>
+                                                     <tr>
+                                                        <th>Rate</th>
+                                                        <td><select>
+                                                                <option>size</option>
+                                                                <option>color</option>
+                                                                <option> </option>
+                                                            </select>
+                                                        </td>
+                                                    </tr>
+                                                      <tr>
+                                                        <th>Category</th>
+                                                        <td><select>
+                                                                <option>size</option>
+                                                                <option>color</option>
+                                                                <option> </option>
+                                                            </select>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </form>
+                                        </div>
+
+                                    </div> <!-- /accordion 4 -->
                                 </div><!-- /infodiv  -->
 
                             </div><!-- / INFODIVPARENT -->
