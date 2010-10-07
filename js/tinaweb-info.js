@@ -46,7 +46,7 @@ function InfoDiv(divid) {
         neighbours : {}, 
         oppositeSelection : new Array(), 
         label : $( "#node_label" ), 
-        contents : $( "#node_contents" ), 
+        contents : $( "#node_contents" ),
         cloud : $( "#node_neighbourhood" ), 
         /// Modif David 
         cloudSearch: $("#node_neighbourhoodForSearch"), 
@@ -156,7 +156,7 @@ function InfoDiv(divid) {
             /// Modif david 
             this.cloudSearch.empty(); 
             var Googlerequests = "http://www.google.com/#q="; 
-            var PubMedrequests = "http://www.ncbi.nlm.nih.gov/pubmed?term="; 
+            var PubMedrequests = "http://www.ncbi.nlm.nih.gov/pubmed?term=";
             var requests=""; 
             for (var i = 0; i < sorted_tags.length; i++) { 
                 var tag = sorted_tags[i]; 
@@ -239,59 +239,118 @@ function InfoDiv(divid) {
 * updates the label and content DOM divs 
 */ 
         updateInfo: function(lastselection) { 
-           var layout_name=tinaviz.get("layout/algorithm");
-            var decHTMLifEnc = function(str){ 
-                return str.replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>'); 
-            };
- 
+            var layout_name=tinaviz.get("layout/algorithm");
+
             var current_cat = tinaviz.views.current.category();
+
             var labelinnerdiv = $("<div></div>"); 
             var contentinnerdiv = $("<div></div>"); 
+
             for(var id in lastselection) { 
                 var node = lastselection[id]; 
                 // ERROR : MISSING CATEGORY in the node list returned from Tinaviz !!!! 
                 if (node.category == current_cat)  { 
-                    var label = jQuery.trim(decodeJSON(node.label));
                     // prepares label and content to be displayed 
                     if ( current_cat == 'Document' ){
                         var temp=decodeJSON(node.content);
                         //alert(temp)
-                        if (layout_name=="phyloforce"){
-                            //on récupère l'année'
-                            var nodeId = jQuery.trim(decodeJSON(node.id));
-                            var hashes = nodeId.split('::'); // obsolet and new terms
-                            var hash = hashes[1].split('_');
-                            var year=hash[0];
-                            label=label + " - " + year
-                            var content = content2html(decodeJSON(node.content));
-                        //alert(content)
-                        //var content = decHTMLifEnc(jQuery.trim(decodeJSON(node.content)));
-                        }else{
-                            var content = decHTMLifEnc(jQuery.trim(decodeJSON(node.content)));                             
-                        }
-
+                        var content=this.getContent(node);
+                        var label=this.getLabel(node);
                     }
                     else{
                         var content = decHTMLifEnc(jQuery.trim(decodeJSON(node.content)));
                     }
                     
-                    console.dir(content);
-                    //} 
+                    console.dir(node);
+
                     // add node to selection cache 
                     this.selection[id] = lastselection[id]; 
-                    labelinnerdiv.append( $("<b></b>").html(label) ); 
-                    // displays contents only if it's a document 
+                    var tmp = "<b>"+label+"</b>";
+                    tmp += '<span id="rating-'+id+'>not set</span>';
+                    labelinnerdiv.append( $("<span></span>").html(tmp) ); 
+
+                    $('#rating-'+id).ratings(5).bind('ratingchanged', function(event, data) {
+                        $('#rating-'+id).text(data.rating);
+                      });
+                                        
+                     // displays contents only if it's a document 
+ 
  
                     // MODIF DAVID 
                     if (current_cat !== undefined) { 
+                        
                         //var contentinnerdivTitle=jQuery.trim(decHTMLifEnc( )); 
  
                         // jQuery.text automaticcally html encode characters 
-                        contentinnerdiv.append( $("<b></b>").html( label ) ); 
+                        contentinnerdiv.append( $("<b></b>").html( label ) );
+                        
+                        /*
+                        if (node.score != null) {
+                            
+                            var tmp = "";
+                            for (var i=0; i < 8;i++) {
+                                if (i==node.score) {
+                                    tmp += "<input type=\"radio\" class=\"star-rating {split:2}\" checked=\"checked\"/>\n"; 
+                                } else {
+                                    tmp += "<input type=\"radio\" class=\"star-rating {split:2}\"/>"; 
+                                }
+                            }
+
+                            contentinnerdiv.append( $("<span></span>").html( tmp ) );
+                        }
+                        */
+                        /* $('.star').rating({
+                                callback: function(value, link){
+                                    alert(value);
+                                }
+                            });*/
+                        
+                       
+
+
  
                         if ( node.content != null ) { 
                             contentinnerdiv.append( $("<p></p>").html( content ) );
+                            
+                        /*       
+                            var attributeTable = $("<table></table>");
+                            attributeTable.empty();
+
+                    
+                            $.each(node, function(key, value) { 
+                                // ignore some keys
+                                if (key=="content"||key=="id"||key=="category"||key=="label") {
+                                    return;
+                                }
+                                
+                                var row = $("<tr></tr>");
+                                row.append("<td><b>"+key+"</b></td>");
+                                var td = $("<td valign=\"top\" width=\"180\"></td>");
+                                if (key=="score") {
+                                    var score = parseInt(value);
+                                    for (var i=0; i < 8;i++) {
+                                        if (i==score) {
+                                            td.append("<input name=\"projectrating\" type=\"radio\" class=\"star {half:true}\" checked=\"checked\"></input>"); 
+                                        } else {
+                                            td.append("<input name=\"projectrating\" type=\"radio\" class=\"star {half:true}\"></input>"); 
+                                        }
+
+                                    }
+                                }
+                                if (key=="keywords") {
+                                    td.append(""+value+"");
+                            
+                                } else {
+                                    td.append(""+value+"");
+                                }
+                                row.append(td);
+                                attributeTable.append( row );
+                            });
+                            
+                            contentinnerdiv.append( $("<p></p>").html( attributeTable ) );*/
                         } 
+                        
+                        
                         // TODO : move this code to a special "web request function" 
                         var SearchQuery=label.replace(" ","+"); 
                         //var WikiQuery=label.replace("+","_"); 
@@ -300,7 +359,6 @@ function InfoDiv(divid) {
                         var CurrentCategRealName = this.categories[current_cat];   /// nom affichÃ© 
  
                         if (CurrentCategRealName == "projects"){ 
- 
                             // TODO : avoid injecting to much html : write constant in index.html, 
                             //      manage hide/shows with this.update() and this.reset(), 
                             //      then use $("#anchor_id").attr("href",SearchQuery) 
@@ -309,7 +367,7 @@ function InfoDiv(divid) {
                                     '<a href="' 
                                     + tinaviz.getPath() 
                                     +'http://www.google.com/#hl=en&source=hp&q=%20' 
-                                    + SearchQuery 
+                                    + SearchQuery.replace(",","OR")
                                     + '%20" align=middle target=blank height=15 width=15> <img src="' 
                                     + tinaviz.getPath() 
                                     +'css/branding/google.png" height=15 width=15> </a><a href="http://en.wikipedia.org/wiki/' 
@@ -323,12 +381,14 @@ function InfoDiv(divid) {
                                     +'css/branding/flickr.png" height=15 width=15> </a>' 
                                     ) 
                                 ); 
-                        } 
+                        }else{
+                            contentinnerdiv.append("<p></p>");
+                        }
                         if ((CurrentCategRealName == "NGram")|(CurrentCategRealName == "keywords")|(CurrentCategRealName == "Keywords")|(CurrentCategRealName == "Terms")|(CurrentCategRealName == "Communities")) { 
                             contentinnerdiv.append( 
                                 $("<p></p>").html( 
                                     '<a href="http://www.google.com/#hl=en&source=hp&q=%20' 
-                                    + SearchQuery 
+                                    + SearchQuery.replace(",","OR")
                                     + '%20" align=middle target=blank height=15 width=15> <img src="' 
                                     + tinaviz.getPath() 
                                     +'css/branding/google.png" height=15 width=15> </a><a href="http://en.wikipedia.org/wiki/' 
@@ -351,7 +411,7 @@ function InfoDiv(divid) {
                                     + '%20" align=middle target=blank height=15 width=15> <img src="' 
                                     + tinaviz.getPath()+'css/branding/google.png" height=15 width=15> </a>' 
                                     +'<a href="http://scholar.google.com/scholar?q=%20' 
-                                    + SearchQuery 
+                                    + SearchQuery
                                     + '%20" align=middle target=blank height=15 width=15> <img src="' 
                                     + tinaviz.getPath() 
                                     +'css/branding/googleScholars.png" height=15 width=15> </a>' 
@@ -362,7 +422,7 @@ function InfoDiv(divid) {
  
                     } 
                 }
-                contentinnerdiv.append("<br/");
+                contentinnerdiv.append("<br/>");
             } 
             if (Object.size( this.selection ) != 0) { 
                 this.label.empty(); 
@@ -370,12 +430,25 @@ function InfoDiv(divid) {
                 this.contents.empty(); 
                 this.label.append( this.alphabeticJquerySort( labelinnerdiv, "b", ", &nbsp;" )); 
                 this.contents.append( contentinnerdiv ); 
+                
+            //this.attributes.empty();
+            //this.contents.append( attributeTable );
             } 
             else { 
                 this.reset(); 
             } 
-        }, 
- 
+        },
+
+        /* Methodes*/
+
+        getContent: function(node){
+            return decHTMLifEnc(jQuery.trim(decodeJSON(node.content)));
+        },
+
+        getLabel: function(node){
+            return jQuery.trim(decodeJSON(node.label));
+        },
+
         /* 
 * Main method recceiving a new node selection 
 * and dispatching infodiv updates 
@@ -448,7 +521,30 @@ function InfoDiv(divid) {
     } // end of return 
 }; 
  
- 
+function InfoDivPhyloweb(divid) {
+    InfoDiv.call(this);
+    return{
+        getContent: function(node){
+            var nodeId = jQuery.trim(decodeJSON(node.id));
+            var hashes = nodeId.split('::'); // obsolet and new terms
+            var hash = hashes[1].split('_');
+            var year=hash[0];
+            label=label + " - " + year
+
+            return content2html(decodeJSON(node.content));
+        },
+        getLabel: function(node){
+            //on rï¿½cupï¿½re l'annï¿½e'
+            var nodeId = jQuery.trim(decodeJSON(node.id));
+            var hashes = nodeId.split('::'); // obsolet and new terms
+            var hash = hashes[1].split('_');
+            var year=hash[0];
+            label=label + " - " + year;
+            return label;
+        }
+    }
+};
+
 /* 
 * WHAT IS IT ????? 
 * DOCUMENTATION REQUIRED 

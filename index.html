@@ -29,8 +29,11 @@
 
         <!-- JQUERY UI -->
         <script type="text/javascript" src="js/jquery-ui/jquery-ui-1.8.min.js" language="javascript"></script>
-        <script src='js/star-rating/jquery.rating.js' type="text/javascript" language="javascript"></script> 
-        <link href='js/star-rating/jquery.rating.css' type="text/css" rel="stylesheet"/> 
+        <script src='js/rating/jquery.ratings.js' type="text/javascript" language="javascript"></script> 
+        <link href='js/rating/jquery.ratings.16.css' type="text/css" rel="stylesheet"/> 
+
+        <!-- UNCOMMENT THE FOLLOWING LINE TO ENABLE DEBUG -->
+        <script type="text/javascript" src="js/firebug-lite/firebug-lite-beta.js" language="javascript"></script>
 
         <!-- TINAVIZ -->
         <script type="text/javascript" src="js/tinaviz/tinaviz.js" language="javascript"></script>
@@ -47,8 +50,6 @@
         <!-- WE USE TINAWEB INFO PANEL -->
         <script type="text/javascript" src="js/tinaweb-main.js" language="javascript"></script>
 
-        <!-- UNCOMMENT THE FOLLOWING LINE TO ENABLE DEBUG -->
-        <!--<script type="text/javascript" src="js/firebug-lite/firebug-lite-beta.js" language="javascript"></script>-->
 
         <!-- JQUERY UI CSS -->
         <link type="text/css" rel="stylesheet" href="css/eggplant/jquery-ui-1.8.1.custom.css"/>
@@ -118,7 +119,7 @@
                                         <!-- Modif David inversion des accordéon + ajout-->
                                         <div id="node_label" class="ui-widget-header ui-corner-all"></div>
                                         <div id="node_neighbourhood" class="ui-widget-content ui-corner-all"></div>
-                                        <div id="node_contents" class="ui-widget-content ui-corner-all">  </div>
+                                        <div id="node_contents" class="ui-widget-content ui-corner-all"></div>
                                     </div>  <!-- /accordion 1 -->
                                     <h3><a href="#">Global Web Searches</a></h3>
                                     <div>
@@ -143,36 +144,6 @@
                                             </table>
                                         </div>
                                     </div> <!-- /accordion 3 -->
-                                    <h3><a href="#">Properties</a></h3>
-                                    <div>
-                                        <div id="node_properties" class="ui-widget-content ui-corner-all">
-
-                                            <form>
-                                                <table id="attributeTable">
-                                                    <tr>
-                                                        <th>Co-occurrences</th>
-                                                        <td>1</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <th>Rate</th>
-
-                                                        <td valign="top" width="180"> 
-                                                            <input name="projectrating" class="projectrating" type="radio" class="star {half:true}"/> 
-                                                            <input name="projectrating" class="projectrating" type="radio" class="star {half:true}"/> 
-                                                            <input name="projectrating" class="projectrating" type="radio" class="star {half:true}"/> 
-                                                            <input name="projectrating" class="projectrating" type="radio" class="star {half:true}"/> 
-                                                            <input name="projectrating" class="projectrating" type="radio" class="star {half:true}" checked="checked"/> 
-                                                            <input name="projectrating" class="projectrating" type="radio" class="star {half:true}"/> 
-                                                            <input name="projectrating" class="projectrating" type="radio" class="star {half:true}"/> 
-                                                            <input name="projectrating" class="projectrating" type="radio" class="star {half:true}"/> 
-                                                        </td>
-                                                    </tr>
-                                                </table>
-                                            </form>
-                                        </div>
-
-                                    </div> <!-- /accordion 4 -->
-
                                     <h3><a href="#">Visualization</a></h3>
                                     <div>
                                         <div id="node_visualization" class="ui-widget-content ui-corner-all">
@@ -189,7 +160,7 @@
                                                             </select>
                                                         </td>
                                                     </tr>
-                                                     <tr>
+                                                    <tr>
                                                         <th>Node Radius</th>
                                                         <td><select>
                                                                 <option>radius</option>
@@ -199,14 +170,14 @@
                                                             </select>
                                                         </td>
                                                     </tr>
-                                                      <tr>
+                                                    <tr>
                                                         <th>Node Weight</th>
                                                         <td><select>
                                                                 <option>weight</option>
                                                             </select>
                                                         </td>
                                                     </tr>
-                                                                                                          <tr>
+                                                    <tr>
                                                         <th>Node Shape</th>
                                                         <td><select>
                                                                 <option>category</option>

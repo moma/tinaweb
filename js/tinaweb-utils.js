@@ -42,7 +42,9 @@ Object.values = function(obj) {
     return values;
 };
 
-
+function decHTMLifEnc(str){
+                return str.replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>');
+            }
 
 function content2html(content){
     var vars = [],  htmlstring, hash;
