@@ -53,7 +53,7 @@ function content2html(content){
     // %2b = ,
     // %2c = +
     //alert(content);
-    console.log("content:"+content);
+    //console.log("content:"+content);
     var hashes = content.split('_'); // obsolet and new terms
 
     for(var i = 0; i < hashes.length; i++){    
@@ -66,8 +66,8 @@ function content2html(content){
             //var node=tinaviz.getNodeAttributes(hash[j]);    
             var node=tinaviz.getNodeAttributes("macro",hash[j]);   
             //alert("here");
-            console.log("received from node attributes = "+node);
-            console.dir(node);
+            //console.log("received from node attributes = "+node);
+            //console.dir(node);
             
             htmlstring.html(node['label']);
         //alert(decodeJSON(node['label']));

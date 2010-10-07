@@ -42,6 +42,12 @@ $(document).ready(function(){
             fillSpace: true
         });
         
+        $('.projectrating').rating({
+            callback: function(value, link){
+                alert(value);
+            }
+        });
+        
         var prefs = {    
             gexf: "FET60bipartite_graph_cooccurrences_.gexf",
             view: "macro",
