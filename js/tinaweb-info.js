@@ -239,10 +239,10 @@ function InfoDiv(divid) {
 * updates the label and content DOM divs 
 */ 
         updateInfo: function(lastselection) { 
- 
+           var layout_name=tinaviz.get("layout/algorithm");
             var decHTMLifEnc = function(str){ 
                 return str.replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>'); 
-            } 
+            };
  
             var current_cat = tinaviz.views.current.category();
             var labelinnerdiv = $("<div></div>"); 
@@ -251,15 +251,31 @@ function InfoDiv(divid) {
                 var node = lastselection[id]; 
                 // ERROR : MISSING CATEGORY in the node list returned from Tinaviz !!!! 
                 if (node.category == current_cat)  { 
-                    var label = jQuery.trim(decodeJSON(node.label)); 
+                    var label = jQuery.trim(decodeJSON(node.label));
                     // prepares label and content to be displayed 
-                    //if ( current_cat == 'Document' ){ 
-                    //               var temp=decodeJSON(node.content); 
-                    //alert(temp) 
-                    //                 var temp2 = content2html(decodeJSON(node.content)); 
-                    //    var content = decHTMLifEnc(jQuery.trim(decodeJSON(node.content))); 
-                    //else 
-                    var content = decHTMLifEnc(jQuery.trim(decodeJSON(node.content))); 
+                    if ( current_cat == 'Document' ){
+                        var temp=decodeJSON(node.content);
+                        //alert(temp)
+                        if (layout_name=="phyloforce"){
+                            //on récupère l'année'
+                            var nodeId = jQuery.trim(decodeJSON(node.id));
+                            var hashes = nodeId.split('::'); // obsolet and new terms
+                            var hash = hashes[1].split('_');
+                            var year=hash[0];
+                            label=label + " - " + year
+                            var content = content2html(decodeJSON(node.content));
+                        //alert(content)
+                        //var content = decHTMLifEnc(jQuery.trim(decodeJSON(node.content)));
+                        }else{
+                            var content = decHTMLifEnc(jQuery.trim(decodeJSON(node.content)));                             
+                        }
+
+                    }
+                    else{
+                        var content = decHTMLifEnc(jQuery.trim(decodeJSON(node.content)));
+                    }
+                    
+                    console.dir(content);
                     //} 
                     // add node to selection cache 
                     this.selection[id] = lastselection[id]; 
@@ -274,7 +290,7 @@ function InfoDiv(divid) {
                         contentinnerdiv.append( $("<b></b>").html( label ) ); 
  
                         if ( node.content != null ) { 
-                            contentinnerdiv.append( $("<p></p>").html( content ) ); 
+                            contentinnerdiv.append( $("<p></p>").html( content ) );
                         } 
                         // TODO : move this code to a special "web request function" 
                         var SearchQuery=label.replace(" ","+"); 
@@ -345,7 +361,8 @@ function InfoDiv(divid) {
                     // FIN MODIF DAVID 
  
                     } 
-                } 
+                }
+                contentinnerdiv.append("<br/");
             } 
             if (Object.size( this.selection ) != 0) { 
                 this.label.empty(); 
