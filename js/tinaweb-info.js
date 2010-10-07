@@ -156,7 +156,7 @@ function InfoDiv(divid) {
             /// Modif david 
             this.cloudSearch.empty(); 
             var Googlerequests = "http://www.google.com/#q="; 
-            var PubMedrequests = "http://www.ncbi.nlm.nih.gov/pubmed?term="; 
+            var PubMedrequests = "http://www.ncbi.nlm.nih.gov/pubmed?term=";
             var requests=""; 
             for (var i = 0; i < sorted_tags.length; i++) { 
                 var tag = sorted_tags[i]; 
@@ -240,10 +240,7 @@ function InfoDiv(divid) {
 */ 
         updateInfo: function(lastselection) { 
            var layout_name=tinaviz.get("layout/algorithm");
-            var decHTMLifEnc = function(str){ 
-                return str.replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>'); 
-            };
- 
+            
             var current_cat = tinaviz.get("category/category"); 
             var labelinnerdiv = $("<div></div>"); 
             var contentinnerdiv = $("<div></div>"); 
@@ -251,24 +248,14 @@ function InfoDiv(divid) {
                 var node = lastselection[id]; 
                 // ERROR : MISSING CATEGORY in the node list returned from Tinaviz !!!! 
                 if (node.category == current_cat)  { 
-                    var label = jQuery.trim(decodeJSON(node.label));
                     // prepares label and content to be displayed 
                     if ( current_cat == 'Document' ){
                         var temp=decodeJSON(node.content);
                         //alert(temp)
-                        if (layout_name=="phyloforce"){
-                            //on récupère l'année'
-                            var nodeId = jQuery.trim(decodeJSON(node.id));
-                            var hashes = nodeId.split('::'); // obsolet and new terms
-                            var hash = hashes[1].split('_');
-                            var year=hash[0];
-                            label=label + " - " + year
-                            var content = content2html(decodeJSON(node.content));
-                        //alert(content)
-                        //var content = decHTMLifEnc(jQuery.trim(decodeJSON(node.content)));
-                        }else{
-                            var content = decHTMLifEnc(jQuery.trim(decodeJSON(node.content)));                             
-                        }
+                        var content=this.getContent(node);
+                        var label=this.getLabel(node);
+                    
+
 
                     }
                     else{
@@ -301,7 +288,6 @@ function InfoDiv(divid) {
                         var CurrentCategRealName = this.categories[current_cat];   /// nom affichÃ© 
  
                         if (CurrentCategRealName == "projects"){ 
- 
                             // TODO : avoid injecting to much html : write constant in index.html, 
                             //      manage hide/shows with this.update() and this.reset(), 
                             //      then use $("#anchor_id").attr("href",SearchQuery) 
@@ -310,7 +296,7 @@ function InfoDiv(divid) {
                                     '<a href="' 
                                     + tinaviz.getPath() 
                                     +'http://www.google.com/#hl=en&source=hp&q=%20' 
-                                    + SearchQuery 
+                                    + SearchQuery.replace(",","OR")
                                     + '%20" align=middle target=blank height=15 width=15> <img src="' 
                                     + tinaviz.getPath() 
                                     +'css/branding/google.png" height=15 width=15> </a><a href="http://en.wikipedia.org/wiki/' 
@@ -324,12 +310,14 @@ function InfoDiv(divid) {
                                     +'css/branding/flickr.png" height=15 width=15> </a>' 
                                     ) 
                                 ); 
-                        } 
+                        }else{
+                             contentinnerdiv.append("<p></p>");
+                        }
                         if ((CurrentCategRealName == "NGram")|(CurrentCategRealName == "keywords")|(CurrentCategRealName == "Keywords")|(CurrentCategRealName == "Terms")|(CurrentCategRealName == "Communities")) { 
                             contentinnerdiv.append( 
                                 $("<p></p>").html( 
                                     '<a href="http://www.google.com/#hl=en&source=hp&q=%20' 
-                                    + SearchQuery 
+                                    + SearchQuery.replace(",","OR")
                                     + '%20" align=middle target=blank height=15 width=15> <img src="' 
                                     + tinaviz.getPath() 
                                     +'css/branding/google.png" height=15 width=15> </a><a href="http://en.wikipedia.org/wiki/' 
@@ -352,7 +340,7 @@ function InfoDiv(divid) {
                                     + '%20" align=middle target=blank height=15 width=15> <img src="' 
                                     + tinaviz.getPath()+'css/branding/google.png" height=15 width=15> </a>' 
                                     +'<a href="http://scholar.google.com/scholar?q=%20' 
-                                    + SearchQuery 
+                                    + SearchQuery
                                     + '%20" align=middle target=blank height=15 width=15> <img src="' 
                                     + tinaviz.getPath() 
                                     +'css/branding/googleScholars.png" height=15 width=15> </a>' 
@@ -375,9 +363,19 @@ function InfoDiv(divid) {
             else { 
                 this.reset(); 
             } 
-        }, 
- 
-        /* 
+        },
+
+    /* Methodes*/
+
+      getContent: function(node){
+        return decHTMLifEnc(jQuery.trim(decodeJSON(node.content)));
+      },
+
+      getLabel: function(node){
+        return jQuery.trim(decodeJSON(node.label));
+      },
+
+/* 
 * Main method recceiving a new node selection 
 * and dispatching infodiv updates 
 * */ 
@@ -449,7 +447,30 @@ function InfoDiv(divid) {
     } // end of return 
 }; 
  
- 
+function InfoDivPhyloweb(divid) {
+    InfoDiv.call(this);
+    return{
+        getContent: function(node){
+            var nodeId = jQuery.trim(decodeJSON(node.id));
+            var hashes = nodeId.split('::'); // obsolet and new terms
+            var hash = hashes[1].split('_');
+            var year=hash[0];
+            label=label + " - " + year
+
+            return content2html(decodeJSON(node.content));
+        },
+        getLabel: function(node){
+                            //on récupère l'année'
+                            var nodeId = jQuery.trim(decodeJSON(node.id));
+                            var hashes = nodeId.split('::'); // obsolet and new terms
+                            var hash = hashes[1].split('_');
+                            var year=hash[0];
+                            label=label + " - " + year;
+                    return label;
+        }
+    }
+};
+
 /* 
 * WHAT IS IT ????? 
 * DOCUMENTATION REQUIRED 

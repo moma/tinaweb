@@ -30,8 +30,13 @@ $(document).ready(function(){
     });
     
     tinaviz.ready(function(){
-
-        var infodiv =  InfoDiv('infodiv');
+        var layout_name=tinaviz.get("layout/algorithm");
+        if (layout_name=="phyloforce"){
+            var infodiv =  InfoDivPhyloweb('infodiv');
+        }
+        else{
+            var infodiv =  InfoDiv('infodiv');
+        }
         tinaviz.infodiv = infodiv;
         tinaviz.infodiv.reset();
         
