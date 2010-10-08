@@ -93,7 +93,6 @@ $(document).ready(function(){
         macro.filter("Category", "category");
         macro.filter("NodeWeightRange", "nodeWeight");
         macro.filter("EdgeWeightRange", "edgeWeight");
-        macro.filter("NodeFunction", "radiusByWeight");       
         macro.filter("Output", "output");
 
         meso.filter("SubGraphCopyStandalone", "category");
@@ -103,7 +102,6 @@ $(document).ready(function(){
 
         meso.filter("NodeWeightRangeHack", "nodeWeight");
         meso.filter("EdgeWeightRangeHack", "edgeWeight");
-        meso.filter("NodeFunction", "radiusByWeight");
         meso.filter("Output", "output");
         
         toolbar.init();

@@ -27,6 +27,14 @@ function Tinaviz(args) {
 
 
     this.views = {
+        all: {
+            set: function(key,value) {
+                return applet.getSession().set(key,value);
+            },
+            get: function(key) {
+                return applet.getSession().get(key);
+            }
+        },
         current: {
             name: function() { 
                 return applet.getView().getName();

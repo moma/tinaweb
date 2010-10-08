@@ -55,6 +55,31 @@ $(document).ready(function(){
         $(this).css('cursor','auto');
     });
     
+
+   $("#nodeRadiusSelector").change(function() { 
+       alert("RADIUS");
+       tinaviz.views.all.set("output/radius",$("#nodeRadiusSelector").val());
+       tinaviz.commit();
+    }); 
+    
+   $("#nodeWeightSelector").change(function() { 
+       alert("WEIGHT");
+       tinaviz.views.all.set("output/weight",$("#nodeShapeSelector").val());
+       tinaviz.commit();
+    }); 
+    
+   $("#nodeShapeSelector").change(function() { 
+       alert("changing shape");
+       tinaviz.views.all.set("output/shape",$("#nodeShapeSelector").val());
+       tinaviz.commit();
+    }); 
+    
+   $("#nodeColorSelector").change(function() { 
+       alert("COLOR");
+       tinaviz.views.all.set("output/color",$("#nodeColorSelector").val());
+       tinaviz.commit();
+    }); 
+    
 });
 
 var toolbar = {
@@ -168,6 +193,7 @@ toolbar.init = function() {
         values: [toolbar.values.sliders.edgeFilter.min, toolbar.values.sliders.edgeFilter.max * 100.0],
         animate: true,
         slide: function(event, ui) {
+            
             tinaviz.set("edgeWeight/min", ui.values[0] / 100.0);
             tinaviz.set("edgeWeight/max", ui.values[1] / 100.0);
             tinaviz.set("layout/iter", 0);
@@ -194,7 +220,7 @@ toolbar.init = function() {
         max: 100.0,// precision/size
         animate: true,
         slide: function(event, ui) {
-            tinaviz.set("output/nodeSizeRatio", ui.value / 100.0);
+            tinaviz.set("output/scaling", ui.value / 100.0);
             tinaviz.commit();
         }
     }
