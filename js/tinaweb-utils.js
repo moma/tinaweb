@@ -55,7 +55,7 @@ function content2html(content){
     // %2b = ,
     // %2c = +
     //alert(content);
-    console.log("content:"+content);
+    //console.log("content:"+content);
     var hashes = content.split('_'); // obsolet and new terms
 
     for(var i = 0; i < hashes.length; i++){    
@@ -72,7 +72,7 @@ function content2html(content){
             //console.log("received from node attributes = "+node);
             //console.dir(node);
             //alert('label=' + node.label);
-            console.log(node.label);
+            //console.log(node.label);
             htmlstring+= htmlDecode(node.label.replace(/\+/g," "))+", ";
             //htmlstring+= "<a href=# onClick='javascript:" + tinaviz.open({view:'macro',gexf:'toto.gexf'})" " node.label.replace("+", " ")+", ";
         //alert(decodeJSON(node['label']));
@@ -95,6 +95,26 @@ function  alphabeticListSort(listitems,textkey) {
     return listitems;
 
 };
+
+
+    /*
+* Generic sorting DOM lists
+*/
+function alphabeticJquerySort(parentdiv, childrendiv, separator) {
+    var listitems = parentdiv.children(childrendiv).get();
+    listitems.sort(function(a, b) {
+        var compA = $(a).html().toUpperCase();
+        var compB = $(b).html().toUpperCase();
+        return (compA < compB) ? -1 : (compA > compB) ? 1 : 0;
+    })
+    $.each(listitems, function(idx, itm) {
+        if ( idx != 0 && idx != listitems.length )
+            parentdiv.append(separator);
+        parentdiv.append(itm);
+    });
+    return parentdiv;
+}
+
 
 /*
  * To html entities
