@@ -468,7 +468,9 @@ function Tinaviz(args) {
         * Search nodes
         */
     this.getNodesByLabel = function(label, type) {
-        if (applet == null) return {};
+        if (applet == null){
+          return {};
+        }
         return $.parseJSON( applet.getNodesByLabel(label, type));
     }
 

@@ -54,12 +54,12 @@ $(document).ready(function(){
         tinaviz.setView(prefs.view);
 
         var layout_name=prefs.layout;
-        if (layout_name=="phyloforce"){
-            var infodiv =  new InfoDivPhyloweb('infodiv');
-        }
-        else{
+        //if (layout_name=="phyloforce"){
+        //    var infodiv =  new InfoDivPhyloweb('infodiv');
+        //}
+        //else{
         var infodiv = new InfoDiv('infodiv');
-        }
+        //}
 
         tinaviz.infodiv = infodiv;
         tinaviz.infodiv.reset();
