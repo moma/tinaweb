@@ -266,12 +266,20 @@ function InfoDiv(divid) {
                     // add node to selection cache 
                     this.selection[id] = lastselection[id]; 
                     var tmp = "<b>"+label+"</b>";
-                    tmp += '<span id="rating-'+id+'>not set</span>';
                     labelinnerdiv.append( $("<span></span>").html(tmp) ); 
+                    
+                    var rating = $('<span id="rating-'+id+'>not set</span>');
+                    rating.ratings(5).bind('ratingchanged', function(event, data) {
+                        $.text(data.rating);
+                      });
+                    //tmp += '<span id="rating-'+id+'>not set</span>';
 
+
+                    /*
                     $('#rating-'+id).ratings(5).bind('ratingchanged', function(event, data) {
                         $('#rating-'+id).text(data.rating);
                       });
+                    */
                                         
                      // displays contents only if it's a document 
  
