@@ -57,26 +57,26 @@ $(document).ready(function(){
     
 
    $("#nodeRadiusSelector").change(function() { 
-       alert("RADIUS");
-       tinaviz.views.all.set("output/radius",$("#nodeRadiusSelector").val());
+       alert("SET RADIUS TO "+$("#nodeRadiusSelector").val());
+       tinaviz.views.current.set("output/radius",$("#nodeRadiusSelector").val());
        tinaviz.commit();
     }); 
     
    $("#nodeWeightSelector").change(function() { 
-       alert("WEIGHT");
-       tinaviz.views.all.set("output/weight",$("#nodeShapeSelector").val());
+       alert("SET WEIGHT TO "+$("#nodeShapeSelector").val());
+       tinaviz.views.current.set("output/weight",$("#nodeShapeSelector").val());
        tinaviz.commit();
     }); 
     
    $("#nodeShapeSelector").change(function() { 
-       alert("changing shape");
-       tinaviz.views.all.set("output/shape",$("#nodeShapeSelector").val());
+       alert("SET SHAPE TO "+$("#nodeShapeSelector").val());
+       tinaviz.views.current.set("output/shape",$("#nodeShapeSelector").val());
        tinaviz.commit();
     }); 
     
    $("#nodeColorSelector").change(function() { 
-       alert("COLOR");
-       tinaviz.views.all.set("output/color",$("#nodeColorSelector").val());
+       alert("SET COLOR TO "+ $("#nodeColorSelector").val());
+       tinaviz.views.current.set("output/color",$("#nodeColorSelector").val());
        tinaviz.commit();
     }); 
     

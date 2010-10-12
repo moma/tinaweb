@@ -30,26 +30,14 @@ $(document).ready(function(){
     });
     
     tinaviz.ready(function(){
-        var layout_name=tinaviz.get("layout/algorithm");
-        if (layout_name=="phyloforce"){
-            var infodiv =  InfoDivPhyloweb('infodiv');
-        }
-        else{
-            var infodiv =  InfoDiv('infodiv');
-        }
-        tinaviz.infodiv = infodiv;
-        tinaviz.infodiv.reset();
+
         
         var size = resize();
         tinaviz.size(size.w, size.h);
 
-        $("#infodiv").accordion({
-            fillSpace: true
-        });
-
-        
+ 
         var prefs = {    
-            gexf: "FET60bipartite_graph_cooccurrences_.gexf",
+            gexf: "default.gexf",
             view: "macro",
             category: "Document",
             node_id: "",
@@ -103,7 +91,20 @@ $(document).ready(function(){
         meso.filter("NodeWeightRangeHack", "nodeWeight");
         meso.filter("EdgeWeightRangeHack", "edgeWeight");
         meso.filter("Output", "output");
+                
+        var layout_name=tinaviz.get("layout/algorithm");
+        if (layout_name=="phyloforce"){
+            tinaviz.infodiv = InfoDivPhyloweb('infodiv');
+        }
+        else{
+            tinaviz.infodiv = InfoDiv('infodiv');
+        }
+        tinaviz.infodiv.reset();
         
+        $("#infodiv").accordion({
+            fillSpace: true
+        });
+
         toolbar.init();
 
         tinaviz.open({
@@ -173,6 +174,7 @@ $(document).ready(function(){
              **/
             selectionChanged: function(selection) {
                 tinaviz.infodiv.reset();
+                
                 if ( selection.mouseMode == "left" ) {
                 // nothing to do
                 } else if ( selection.mouseMode == "right" ) {

@@ -24,17 +24,44 @@ function Tinaviz(args) {
     for (x in args) {
         opts[x] = args[x]
     }
-
+    /**
+     * Called by the applet
+     */
+    this.logNormal = function(msg) {
+        try {
+            console.log(msg);
+        }
+        catch (e){
+            return;
+        }
+    };
+    
+    /**
+     * Called by the applet
+     */
+    this.logDebug = function(msg) {
+        try {
+            console.log(msg);
+        }
+        catch (e){
+            return;
+        }
+    };
+    
+    /**
+     * Called by the applet
+     */
+    this.logError = function(msg) {
+        try {
+            console.error(msg);
+        }
+        catch (e){
+            alert(msg);
+            return;
+        }
+    };
 
     this.views = {
-        all: {
-            set: function(key,value) {
-                return applet.getSession().set(key,value);
-            },
-            get: function(key) {
-                return applet.getSession().get(key);
-            }
-        },
         current: {
             name: function() { 
                 return applet.getView().getName();
@@ -45,6 +72,7 @@ function Tinaviz(args) {
                 return applet.getView().set(key,value);
             },
             get: function(key) {
+                //alert("get current "+key);
                 return applet.getView().get(key);
             },
             commit: function() {
@@ -289,37 +317,44 @@ function Tinaviz(args) {
             dataType: "text", // if we use 'text', we need to disable cache
             cache: "false", //
             error: function() {
+                /*
                 try {
                     if (opts.url.search("://") != -1) {
+                        tinaviz.logNormal("applet.getView().openURI("+opts.url+", "+opts.clear+");");
                         applet.getView().openURI(opts.url, opts.clear);
                     } else {
                         var sPath = document.location.href;
+                        tinaviz.logNormal("applet.getView().openURI("+(sPath.substring(0, sPath.lastIndexOf('/') + 1) + opts.url)+", "+opts.clear+");");
                         applet.getView().openURI(sPath.substring(0, sPath.lastIndexOf('/') + 1) + opts.url, opts.clear);
                     }
                 } catch (e) {
                     alert("Couldn't import graph: "+e);
                     opts.error(e);
                 }
+                */
             },
             success: function(gexf) {
                 var f = false;
                 // alert("success, calling updateFromString");
                 try {
-                    view.openString(gexf, opts.clear);
+                    tinaviz.logNormal("view.openString(.., "+opts.clear+")");
+                    applet.getView().openString(gexf, opts.clear);
                 } catch (e) {
-                    // logNormal("Couldn't load graph using openString, trying with openURI..");
+                    tinaviz.logNormal("Couldn't load graph using openString, trying with openURI..");
                     f = true;
                 }
                 if (f) {
                     try {
                         if (opts.url.search("://") != -1) {
+                            tinaviz.logNormal("applet.getView().openURI("+opts.url+", "+opts.clear+");");
                             applet.getView().openURI(opts.url, opts.clear);
                         } else {
                             var sPath = document.location.href;
+                            tinaviz.logNormal("applet.getView().openURI("+(sPath.substring(0, sPath.lastIndexOf('/') + 1) + opts.url)+", "+opts.clear+");");
                             applet.getView().openURI(sPath.substring(0, sPath.lastIndexOf('/') + 1) + opts.url, opts.clear);
                         }
                     } catch (e) {
-                        alert("Couldn't import graph: "+e);
+                        tinaviz.logError("Couldn't import graph: "+e);
                         opts.error(e);
                     }
                 }
@@ -451,6 +486,7 @@ function Tinaviz(args) {
          */
     this.commit= function(view) {
         if (view===undefined) {
+            alert("commit all");
             applet.commit();
         } else {
             applet.commit(view);
@@ -628,7 +664,9 @@ function Tinaviz(args) {
      * @return
      */
     this.selected = function(view, attr, mouse) {
+
         var data = $.parseJSON(attr);
+        
         this.callbackSelectionChanged({
             'viewName':view,
             'data':data,
@@ -722,42 +760,7 @@ function Tinaviz(args) {
         applet.getView().setPause(value);
     }
 
-    /**
-     * Called by the applet
-     */
-    this.logNormal = function(msg) {
-        try {
-            console.log(msg);
-        }
-        catch (e){
-            return;
-        }
-    }
-    
-    /**
-     * Called by the applet
-     */
-    this.logDebug = function(msg) {
-        try {
-            console.log(msg);
-        }
-        catch (e){
-            return;
-        }
-    }
-    
-    /**
-     * Called by the applet
-     */
-    this.logError = function(msg) {
-        try {
-            console.error(msg);
-        }
-        catch (e){
-            alert(msg);
-            return;
-        }
-    }
+
     
     /**
      * toggles HD rendering
