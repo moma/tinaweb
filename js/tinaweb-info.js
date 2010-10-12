@@ -150,7 +150,7 @@ function InfoDiv(divid) {
  
             } 
             this.oppositeSelection = toBe; 
-            var sorted_tags = alphabeticListSort( Object.values( tempcloud ), 'occurrences' );
+            var sorted_tags = alphabeticListSort( Object.values( tempcloud ), 'label' );
             /* some display sizes const */ 
  
             /// Modif david 
