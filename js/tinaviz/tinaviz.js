@@ -486,7 +486,6 @@ function Tinaviz(args) {
          */
     this.commit= function(view) {
         if (view===undefined) {
-            alert("commit all");
             applet.commit();
         } else {
             applet.commit(view);
@@ -805,7 +804,7 @@ function Tinaviz(args) {
     }
     this.toggleView= function() {
         var current_cat = this.getCategory();
-        if (this.views.current.getName() == "macro") {
+        if (this.views.current.name() == "macro") {
             // check if selection is empty
             if (Object.size(this.infodiv.selection) != 0) {
                 this.views.meso.set("category/category", current_cat);
@@ -814,7 +813,7 @@ function Tinaviz(args) {
             } else {
                 alert("please first select some nodes before switching to meso level");
             }
-        } else if (this.views.current.getName() == "meso") {
+        } else if (this.views.current.name() == "meso") {
             this.views.macro.set("category/category", current_cat);
             this.setView("macro");
             this.updateNodes("macro", current_cat);
