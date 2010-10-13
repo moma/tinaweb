@@ -255,11 +255,14 @@ function InfoDiv(divid) {
                     // prepares label and content to be displayed
                     var nodeId = jQuery.trim(decodeJSON(node.id));
                     var hashes = nodeId.split('::'); // obsolet and new terms
-                    var hash = hashes[1].split('_');
-                    var years=hash[0].split('-');
-                    var year=years[1];
-                    if (year !== undefined){
-                        label=label + " - " + year
+                    if (hashes[1] !== undefined){
+                        var hash = hashes[1].split('_');
+                        var years=hash[0].split('-');
+                        var year=years[1];
+                        if (year !== undefined){
+                            label=label + " - " + year;
+                        }
+
                     }
                     
                     if ( current_cat == 'Document' ){
