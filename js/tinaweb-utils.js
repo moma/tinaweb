@@ -319,55 +319,54 @@ function urlList(label,CurrentCategRealName){
         //      manage hide/shows with this.update() and this.reset(),
         //      then use $("#anchor_id").attr("href",SearchQuery)
         return $("<p></p>").html(
-                '<a href="'
-                + tinaviz.getPath()
-                +'http://www.google.com/#hl=en&source=hp&q=%20'
-                + SearchQuery.replace(",","OR")
-                + '%20" align=middle target=blank height=15 width=15> <img src="'
-                + tinaviz.getPath()
-                +'css/branding/google.png" height=15 width=15> </a><a href="http://en.wikipedia.org/wiki/'
-                + SearchQuery
-                + '" align=middle target=blank height=15 width=15> <img src="'
-                + tinaviz.getPath()
-                +'css/branding/wikipedia.png" height=15 width=15> </a><a href="http://www.flickr.com/search/?w=all&q='
-                + SearchQuery
-                + '" align=middle target=blank height=15 width=15> <img src="'
-                + tinaviz.getPath()
-                +'css/branding/flickr.png" height=15 width=15> </a>'
-                )
+            '<a href="'
+            + tinaviz.getPath()
+            +'http://www.google.com/#hl=en&source=hp&q=%20'
+            + SearchQuery.replace(",","OR")
+            + '%20" align=middle target=blank height=15 width=15> <img src="'
+            + tinaviz.getPath()
+            +'css/branding/google.png" height=15 width=15> </a><a href="http://en.wikipedia.org/wiki/'
+            + SearchQuery
+            + '" align=middle target=blank height=15 width=15> <img src="'
+            + tinaviz.getPath()
+            +'css/branding/wikipedia.png" height=15 width=15> </a><a href="http://www.flickr.com/search/?w=all&q='
+            + SearchQuery
+            + '" align=middle target=blank height=15 width=15> <img src="'
+            + tinaviz.getPath()
+            +'css/branding/flickr.png" height=15 width=15> </a>'
+            )
             
-    }else{
-        return "<p></p>";
+    }else if ((CurrentCategRealName == "NGrams")|(CurrentCategRealName == "NGram")|(CurrentCategRealName == "keywords")|(CurrentCategRealName == "Keywords")|(CurrentCategRealName == "Terms")|(CurrentCategRealName == "Communities")) {
+    return $("<p></p>").html(
+            '<a href="http://www.google.com/#hl=en&source=hp&q=%20'
+            + SearchQuery.replace(",","OR")
+            + '%20" align=middle target=blank height=15 width=15> <img src="'
+            + tinaviz.getPath()
+            +'css/branding/google.png" height=15 width=15> </a><a href="http://en.wikipedia.org/wiki/'
+            + SearchQuery
+            + '" align=middle target=blank height=15 width=15> <img src="'
+            + tinaviz.getPath()
+            +'css/branding/wikipedia.png" height=15 width=15> </a><a href="http://www.flickr.com/search/?w=all&q='
+            + SearchQuery
+            + '" align=middle target=blank height=15 width=15> <img src="'
+            + tinaviz.getPath()
+            +'css/branding/flickr.png" height=15 width=15> </a>'
+            )
     }
-    if ((CurrentCategRealName == "NGram")|(CurrentCategRealName == "keywords")|(CurrentCategRealName == "Keywords")|(CurrentCategRealName == "Terms")|(CurrentCategRealName == "Communities")) {
+    else if ((CurrentCategRealName == "Scholars")|(CurrentCategRealName == "People")|(CurrentCategRealName == "scholars")){
         return $("<p></p>").html(
-                '<a href="http://www.google.com/#hl=en&source=hp&q=%20'
-                + SearchQuery.replace(",","OR")
-                + '%20" align=middle target=blank height=15 width=15> <img src="'
-                + tinaviz.getPath()
-                +'css/branding/google.png" height=15 width=15> </a><a href="http://en.wikipedia.org/wiki/'
-                + SearchQuery
-                + '" align=middle target=blank height=15 width=15> <img src="'
-                + tinaviz.getPath()
-                +'css/branding/wikipedia.png" height=15 width=15> </a><a href="http://www.flickr.com/search/?w=all&q='
-                + SearchQuery
-                + '" align=middle target=blank height=15 width=15> <img src="'
-                + tinaviz.getPath()
-                +'css/branding/flickr.png" height=15 width=15> </a>'
-                )
-    }
-    if ((CurrentCategRealName == "Scholars")|(CurrentCategRealName == "People")|(CurrentCategRealName == "scholars")){
-        return $("<p></p>").html(
-                '<a href="http://www.google.com/#hl=en&source=hp&q=%20'
-                + SearchQuery
-                + '%20" align=middle target=blank height=15 width=15> <img src="'
-                + tinaviz.getPath()+'css/branding/google.png" height=15 width=15> </a>'
-                +'<a href="http://scholar.google.com/scholar?q=%20'
-                + SearchQuery
-                + '%20" align=middle target=blank height=15 width=15> <img src="'
-                + tinaviz.getPath()
-                +'css/branding/googleScholars.png" height=15 width=15> </a>'
-                )
+            '<a href="http://www.google.com/#hl=en&source=hp&q=%20'
+            + SearchQuery
+            + '%20" align=middle target=blank height=15 width=15> <img src="'
+            + tinaviz.getPath()+'css/branding/google.png" height=15 width=15> </a>'
+            +'<a href="http://scholar.google.com/scholar?q=%20'
+            + SearchQuery
+            + '%20" align=middle target=blank height=15 width=15> <img src="'
+            + tinaviz.getPath()
+            +'css/branding/googleScholars.png" height=15 width=15> </a>'
+            )
+    }else {
+        return $("<p></p>");
     }
 }
 

@@ -246,7 +246,8 @@ function InfoDiv(divid) {
  
             var current_cat = tinaviz.get("category/category"); 
             var labelinnerdiv = $("<div></div>"); 
-            var contentinnerdiv = $("<div></div>"); 
+            var contentinnerdiv = $("<div></div>");
+            var number_of_label=0;
             for(var id in lastselection) { 
                 var node = lastselection[id]; 
                 // ERROR : MISSING CATEGORY in the node list returned from Tinaviz !!!! 
@@ -273,8 +274,16 @@ function InfoDiv(divid) {
                         var content = decHTMLifEnc(jQuery.trim(decodeJSON(node.content)));
                     }
                     
-                    this.selection[id] = lastselection[id]; 
-                    labelinnerdiv.append( $("<b></b>").html(label) ); 
+                    this.selection[id] = lastselection[id];
+                    number_of_label++;
+                    if (number_of_label<5){
+                    labelinnerdiv.append( $("<b></b>").html(label) );
+                    }else{
+                        if (number_of_label==5){
+                           labelinnerdiv.append( $("<b></b>").html("[...]") );
+                        }
+                    }
+
                     // displays contents only if it's a document 
                     var current_cat = tinaviz.get("category/category");  /// current category
                     if (current_cat !== undefined) { 
@@ -284,7 +293,9 @@ function InfoDiv(divid) {
                         if ( node.content != null ) { 
                             contentinnerdiv.append( $("<p></p>").html( content ) );
                         }
-                    } 
+                       
+                    }
+                    contentinnerdiv.append( $("<p></p>").html( urlList(label,this.categories[current_cat]) ) );
                 }
                 contentinnerdiv.append("<br/");
             } 
