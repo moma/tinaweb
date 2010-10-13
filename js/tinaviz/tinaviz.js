@@ -317,7 +317,7 @@ function Tinaviz(args) {
             dataType: "text", // if we use 'text', we need to disable cache
             cache: "false", //
             error: function() {
-                /*
+            /*
                 try {
                     if (opts.url.search("://") != -1) {
                         tinaviz.logNormal("applet.getView().openURI("+opts.url+", "+opts.clear+");");
@@ -490,6 +490,81 @@ function Tinaviz(args) {
         } else {
             applet.commit(view);
         }
+    }
+    
+    this.askForNeighbours = function(dataset, id, category) {
+       // alert("askForNeighbours("+dataset+","+id+","+category+")");
+
+        /*
+ *
+ *{"py/object": "tinasoft.pytextminer.document.Document", 
+ *  "ngramEmpty": " ",
+ * "forbChars": "[^a-zA-Z\\s\\@\u00c2\u00c6\u00c7\u00c8\u00c9\u00ca\u00ce\u00db\u00d9\u00e0\u00e2\u00e6\u00e7\u00e8\u00e9\u00ea\u00ee\u0128\u00f4\u00d4\u00f9\u00fb\u00fc\\,\\.\\;\\:\\!\\?\"'\\[\\]\\{\\}\\(\\)\\<\\>]", 
+ * "author": null, 
+ * "ngramSep": "[\\s]+", 
+ * "doc_acrnm": "MOLSPINQIP ",
+ *  "label": "MOLSPINQIP ", 
+ *  "edges": {
+ *  "Whitelist": {}, 
+ *  "Corpora": {},
+ *   "Cluster": {}, 
+ *   "NGram": {}, 
+ *   "Corpus": {"FET": 1},
+ *    "Document": {
+ *    "56": null, 
+ *    "54": null,
+ *     "42": null, 
+ *     "43": null,
+ *      "60": null,
+ *       "53": null,
+ *        "52": null, 
+ *        "23": null, 
+ *        "24": null, 
+ *        "25": null, 
+ *        "26": null,
+ *         "27": null,
+ *          "20": null, 
+ *          "21": null, "22": null, "49": null, "46": null, "47": null, "44": null, "28": null, "29": null, "40": null, "41": null, "1": null, "3": null, "2": null, "5": null, "4": null, "7": null, "6": null, "9": null, "18": null, "39": null, "38": null, "59": null, "14": null, "11": null, "10": null, "13": null, "12": null, "15": null, "58": null, "17": null, "16": null, "19": null, "32": null, "31": null, "30": null, "51": null, "36": null, "35": null, "34": null, "33": null, "55": null, "37": null, "48": null, "57": null, "50": null}}, "ngramMin": 1, "date": null, "ngramMax": 3, "id": "31"}
+ *
+ */
+        switch (category) {
+            case 'Document':
+                TinaService.getDocument(dataset, id, {
+                    success: function(data, textStatus, XMLHttpRequest) {
+                        //alert("got" +data.edges);
+                        applet.setNeighbourhood(category+"::"+id, $.toJSON(data.edges));
+                    },
+                    error: function(XMLHttpRequest, textStatus, errorThrown) {
+
+                    },
+                    complete: function(XMLHttpRequest, textStatus) {
+
+                    },
+                    beforeSend: function() {
+                    }
+                }
+                );
+                break;
+            case 'NGram':
+                TinaService.getNGram(dataset, id, {
+                    success: function(data, textStatus, XMLHttpRequest) {
+                        //alert("got" +data.edges);
+                        applet.setNeighbourhood(category+"::"+id, $.toJSON(data.edges));
+                    },
+                    error: function(XMLHttpRequest, textStatus, errorThrown) {
+
+                    },
+                    complete: function(XMLHttpRequest, textStatus) {
+
+                    },
+                    beforeSend: function() {
+                    }
+                }
+                );
+
+                break;
+        }
+       
     }
 
 
