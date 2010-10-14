@@ -59,25 +59,21 @@ $(document).ready(function(){
    $("#nodeRadiusSelector").change(function() { 
        alert("SET RADIUS TO "+$("#nodeRadiusSelector").val());
        tinaviz.views.current.set("output/radius",$("#nodeRadiusSelector").val());
-       tinaviz.commit();
     }); 
     
    $("#nodeWeightSelector").change(function() { 
        alert("SET WEIGHT TO "+$("#nodeShapeSelector").val());
        tinaviz.views.current.set("output/weight",$("#nodeShapeSelector").val());
-       tinaviz.commit();
     }); 
     
    $("#nodeShapeSelector").change(function() { 
        alert("SET SHAPE TO "+$("#nodeShapeSelector").val());
        tinaviz.views.current.set("output/shape",$("#nodeShapeSelector").val());
-       tinaviz.commit();
     }); 
     
    $("#nodeColorSelector").change(function() { 
        alert("SET COLOR TO "+ $("#nodeColorSelector").val());
        tinaviz.views.current.set("output/color",$("#nodeColorSelector").val());
-       tinaviz.commit();
     }); 
     
 });
@@ -197,7 +193,6 @@ toolbar.init = function() {
             tinaviz.set("edgeWeight/min", ui.values[0] / 100.0);
             tinaviz.set("edgeWeight/max", ui.values[1] / 100.0);
             tinaviz.set("layout/iter", 0);
-            tinaviz.commit();
             if (tinaviz.views.current.name()=="meso") tinaviz.autoCentering();
         }
     });
@@ -210,7 +205,6 @@ toolbar.init = function() {
             tinaviz.set("nodeWeight/min", ui.values[0] / 100.0);
             tinaviz.set("nodeWeight/max", ui.values[1] / 100.0);
             tinaviz.set("layout/iter", 0);
-            tinaviz.commit();
             if (tinaviz.views.current.name()=="meso") tinaviz.autoCentering();
         }
     });
@@ -221,7 +215,6 @@ toolbar.init = function() {
         animate: true,
         slide: function(event, ui) {
             tinaviz.set("output/scaling", ui.value / 100.0);
-            tinaviz.commit();
         }
     }
     );
@@ -232,7 +225,6 @@ toolbar.init = function() {
         animate: true,
         slide: function(event, ui) {
             tinaviz.set("selection/radius", ui.value);
-            tinaviz.commit();
         }
     });
 
@@ -316,8 +308,7 @@ toolbar.init = function() {
         view.categories[cat].layout.iter = view.get("layout/iter");
         view.set("layout/iter", view.categories[next_cat].layout.iter);
         view.category(next_cat);
-        view.commit();
-            
+
         tinaviz.autoCentering();
 
         if (view.name()=="macro") {

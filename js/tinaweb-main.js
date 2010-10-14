@@ -188,7 +188,6 @@ $(document).ready(function(){
                     }
                     tinaviz.updateNodes("meso", macroCategory);
                     tinaviz.views.meso.set("layout/iter", 0);
-                    tinaviz.views.meso.commit();
                     tinaviz.autoCentering();
                 }
                 tinaviz.infodiv.update(selection.viewName, selection.data);

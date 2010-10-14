@@ -75,9 +75,6 @@ function Tinaviz(args) {
                 //alert("get current "+key);
                 return applet.getView().get(key);
             },
-            commit: function() {
-                applet.commit();
-            },
 
             category: function(x) {
                 if (x===undefined || x==null) {
@@ -120,9 +117,7 @@ function Tinaviz(args) {
             get: function(key) {
                 return applet.getView('macro').get(key);
             },
-            commit: function() {
-                applet.getView('macro').commit();
-            },
+
             category: function(x) {
                 if (x===undefined || x==null) {
                     return applet.getView('macro').getString("category/category");
@@ -165,10 +160,7 @@ function Tinaviz(args) {
             get: function(key) {
                 return applet.getView('meso').get(key);
             },
-            commit: function() {
-                applet.getView('meso').commit();
-            },
-            
+
             category: function(x) {
                 if (x===undefined || x==null) {
                     return applet.getView('meso').getString("category/category");
@@ -478,19 +470,6 @@ function Tinaviz(args) {
     this.setView = function(view) {
         applet.setView(view);
     }
-
-
-    /*
-         * Commits the applet's parameters
-         * Accept an optional callback to give some reaction to events
-         */
-    this.commit= function(view) {
-        if (view===undefined) {
-            applet.commit();
-        } else {
-            applet.commit(view);
-        }
-    }
     
     this.askForNeighbours = function(dataset, id, category) {
        // alert("askForNeighbours("+dataset+","+id+","+category+")");
@@ -628,16 +607,6 @@ function Tinaviz(args) {
         }
     }
 
-    this.commitCallback= function(view, cb) {
-        if (view==null) {
-            applet.commit();
-        }
-        if (cb==null) {
-            applet.commit(view);
-        } else {
-            this.enqueueCb(applet.commit(view),cb);
-        }
-    }
 
     /*
         * recenter the graph
@@ -681,53 +650,7 @@ function Tinaviz(args) {
     }
 
 
-    /************************
-         * Core Callback system
-         *
-         ************************/
 
-    /*
-         * Push a callback in the queue
-         */
-    this.enqueueCb=function(id,cb) {
-        cbsAwait[id] = cb;
-    }
-
-    /*
-         * Runs a callback
-         */
-    this.runCb=function(id) {
-        cbsRun[i]();
-        delete cbsRun[i];
-    }
-    /**
-     * Put a callback for the "await" list to the "run" list
-     *
-     */
-    this.activateCb=function(id) {
-        cbsRun[id] = cbsAwait[id];
-        delete cbsAwait[id];
-        return id;
-    }
-
-    /**
-     * How the callback system works:
-     *
-     * When the client call the "commit()" method, an update of the current view is
-     * scheduled by the applet, then the id of the new revision will be stored together
-     * with a callback address, by the javascript.
-     *
-     * As soon as the current view will reach this revision (or a greater one) the
-     * corresponding callback(s) will be called, then removed from the stack.
-     *
-     */
-    this.cbSync=function(id) {
-        for (i in cbsAwait) {
-            if (i<=id) {
-                setTimeout("tinaviz.runCb("+this.activateCb(i)+")",0);
-            }
-        }
-    }
 
     /** 
      * Callback for clicks on nodes
@@ -867,7 +790,6 @@ function Tinaviz(args) {
         this.views.meso.set("category/category", category);
         //this.set("macro", "category/category", category);
         this.setView("meso");
-        this.commit("meso");
         this.updateNodes("meso", category);
     }
 
