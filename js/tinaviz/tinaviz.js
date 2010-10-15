@@ -78,7 +78,6 @@ function Tinaviz(args) {
 
             category: function(x) {
                 if (x===undefined || x==null) {
-                    //alert(applet.getView().getString("category/category"));
                     return applet.getView().getString("category/category");
                 } else {
                     applet.getView().set("category/category", x);
