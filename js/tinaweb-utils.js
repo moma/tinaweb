@@ -72,7 +72,7 @@ function content2html(content){
 function  alphabeticListSort(listitems,textkey) {
     listitems.sort(function(a, b) {
         var compA = a[textkey].toUpperCase();
-        var compB = b[textkey].toUpperCase();
+        var compB = b[textkey].toUpperCase();        
         return (compA < compB) ? -1 : (compA >= compB) ? 1 : 0;
     })
     return listitems;
@@ -80,7 +80,9 @@ function  alphabeticListSort(listitems,textkey) {
 };
 function  numericListSort(listitems,textkey) {
     listitems.sort(function(a, b) {
-        return (a > b) ? -1 : (a <= b) ? 1 : 0;
+    var compA = parseFloat(a[textkey]);
+    var compB = parseFloat(b[textkey]);
+        return (compA > compB) ? -1 : (compA <= compB) ? 1 : 0;
     })
     return listitems;
 };

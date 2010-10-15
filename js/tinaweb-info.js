@@ -150,8 +150,8 @@ function InfoDiv(divid) {
  
             } 
             this.oppositeSelection = toBe; 
-            var sorted_tags = alphabeticListSort( Object.values( tempcloud ), 'label' );
-            //var sorted_tags = numericListSort( Object.values( tempcloud ), 'occurrences' ); Ne marche pas encore
+            //var sorted_tags = alphabeticListSort( Object.values( tempcloud ), 'label' );
+            var sorted_tags = numericListSort( Object.values( tempcloud ), 'degree' ); //Ne marche pas encore
 
 
             /* some display sizes const */ 
@@ -192,8 +192,11 @@ function InfoDiv(divid) {
             var const_doc_tag = 12; 
             var tooltip = ""; 
             /* displays tag cloud */ 
-            var tagcloud = $("<p></p>"); 
+            var tagcloud = $("<p></p>");
+            var nb_displayed_tag=0;
             for (var i = 0; i < sorted_tags.length; i++) { 
+                if (nb_displayed_tag<20){
+                nb_displayed_tag++;
                 var tag = sorted_tags[i]; 
                 var tagid = tag['id']; 
                 var tagspan = $("<span id='"+tagid+"'></span>"); 
@@ -227,7 +230,15 @@ function InfoDiv(divid) {
                 // appends the final tag to the cloud paragraph 
                 tagcloud.append(tagspan); 
                 if (i != sorted_tags.length-1 && sorted_tags.length > 1) 
-                    tagcloud.append(", &nbsp;"); 
+                    tagcloud.append(", &nbsp;");   
+                }else if(nb_displayed_tag==20){
+                    tagcloud.append("[...]");
+                    nb_displayed_tag++;
+
+                }else {
+                    break;
+                };
+
             } 
             // updates the main cloud  div 
             this.cloud.empty(); 
