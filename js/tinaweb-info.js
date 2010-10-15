@@ -151,6 +151,9 @@ function InfoDiv(divid) {
             } 
             this.oppositeSelection = toBe; 
             var sorted_tags = alphabeticListSort( Object.values( tempcloud ), 'label' );
+            //var sorted_tags = numericListSort( Object.values( tempcloud ), 'occurrences' ); Ne marche pas encore
+
+
             /* some display sizes const */ 
  
             /// Modif david 

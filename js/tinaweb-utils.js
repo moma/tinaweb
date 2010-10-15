@@ -73,12 +73,19 @@ function  alphabeticListSort(listitems,textkey) {
     listitems.sort(function(a, b) {
         var compA = a[textkey].toUpperCase();
         var compB = b[textkey].toUpperCase();
-        return (compA < compB) ? -1 : (compA > compB) ? 1 : 0;
+        return (compA < compB) ? -1 : (compA >= compB) ? 1 : 0;
     })
     return listitems;
 
 };
-    /*
+function  numericListSort(listitems,textkey) {
+    listitems.sort(function(a, b) {
+        return (a > b) ? -1 : (a <= b) ? 1 : 0;
+    })
+    return listitems;
+};
+
+/*
 * Generic sorting DOM lists
 */
 function alphabeticJquerySort(parentdiv, childrendiv, separator) {
