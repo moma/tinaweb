@@ -87,6 +87,12 @@ function  numericListSort(listitems,textkey) {
     return listitems;
 };
 
+
+function sortNumber(a,b)
+{
+return a - b;
+}
+
 /*
 * Generic sorting DOM lists
 */
@@ -182,6 +188,22 @@ var resize = function() {
     return size;
 };
 
+function find(element,array){
+    // Find the position of element in the array list,n return
+    var pos = null;
+    for (var i = 0; i < array.length; i++) {
+        if (array[i] == element) {
+            if (pos != null){
+                pos.push(i);
+            }else{
+                pos=new Array();
+                pos.push(i);
+            }
+
+        }
+    }
+    return pos;
+}
 function getUrlVars()
 {
     var vars = [], hash;
