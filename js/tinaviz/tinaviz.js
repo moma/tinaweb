@@ -460,7 +460,7 @@ function Tinaviz(args) {
      * Set a value to all views
      */
     this.set = function(key,value) {
-        applet.getSession().set(key,value);
+        applet.set(key,value);
     }
     
     /**
