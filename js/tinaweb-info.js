@@ -151,7 +151,7 @@ function InfoDiv(divid) {
             } 
             this.oppositeSelection = toBe; 
             //var sorted_tags = alphabeticListSort( Object.values( tempcloud ), 'label' );
-            var sorted_tags = numericListSort( Object.values( tempcloud ), 'degree' ); //Ne marche pas encore
+            var sorted_tags = numericListSort( Object.values( tempcloud ), 'degree' ); 
 
 
             /* some display sizes const */ 
@@ -188,7 +188,7 @@ function InfoDiv(divid) {
                     this.cloudSearch.append(tmp); 
                 }
             } 
-            var sizecoef = 15; 
+            var sizecoef = 15;
             var const_doc_tag = 12; 
             var tooltip = ""; 
             /* displays tag cloud */ 
@@ -217,13 +217,13 @@ function InfoDiv(divid) {
                         tagspan.css('font-size', const_doc_tag); 
                     else 
                         tagspan.css('font-size', 
-                            Math.floor( sizecoef*Math.log( 1.5 + tag['occurrences'] ) ) 
+                            Math.floor(sizecoef*(Math.min(20,Math.log(1.5 + tag['occurrences']))))
                             ); 
                     tooltip = "click on a label to switch to its meso view - size is proportional to edge weight"; 
                 } 
                 else { 
                     tagspan.css('font-size', 
-                        Math.floor( sizecoef*Math.log( 1.5 + tag['degree'] ) ) 
+                        Math.max(Math.floor(sizecoef*Math.min(2,Math.log( 1.5 + tag['degree'] ))),15)
                         ); 
                     tooltip = "click on a label to switch to its meso view - size is proportional to the degree"; 
                 } 
@@ -276,19 +276,16 @@ function InfoDiv(divid) {
                         var years=hash[0].split('-');
                         var year=years[1];
                         if (year !== undefined){
-                            console.log(year)
                             f=find(label,labelsArray);
                             if (f != null){
                                 year_list=yearsArray[f[0]];
                                 year_list.push(year);
-                                yearsArray[f[0]]=year_list;
-                                console.log("year array=" + yearsArray[f[0]]);
+                                yearsArray[f[0]]=year_list;                            
                             }else{
                                 year_list= new Array();
                                 year_list.push(year);
                                 yearsArray.push(year_list);
-                                labelsArray.push(label);
-                                console.log(labelsArray);
+                                labelsArray.push(label);                                
                             };
                             //label=label + " - " + year;
                         }else{ // if no period indication just fill the label array
@@ -319,15 +316,23 @@ function InfoDiv(divid) {
                     // displays contents only if it's a document 
                     var current_cat = tinaviz.get("category/category");  /// current category
                     if (current_cat !== undefined) { 
-                        //var contentinnerdivTitle=jQuery.trim(decHTMLifEnc( )); 
-                        // jQuery.text automaticcally html encode characters 
-                        contentinnerdiv.append( $("<b></b>").html( label ) );  
+                        // jQuery.text automaticcally html encode characters
+                        if (layout_name=="phyloforce"){
+                            //on récupère l'année
+                            var nodeId = jQuery.trim(decodeJSON(node.id));
+                            var hashes = nodeId.split('::'); // obsolet and new terms
+                            var hash = hashes[1].split('_');
+                            var period=" - " + hash[0];
+                        }else{
+                            period="";
+                        }
+                        contentinnerdiv.append( $("<b></b>").html( label + period) );
                         if ( node.content != null ) { 
                             contentinnerdiv.append( $("<p></p>").html( content ) );
                         }
                        
                     }
-                    contentinnerdiv.append( $("<p></p>").html( urlList(label,this.categories[current_cat]) ) );
+                    contentinnerdiv.append( $("<p></p>").html( urlList( htmlDecode(label),this.categories[current_cat]) ) );
                 }
                 contentinnerdiv.append("<br/");
             }
@@ -342,14 +347,12 @@ function InfoDiv(divid) {
                 for (i=0;i<num_labels;i=i+1){
                     currentLabel=labelsArray[i];
                     years=yearsArray[i].sort(sortNumber);
-                    console.log(currentLabel);
-                    console.log(years);
                     if (years.length==1){
                         labelinnerdiv.append($("<b></b>").html(currentLabel + " (" + years[0] + ")"));
                     }else if(years.length==2){
                         labelinnerdiv.append( $("<b></b>").html(currentLabel + " (" + years[0]+ "," + years[1] + ")"));
                     }else {
-                        labelinnerdiv.append( $("<b></b>").html(currentLabel + " (" + years[0]+ ", [...] " + years[years.length-1] + ")"));
+                        labelinnerdiv.append( $("<b></b>").html(currentLabel + " (" + years[0]+ ", ... " + years[years.length-1] + ")"));
                     }
                 }
                 if (labelsArray.length>numEltMax){ // display of max 5 labels
