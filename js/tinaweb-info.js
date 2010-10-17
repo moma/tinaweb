@@ -150,7 +150,10 @@ function InfoDiv(divid) {
  
             } 
             this.oppositeSelection = toBe; 
-            var sorted_tags = alphabeticListSort( Object.values( tempcloud ), 'label' ); 
+            //var sorted_tags = alphabeticListSort( Object.values( tempcloud ), 'label' );
+            var sorted_tags = numericListSort( Object.values( tempcloud ), 'degree' ); //Ne marche pas encore
+
+
             /* some display sizes const */ 
  
             /// Modif david 
@@ -189,8 +192,11 @@ function InfoDiv(divid) {
             var const_doc_tag = 12; 
             var tooltip = ""; 
             /* displays tag cloud */ 
-            var tagcloud = $("<p></p>"); 
+            var tagcloud = $("<p></p>");
+            var nb_displayed_tag=0;
             for (var i = 0; i < sorted_tags.length; i++) { 
+                if (nb_displayed_tag<20){
+                nb_displayed_tag++;
                 var tag = sorted_tags[i]; 
                 var tagid = tag['id']; 
                 var tagspan = $("<span id='"+tagid+"'></span>"); 
@@ -224,7 +230,15 @@ function InfoDiv(divid) {
                 // appends the final tag to the cloud paragraph 
                 tagcloud.append(tagspan); 
                 if (i != sorted_tags.length-1 && sorted_tags.length > 1) 
-                    tagcloud.append(", &nbsp;"); 
+                    tagcloud.append(", &nbsp;");   
+                }else if(nb_displayed_tag==20){
+                    tagcloud.append("[...]");
+                    nb_displayed_tag++;
+
+                }else {
+                    break;
+                };
+
             } 
             // updates the main cloud  div 
             this.cloud.empty(); 
@@ -256,11 +270,17 @@ function InfoDiv(divid) {
                         //alert(temp)
                         var content=this.getContent(node);
                         var label=this.getLabel(node);
+
+                    }
+                    
+                    if ( current_cat == 'Document' ){
+                        var temp=decodeJSON(node.content);                       
+                        var content=fillContent(node);                        
                     }
                     else{
                         var content = decHTMLifEnc(jQuery.trim(decodeJSON(node.content)));
                     }
-                    
+
                     console.dir(node);
 
                     // add node to selection cache 
@@ -282,153 +302,20 @@ function InfoDiv(divid) {
                     */
                                         
                      // displays contents only if it's a document 
- 
- 
-                    // MODIF DAVID 
+
                     if (current_cat !== undefined) { 
                         
                         //var contentinnerdivTitle=jQuery.trim(decHTMLifEnc( )); 
- 
                         // jQuery.text automaticcally html encode characters 
-                        contentinnerdiv.append( $("<b></b>").html( label ) );
-                        
-                        /*
-                        if (node.score != null) {
-                            
-                            var tmp = "";
-                            for (var i=0; i < 8;i++) {
-                                if (i==node.score) {
-                                    tmp += "<input type=\"radio\" class=\"star-rating {split:2}\" checked=\"checked\"/>\n"; 
-                                } else {
-                                    tmp += "<input type=\"radio\" class=\"star-rating {split:2}\"/>"; 
-                                }
-                            }
 
-                            contentinnerdiv.append( $("<span></span>").html( tmp ) );
-                        }
-                        */
-                        /* $('.star').rating({
-                                callback: function(value, link){
-                                    alert(value);
-                                }
-                            });*/
-                        
-                       
-
-
- 
+                        contentinnerdiv.append( $("<b></b>").html( label ) );  
                         if ( node.content != null ) { 
                             contentinnerdiv.append( $("<p></p>").html( content ) );
-                            
-                        /*       
-                            var attributeTable = $("<table></table>");
-                            attributeTable.empty();
 
-                    
-                            $.each(node, function(key, value) { 
-                                // ignore some keys
-                                if (key=="content"||key=="id"||key=="category"||key=="label") {
-                                    return;
-                                }
-                                
-                                var row = $("<tr></tr>");
-                                row.append("<td><b>"+key+"</b></td>");
-                                var td = $("<td valign=\"top\" width=\"180\"></td>");
-                                if (key=="score") {
-                                    var score = parseInt(value);
-                                    for (var i=0; i < 8;i++) {
-                                        if (i==score) {
-                                            td.append("<input name=\"projectrating\" type=\"radio\" class=\"star {half:true}\" checked=\"checked\"></input>"); 
-                                        } else {
-                                            td.append("<input name=\"projectrating\" type=\"radio\" class=\"star {half:true}\"></input>"); 
-                                        }
-
-                                    }
-                                }
-                                if (key=="keywords") {
-                                    td.append(""+value+"");
-                            
-                                } else {
-                                    td.append(""+value+"");
-                                }
-                                row.append(td);
-                                attributeTable.append( row );
-                            });
-                            
-                            contentinnerdiv.append( $("<p></p>").html( attributeTable ) );*/
-                        } 
-                        
-                        
-                        // TODO : move this code to a special "web request function" 
-                        var SearchQuery=label.replace(" ","+"); 
-                        //var WikiQuery=label.replace("+","_"); 
- 
-                        // TODO : use this.category var to identify categories from object configuration 
-                        var CurrentCategRealName = this.categories[current_cat];   /// nom affiché 
- 
-                        if (CurrentCategRealName == "projects"){ 
-                            // TODO : avoid injecting to much html : write constant in index.html, 
-                            //      manage hide/shows with this.update() and this.reset(), 
-                            //      then use $("#anchor_id").attr("href",SearchQuery) 
-                            contentinnerdiv.append( 
-                                $("<p></p>").html( 
-                                    '<a href="' 
-                                    + tinaviz.getPath() 
-                                    +'http://www.google.com/#hl=en&source=hp&q=%20' 
-                                    + SearchQuery.replace(",","OR")
-                                    + '%20" align=middle target=blank height=15 width=15> <img src="' 
-                                    + tinaviz.getPath() 
-                                    +'css/branding/google.png" height=15 width=15> </a><a href="http://en.wikipedia.org/wiki/' 
-                                    + SearchQuery 
-                                    + '" align=middle target=blank height=15 width=15> <img src="' 
-                                    + tinaviz.getPath() 
-                                    +'css/branding/wikipedia.png" height=15 width=15> </a><a href="http://www.flickr.com/search/?w=all&q=' 
-                                    + SearchQuery 
-                                    + '" align=middle target=blank height=15 width=15> <img src="' 
-                                    + tinaviz.getPath() 
-                                    +'css/branding/flickr.png" height=15 width=15> </a>' 
-                                    ) 
-                                ); 
-                        }else{
-                            contentinnerdiv.append("<p></p>");
                         }
-                        if ((CurrentCategRealName == "NGram")|(CurrentCategRealName == "keywords")|(CurrentCategRealName == "Keywords")|(CurrentCategRealName == "Terms")|(CurrentCategRealName == "Communities")) { 
-                            contentinnerdiv.append( 
-                                $("<p></p>").html( 
-                                    '<a href="http://www.google.com/#hl=en&source=hp&q=%20' 
-                                    + SearchQuery.replace(",","OR")
-                                    + '%20" align=middle target=blank height=15 width=15> <img src="' 
-                                    + tinaviz.getPath() 
-                                    +'css/branding/google.png" height=15 width=15> </a><a href="http://en.wikipedia.org/wiki/' 
-                                    + SearchQuery 
-                                    + '" align=middle target=blank height=15 width=15> <img src="' 
-                                    + tinaviz.getPath() 
-                                    +'css/branding/wikipedia.png" height=15 width=15> </a><a href="http://www.flickr.com/search/?w=all&q=' 
-                                    + SearchQuery 
-                                    + '" align=middle target=blank height=15 width=15> <img src="' 
-                                    + tinaviz.getPath() 
-                                    +'css/branding/flickr.png" height=15 width=15> </a>' 
-                                    ) 
-                                ); 
-                        } 
-                        if ((CurrentCategRealName == "Scholars")|(CurrentCategRealName == "People")|(CurrentCategRealName == "scholars")){ 
-                            contentinnerdiv.append( 
-                                $("<p></p>").html( 
-                                    '<a href="http://www.google.com/#hl=en&source=hp&q=%20' 
-                                    + SearchQuery 
-                                    + '%20" align=middle target=blank height=15 width=15> <img src="' 
-                                    + tinaviz.getPath()+'css/branding/google.png" height=15 width=15> </a>' 
-                                    +'<a href="http://scholar.google.com/scholar?q=%20' 
-                                    + SearchQuery
-                                    + '%20" align=middle target=blank height=15 width=15> <img src="' 
-                                    + tinaviz.getPath() 
-                                    +'css/branding/googleScholars.png" height=15 width=15> </a>' 
-                                    ) 
-                                ); 
-                        } 
-                    // FIN MODIF DAVID 
- 
-                    } 
+                       
+                    }
+                    contentinnerdiv.append( $("<p></p>").html( urlList(label,this.categories[current_cat]) ) );
                 }
                 contentinnerdiv.append("<br/>");
             } 
@@ -445,18 +332,9 @@ function InfoDiv(divid) {
             else { 
                 this.reset(); 
             } 
-        },
 
-        /* Methodes*/
-
-        getContent: function(node){
-            return decHTMLifEnc(jQuery.trim(decodeJSON(node.content)));
-        },
-
-        getLabel: function(node){
-            return jQuery.trim(decodeJSON(node.label));
-        },
-
+        }, 
+ 
         /* 
 * Main method recceiving a new node selection 
 * and dispatching infodiv updates 
@@ -529,29 +407,6 @@ function InfoDiv(divid) {
     } // end of return 
 }; 
  
-function InfoDivPhyloweb(divid) {
-    InfoDiv.call(this);
-    return{
-        getContent: function(node){
-            var nodeId = jQuery.trim(decodeJSON(node.id));
-            var hashes = nodeId.split('::'); // obsolet and new terms
-            var hash = hashes[1].split('_');
-            var year=hash[0];
-            label=label + " - " + year
-
-            return content2html(decodeJSON(node.content));
-        },
-        getLabel: function(node){
-            //on r�cup�re l'ann�e'
-            var nodeId = jQuery.trim(decodeJSON(node.id));
-            var hashes = nodeId.split('::'); // obsolet and new terms
-            var hash = hashes[1].split('_');
-            var year=hash[0];
-            label=label + " - " + year;
-            return label;
-        }
-    }
-};
 
 /* 
 * WHAT IS IT ????? 

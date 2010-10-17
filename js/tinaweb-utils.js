@@ -52,28 +52,22 @@ function content2html(content){
     titles[0]='<b>Lost: </b>';
     titles[1]='<b>New: </b>';
     var htmlstring="";
-    // %2b = ,
-    // %2c = +
-    //alert(content);
-    //console.log("content:"+content);
-    var hashes = content.split('_'); // obsolet and new terms
 
-    for(var i = 0; i < hashes.length; i++){    
-        
-        //alert("hashes i:"+[i]);
+    var hashes = content.split('_'); // obsolet and new terms
+    for(var i = 0; i < hashes.length; i++){            
         if (hashes[i]=='.') continue;
         htmlstring += titles[i];
         hash = hashes[i].split('-'); // list of terms
         for(var j = 0; j < hash.length; j++){
-            //alert("hash j:"+hash[j]);
-            //var node=tinaviz.getNodeAttributes(hash[j]);    
             var node=tinaviz.getNodeAttributes("macro",'N::'+hash[j]);
+
             // htmlstring.html(node['label']);
             //alert('label=' + node.label);
             htmlstring+= htmlDecode(node.label.replace(/\+/g," "))+", ";
             //htmlstring+= "<a href=# onClick='javascript:" + tinaviz.open({view:'macro',gexf:'toto.gexf'})" " node.label.replace("+", " ")+", ";
 
         //alert(decodeJSON(node['label']));
+
         }
         htmlstring += "<br/>";
     }
@@ -83,16 +77,42 @@ function content2html(content){
 /*
  * Tri alphabetique
  */
-
 function  alphabeticListSort(listitems,textkey) {
     listitems.sort(function(a, b) {
         var compA = a[textkey].toUpperCase();
-        var compB = b[textkey].toUpperCase();
-        return (compA < compB) ? -1 : (compA > compB) ? 1 : 0;
+        var compB = b[textkey].toUpperCase();        
+        return (compA < compB) ? -1 : (compA >= compB) ? 1 : 0;
     })
     return listitems;
 
 };
+function  numericListSort(listitems,textkey) {
+    listitems.sort(function(a, b) {
+    var compA = parseFloat(a[textkey]);
+    var compB = parseFloat(b[textkey]);
+        return (compA > compB) ? -1 : (compA <= compB) ? 1 : 0;
+    })
+    return listitems;
+};
+
+/*
+* Generic sorting DOM lists
+*/
+function alphabeticJquerySort(parentdiv, childrendiv, separator) {
+    var listitems = parentdiv.children(childrendiv).get();
+    listitems.sort(function(a, b) {
+        var compA = $(a).html().toUpperCase();
+        var compB = $(b).html().toUpperCase();
+        return (compA < compB) ? -1 : (compA > compB) ? 1 : 0;
+    })
+    $.each(listitems, function(idx, itm) {
+        if ( idx != 0 && idx != listitems.length )
+            parentdiv.append(separator);
+        parentdiv.append(itm);
+    });
+    return parentdiv;
+}
+
 
 /*
  * To html entities
@@ -302,3 +322,88 @@ function getUrlVars()
     };
 
 })(jQuery);
+
+/* --------------------------------- */
+/* Fonctions pour la div content */
+/* --------------------------------- */
+
+
+function urlList(label,CurrentCategRealName){
+    var SearchQuery=label.replace(" ","+");
+    //var WikiQuery=label.replace("+","_");
+    if (CurrentCategRealName == "projects"){
+        // TODO : avoid injecting to much html : write constant in index.html,
+        //      manage hide/shows with this.update() and this.reset(),
+        //      then use $("#anchor_id").attr("href",SearchQuery)
+        return $("<p></p>").html(
+            '<a href="'
+            + tinaviz.getPath()
+            +'http://www.google.com/#hl=en&source=hp&q=%20'
+            + SearchQuery.replace(",","OR")
+            + '%20" align=middle target=blank height=15 width=15> <img src="'
+            + tinaviz.getPath()
+            +'css/branding/google.png" height=15 width=15> </a><a href="http://en.wikipedia.org/wiki/'
+            + SearchQuery
+            + '" align=middle target=blank height=15 width=15> <img src="'
+            + tinaviz.getPath()
+            +'css/branding/wikipedia.png" height=15 width=15> </a><a href="http://www.flickr.com/search/?w=all&q='
+            + SearchQuery
+            + '" align=middle target=blank height=15 width=15> <img src="'
+            + tinaviz.getPath()
+            +'css/branding/flickr.png" height=15 width=15> </a>'
+            )
+            
+    }else if ((CurrentCategRealName == "NGrams")|(CurrentCategRealName == "NGram")|(CurrentCategRealName == "keywords")|(CurrentCategRealName == "Keywords")|(CurrentCategRealName == "Terms")|(CurrentCategRealName == "Communities")) {
+    return $("<p></p>").html(
+            '<a href="http://www.google.com/#hl=en&source=hp&q=%20'
+            + SearchQuery.replace(",","OR")
+            + '%20" align=middle target=blank height=15 width=15> <img src="'
+            + tinaviz.getPath()
+            +'css/branding/google.png" height=15 width=15> </a><a href="http://en.wikipedia.org/wiki/'
+            + SearchQuery
+            + '" align=middle target=blank height=15 width=15> <img src="'
+            + tinaviz.getPath()
+            +'css/branding/wikipedia.png" height=15 width=15> </a><a href="http://www.flickr.com/search/?w=all&q='
+            + SearchQuery
+            + '" align=middle target=blank height=15 width=15> <img src="'
+            + tinaviz.getPath()
+            +'css/branding/flickr.png" height=15 width=15> </a>'
+            )
+    }
+    else if ((CurrentCategRealName == "Scholars")|(CurrentCategRealName == "People")|(CurrentCategRealName == "scholars")){
+        return $("<p></p>").html(
+            '<a href="http://www.google.com/#hl=en&source=hp&q=%20'
+            + SearchQuery
+            + '%20" align=middle target=blank height=15 width=15> <img src="'
+            + tinaviz.getPath()+'css/branding/google.png" height=15 width=15> </a>'
+            +'<a href="http://scholar.google.com/scholar?q=%20'
+            + SearchQuery
+            + '%20" align=middle target=blank height=15 width=15> <img src="'
+            + tinaviz.getPath()
+            +'css/branding/googleScholars.png" height=15 width=15> </a>'
+            )
+    }else {
+        return $("<p></p>");
+    }
+}
+
+
+/* --------------------------------- */
+/* Fonctions tinaforce et phyloforce */
+/* --------------------------------- */
+
+function fillContent(node){
+    // donne le contenu de la div content
+    var layout_name=tinaviz.get("layout/algorithm");
+    if (layout_name=="phyloforce"){
+        //on r�cup�re l'ann�e
+        var nodeId = jQuery.trim(decodeJSON(node.id));
+        var hashes = nodeId.split('::'); // obsolet and new terms
+        var hash = hashes[1].split('_');
+        var year=hash[0];
+        var content = content2html(decodeJSON(node.content));
+    }else{
+        var content = decHTMLifEnc(jQuery.trim(decodeJSON(node.content)));
+    }
+    return content;
+}
