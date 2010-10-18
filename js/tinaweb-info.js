@@ -317,7 +317,7 @@ function InfoDiv(divid) {
                     // add node to selection cache 
                     this.selection[id] = lastselection[id]; 
                     var tmp = "<b>"+label+"</b>";
-                    labelinnerdiv.append( $("<span></span>").html(tmp) ); 
+                    //labelinnerdiv.append( $("<span></span>").html(tmp) );
                     
                     this.selection[id] = lastselection[id];                   
                     // displays contents only if it's a document 
