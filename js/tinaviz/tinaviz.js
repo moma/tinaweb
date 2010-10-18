@@ -552,7 +552,7 @@ function Tinaviz(args) {
          */
     this.selectFromId = function(id, callback) {
         if (id===undefined) return;
-        applet.selectFromId(id,callback);
+        applet.selectFromUUID(id,callback);
     }
 
     this.resetLayoutCounter= function(view) {

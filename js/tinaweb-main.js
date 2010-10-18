@@ -58,21 +58,6 @@ $(document).ready(function(){
 
         tinaviz.setView(prefs.view);
 
-        var layout_name=prefs.layout;
-        //if (layout_name=="phyloforce"){
-        //    var infodiv =  new InfoDivPhyloweb('infodiv');
-        //}
-        //else{
-        var infodiv = new InfoDiv('infodiv');
-        //}
-
-        tinaviz.infodiv = infodiv;
-        tinaviz.infodiv.reset();
-
-        $("#infodiv").accordion({
-            fillSpace: true
-        });
-
         var session = tinaviz.session();
         var macro = tinaviz.views.macro;
         var meso = tinaviz.views.meso;
@@ -106,12 +91,8 @@ $(document).ready(function(){
         meso.filter("EdgeWeightRangeHack", "edgeWeight");
         meso.filter("Output", "output");
                
-        if (tinaviz.get("layout/algorithm")=="phyloforce"){
-            tinaviz.infodiv = InfoDivPhyloweb('infodiv');
-        }
-        else{
-            tinaviz.infodiv = InfoDiv('infodiv');
-        }
+        tinaviz.infodiv = InfoDiv('infodiv');
+        
         tinaviz.infodiv.reset();
         
         $("#infodiv").accordion({
