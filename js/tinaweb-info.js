@@ -151,7 +151,7 @@ function InfoDiv(divid) {
             } 
             this.oppositeSelection = toBe; 
             //var sorted_tags = alphabeticListSort( Object.values( tempcloud ), 'label' );
-            var sorted_tags = numericListSort( Object.values( tempcloud ), 'degree' ); //Ne marche pas encore
+            var sorted_tags = numericListSort( Object.values( tempcloud ), 'degree' ); 
 
 
             /* some display sizes const */ 
@@ -188,7 +188,7 @@ function InfoDiv(divid) {
                     this.cloudSearch.append(tmp); 
                 }
             } 
-            var sizecoef = 15; 
+            var sizecoef = 15;
             var const_doc_tag = 12; 
             var tooltip = ""; 
             /* displays tag cloud */ 
@@ -217,13 +217,13 @@ function InfoDiv(divid) {
                         tagspan.css('font-size', const_doc_tag); 
                     else 
                         tagspan.css('font-size', 
-                            Math.floor( sizecoef*Math.log( 1.5 + tag['occurrences'] ) ) 
+                            Math.floor(sizecoef*(Math.min(20,Math.log(1.5 + tag['occurrences']))))
                             ); 
                     tooltip = "click on a label to switch to its meso view - size is proportional to edge weight"; 
                 } 
                 else { 
                     tagspan.css('font-size', 
-                        Math.floor( sizecoef*Math.log( 1.5 + tag['degree'] ) ) 
+                        Math.max(Math.floor(sizecoef*Math.min(2,Math.log( 1.5 + tag['degree'] ))),15)
                         ); 
                     tooltip = "click on a label to switch to its meso view - size is proportional to the degree"; 
                 } 
@@ -253,26 +253,57 @@ function InfoDiv(divid) {
 * updates the label and content DOM divs 
 */ 
         updateInfo: function(lastselection) { 
-            var layout_name=tinaviz.get("layout/algorithm");
-
-            var current_cat = tinaviz.views.current.category();
-
+           var layout_name=tinaviz.get("layout/algorithm");
+            var decHTMLifEnc = function(str){ 
+                return str.replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>'); 
+            };
+            var current_cat = tinaviz.get("category/category"); 
             var labelinnerdiv = $("<div></div>"); 
-            var contentinnerdiv = $("<div></div>"); 
-
-            for(var id in lastselection) { 
+            var contentinnerdiv = $("<div></div>");
+            var number_of_label=0;
+            var labelsArray=new Array();
+            var yearsArray=new Array();
+            for(var id in lastselection) {
                 var node = lastselection[id]; 
                 // ERROR : MISSING CATEGORY in the node list returned from Tinaviz !!!! 
                 if (node.category == current_cat)  { 
-                    // prepares label and content to be displayed 
-                    if ( current_cat == 'Document' ){
-                        var temp=decodeJSON(node.content);
-                        //alert(temp)
-                        var content=this.getContent(node);
-                        var label=this.getLabel(node);
+                    var label = jQuery.trim(decodeJSON(node.label));
+                    // prepares label and content to be displayed
+                    var nodeId = jQuery.trim(decodeJSON(node.id));
+                    var hashes = nodeId.split('::'); // obsolet and new terms
+                    if (hashes[1] !== undefined){
+                        var hash = hashes[1].split('_');
+                        var years=hash[0].split('-');
+                        var year=years[1];
+                        if (year !== undefined){
+                            f=find(label,labelsArray);
+                            if (f != null){
+                                year_list=yearsArray[f[0]];
+                                year_list.push(year);
+                                yearsArray[f[0]]=year_list;                            
+                            }else{
+                                year_list= new Array();
+                                year_list.push(year);
+                                yearsArray.push(year_list);
+                                labelsArray.push(label);                                
+                            };
+                            //label=label + " - " + year;
+                        }else{ // if no period indication just fill the label array
+                            f=find(label,labelsArray);
+                            if (f == null){
+                                labelsArray.push(label);
+                            }
+                        };
+                    };
 
+                    number_of_label++;//preaffichage
+                    if (number_of_label<5){
+                    labelinnerdiv.append( $("<b></b>").html(label) );
+                    }else{
+                        if (number_of_label==5){
+                           labelinnerdiv.append( $("<b></b>").html("[...]") );
+                        }
                     }
-                    
                     if ( current_cat == 'Document' ){
                         var temp=decodeJSON(node.content);                       
                         var content=fillContent(node);                        
@@ -286,39 +317,57 @@ function InfoDiv(divid) {
                     // add node to selection cache 
                     this.selection[id] = lastselection[id]; 
                     var tmp = "<b>"+label+"</b>";
-                    labelinnerdiv.append( $("<span></span>").html(tmp) ); 
+                    //labelinnerdiv.append( $("<span></span>").html(tmp) );
                     
-                    var rating = $('<span id="rating-'+id+'>not set</span>');
-                    rating.ratings(5).bind('ratingchanged', function(event, data) {
-                        $.text(data.rating);
-                      });
-                    //tmp += '<span id="rating-'+id+'>not set</span>';
-
-
-                    /*
-                    $('#rating-'+id).ratings(5).bind('ratingchanged', function(event, data) {
-                        $('#rating-'+id).text(data.rating);
-                      });
-                    */
-                                        
-                     // displays contents only if it's a document 
-
+                    this.selection[id] = lastselection[id];                   
+                    // displays contents only if it's a document 
+                    var current_cat = tinaviz.get("category/category");  /// current category
                     if (current_cat !== undefined) { 
-                        
-                        //var contentinnerdivTitle=jQuery.trim(decHTMLifEnc( )); 
-                        // jQuery.text automaticcally html encode characters 
-
-                        contentinnerdiv.append( $("<b></b>").html( label ) );  
+                        // jQuery.text automaticcally html encode characters
+                        if (layout_name=="phyloforce"){
+                            //on récupère l'année
+                            var nodeId = jQuery.trim(decodeJSON(node.id));
+                            var hashes = nodeId.split('::'); // obsolet and new terms
+                            var hash = hashes[1].split('_');
+                            var period=" - " + hash[0];
+                        }else{
+                            period="";
+                        }
+                        contentinnerdiv.append( $("<b></b>").html( label + period) );
                         if ( node.content != null ) { 
                             contentinnerdiv.append( $("<p></p>").html( content ) );
 
                         }
                        
                     }
-                    contentinnerdiv.append( $("<p></p>").html( urlList(label,this.categories[current_cat]) ) );
+                    contentinnerdiv.append( $("<p></p>").html( urlList( htmlDecode(label),this.categories[current_cat]) ) );
                 }
-                contentinnerdiv.append("<br/>");
-            } 
+                contentinnerdiv.append("<br/");
+            }
+            if ( yearsArray[0] != undefined){ // we have phylogenetic data
+                labelinnerdiv.empty();
+                var numEltMax=3; // highest number of labels display in phylo mode
+                num_labels=labelsArray.length;
+                if (num_labels>numEltMax){ // display of max 5 labels
+                    num_labels=numEltMax;
+                }
+                var labels="<b></b>";
+                for (i=0;i<num_labels;i=i+1){
+                    currentLabel=labelsArray[i];
+                    years=yearsArray[i].sort(sortNumber);
+                    if (years.length==1){
+                        labelinnerdiv.append($("<b></b>").html(currentLabel + " (" + years[0] + ")"));
+                    }else if(years.length==2){
+                        labelinnerdiv.append( $("<b></b>").html(currentLabel + " (" + years[0]+ "," + years[1] + ")"));
+                    }else {
+                        labelinnerdiv.append( $("<b></b>").html(currentLabel + " (" + years[0]+ ", ... " + years[years.length-1] + ")"));
+                    }
+                }
+                if (labelsArray.length>numEltMax){ // display of max 5 labels
+                    labelinnerdiv.append( $("<b></b>").html("[...]"));
+                }
+            }
+
             if (Object.size( this.selection ) != 0) { 
                 this.label.empty(); 
                 this.unselect_button.show(); 

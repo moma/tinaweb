@@ -26,18 +26,13 @@
 
         <!-- JQUERY -->
         <script type="text/javascript" src="js/jquery/jquery-1.4.2.min.js" language="javascript"></script>
-        <script type="text/javascript" src="js/jquery/jquery.ba-dotimeout.min.js" language="javascript"></script>
-
-        <!-- FEEGIX -->
-        <script type="text/javascript" src="js/fleegix/hash.js" language="javascript"></script>
 
         <!-- JQUERY UI -->
         <script type="text/javascript" src="js/jquery-ui/jquery-ui-1.8.min.js" language="javascript"></script>
-        <script src='js/rating/jquery.ratings.js' type="text/javascript" language="javascript"></script> 
-        <link href='js/rating/jquery.ratings.16.css' type="text/css" rel="stylesheet"/> 
+        <script src='js/rating/jquery.ratings.js' type="text/javascript" language="javascript"></script>
+        <link href='js/rating/jquery.ratings.16.css' type="text/css" rel="stylesheet"/>
 
-        <!-- UNCOMMENT THE FOLLOWING LINE TO ENABLE DEBUG -->
-        <script type="text/javascript" src="js/firebug-lite/firebug-lite-beta.js" language="javascript"></script>
+        <script type="text/javascript" src="js/jquery/jquery.ba-dotimeout.min.js" language="javascript"></script>
 
         <!-- TINAVIZ -->
         <script type="text/javascript" src="js/tinaviz/tinaviz.js" language="javascript"></script>
@@ -54,6 +49,8 @@
         <!-- WE USE TINAWEB INFO PANEL -->
         <script type="text/javascript" src="js/tinaweb-main.js" language="javascript"></script>
 
+        <!-- UNCOMMENT THE FOLLOWING LINE TO ENABLE DEBUG -->
+        <!--<script type="text/javascript" src="js/firebug-lite/firebug-lite-beta.js" language="javascript"></script>-->
 
         <!-- JQUERY UI CSS -->
         <link type="text/css" rel="stylesheet" href="css/eggplant/jquery-ui-1.8.1.custom.css"/>
@@ -95,7 +92,7 @@
                                 <div id="sliderNodeWeight"></div>
                             </div>
                         </div>
-
+                        
                         <button id="toggle-autoCentering" class="fg-button toolbar-right">center</button>
                         <form id="search" action="#" class="toolbar-right">
                             <input id="search_input" type="text" value="" />
@@ -123,7 +120,7 @@
                                         <!-- Modif David inversion des accordéon + ajout-->
                                         <div id="node_label" class="ui-widget-header ui-corner-all"></div>
                                         <div id="node_neighbourhood" class="ui-widget-content ui-corner-all"></div>
-                                        <div id="node_contents" class="ui-widget-content ui-corner-all"></div>
+                                        <div id="node_contents" class="ui-widget-content ui-corner-all">  </div>
                                     </div>  <!-- /accordion 1 -->
                                     <h3><a href="#">Global Web Searches</a></h3>
                                     <div>
@@ -147,52 +144,7 @@
                                                 </tbody>
                                             </table>
                                         </div>
-                                    </div> <!-- /accordion 3 -->
-                                    <h3><a href="#">Visualization</a></h3>
-                                    <div>
-                                        <div id="node_visualization" class="ui-widget-content ui-corner-all">
-
-                                            <form>
-                                                <table id="mappingTable">
-                                                    <tr>
-                                                        <th>Node Color</th>
-                                                        <td><select id="nodeColorSelector">
-                                                                <option>category</option>
-                                                                <option>rate</option>
-                                                                <option>co-occurrences</option>
-                                                                <option> </option>
-                                                            </select>
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <th>Node Radius</th>
-                                                        <td><select id="nodeRadiusSelector">
-                                                                <option>radius</option>
-                                                                <option>weight</option>
-                                                                <option>co-occurrences</option>
-                                                                <option>rate</option>
-                                                            </select>
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <th>Node Weight</th>
-                                                        <td><select id="nodeWeightSelector">
-                                                                <option>weight</option>
-                                                            </select>
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <th>Node Shape</th>
-                                                        <td><select id="nodeShapeSelector">                                                                
-                                                                <option>category</option>
-                                                            </select>
-                                                        </td>
-                                                    </tr>
-                                                </table>
-                                            </form>
-                                        </div>
-
-                                    </div> <!-- /accordion 4 -->
+                                    </div> <!-- accordion 3 -->
                                 </div><!-- /infodiv  -->
 
                             </div><!-- / INFODIVPARENT -->

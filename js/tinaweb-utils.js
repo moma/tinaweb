@@ -95,6 +95,12 @@ function  numericListSort(listitems,textkey) {
     return listitems;
 };
 
+
+function sortNumber(a,b)
+{
+return a - b;
+}
+
 /*
 * Generic sorting DOM lists
 */
@@ -190,6 +196,22 @@ var resize = function() {
     return size;
 };
 
+function find(element,array){
+    // Find the position of element in the array list,n return
+    var pos = null;
+    for (var i = 0; i < array.length; i++) {
+        if (array[i] == element) {
+            if (pos != null){
+                pos.push(i);
+            }else{
+                pos=new Array();
+                pos.push(i);
+            }
+
+        }
+    }
+    return pos;
+}
 function getUrlVars()
 {
     var vars = [], hash;
@@ -329,7 +351,7 @@ function getUrlVars()
 
 
 function urlList(label,CurrentCategRealName){
-    var SearchQuery=label.replace(" ","+");
+    var SearchQuery=label.replace(/ /gi ,"+");
     //var WikiQuery=label.replace("+","_");
     if (CurrentCategRealName == "projects"){
         // TODO : avoid injecting to much html : write constant in index.html,
@@ -343,7 +365,7 @@ function urlList(label,CurrentCategRealName){
             + '%20" align=middle target=blank height=15 width=15> <img src="'
             + tinaviz.getPath()
             +'css/branding/google.png" height=15 width=15> </a><a href="http://en.wikipedia.org/wiki/'
-            + SearchQuery
+            + label.replace(/ /gi ,"_")
             + '" align=middle target=blank height=15 width=15> <img src="'
             + tinaviz.getPath()
             +'css/branding/wikipedia.png" height=15 width=15> </a><a href="http://www.flickr.com/search/?w=all&q='
@@ -353,14 +375,14 @@ function urlList(label,CurrentCategRealName){
             +'css/branding/flickr.png" height=15 width=15> </a>'
             )
             
-    }else if ((CurrentCategRealName == "NGrams")|(CurrentCategRealName == "NGram")|(CurrentCategRealName == "keywords")|(CurrentCategRealName == "Keywords")|(CurrentCategRealName == "Terms")|(CurrentCategRealName == "Communities")) {
+    }else if ((CurrentCategRealName == "NGrams")|(CurrentCategRealName == "NGram")|(CurrentCategRealName == "keywords")|(CurrentCategRealName == "Keywords")|(CurrentCategRealName == "Terms")|(CurrentCategRealName == "Communities")|(CurrentCategRealName == "Documents")) {
     return $("<p></p>").html(
             '<a href="http://www.google.com/#hl=en&source=hp&q=%20'
             + SearchQuery.replace(",","OR")
             + '%20" align=middle target=blank height=15 width=15> <img src="'
             + tinaviz.getPath()
             +'css/branding/google.png" height=15 width=15> </a><a href="http://en.wikipedia.org/wiki/'
-            + SearchQuery
+            + label.replace(/ /gi ,"_")
             + '" align=middle target=blank height=15 width=15> <img src="'
             + tinaviz.getPath()
             +'css/branding/wikipedia.png" height=15 width=15> </a><a href="http://www.flickr.com/search/?w=all&q='
