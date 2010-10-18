@@ -304,13 +304,11 @@ toolbar.init = function() {
         // update the node list
         tinaviz.updateNodes(view.name(), next_cat);
 
-        // update the algorithm
-        view.categories[cat].layout.iter = view.get("layout/iter");
-        view.set("layout/iter", view.categories[next_cat].layout.iter);
         view.category(next_cat);
-
+        
         tinaviz.autoCentering();
-
+             
+         
         if (view.name()=="macro") {
             // empty the selection, and ask the applet to select opposite nodes
             var i = 0;
@@ -320,8 +318,13 @@ toolbar.init = function() {
                 tinaviz.selectFromId(tinaviz.infodiv.oppositeSelection[nbid], cb);
             }
         }
-        tinaviz.infodiv.display_current_category();
+    
+        // update the algorithm
+        view.categories[cat].layout.iter = view.get("layout/iter");
+        view.set("layout/iter", view.categories[next_cat].layout.iter);
         
+        tinaviz.infodiv.display_current_category();
+
     });
 
     toolbar.checkSearchForm();
