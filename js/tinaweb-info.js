@@ -274,7 +274,9 @@ function InfoDiv(divid) {
                     if (hashes[1] !== undefined){
                         var hash = hashes[1].split('_');
                         var years=hash[0].split('-');
-                        var year=years[1];
+                        var year=years[1];// année de fin
+                        var year0=years[0]; // année de début
+
                         if (year !== undefined){
                             f=find(label,labelsArray);
                             if (f != null){
@@ -341,6 +343,10 @@ function InfoDiv(divid) {
                        
                     }
                     contentinnerdiv.append( $("<p></p>").html( urlList( htmlDecode(label),this.categories[current_cat]) ) );
+
+                    if (year !== undefined){
+                        contentinnerdiv.append( $("<p></p>").html( linkToMap(htmlDecode(label),id,year0,year)));
+                    }
                 }
                 contentinnerdiv.append("<br/");
             }

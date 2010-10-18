@@ -348,7 +348,11 @@ function getUrlVars()
 /* --------------------------------- */
 /* Fonctions pour la div content */
 /* --------------------------------- */
-
+function linkToMap(label,id,year0,year1){
+return $("<p></p>").html(
+"<a href='#' onClick='javascript:tinaviz.open({view:'macro',gexf:'" + "map" + year0 + year1 +
+'map' +".gexf,id=" + id +  "> View this node in the map</a>")
+}
 
 function urlList(label,CurrentCategRealName){
     var SearchQuery=label.replace(/ /gi ,"+");
