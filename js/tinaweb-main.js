@@ -106,12 +106,8 @@ $(document).ready(function(){
         meso.filter("EdgeWeightRangeHack", "edgeWeight");
         meso.filter("Output", "output");
                
-        if (tinaviz.get("layout/algorithm")=="phyloforce"){
-            tinaviz.infodiv = InfoDivPhyloweb('infodiv');
-        }
-        else{
-            tinaviz.infodiv = InfoDiv('infodiv');
-        }
+        tinaviz.infodiv = InfoDiv('infodiv');
+        
         tinaviz.infodiv.reset();
         
         $("#infodiv").accordion({
