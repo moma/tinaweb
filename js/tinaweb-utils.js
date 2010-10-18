@@ -52,6 +52,7 @@ function content2html(content){
     titles[0]='<b>Lost: </b>';
     titles[1]='<b>New: </b>';
     var htmlstring="";
+
     var hashes = content.split('_'); // obsolet and new terms
     for(var i = 0; i < hashes.length; i++){            
         if (hashes[i]=='.') continue;
@@ -59,7 +60,14 @@ function content2html(content){
         hash = hashes[i].split('-'); // list of terms
         for(var j = 0; j < hash.length; j++){
             var node=tinaviz.getNodeAttributes("macro",'N::'+hash[j]);
-            htmlstring+= htmlDecode(node.label.replace(/\+/g," "))+", ";            
+
+            // htmlstring.html(node['label']);
+            //alert('label=' + node.label);
+            htmlstring+= htmlDecode(node.label.replace(/\+/g," "))+", ";
+            //htmlstring+= "<a href=# onClick='javascript:" + tinaviz.open({view:'macro',gexf:'toto.gexf'})" " node.label.replace("+", " ")+", ";
+
+        //alert(decodeJSON(node['label']));
+
         }
         htmlstring += "<br/>";
     }
@@ -410,7 +418,7 @@ function fillContent(node){
     // donne le contenu de la div content
     var layout_name=tinaviz.get("layout/algorithm");
     if (layout_name=="phyloforce"){
-        //on récupère l'année
+        //on rï¿½cupï¿½re l'annï¿½e
         var nodeId = jQuery.trim(decodeJSON(node.id));
         var hashes = nodeId.split('::'); // obsolet and new terms
         var hash = hashes[1].split('_');

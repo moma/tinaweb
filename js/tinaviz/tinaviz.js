@@ -24,49 +24,106 @@ function Tinaviz(args) {
     for (x in args) {
         opts[x] = args[x]
     }
-
-
-    // todo: replace by 'view'
-    this.current = {
-
-        name: 'macro',
-
-        // TODO put current viz manipulation methods here
-        set: function(key,value) {
-            return applet.view().set(key,value)
-        },
-        get: function(key) {
-            return applet.view().get(key)
-        },
-        commitProperties: function() {
-            return applet.view().commitProperties()
-        },
-
-        category: "NGram",
-
-        filters: [
-        {},
-        {}
-        // { filter 1.. }
-
-        ]
+    /**
+     * Called by the applet
+     */
+    this.logNormal = function(msg) {
+        try {
+            console.log(msg);
+        }
+        catch (e){
+            return;
+        }
+    };
+    
+    /**
+     * Called by the applet
+     */
+    this.logDebug = function(msg) {
+        try {
+            console.log(msg);
+        }
+        catch (e){
+            return;
+        }
+    };
+    
+    /**
+     * Called by the applet
+     */
+    this.logError = function(msg) {
+        try {
+            console.error(msg);
+        }
+        catch (e){
+            alert(msg);
+            return;
+        }
     };
 
     this.views = {
+        current: {
+            name: function() { 
+                return applet.getView().getName();
+            },
+
+            // TODO put current viz manipulation methods here
+            set: function(key,value) {
+                return applet.getView().set(key,value);
+            },
+            get: function(key) {
+                //alert("get current "+key);
+                return applet.getView().get(key);
+            },
+
+            category: function(x) {
+                if (x===undefined || x==null) {
+                    return applet.getView().getString("category/category");
+                } else {
+                    applet.getView().set("category/category", x);
+                }
+            },
+            filter: function(x,y) {
+                applet.getView().filter(x,y);
+            },
+            
+            categories: {
+                Document: {
+                    layout: {
+                        iter: 0
+                    // TODO
+                    // put other layout parameters here
+                    }
+                },
+                NGram: {
+                    layout: {
+                        iter: 0
+                    // TODO
+                    // put other layout parameters here
+                    }
+                }
+            }
+        },
         macro: {
-            name: 'macro',
+            name: function() { 
+                return 'macro';
+            },
 
             // setters/getters used for communication with the applet
             set: function(key,value) {
-                return applet.view('macro').set(key,value)
+                applet.getView('macro').set(key,value);
             },
             get: function(key) {
-                return applet.view('macro').get(key)
-            },
-            commitProperties: function() {
-                return applet.view('macro').commitProperties()
+                return applet.getView('macro').get(key);
             },
 
+            category: function(x) {
+                if (x===undefined || x==null) {
+                    return applet.getView('macro').getString("category/category");
+                } else {
+                    applet.getView('macro').set("category/category", x);
+                }
+            },
             selection: new Array(),
 
             categories: {
@@ -85,22 +142,31 @@ function Tinaviz(args) {
                     }
                 }
             },
-            filters: []
+            
+            filter: function(x,y) {
+                applet.getView('macro').filter(x,y);
+            }
         },
         meso: {
-            name: 'meso',
+            name: function() { 
+                return 'meso';
+            },
 
             // setters/getters used for communication with the applet
             set: function(key,value) {
-                return applet.view('meso').set(key,value)
+                applet.getView('meso').set(key,value);
             },
             get: function(key) {
-                return applet.view('meso').get(key)
-            },
-            commitProperties: function() {
-                return applet.view('meso').commitProperties()
+                return applet.getView('meso').get(key);
             },
 
+            category: function(x) {
+                if (x===undefined || x==null) {
+                    return applet.getView('meso').getString("category/category");
+                } else {
+                    applet.getView('meso').set("category/category", x);
+                }
+            },
 
             selection: new Array(),
 
@@ -119,8 +185,10 @@ function Tinaviz(args) {
                     // put other layout parameters here
                     }
                 }
-            },
-            filters: []
+            }, 
+            filter: function(x,y) {
+                applet.getView('meso').filter(x,y);
+            }
         }
     };
 
@@ -210,15 +278,13 @@ function Tinaviz(args) {
             }
         }
 
-        var view = this.view(opts.view);
-        
         if (opts.clear) {
-            this.current.set("layout/iter", 0);
+            this.views.current.set("layout/iter", 0);
         //applet.clear();
         }
         
         if (opts.layout) {
-            this.current.set("layout/name", opts.layout)
+            this.views.current.set("layout/name", opts.layout)
         }
         callbackImported = function(msg){
             if (msg=="success") {
@@ -233,7 +299,6 @@ function Tinaviz(args) {
         }
         
         callbackBeforeImport = opts.before;
-
         callbackBeforeImport();
         
         //alert("loading "+args.url);
@@ -243,37 +308,44 @@ function Tinaviz(args) {
             dataType: "text", // if we use 'text', we need to disable cache
             cache: "false", //
             error: function() {
+            /*
                 try {
                     if (opts.url.search("://") != -1) {
-                        view.openURI(opts.url, opts.clear);
+                        tinaviz.logNormal("applet.getView().openURI("+opts.url+", "+opts.clear+");");
+                        applet.getView().openURI(opts.url, opts.clear);
                     } else {
                         var sPath = document.location.href;
-                        view.openURI(sPath.substring(0, sPath.lastIndexOf('/') + 1) + opts.url, opts.clear);
+                        tinaviz.logNormal("applet.getView().openURI("+(sPath.substring(0, sPath.lastIndexOf('/') + 1) + opts.url)+", "+opts.clear+");");
+                        applet.getView().openURI(sPath.substring(0, sPath.lastIndexOf('/') + 1) + opts.url, opts.clear);
                     }
                 } catch (e) {
                     alert("Couldn't import graph: "+e);
                     opts.error(e);
                 }
+                */
             },
             success: function(gexf) {
                 var f = false;
                 // alert("success, calling updateFromString");
                 try {
-                    view.openString(gexf, opts.clear);
+                    tinaviz.logNormal("view.openString(.., "+opts.clear+")");
+                    applet.getView().openString(gexf, opts.clear);
                 } catch (e) {
-                    //console.log("Couldn't load graph using openString, trying with openURI..");
+                    tinaviz.logNormal("Couldn't load graph using openString, trying with openURI..");
                     f = true;
                 }
                 if (f) {
                     try {
                         if (opts.url.search("://") != -1) {
-                            view.openURI(opts.url, opts.clear);
+                            tinaviz.logNormal("applet.getView().openURI("+opts.url+", "+opts.clear+");");
+                            applet.getView().openURI(opts.url, opts.clear);
                         } else {
                             var sPath = document.location.href;
-                            view.openURI(sPath.substring(0, sPath.lastIndexOf('/') + 1) + opts.url, opts.clear);
+                            tinaviz.logNormal("applet.getView().openURI("+(sPath.substring(0, sPath.lastIndexOf('/') + 1) + opts.url)+", "+opts.clear+");");
+                            applet.getView().openURI(sPath.substring(0, sPath.lastIndexOf('/') + 1) + opts.url, opts.clear);
                         }
                     } catch (e) {
-                        alert("Couldn't import graph: "+e);
+                        tinaviz.logError("Couldn't import graph: "+e);
                         opts.error(e);
                     }
                 }
@@ -376,57 +448,101 @@ function Tinaviz(args) {
         return appletTag;
     }
 
-    /**
-     * Core method communicating with the applet
-     */
-    this.dispatchProperty= function(key,value) {
-        if (applet == null) return;
-        for (view in this.views) {
-            this.views[view].set(key, value);
-        }
-    }
-
-    /**
-     * Core method communicating with the applet
-     */
-    this.set= function(key,value) {
-        return applet.set(key,value);
-    }
 
     /**
      * Core method communicating with the applet
      */
     this.get = function(key) {
-        return applet.get(key);
+        return applet.getView().get(key);
     }
 
+    /**
+     * Set a value to all views
+     */
+    this.set = function(key,value) {
+        applet.set(key,value);
+    }
+    
     /**
      * Commands switching between view levels
      */
     this.setView = function(view) {
-        if (applet == null) return;
         applet.setView(view);
     }
+    
+    this.askForNeighbours = function(dataset, id, category) {
+       // alert("askForNeighbours("+dataset+","+id+","+category+")");
 
-    /**
-     * Gets the the view level name
-     */
-    this.getViewName = function(view) {
-        return applet.getView().getName();
-    }
+        /*
+ *
+ *{"py/object": "tinasoft.pytextminer.document.Document", 
+ *  "ngramEmpty": " ",
+ * "forbChars": "[^a-zA-Z\\s\\@\u00c2\u00c6\u00c7\u00c8\u00c9\u00ca\u00ce\u00db\u00d9\u00e0\u00e2\u00e6\u00e7\u00e8\u00e9\u00ea\u00ee\u0128\u00f4\u00d4\u00f9\u00fb\u00fc\\,\\.\\;\\:\\!\\?\"'\\[\\]\\{\\}\\(\\)\\<\\>]", 
+ * "author": null, 
+ * "ngramSep": "[\\s]+", 
+ * "doc_acrnm": "MOLSPINQIP ",
+ *  "label": "MOLSPINQIP ", 
+ *  "edges": {
+ *  "Whitelist": {}, 
+ *  "Corpora": {},
+ *   "Cluster": {}, 
+ *   "NGram": {}, 
+ *   "Corpus": {"FET": 1},
+ *    "Document": {
+ *    "56": null, 
+ *    "54": null,
+ *     "42": null, 
+ *     "43": null,
+ *      "60": null,
+ *       "53": null,
+ *        "52": null, 
+ *        "23": null, 
+ *        "24": null, 
+ *        "25": null, 
+ *        "26": null,
+ *         "27": null,
+ *          "20": null, 
+ *          "21": null, "22": null, "49": null, "46": null, "47": null, "44": null, "28": null, "29": null, "40": null, "41": null, "1": null, "3": null, "2": null, "5": null, "4": null, "7": null, "6": null, "9": null, "18": null, "39": null, "38": null, "59": null, "14": null, "11": null, "10": null, "13": null, "12": null, "15": null, "58": null, "17": null, "16": null, "19": null, "32": null, "31": null, "30": null, "51": null, "36": null, "35": null, "34": null, "33": null, "55": null, "37": null, "48": null, "57": null, "50": null}}, "ngramMin": 1, "date": null, "ngramMax": 3, "id": "31"}
+ *
+ */
+        switch (category) {
+            case 'Document':
+                TinaService.getDocument(dataset, id, {
+                    success: function(data, textStatus, XMLHttpRequest) {
+                        //alert("got" +data.edges);
+                        applet.setNeighbourhood(category+"::"+id, $.toJSON(data.edges));
+                    },
+                    error: function(XMLHttpRequest, textStatus, errorThrown) {
 
+                    },
+                    complete: function(XMLHttpRequest, textStatus) {
 
-    /*
-         * Commits the applet's parameters
-         * Accept an optional callback to give some reaction to events
-         */
-    this.touch= function(view) {
-        if (applet == null) return;
-        if (view===undefined) {
-            applet.touch();
-        } else {
-            applet.touch(view);
+                    },
+                    beforeSend: function() {
+                    }
+                }
+                );
+                break;
+            case 'NGram':
+                TinaService.getNGram(dataset, id, {
+                    success: function(data, textStatus, XMLHttpRequest) {
+                        //alert("got" +data.edges);
+                        applet.setNeighbourhood(category+"::"+id, $.toJSON(data.edges));
+                    },
+                    error: function(XMLHttpRequest, textStatus, errorThrown) {
+
+                    },
+                    complete: function(XMLHttpRequest, textStatus) {
+
+                    },
+                    beforeSend: function() {
+                    }
+                }
+                );
+
+                break;
         }
+       
     }
 
 
@@ -435,13 +551,11 @@ function Tinaviz(args) {
          *  callback is boolean activating this.selected() callback
          */
     this.selectFromId = function(id, callback) {
-        if (applet == null) return;
         if (id===undefined) return;
-        return applet.selectFromId(id,callback);
+        applet.selectFromId(id,callback);
     }
 
     this.resetLayoutCounter= function(view) {
-        if (applet == null) return;
         applet.view(view).set("layout/iter",0);
     }
 
@@ -458,19 +572,15 @@ function Tinaviz(args) {
     /*
          *  Set the current state of the applet to enable
          */
-    this.setEnabled =  function(value) {
-        if (applet == null) return;
+    this.setEnabled = function(value) {
         applet.setEnabled(value);
     }
-
 
     /*
         * Search nodes
         */
     this.getNodesByLabel = function(label, type) {
-        if (applet == null){
-          return {};
-        }
+        if (label.length < 3) return {};
         return $.parseJSON( applet.getNodesByLabel(label, type));
     }
 
@@ -479,7 +589,8 @@ function Tinaviz(args) {
         * viewToSearch: visualization,macro,meso,current
         */
     this.searchNodes= function(matchLabel, matchCategory,  matchType, viewToSearch, center) {
-       applet.selectNodesByLabel(matchLabel, matchCategory, matchType, viewToSearch, center);
+        if (matchLabel.length < 3) return;
+        applet.selectNodesByLabel(matchLabel, matchCategory, matchType, viewToSearch, center);
     }
 
 
@@ -495,24 +606,12 @@ function Tinaviz(args) {
         }
     }
 
-    this.touchCallback= function(view, cb) {
-        if (applet == null) return;
-        if (view==null) {
-            applet.touch();
-        }
-        if (cb==null) {
-            applet.touch(view);
-        } else {
-            this.enqueueCb(applet.touch(view),cb);
-        }
-    }
 
     /*
         * recenter the graph
         */
     this.autoCentering= function() {
-        if (applet == null) return false;
-        return applet.autoCentering();
+        applet.autoCentering();
     }
 
     /*
@@ -534,68 +633,23 @@ function Tinaviz(args) {
     
     this.getNeighboursFromDatabase = function(id) {
         var elem = id.split('::');  
-        //console.log("var data = TinaService.getNgrams("+elem[1]+");");
+        //logNormal("var data = TinaService.getNgrams("+elem[1]+");");
 
         TinaService.getNGrams(
-        0,
-        elem[1],
-        {
-            success: function(data) {
-                 //console.log("var data = "+data+";");
+            0,
+            elem[1],
+            {
+                success: function(data) {
+                //
+                //logNormal("var data = "+data+";");
+                }
             }
-        }
-    );
+            );
 
     }
 
 
-    /************************
-         * Core Callback system
-         *
-         ************************/
 
-    /*
-         * Push a callback in the queue
-         */
-    this.enqueueCb=function(id,cb) {
-        cbsAwait[id] = cb;
-    }
-
-    /*
-         * Runs a callback
-         */
-    this.runCb=function(id) {
-        cbsRun[i]();
-        delete cbsRun[i];
-    }
-    /**
-     * Put a callback for the "await" list to the "run" list
-     *
-     */
-    this.activateCb=function(id) {
-        cbsRun[id] = cbsAwait[id];
-        delete cbsAwait[id];
-        return id;
-    }
-
-    /**
-     * How the callback system works:
-     *
-     * When the client call the "touch()" method, an update of the current view is
-     * scheduled by the applet, then the id of the new revision will be stored together
-     * with a callback address, by the javascript.
-     *
-     * As soon as the current view will reach this revision (or a greater one) the
-     * corresponding callback(s) will be called, then removed from the stack.
-     *
-     */
-    this.cbSync=function(id) {
-        for (i in cbsAwait) {
-            if (i<=id) {
-                setTimeout("tinaviz.runCb("+this.activateCb(i)+")",0);
-            }
-        }
-    }
 
     /** 
      * Callback for clicks on nodes
@@ -606,8 +660,14 @@ function Tinaviz(args) {
      * @return
      */
     this.selected = function(view, attr, mouse) {
+
         var data = $.parseJSON(attr);
-        this.callbackSelectionChanged({'viewName':view,'data':data,'mouseMode':mouse})
+        
+        this.callbackSelectionChanged({
+            'viewName':view,
+            'data':data,
+            'mouseMode':mouse
+        })
     }
 
     this.constructNewViewObject = function(viewName) {
@@ -634,10 +694,10 @@ function Tinaviz(args) {
             var n = {
                 edges: new Array()
             };
-            //console.log("creating the reply:"+node);
-            //console.dir(node);
+            console.log("creating the reply:"+node);
+            console.dir(node);
             if (node===undefined) {
-                //console.log("node was undefined");
+                console.log("node was undefined");
             } else {
             var edgesArray = node.getWeightsArray();
                 var j = 0;
@@ -668,39 +728,41 @@ function Tinaviz(args) {
 
 
     this.toggleLabels = function() {
-        return this.view().toggleLabels();
+        return applet.getView().toggleLabels();
     }
 
     /**
          * hide/show nodes
          */
     this.toggleNodes = function() {
-        return this.view().toggleNodes();
+        return applet.getView().toggleNodes();
     }
 
     /**
      * hide/show edges
      */
     this.toggleEdges = function() {
-        return this.view().toggleLinks();
+        return applet.getView().toggleLinks();
     }
 
     /**
      * play/pause layout engine
      */
     this.togglePause = function() {
-        return this.view().togglePause();
+        return applet.getView().togglePause();
     }
     
     this.setPause = function(value) {
-        return this.view().setPause(value);
+        applet.getView().setPause(value);
     }
 
+
+    
     /**
      * toggles HD rendering
      */
     this.toggleHD = function() {
-        return this.view().toggleHD();
+        return applet.getView().toggleHD();
     }
     /**
      * Get the opposite category name (the NOT DISPLAYED one)
@@ -720,14 +782,13 @@ function Tinaviz(args) {
      */
     this.viewMeso = function(id, category) {
         // selects unique node
-        //console.log("calling viewMeso("+id+","+category+")");
+        //logNormal("calling viewMeso("+id+","+category+")");
         this.unselect();
         this.selectFromId(id, true);
         // sets the category of the graph
         this.views.meso.set("category/category", category);
         //this.set("macro", "category/category", category);
         this.setView("meso");
-        this.touch("meso");
         this.updateNodes("meso", category);
     }
 
@@ -735,11 +796,11 @@ function Tinaviz(args) {
         return this.get("category/category");
     }
     this.setCategory= function(value) {
-        return this.set("category/category", value);
+        this.set("category/category", value);
     }
     this.toggleView= function() {
         var current_cat = this.getCategory();
-        if (this.getViewName() == "macro") {
+        if (this.views.current.name() == "macro") {
             // check if selection is empty
             if (Object.size(this.infodiv.selection) != 0) {
                 this.views.meso.set("category/category", current_cat);
@@ -748,7 +809,7 @@ function Tinaviz(args) {
             } else {
                 alert("please first select some nodes before switching to meso level");
             }
-        } else if (this.getViewName() == "meso") {
+        } else if (this.views.current.name() == "meso") {
             this.views.macro.set("category/category", current_cat);
             this.setView("macro");
             this.updateNodes("macro", current_cat);
@@ -757,35 +818,26 @@ function Tinaviz(args) {
     }
 
     this.session=function() {
-        return applet.session();
+        return applet.getSession();
     }
 
 
-    this.view=function(v) {
-        return applet.view(v);
+    this.getView=function(view) {
+        if (applet == null) return;
+        if (view===undefined) {
+            applet.getView();
+        } else {
+            applet.getView(view);
+        }
     }
 
     /**
      * Manually unselects all nodes
      */
     this.unselect= function() {
-        if (this.getViewName() == "meso") {
-            applet.unselectCurrent();
-        } else {
-            applet.unselect();
-        }
-
-
+        applet.unselect();
         this.infodiv.reset();
-    //if (this.getViewName() == "meso") {
-    // this.setView("macro");
-    //tinaviz.resetLayoutCounter();
-
-    //this.autoCentering();
-    //}
-    //this.touch("current"); // don't touch, so we do not redraw the graph
     }
-
 
     /**
      *  Retrieves list of nodes
@@ -807,31 +859,6 @@ function Tinaviz(args) {
             this.infodiv.updateNodeList( this.infodiv.data[category], category );
     }
 
-
-    /**
-     *  Try to log an error with firebug otherwise alert it
-     */
-    this.logError= function(msg) {
-        try {
-            //console.error(msg);
-        }
-        catch (e){
-            alert(msg);
-            return;
-        }
-    }
-    
-    /**
-     *  Try to log an normal msg with firebug otherwise returns
-     */
-    this.logNormal = function(msg) {
-        try {
-            //console.log(msg);
-        }
-        catch (e) {
-            return;
-        }
-    }
 
 
     /**************************************** 
