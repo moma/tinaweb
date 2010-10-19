@@ -68,8 +68,12 @@ function Tinaviz(args) {
             },
 
             // TODO put current viz manipulation methods here
-            set: function(key,value) {
-                return applet.getView().set(key,value);
+            set: function(key,value,x) {
+                if (x===undefined || x==null) {
+                    applet.getView().set(key, value, true);
+                } else {
+                    applet.getView().set(key, value, x);
+                }
             },
             get: function(key) {
                 //alert("get current "+key);
@@ -80,7 +84,7 @@ function Tinaviz(args) {
                 if (x===undefined || x==null) {
                     return applet.getView().getString("category/category");
                 } else {
-                    applet.getView().set("category/category", x);
+                    applet.getView().set("category/category", x, true);
                 }
             },
             filter: function(x,y) {
@@ -110,9 +114,14 @@ function Tinaviz(args) {
             },
 
             // setters/getters used for communication with the applet
-            set: function(key,value) {
-                applet.getView('macro').set(key,value);
+            set: function(key,value,x) {
+                if (x===undefined || x==null) {
+                    applet.getView("macro").set(key, value,true);
+                } else {
+                    applet.getView("macro").set(key, value,x);
+                }
             },
+            
             get: function(key) {
                 return applet.getView('macro').get(key);
             },
@@ -121,7 +130,7 @@ function Tinaviz(args) {
                 if (x===undefined || x==null) {
                     return applet.getView('macro').getString("category/category");
                 } else {
-                    applet.getView('macro').set("category/category", x);
+                    applet.getView('macro').set("category/category", x, true);
                 }
             },
             selection: new Array(),
@@ -153,8 +162,12 @@ function Tinaviz(args) {
             },
 
             // setters/getters used for communication with the applet
-            set: function(key,value) {
-                applet.getView('meso').set(key,value);
+            set: function(key,value,x) {
+                if (x===undefined || x==null) {
+                    applet.getView("meso").set(key, value,true);
+                } else {
+                    applet.getView("meso").set(key, value,x);
+                }
             },
             get: function(key) {
                 return applet.getView('meso').get(key);
@@ -164,7 +177,7 @@ function Tinaviz(args) {
                 if (x===undefined || x==null) {
                     return applet.getView('meso').getString("category/category");
                 } else {
-                    applet.getView('meso').set("category/category", x);
+                    applet.getView('meso').set("category/category", x, true);
                 }
             },
 
@@ -459,8 +472,14 @@ function Tinaviz(args) {
     /**
      * Set a value to all views
      */
-    this.set = function(key,value) {
-        applet.set(key,value);
+    this.set = function(key,value, sync) {
+          
+        if (sync===undefined || sync==null) {        
+             applet.setParam(key,value, false);
+        } else {
+             applet.setParam(key,value, true);
+        }
+
     }
     
     /**
@@ -556,7 +575,7 @@ function Tinaviz(args) {
     }
 
     this.resetLayoutCounter= function(view) {
-        applet.view(view).set("layout/iter",0);
+        applet.view(view).set("layout/iter",0,false);
     }
 
     /*
@@ -796,21 +815,21 @@ function Tinaviz(args) {
         return this.get("category/category");
     }
     this.setCategory= function(value) {
-        this.set("category/category", value);
+        this.set("category/category", value,false);
     }
     this.toggleView= function() {
         var current_cat = this.getCategory();
         if (this.views.current.name() == "macro") {
             // check if selection is empty
             if (Object.size(this.infodiv.selection) != 0) {
-                this.views.meso.set("category/category", current_cat);
+                this.views.meso.set("category/category", current_cat, false);
                 this.setView("meso");
                 this.updateNodes("meso", current_cat);
             } else {
                 alert("please first select some nodes before switching to meso level");
             }
         } else if (this.views.current.name() == "meso") {
-            this.views.macro.set("category/category", current_cat);
+            this.views.macro.set("category/category", current_cat, false);
             this.setView("macro");
             this.updateNodes("macro", current_cat);
         }
@@ -879,7 +898,7 @@ function Tinaviz(args) {
     }
 
     /**
-     * Callback changing utton states
+     * Callback changing button states
      */
     this.buttonStateCallback = function(button, enabled) {
         toolbar.updateButton(button, enabled);
