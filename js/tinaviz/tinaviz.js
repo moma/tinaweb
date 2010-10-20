@@ -647,6 +647,8 @@ function Tinaviz(args) {
          * Gets the list of neighbours for a given node
          */
     this.getNeighbourhood = function(view,id) {
+        //alert("view: "+view+" id:"+id);
+        //alert(applet.getNeighbourhood(view,id));
         return $.parseJSON( applet.getNeighbourhood(view,id) );
     }
     
