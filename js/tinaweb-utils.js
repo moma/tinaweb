@@ -43,36 +43,9 @@ Object.values = function(obj) {
 };
 
 function decHTMLifEnc(str){
-                return str.replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>');
-            }
-
-function content2html(content){
-    var vars = [],  htmlstring, hash;
-    var titles= [];
-    titles[0]='<b>Lost: </b>';
-    titles[1]='<b>New: </b>';
-    var htmlstring="";
-
-    var hashes = content.split('_'); // obsolet and new terms
-    for(var i = 0; i < hashes.length; i++){            
-        if (hashes[i]=='.') continue;
-        htmlstring += titles[i];
-        hash = hashes[i].split('-'); // list of terms
-        for(var j = 0; j < hash.length; j++){
-            var node=tinaviz.getNodeAttributes("macro",'N::'+hash[j]);
-
-            // htmlstring.html(node['label']);
-            //alert('label=' + node.label);
-            htmlstring+= htmlDecode(node.label.replace(/\+/g," "))+", ";
-            //htmlstring+= "<a href=# onClick='javascript:" + tinaviz.open({view:'macro',gexf:'toto.gexf'})" " node.label.replace("+", " ")+", ";
-
-        //alert(decodeJSON(node['label']));
-
-        }
-        htmlstring += "<br/>";
-    }
-    return htmlstring;
+    return str.replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>');
 }
+
 
 /*
  * Tri alphabetique
@@ -88,8 +61,8 @@ function  alphabeticListSort(listitems,textkey) {
 };
 function  numericListSort(listitems,textkey) {
     listitems.sort(function(a, b) {
-    var compA = parseFloat(a[textkey]);
-    var compB = parseFloat(b[textkey]);
+        var compA = parseFloat(a[textkey]);
+        var compB = parseFloat(b[textkey]);
         return (compA > compB) ? -1 : (compA <= compB) ? 1 : 0;
     })
     return listitems;
@@ -98,7 +71,7 @@ function  numericListSort(listitems,textkey) {
 
 function sortNumber(a,b)
 {
-return a - b;
+    return a - b;
 }
 
 /*
@@ -348,10 +321,25 @@ function getUrlVars()
 /* --------------------------------- */
 /* Fonctions pour la div content */
 /* --------------------------------- */
-function linkToMap(label,id,year0,year1){
-return $("<p></p>").html(
-"<a href='#' onClick='javascript:tinaviz.open({view:'macro',gexf:'" + "map" + year0 + year1 +
-'map' +".gexf,id=" + id +  "> View this node in the map</a>")
+
+function content2html(content){
+    var vars = [],  htmlstring, hash;
+    var titles= [];
+    titles[0]='<b>Lost: </b>';
+    titles[1]='<b>New: </b>';
+    var htmlstring="";
+    var hashes = content.split('_'); // obsolet and new terms
+    for(var i = 0; i < hashes.length; i++){
+        if (hashes[i]=='.') continue;
+        htmlstring += titles[i];
+        hash = hashes[i].split('-'); // list of terms
+        for(var j = 0; j < hash.length; j++){
+            var node=tinaviz.getNodeAttributes("macro",'N::'+hash[j]);
+            htmlstring+= htmlDecode(node.label.replace(/\+/g," "))+", ";
+        }
+        htmlstring += "<br/>";
+    }
+    return htmlstring;
 }
 
 function urlList(label,CurrentCategRealName){
@@ -380,7 +368,7 @@ function urlList(label,CurrentCategRealName){
             )
             
     }else if ((CurrentCategRealName == "NGrams")|(CurrentCategRealName == "NGram")|(CurrentCategRealName == "keywords")|(CurrentCategRealName == "Keywords")|(CurrentCategRealName == "Terms")|(CurrentCategRealName == "Communities")|(CurrentCategRealName == "Documents")) {
-    return $("<p></p>").html(
+        return $("<p></p>").html(
             '<a href="http://www.google.com/#hl=en&source=hp&q=%20'
             + SearchQuery.replace(",","OR")
             + '%20" align=middle target=blank height=15 width=15> <img src="'
@@ -422,14 +410,64 @@ function fillContent(node){
     // donne le contenu de la div content
     var layout_name=tinaviz.get("layout/algorithm");
     if (layout_name=="phyloforce"){
-        //on rï¿½cupï¿½re l'annï¿½e
+        //on récupère l'année
         var nodeId = jQuery.trim(decodeJSON(node.id));
         var hashes = nodeId.split('::'); // obsolet and new terms
         var hash = hashes[1].split('_');
         var year=hash[0];
         var content = content2html(decodeJSON(node.content));
+
     }else{
         var content = decHTMLifEnc(jQuery.trim(decodeJSON(node.content)));
     }
     return content;
+}
+
+/// donne la liste des liens vers d'autres vues (cartes tinaweb et autres)
+function linksToMaps(node){
+    var linkList=$("<div></div>");
+    var nodeId = jQuery.trim(decodeJSON(node.id));
+    var hashes = nodeId.split('::'); // 
+    if (hashes[1] !== undefined){
+        var hash = hashes[1].split('_'); //année et id du cluster
+        var years=hash[0].split('-'); // année de début et de fin
+        if (years !== undefined){
+            var a = $('<div>View the map</div>');
+            //a.attr('href', '#');
+            a.button({  
+                text:true,
+                label:"View the map"
+
+            });
+            var prefs = {
+                gexf: "FET60bipartite_graph_cooccurrences_.gexf",
+                view: "macro",
+                category: "Document",
+                node_id: "",
+                search: "",
+                magnify: "0.5",
+                cursor_size: "1.0",
+                edge_filter_min: "0.0",
+                edge_filter_max: "1.0",
+                node_filter_min: "0.0",
+                node_filter_max: "1.0",
+                layout: "tinaforce",
+                edge_rendering: "curve",
+                pause:false
+            };
+
+            a.click(function(){
+                openGraph(prefs,tinaviz);
+            });
+            linkList.append(a);
+
+        }
+
+    }
+    return linkList;
+}
+
+
+function mapName(){
+    return "PhyloMap"; // nom p ar défaut. faire évoluter en utilisant la partie générique du nom dans le gexf
 }

@@ -30,13 +30,8 @@ $(document).ready(function(){
     });
     
     tinaviz.ready(function(){
-
-        var size = resize();
-        tinaviz.size(size.w, size.h);
-
- 
-        var prefs = {    
-            gexf: "default.gexf", // "FET60bipartite_graph_cooccurrences_.gexf"
+        var prefs = {
+            gexf: "FET60bipartite_graph_cooccurrences_.gexf",
             view: "macro",
             category: "Document",
             node_id: "",
@@ -48,116 +43,36 @@ $(document).ready(function(){
             node_filter_min: "0.0",
             node_filter_max: "1.0",
             layout: "tinaforce",
-            edge_rendering: "curve"
-
+            edge_rendering: "curve",
+            pause:false
         };
         var urlVars = getUrlVars();
         for (x in urlVars) {
             prefs[x] = urlVars[x];
         }
 
-        tinaviz.setView(prefs.view);
+        var layout_name=prefs.layout;
+        //if (layout_name=="phyloforce"){
+        //    var infodiv =  new InfoDivPhyloweb('infodiv');
+        //}
+        //else{
+        var infodiv = new InfoDiv('infodiv');
+        //}
 
-        var session = tinaviz.session();
-        var macro = tinaviz.views.macro;
-        var meso = tinaviz.views.meso;
+        tinaviz.infodiv = infodiv;
         
-        // session.add("nodes/0/keywords", "newKeyword");
+        var size = resize();
+        tinaviz.size(size.w, size.h);
 
-        session.set("edgeWeight/min", parseFloat(prefs.edge_filter_min));
-        session.set("edgeWeight/max", parseFloat(prefs.edge_filter_max));
-        session.set("nodeWeight/min", parseFloat(prefs.node_filter_min));
-        session.set("nodeWeight/max", parseFloat(prefs.node_filter_max));
-        session.set("category/category", prefs.category);
-        session.set("output/nodeSizeMin", 5.0);
-        session.set("output/nodeSizeMax", 20.0);
-        session.set("output/nodeSizeRatio", parseFloat(prefs.magnify));
-        session.set("selection/radius", parseFloat(prefs.cursor_size));
-        session.set("layout/algorithm", prefs.layout)
-        session.set("rendering/edge/shape", prefs.edge_rendering);
-        session.set("data/source", "gexf");
-
-        macro.filter("Category", "category");
-        macro.filter("NodeWeightRange", "nodeWeight");
-        macro.filter("EdgeWeightRange", "edgeWeight");
-        macro.filter("Output", "output");
-
-        meso.filter("SubGraphCopyStandalone", "category");
-        meso.set("category/source", "macro");
-        meso.set("category/category", "Document");
-        meso.set("category/mode", "keep");
-
-        meso.filter("NodeWeightRangeHack", "nodeWeight");
-        meso.filter("EdgeWeightRangeHack", "edgeWeight");
-        meso.filter("Output", "output");
-               
-        tinaviz.infodiv = InfoDiv('infodiv');
-        
-        tinaviz.infodiv.reset();
-        
         $("#infodiv").accordion({
             fillSpace: true
         });
+        
 
         toolbar.init();
 
-        tinaviz.open({
-            before: function() {
-                $('#appletInfo').show();
-                $('#appletInfo').html("please wait while loading the graph..");
-                $('#appletInfo').effect('pulsate', {}, 'fast');
-                tinaviz.infodiv.reset();
-            },
-            success: function() {
-                // init the node list with ngrams
-                tinaviz.updateNodes( prefs.view, prefs.category );
+        openGraph(prefs,tinaviz);
 
-                // cache the document list.hide
-                tinaviz.getNodes( prefs.view, "Document" );
-             
-                var view = tinaviz.views.current;
-
-                // initialize the sliders
-                $("#sliderNodeSize").slider( "option", "value", 
-                    parseInt(view.get("output/nodeSizeRatio")) *100 
-                    );
-                $("#sliderSelectionZone").slider( "option", "value", 
-                    parseInt(view.get("selection/radius")) * 100 
-                    );
-                $("#sliderEdgeWeight").slider( "option", "values", [
-                    parseInt( view.get("edgeWeight/min") ),
-                    parseInt(view.get("edgeWeight/max")) *100 
-                    ]);
-                $("#sliderNodeWeight").slider( "option", "values", [
-                    parseInt(view.get("nodeWeight/min") ),
-                    parseInt(view.get("nodeWeight/max")) *100 
-                    ]);
-                
-                tinaviz.infodiv.display_current_category();
-                tinaviz.infodiv.display_current_view();
-     
-                if (prefs.node_id != "") {
-                    tinaviz.selectFromId( prefs.node_id, true );
-                }
-             
-                if (prefs.search != "") {
-                    $("#search_input").val(prefs.search);
-                    tinaviz.searchNodes(prefs.search, "containsIgnoreCase");
-                }
-                        
-                $("#appletInfo").hide();
-            },
-            error: function(msg) {
-                $("#appletInfo").html("Error, couldn't load graph: "+msg);
-            }
-        });
-                
-        tinaviz.open({
-            view: prefs.view,
-            url: prefs.gexf,
-            layout: prefs.layout
-        });
-        
         tinaviz.event({
         
             /*
@@ -168,20 +83,20 @@ $(document).ready(function(){
              **/
             selectionChanged: function(selection) {
                 tinaviz.infodiv.reset();
-                
                 if ( selection.mouseMode == "left" ) {
                 // nothing to do
                 } else if ( selection.mouseMode == "right" ) {
                 // nothing to do
                 } else if (selection.mouseMode == "doubleLeft") {
-                    var macroCategory = tinaviz.views.macro.category();
+                    var macroCategory = tinaviz.views.macro.get("category/category");
                     //console.log("selected doubleLeft ("+selection.viewName+","+selection.data+")");
-                    tinaviz.views.meso.category(macroCategory);
+                    tinaviz.views.meso.set("category/category", macroCategory);
                     if (selection.viewName == "macro") {
                         tinaviz.setView("meso");
                     }
                     tinaviz.updateNodes("meso", macroCategory);
                     tinaviz.views.meso.set("layout/iter", 0);
+                    tinaviz.views.meso.commitProperties();
                     tinaviz.autoCentering();
                 }
                 tinaviz.infodiv.update(selection.viewName, selection.data);
@@ -202,7 +117,7 @@ $(document).ready(function(){
                 tinaviz.infodiv.display_current_view();
                 
                 var showFilter = false;
-                if (view.getName() == "meso") {
+                if (view.name == "meso") {
                 
                     // TODO check selection
                     // if selection has edges with edge of all the same weight, we disable the filter
@@ -235,3 +150,106 @@ $(document).ready(function(){
     });
 
 });
+
+
+function openGraph(prefs,tinaviz){
+    tinaviz.unselect();
+    tinaviz.setView(prefs.view);
+    tinaviz.infodiv.reset();
+    var session = tinaviz.session();
+    var macro = tinaviz.view("macro");
+    var meso = tinaviz.view("meso");
+
+    session.set("edgeWeight/min", parseFloat(prefs.edge_filter_min));
+    session.set("edgeWeight/max", parseFloat(prefs.edge_filter_max));
+    session.set("nodeWeight/min", parseFloat(prefs.node_filter_min));
+    session.set("nodeWeight/max", parseFloat(prefs.node_filter_max));
+    session.set("category/category", prefs.category);
+    session.set("output/nodeSizeMin", 5.0);
+    session.set("output/nodeSizeMax", 20.0);
+    session.set("output/nodeSizeRatio", parseFloat(prefs.magnify));
+    session.set("selection/radius", parseFloat(prefs.cursor_size));
+    session.set("layout/algorithm", prefs.layout)
+    session.set("rendering/edge/shape", prefs.edge_rendering);
+    session.set("data/source", "gexf");
+
+    macro.filter("Category", "category");
+    macro.filter("NodeWeightRange", "nodeWeight");
+    macro.filter("EdgeWeightRange", "edgeWeight");
+    macro.filter("NodeFunction", "radiusByWeight");
+    macro.filter("Output", "output");
+
+    meso.filter("SubGraphCopyStandalone", "category");
+    meso.set("category/source", "macro");
+    meso.set("category/category", "Document");
+    meso.set("category/mode", "keep");
+
+    meso.filter("NodeWeightRangeHack", "nodeWeight");
+    meso.filter("EdgeWeightRangeHack", "edgeWeight");
+    meso.filter("NodeFunction", "radiusByWeight");
+    meso.filter("Output", "output");
+
+
+    tinaviz.open({
+        before: function() {
+            $('#appletInfo').show();
+            $('#appletInfo').html("please wait while loading the graph..");
+            $('#appletInfo').effect('pulsate', {}, 'fast');
+            tinaviz.infodiv.reset();
+        },
+        success: function() {
+            // init the node list with ngrams
+            tinaviz.updateNodes( prefs.view, prefs.category );
+
+            // cache the document list.hide
+            tinaviz.getNodes( prefs.view, "Document" );
+
+            var view = tinaviz.view();
+
+            // initialize the sliders
+            $("#sliderNodeSize").slider( "option", "value",
+                parseInt(view.get("output/nodeSizeRatio")) *100
+                );
+            $("#sliderSelectionZone").slider( "option", "value",
+                parseInt(view.get("selection/radius")) * 100
+                );
+            $("#sliderEdgeWeight").slider( "option", "values", [
+                parseInt( view.get("edgeWeight/min") ),
+                parseInt(view.get("edgeWeight/max")) *100
+                ]);
+            $("#sliderNodeWeight").slider( "option", "values", [
+                parseInt(view.get("nodeWeight/min") ),
+                parseInt(view.get("nodeWeight/max")) *100
+                ]);
+
+            tinaviz.infodiv.display_current_category();
+            tinaviz.infodiv.display_current_view();
+
+            if (prefs.node_id != "") {
+                tinaviz.selectFromId( prefs.node_id, true );
+            }
+
+            if (prefs.search != "") {
+                $("#search_input").val(prefs.search);
+                tinaviz.searchNodes(prefs.search, "containsIgnoreCase");
+            }
+
+            $("#appletInfo").hide();
+        },
+        error: function(msg) {
+            $("#appletInfo").html("Error, couldn't load graph: "+msg);
+        }
+    });
+ 
+    tinaviz.setPause(prefs.pause);
+
+    tinaviz.open({
+        view: prefs.view,
+        url: prefs.gexf,
+        layout: prefs.layout
+    });
+
+
+//linkList.html("<a href='#' onClick='javascript:tinaviz.open({view:'macro',gexf:'" +
+//   mapName() + "map-" + years[0] + "-" + years[1] + ".gexf'})>View in map</a>"  );
+}

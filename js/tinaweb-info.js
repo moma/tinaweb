@@ -46,7 +46,7 @@ function InfoDiv(divid) {
         neighbours : {}, 
         oppositeSelection : new Array(), 
         label : $( "#node_label" ), 
-        contents : $( "#node_contents" ),
+        contents : $( "#node_contents" ), 
         cloud : $( "#node_neighbourhood" ), 
         /// Modif David 
         cloudSearch: $("#node_neighbourhoodForSearch"), 
@@ -63,8 +63,8 @@ function InfoDiv(divid) {
 * dispatch current category displayed 
 */ 
         display_current_category: function() { 
-            var current_view = tinaviz.views.current.name(); 
-            var current_cat = tinaviz.views.current.category();
+            var current_view = tinaviz.getViewName(); 
+            var current_cat = tinaviz.get("category/category"); 
             if (current_cat !== undefined) 
                 var opposite = this.categories[tinaviz.getOppositeCategory(current_cat)]; 
             //$("#title_acc_1").text("current selection of "+ this.categories[current_cat]); 
@@ -80,7 +80,7 @@ function InfoDiv(divid) {
 * dispatch current view displayed 
 */ 
         display_current_view: function() { 
-            var current_view = tinaviz.views.current.name(); 
+            var current_view = tinaviz.getViewName(); 
             if (current_view !== undefined) { 
                 var level = $("#level"); 
                 level.button('option','label',current_view + " level"); 
@@ -169,7 +169,7 @@ function InfoDiv(divid) {
                 if (i < sorted_tags.length - 1) requests = requests + "+AND+"; 
             } 
  
-            var current_cat = tinaviz.views.current.category();  /// category courante 
+            var current_cat = tinaviz.get("category/category");  /// category courante 
             ///alert(current_cat) 
             if (current_cat !== undefined){ 
                 var oppositeRealName = this.categories[tinaviz.getOppositeCategory(current_cat)]; 
@@ -274,9 +274,7 @@ function InfoDiv(divid) {
                     if (hashes[1] !== undefined){
                         var hash = hashes[1].split('_');
                         var years=hash[0].split('-');
-                        var year=years[1];// année de fin
-                        var year0=years[0]; // année de début
-
+                        var year=years[1];
                         if (year !== undefined){
                             f=find(label,labelsArray);
                             if (f != null){
@@ -313,13 +311,6 @@ function InfoDiv(divid) {
                     else{
                         var content = decHTMLifEnc(jQuery.trim(decodeJSON(node.content)));
                     }
-
-                    console.dir(node);
-
-                    // add node to selection cache 
-                    this.selection[id] = lastselection[id]; 
-                    var tmp = "<b>"+label+"</b>";
-                    //labelinnerdiv.append( $("<span></span>").html(tmp) );
                     
                     this.selection[id] = lastselection[id];                   
                     // displays contents only if it's a document 
@@ -338,16 +329,12 @@ function InfoDiv(divid) {
                         contentinnerdiv.append( $("<b></b>").html( label + period) );
                         if ( node.content != null ) { 
                             contentinnerdiv.append( $("<p></p>").html( content ) );
-
                         }
                        
                     }
                     contentinnerdiv.append( $("<p></p>").html( urlList( htmlDecode(label),this.categories[current_cat]) ) );
-
-                    if (year !== undefined){
-                        contentinnerdiv.append( $("<p></p>").html( linkToMap(htmlDecode(label),id,year0,year)));
-                    }
                 }
+                contentinnerdiv.append(linksToMaps(node));
                 contentinnerdiv.append("<br/");
             }
             if ( yearsArray[0] != undefined){ // we have phylogenetic data
@@ -373,6 +360,7 @@ function InfoDiv(divid) {
                     labelinnerdiv.append( $("<b></b>").html("[...]"));
                 }
             }
+       
 
             if (Object.size( this.selection ) != 0) { 
                 this.label.empty(); 
@@ -380,14 +368,10 @@ function InfoDiv(divid) {
                 this.contents.empty(); 
                 this.label.append( this.alphabeticJquerySort( labelinnerdiv, "b", ", &nbsp;" )); 
                 this.contents.append( contentinnerdiv ); 
-                
-            //this.attributes.empty();
-            //this.contents.append( attributeTable );
             } 
             else { 
                 this.reset(); 
             } 
-
         }, 
  
         /* 
@@ -462,7 +446,7 @@ function InfoDiv(divid) {
     } // end of return 
 }; 
  
-
+ 
 /* 
 * WHAT IS IT ????? 
 * DOCUMENTATION REQUIRED 
