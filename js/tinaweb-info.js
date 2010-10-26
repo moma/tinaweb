@@ -273,7 +273,7 @@ function InfoDiv(divid) {
                     var hashes = nodeId.split('::'); // obsolet and new terms
                     if (hashes[1] !== undefined){
                         var hash = hashes[1].split('_');
-                        var years=hash[0].split('-');
+                        var years=hash[0].split('#');
                         var year=years[1];
                         if (year !== undefined){
                             f=find(label,labelsArray);
@@ -334,7 +334,7 @@ function InfoDiv(divid) {
                     }
                     contentinnerdiv.append( $("<p></p>").html( urlList( htmlDecode(label),this.categories[current_cat]) ) );
                 }
-                contentinnerdiv.append(linksToMaps(node));
+                //contentinnerdiv.append(linksToMaps(node)); // fait un lien vers la carte 
                 contentinnerdiv.append("<br/");
             }
             if ( yearsArray[0] != undefined){ // we have phylogenetic data

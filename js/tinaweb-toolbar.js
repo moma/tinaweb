@@ -58,29 +58,21 @@ $(document).ready(function(){
 });
 
 var toolbar = {
-
-    values: {
-    
-        search: "",
-        
-        sliders: {
-        
-            magnify: 0.5,
-            
-            cursor_size: 0.5,
-        
+    values: {    
+        search: "",        
+        sliders: {        
+            magnify: 0.5,            
+            cursor_size: 0.5,        
             nodeFilter: {
-                min: 0.0,
+                min: 0.01,
                 max: 1.0
-            },
-            
+            },            
             edgeFilter: {
-                min: 0.0,
+                min: 0.01,
                 max: 1.0
             }
         },
-        buttons: {
-        
+        buttons: {        
             pause: false,
             showNodes: true,
             showEdges: true,
@@ -95,22 +87,21 @@ var toolbar = {
 
 toolbar.lastSearch = "";
 toolbar.checkSearchForm = function() {
-      var txt = $("#search_input").val();
-      if (txt != toolbar.lastSearch) {
-            tinaviz.unselect();
-           toolbar.lastSearch = txt;   
-          if (txt=="") {
-             tinaviz.searchNodes("", "", "", "", false);
-          } else {
-              var cat = tinaviz.getCategory();
-               tinaviz.searchNodes(txt, cat, "containsIgnoreCase", "current", true);
-          }
-      }
-   setTimeout("toolbar.checkSearchForm()",200);
+    var txt = $("#search_input").val();
+    if (txt != toolbar.lastSearch) {
+        tinaviz.unselect();
+        toolbar.lastSearch = txt;
+        if (txt=="") {
+            tinaviz.searchNodes("", "", "", "", false);
+        } else {
+            var cat = tinaviz.getCategory();
+            tinaviz.searchNodes(txt, cat, "containsIgnoreCase", "current", true);
+        }
+    }
+    setTimeout("toolbar.checkSearchForm()",200);
 };
 
-toolbar.init = function() {
-    
+toolbar.init = function() {    
     $("search").val(toolbar.values.search);
     
     $("#search").submit(function() {
@@ -169,6 +160,7 @@ toolbar.init = function() {
         animate: true,
         slide: function(event, ui) {
             tinaviz.current.set("edgeWeight/min", ui.values[0] / 100.0);
+            //console.log("min edge" + ui.values[0] / 100.0);
             tinaviz.current.set("edgeWeight/max", ui.values[1] / 100.0);
             tinaviz.current.set("layout/iter", 0);
             tinaviz.current.commitProperties();
@@ -183,9 +175,16 @@ toolbar.init = function() {
         slide: function(event, ui) {
             tinaviz.current.set("nodeWeight/min", ui.values[0] / 100.0);
             tinaviz.current.set("nodeWeight/max", ui.values[1] / 100.0);
+            // console.log("min nodeWeigth" + ui.values[0] / 100.0);
             tinaviz.current.set("layout/iter", 0);
             tinaviz.current.commitProperties();
             if (tinaviz.getViewName()=="meso") tinaviz.autoCentering();
+            var p = $("#toggle-paused");
+            if( p.button('option','icons')['primary'] == 'ui-icon-play'  ) {
+                tinaviz.autoCentering();
+
+            }
+
         }
     });
 
