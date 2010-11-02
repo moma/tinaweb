@@ -1,4 +1,3 @@
-//      This program is free software; you can redistribute it and/or modify 
 //      it under the terms of the GNU General Public License as published by 
 //      the Free Software Foundation; either version 2 of the License, or 
 //      (at your option) any later version. 
@@ -317,12 +316,12 @@ function InfoDiv(divid) {
                     var current_cat = tinaviz.get("category/category");  /// current category
                     if (current_cat !== undefined) { 
                         // jQuery.text automaticcally html encode characters
-                        if (layout_name=="phyloforce"){
+                        if ((layout_name=="phyloforce")&(current_cat == 'Document')){
                             //on récupère l'année
                             var nodeId = jQuery.trim(decodeJSON(node.id));
                             var hashes = nodeId.split('::'); // obsolet and new terms
                             var hash = hashes[1].split('_');
-                            var period=" - " + hash[0];
+                            var period=" - " + hash[0].replace('#', '-');
                         }else{
                             period="";
                         }
@@ -334,7 +333,10 @@ function InfoDiv(divid) {
                     }
                     contentinnerdiv.append( $("<p></p>").html( urlList( htmlDecode(label),this.categories[current_cat]) ) );
                 }
-                //contentinnerdiv.append(linksToMaps(node)); // fait un lien vers la carte 
+
+                if ((current_cat !== undefined)&(current_cat == 'Document')){
+                       contentinnerdiv.append(linksToMaps(node)); // fait un lien vers la carte
+                }
                 contentinnerdiv.append("<br/");
             }
             if ( yearsArray[0] != undefined){ // we have phylogenetic data

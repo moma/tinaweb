@@ -335,7 +335,7 @@ function content2html(content){
         hash = hashes[i].split('-'); // list of terms
         for(var j = 0; j < hash.length; j++){
             var node=tinaviz.getNodeAttributes("macro",'N::'+hash[j]);
-            htmlstring+= htmlDecode(node.label.replace(/\+/g," "))+", ";
+            htmlstring+= decodeJSON(node.label.replace(/\+/g," "))+", ";
         }
         htmlstring += "<br/>";
     }
@@ -425,12 +425,13 @@ function fillContent(node){
 
 /// donne la liste des liens vers d'autres vues (cartes tinaweb et autres)
 function linksToMaps(node){
+    var layout_name=tinaviz.get("layout/algorithm");
     var linkList=$("<div></div>");
     var nodeId = jQuery.trim(decodeJSON(node.id));
     var hashes = nodeId.split('::'); // 
     if (hashes[1] !== undefined){
         var hash = hashes[1].split('_'); //année et id du cluster
-        var years=hash[0].split('-'); // année de début et de fin
+        var years=hash[0].split('#'); // année de début et de fin
         if (years !== undefined){
             var a = $('<div>View the map</div>');
             //a.attr('href', '#');
@@ -439,11 +440,18 @@ function linksToMaps(node){
                 label:"View the map"
 
             });
+            if (layout_name=="phyloforce"){
+                var gexfFile=mapName()+years[0]+"-"+years[1]+".gexf";
+                var Targetlayout="tinaforce";
+            }else{
+                var gexfFile=mapName()+".gexf";
+                var Targetlayout="phyloforce";
+            }
             var prefs = {
-                gexf: "FET60bipartite_graph_cooccurrences_.gexf",
+                gexf: gexfFile,
                 view: "macro",
                 category: "Document",
-                node_id: "",
+                node_id: nodeId,
                 search: "",
                 magnify: "0.5",
                 cursor_size: "1.0",
@@ -451,16 +459,14 @@ function linksToMaps(node){
                 edge_filter_max: "1.0",
                 node_filter_min: "0.0",
                 node_filter_max: "1.0",
-                layout: "tinaforce",
+                layout: Targetlayout,
                 edge_rendering: "curve",
                 pause:false
-            };
-
+            };            
             a.click(function(){
                 openGraph(prefs,tinaviz);
             });
             linkList.append(a);
-
         }
 
     }
@@ -469,5 +475,11 @@ function linksToMaps(node){
 
 
 function mapName(){
-    return "PhyloMap"; // nom p ar défaut. faire évoluter en utilisant la partie générique du nom dans le gexf
+    var layout_name=tinaviz.get("layout/algorithm");
+    if (layout_name=="phyloforce"){
+        return "map"; // nom par défaut. faire évoluter en utilisant la partie générique du nom dans le gexf
+    }else{
+        return "phylo"; // nom p ar défaut. faire évoluter en utilisant la partie générique du nom dans le gexf 
+    }
+
 }

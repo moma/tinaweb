@@ -64,11 +64,11 @@ var toolbar = {
             magnify: 0.5,            
             cursor_size: 0.5,        
             nodeFilter: {
-                min: 0.01,
+                min: 0.0,
                 max: 1.0
             },            
             edgeFilter: {
-                min: 0.01,
+                min: 0.0,
                 max: 1.0
             }
         },
@@ -95,7 +95,8 @@ toolbar.checkSearchForm = function() {
             tinaviz.searchNodes("", "", "", "", false);
         } else {
             var cat = tinaviz.getCategory();
-            tinaviz.searchNodes(txt, cat, "containsIgnoreCase", "current", true);
+            //tinaviz.searchNodes(txt, cat, "containsIgnoreCase", "current", true);
+            tinaviz.searchNodes(txt, cat, "containsIgnoreCase", "opposite", true);
         }
     }
     setTimeout("toolbar.checkSearchForm()",200);
