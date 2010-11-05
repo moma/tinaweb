@@ -431,13 +431,15 @@ function linksToMaps(node){
     var hashes = nodeId.split('::'); // 
     if (hashes[1] !== undefined){
         var hash = hashes[1].split('_'); //année et id du cluster
+        var idInMap=hash[1]; //identifiant dans la carte
         var years=hash[0].split('#'); // année de début et de fin
         if (years !== undefined){
-            var a = $('<div>View the map</div>');
+            var a = $('<span></span>');
             //a.attr('href', '#');
             a.button({  
-                text:true,
-                label:"View the map"
+                text:false,
+                //label:"View the map",
+                icons: {primary:'ui-icon ui-icon-extlink'}
 
             });
             if (layout_name=="phyloforce"){
@@ -468,6 +470,8 @@ function linksToMaps(node){
             });
             linkList.append(a);
         }
+
+        ///
 
     }
     return linkList;

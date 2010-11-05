@@ -31,7 +31,7 @@ $(document).ready(function(){
     
     tinaviz.ready(function(){
         var prefs = {
-            gexf: "FET60bipartite_graph_cooccurrences_.gexf",
+            gexf: "phylo.gexf",
             view: "macro",
             category: "Document",
             node_id: "",
@@ -42,7 +42,7 @@ $(document).ready(function(){
             edge_filter_max: "1.0",
             node_filter_min: "0.0",
             node_filter_max: "1.0",
-            layout: "tinaforce",
+            layout: "phyloforce",
             edge_rendering: "curve",
             pause:false
         };

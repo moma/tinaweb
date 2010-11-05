@@ -309,8 +309,7 @@ function InfoDiv(divid) {
                     }
                     else{
                         var content = decHTMLifEnc(jQuery.trim(decodeJSON(node.content)));
-                    }
-                    
+                    }                    
                     this.selection[id] = lastselection[id];                   
                     // displays contents only if it's a document 
                     var current_cat = tinaviz.get("category/category");  /// current category
