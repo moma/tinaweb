@@ -275,6 +275,7 @@ toolbar.init = function() {
             primary:'ui-icon-close'
         }
     }).click(function(event) {
+        toolbar.lastsearch = "";
         tinaviz.unselect();
     });
 
