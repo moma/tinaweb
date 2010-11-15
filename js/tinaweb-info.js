@@ -16,12 +16,10 @@
 
 /**
 * Generic GUI Components used by both TinaSoft Desktop and TinaWeb
-
-*
 */
 
 /*
-* Asynchronously displays of node list
+* Asynchronously displays a row from the node list
 */
 function displayNodeRow(label, id, category) {
     $("#node_table > tbody").append(
@@ -49,7 +47,7 @@ function InfoDiv(divid) {
         label : $( "#node_label" ),
         contents : $( "#node_contents" ),
         cloud : $( "#node_neighbourhood" ),
-        /// Modif David
+        // Modif David
         cloudSearch: $("#node_neighbourhoodForSearch"),
         cloudSearchCopy : $( "#node_neighbourhoodCopy" ),
         unselect_button: $( "#toggle-unselect" ),
@@ -61,8 +59,8 @@ function InfoDiv(divid) {
         },
         last_category: "",
         /*
-* dispatch current category displayed
-*/
+        * dispatch current category displayed
+        */
         display_current_category: function() {
             console.log(tinaviz);
             var current_view = tinaviz.views.current.name();
@@ -79,6 +77,7 @@ function InfoDiv(divid) {
             else
                 $("#toggle-switch").button("option", "label", "switch category");
         },
+
         /*
         * dispatch current view displayed
         */
@@ -102,30 +101,10 @@ function InfoDiv(divid) {
             }
         },
 
-
-
         /*
-* Generic sorting DOM lists
-*/
-        alphabeticJquerySort: function(parentdiv, childrendiv, separator) {
-            var listitems = parentdiv.children(childrendiv).get();
-            listitems.sort(function(a, b) {
-                var compA = $(a).html().toUpperCase();
-                var compB = $(b).html().toUpperCase();
-                return (compA < compB) ? -1 : (compA > compB) ? 1 : 0;
-            })
-            $.each(listitems, function(idx, itm) {
-                if ( idx != 0 && idx != listitems.length )
-                    parentdiv.append(separator);
-                parentdiv.append(itm);
-            });
-            return parentdiv;
-        },
-
-        /*
-* updates the tag cloud
-* of the opposite nodes of a given selection
-*/
+        * updates the tag cloud
+        * of the opposite nodes of a given selection
+        */
         updateTagCloud: function( viewLevel ) {
             /* builds aggregated tag object */
             if (Object.size( this.selection ) == 0) return;
@@ -155,13 +134,11 @@ function InfoDiv(divid) {
 
             }
             this.oppositeSelection = toBe;
-            //var sorted_tags = alphabeticListSort( Object.values( tempcloud ), 'label' );
             var sorted_tags = numericListSort( Object.values( tempcloud ), 'degree' );
-
 
             /* some display sizes const */
 
-            /// Modif david
+            // Modif david
             this.cloudSearch.empty();
             var Googlerequests = "http://www.google.com/#q=";
             var PubMedrequests = "http://www.ncbi.nlm.nih.gov/pubmed?term=";
@@ -174,8 +151,8 @@ function InfoDiv(divid) {
                 if (i < sorted_tags.length - 1) requests = requests + "+AND+";
             }
             console.log(tinaviz);
-            var current_cat = tinaviz.views.current.category();  /// category courante
-            ///alert(current_cat)
+            var current_cat = tinaviz.views.current.category();
+
             if (current_cat !== undefined){
                 var oppositeRealName = this.categories[tinaviz.getOppositeCategory(current_cat)];
                 if (oppositeRealName !== undefined){
@@ -255,8 +232,8 @@ function InfoDiv(divid) {
         },
 
         /*
-* updates the label and content DOM divs
-*/
+        * updates the label and content DOM divs
+        */
         updateInfo: function(lastselection) {
             console.log(tinaviz);
             var layout_name=tinaviz.get("layout/algorithm");
@@ -311,14 +288,12 @@ function InfoDiv(divid) {
                         }
                     }
                     if ( current_cat == 'Document' ){
-                        var temp=decodeJSON(node.content);
-                        var content=fillContent(node);
+                        var temp = decodeJSON(node.content);
+                        var content = this.fillContent(node);
                     }
                     else{
                         var content = decHTMLifEnc(jQuery.trim(decodeJSON(node.content)));
                     }
-
-                    console.dir(node);
 
                     // add node to selection cache
                     this.selection[id] = lastselection[id];
@@ -347,10 +322,11 @@ function InfoDiv(divid) {
                         }
 
                     }
-                    contentinnerdiv.append( $("<p></p>").html( urlList( htmlDecode(label),this.categories[current_cat]) ) );
+                    contentinnerdiv.append( $("<p></p>").html( this.getSearchQueries( htmlDecode(label),this.categories[current_cat]) ) );
                 }
                 contentinnerdiv.append("<br/");
             }
+
             if ( yearsArray[0] != undefined){ // we have phylogenetic data
                 labelinnerdiv.empty();
                 var numEltMax=3; // highest number of labels display in phylo mode
@@ -379,7 +355,7 @@ function InfoDiv(divid) {
                 this.label.empty();
                 this.unselect_button.show();
                 this.contents.empty();
-                this.label.append( this.alphabeticJquerySort( labelinnerdiv, "b", ", &nbsp;" ));
+                this.label.append( alphabeticJquerySort( labelinnerdiv, "b", ", &nbsp;" ));
                 this.contents.append( contentinnerdiv );
 
             //this.attributes.empty();
@@ -392,9 +368,9 @@ function InfoDiv(divid) {
         },
 
         /*
-* Main method recceiving a new node selection
-* and dispatching infodiv updates
-* */
+        * Main method recceiving a new node selection
+        * and dispatching infodiv updates
+        */
         update: function(view, lastselection) {
             if ( Object.size ( lastselection ) == 0 ) {
                 this.reset();
@@ -406,8 +382,8 @@ function InfoDiv(divid) {
         },
 
         /*
-* Resets the entire infodiv
-*/
+        * Resets the entire infodiv
+        */
         reset: function() {
             this.unselect_button.hide();
             this.label.empty().append($("<h2></h2>").html("Empty selection"));
@@ -438,12 +414,12 @@ function InfoDiv(divid) {
             this.neighbours = {};
             this.data = {};
             this.last_category = "";
-
             return;
         },
+
         /*
-* Init the node list
-*/
+        * Init the node list
+        */
         updateNodeList: function(node_list, category) {
             if (category != this.last_category) {
                 this.table.empty();
@@ -458,26 +434,112 @@ function InfoDiv(divid) {
                     })();
                 }
             }
+        },
+
+        /*
+        /* displays node contents
+        */
+        fillContent: function(node) {
+            // donne le contenu de la div content
+            var layout_name = tinaviz.get("layout/algorithm");
+            if (layout_name == "phyloforce") {
+                // get node's year
+                var nodeId = jQuery.trim(decodeJSON(node.id));
+                var hashes = nodeId.split('::'); // obsolet and new terms
+                var hash = hashes[1].split('_');
+                var year=hash[0];
+                var content = this.content2html(decodeJSON(node.content));
+            }
+            else {
+                var content = decHTMLifEnc(jQuery.trim(decodeJSON(node.content)));
+            }
+            return content;
+        },
+
+        /*
+        /* displays node contents
+        */
+        content2html: function(content) {
+            var vars = [],  htmlstring, hash;
+            var titles= [];
+            titles[0]='<b>Lost: </b>';
+            titles[1]='<b>New: </b>';
+            var htmlstring="";
+
+            var hashes = content.split('_'); // obsolet and new terms
+            for(var i = 0; i < hashes.length; i++){
+                if (hashes[i]=='.') continue;
+                htmlstring += titles[i];
+                hash = hashes[i].split('-'); // list of terms
+                for(var j = 0; j < hash.length; j++){
+                    var node=tinaviz.getNodeAttributes("macro",'N::'+hash[j]);
+                    htmlstring+= htmlDecode(node.label.replace(/\+/g," "))+", ";
+                }
+                htmlstring += "<br/>";
+            }
+            return htmlstring;
+        },
+
+        /*
+        /* displays node related search queries
+        */
+        getSearchQueries: function(label,CurrentCategRealName){
+            var SearchQuery=label.replace(/ /gi ,"+");
+            //var WikiQuery=label.replace("+","_");
+            if (CurrentCategRealName == "projects"){
+                return $("<p></p>").html(
+                    '<a href="'
+                    + tinaviz.getPath()
+                    +'http://www.google.com/#hl=en&source=hp&q=%20'
+                    + SearchQuery.replace(",","OR")
+                    + '%20" align=middle target=blank height=15 width=15> <img src="'
+                    + tinaviz.getPath()
+                    +'css/branding/google.png" height=15 width=15> </a><a href="http://en.wikipedia.org/wiki/'
+                    + label.replace(/ /gi ,"_")
+                    + '" align=middle target=blank height=15 width=15> <img src="'
+                    + tinaviz.getPath()
+                    +'css/branding/wikipedia.png" height=15 width=15> </a><a href="http://www.flickr.com/search/?w=all&q='
+                    + SearchQuery
+                    + '" align=middle target=blank height=15 width=15> <img src="'
+                    + tinaviz.getPath()
+                    +'css/branding/flickr.png" height=15 width=15> </a>'
+                    )
+
+            }
+            else if ((CurrentCategRealName == "NGrams")|(CurrentCategRealName == "NGram")|(CurrentCategRealName == "keywords")|(CurrentCategRealName == "Keywords")|(CurrentCategRealName == "Terms")|(CurrentCategRealName == "Communities")|(CurrentCategRealName == "Documents")) {
+                return $("<p></p>").html(
+                    '<a href="http://www.google.com/#hl=en&source=hp&q=%20'
+                    + SearchQuery.replace(",","OR")
+                    + '%20" align=middle target=blank height=15 width=15> <img src="'
+                    + tinaviz.getPath()
+                    +'css/branding/google.png" height=15 width=15> </a><a href="http://en.wikipedia.org/wiki/'
+                    + label.replace(/ /gi ,"_")
+                    + '" align=middle target=blank height=15 width=15> <img src="'
+                    + tinaviz.getPath()
+                    +'css/branding/wikipedia.png" height=15 width=15> </a><a href="http://www.flickr.com/search/?w=all&q='
+                    + SearchQuery
+                    + '" align=middle target=blank height=15 width=15> <img src="'
+                    + tinaviz.getPath()
+                    +'css/branding/flickr.png" height=15 width=15> </a>'
+                    )
+            }
+            else if ((CurrentCategRealName == "Scholars")|(CurrentCategRealName == "People")|(CurrentCategRealName == "scholars")){
+                return $("<p></p>").html(
+                    '<a href="http://www.google.com/#hl=en&source=hp&q=%20'
+                    + SearchQuery
+                    + '%20" align=middle target=blank height=15 width=15> <img src="'
+                    + tinaviz.getPath()+'css/branding/google.png" height=15 width=15> </a>'
+                    +'<a href="http://scholar.google.com/scholar?q=%20'
+                    + SearchQuery
+                    + '%20" align=middle target=blank height=15 width=15> <img src="'
+                    + tinaviz.getPath()
+                    +'css/branding/googleScholars.png" height=15 width=15> </a>'
+                    )
+            }
+            else {
+                return $("<p></p>");
+            }
         }
 
     } // end of return
 };
-
-
-/*
-* WHAT IS IT ?????
-* DOCUMENTATION REQUIRED
-*/
-function stp(fld) {
-    var res = "";
-    var c = 0;
-    for (i=0; i<fld.length; i++) {
-        if (fld.charAt(i) != " " || c > 0) {
-            res += fld.charAt(i);
-            if (fld.charAt(i) != " ") {
-                c = res.length;
-            }
-        }
-    }
-    return res.substr(0,c);
-}
