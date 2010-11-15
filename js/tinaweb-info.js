@@ -26,7 +26,6 @@ function displayNodeRow(label, id, category) {
         $("<tr></tr>").append(
             $("<td id='"+id+"'></td>").text(label).click( function(eventObject) {
                 //switch to meso view
-                console.log(tinaviz);
                 tinaviz.viewMeso(id, category);
             })
             )
@@ -437,7 +436,7 @@ function InfoDiv(divid) {
         },
 
         /*
-        /* displays node contents
+        * fills node's content DIV
         */
         fillContent: function(node) {
             // donne le contenu de la div content
@@ -448,18 +447,31 @@ function InfoDiv(divid) {
                 var hashes = nodeId.split('::'); // obsolet and new terms
                 var hash = hashes[1].split('_');
                 var year=hash[0];
-                var content = this.content2html(decodeJSON(node.content));
+                var content = this.getPhyloNodeHtml(node);
             }
             else {
-                var content = decHTMLifEnc(jQuery.trim(decodeJSON(node.content)));
+                var content = this.getGenericNodeHtml(node);
             }
             return content;
         },
 
         /*
-        /* displays node contents
+        * displays node contents in the generic case
         */
-        content2html: function(content) {
+        getGenericNodeHtml: function(node) {
+            if (node.content === undefined) {
+                return "";
+            }
+            else {
+                return decHTMLifEnc(jQuery.trim(decodeJSON(node.content)));
+            }
+        },
+
+        /*
+        * displays node contents if in phyloweb context
+        */
+        getPhyloNodeHtml: function(node) {
+            var content = decodeJSON(node.ccntent);
             var vars = [],  htmlstring, hash;
             var titles= [];
             titles[0]='<b>Lost: </b>';
