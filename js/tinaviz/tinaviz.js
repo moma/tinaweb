@@ -320,7 +320,9 @@ function Tinaviz(args) {
             type: "GET",
             dataType: "text", // if we use 'text', we need to disable cache
             cache: "false", //
-            error: function() {
+            error: function(e,f,g) {
+                tinaviz.logNormal("AJAX error = "+e.statusText);
+
             /*
                 try {
                     if (opts.url.search("://") != -1) {
@@ -388,78 +390,7 @@ function Tinaviz(args) {
         this.callbackSelectionChanged = opts.selectionChanged;
     }
 
-    this.getHTML = function() {
-        var path = this.libPath;
-        var context = this.context;
-        var engine = this.engine;
-
-        var archives = path+'tinaviz-all.jar';
-
-        var brand = "true";
-        if (this.branding == false) brand = "false";
-
-        var appletTag = '<!--[if !IE]> --> \
-                            <object id="tinaviz" \
-                                        classid="java:tinaviz.Main" \
-                                        type="application/x-java-applet" \
-                                        archive="'+archives+'" \
-                                        width="10" height="10" \
-                                        standby="Loading Tinaviz..." > \
- \
-                              <param name="archive" value="'+archives+'" /> \
-                              <param name="mayscript" value="true" /> \
-                              <param name="scriptable" value="true" /> \
- \
-                              <!--<param name="image" value="css/branding/appletLoading.gif" />--> \
-                                <param name="boxmessage" value="Loading TinaViz..." /> \
-                              <param name="boxbgcolor" value="#FFFFFF" /> \
-                              <param name="progressbar" value="true" /> \
-                              <!--<param name="noddraw.check" value="true">--> \
-                                <param name="engine" value="'+engine+'" /> \
-                                <param name="js_context" value="'+context+'" /> \
-                                <param name="root_prefix" value="'+path+'" /> \
-                                <param name="branding_icon" value="'+brand+'" /> \
-                                <param name="classloader_cache" value="false" /> \
-                                <!--<param name="separate_jvm" value="true" />--> \
-                              <!--<![endif]--> \
- \
-                              <object id="tinaviz" classid="clsid:CAFEEFAC-0016-0000-FFFF-ABCDEFFEDCBA" \
-                                  width="10" height="10" \
-                                  standby="Loading Processing software..."  > \
- \
-                                <param name="code" value="tinaviz.Main" /> \
-                                <param name="archive" value="'+archives+'" />\
-                                <param name="mayscript" value="true" /> \
-                                <param name="scriptable" value="true" /> \
- \
-                              <!--<param name="image" value="css/branding/appletLoading.gif" /> --> \
-                                <param name="boxmessage" value="Loading TinaViz..." /> \
-                                <param name="boxbgcolor" value="#FFFFFF" /> \
-                                <param name="progressbar" value="true" /> \
-                                <!--<param name="noddraw.check" value="true">--> \
-                                <param name="engine" value="'+engine+'" /> \
-                                <param name="js_context" value="'+context+'" />\
-                                <param name="root_prefix" value="'+path+'" /> \
-                                <param name="branding_icon" value="'+brand+'" /> \
-                                <param name="classloader_cache" value="false" /> \
-                                <!--<param name="separate_jvm" value="true" />--> \
-                                <p>\
-                                    <strong>\
-                                        This browser does not have a Java Plug-in.\
-                                        <br />\
-                                        <a href="http://www.java.com/getjava" title="Download Java Plug-in">\
-                                            Get the latest Java Plug-in here.\
-                                        </a>\
-                                    </strong>\
-                                </p>\
-\
-                              </object>\
-\
-                              <!--[if !IE]> -->\
-                            </applet>\
-                            <!--<![endif]-->';
-        return appletTag;
-    }
+    
 
 
     /**
@@ -474,10 +405,10 @@ function Tinaviz(args) {
      */
     this.set = function(key,value, sync) {
           
-        if (sync===undefined || sync==null) {        
-             applet.setParam(key,value, false);
+        if (sync===undefined || sync==null) {
+            applet.setParam(key,value, false);
         } else {
-             applet.setParam(key,value, true);
+            applet.setParam(key,value, true);
         }
 
     }
@@ -490,7 +421,7 @@ function Tinaviz(args) {
     }
     
     this.askForNeighbours = function(dataset, id, category) {
-       // alert("askForNeighbours("+dataset+","+id+","+category+")");
+        // alert("askForNeighbours("+dataset+","+id+","+category+")");
 
         /*
  *
@@ -575,7 +506,7 @@ function Tinaviz(args) {
     }
 
     this.resetLayoutCounter= function(view) {
-        applet.view(view).set("layout/iter",0,false);
+        this.views[view].set("layout/iter",0,false);
     }
 
     /*
@@ -653,7 +584,7 @@ function Tinaviz(args) {
     }
     
     this.getNeighboursFromDatabase = function(id) {
-        var elem = id.split('::');  
+        var elem = id.split('::');
         //logNormal("var data = TinaService.getNgrams("+elem[1]+");");
 
         TinaService.getNGrams(
@@ -672,7 +603,7 @@ function Tinaviz(args) {
 
 
 
-    /** 
+    /**
      * Callback for clicks on nodes
      * 
      * @param view 
@@ -692,7 +623,7 @@ function Tinaviz(args) {
     }
 
     this.constructNewViewObject = function(viewName) {
-        var view = this.view(viewName);
+        var view = this.views[viewName];
 
         var reply = {
             layoutCounter: 0,
@@ -882,7 +813,7 @@ function Tinaviz(args) {
 
 
 
-    /**************************************** 
+    /****************************************
      *
      * HTML VIZ DIV ADJUSTING/ACTION
      *
@@ -913,6 +844,57 @@ function Tinaviz(args) {
         callbackImported(msg);
     }
 
+    this.getHTML = function() {
+        var path = this.libPath;
+        var context = this.context;
+        var engine = this.engine;
+
+        var brand = "true";
+        if (this.branding == false) brand = "false";
+
+
+        var buff = '';
+        var func = document.write;
+        document.write = function(arg){
+            buff += arg;
+        }
+        var res = deployJava.writeAppletTag({
+            id: "tinaviz",
+            code: 'tinaviz.Main.class',
+            archive: path+'tinaviz-all.jar',
+            width: 10,
+            height: 10,
+            image: 'css/branding/appletLoading.gif',
+            standby: "Loading Tinaviz..."
+        }, {
+            engine: engine,
+            js_context: context,
+            root_prefix: path,
+            branding_icon: brand,
+            progressbar: false,
+            boxbgcolor: "#FFFFFF",
+            boxmessage: "Loading Tinaviz...",
+            image: "css/branding/appletLoading.gif",
+            mayscript: true,
+            scriptable: true
+        });
+        document.write = func;
+        return buff;
+    }
+    //alert( this.getHTML() );
     this.tag.html( this.getHTML() );
 }
 
+
+/*
+ JQUERY TINAVIZ PLUGIN - FOR NEXT VERSION OF TINAVIZ
+
+(function($){
+ $.fn.truncate = function() {
+    tinaviz = new Tinaviz();
+    this.tag.html( tinaviz.getHTML() );
+    return tinaviz;
+ };
+})(jQuery);
+
+ */

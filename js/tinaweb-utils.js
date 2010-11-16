@@ -153,7 +153,7 @@ function getScreenHeight() {
     return y;
 }
 
-var resize = function() {
+function resize() {
     var infoDivWidth = 390;
 
     var size = {
@@ -165,7 +165,7 @@ var resize = function() {
     $("#infodiv").css('width', infoDivWidth);
     $("#infodivparent").css('height', size.h);
     return size;
-};
+}
 
 function find(element,array){
     // Find the position of element in the array list,n return
