@@ -403,12 +403,12 @@ function Tinaviz(args) {
     /**
      * Set a value to all views
      */
-    this.set = function(key,value, sync) {
+    this.set = function(key, value, sync) {
           
         if (sync===undefined || sync==null) {
-            applet.setParam(key,value, false);
-        } else {
             applet.setParam(key,value, true);
+        } else {
+            applet.setParam(key,value, sync);
         }
 
     }

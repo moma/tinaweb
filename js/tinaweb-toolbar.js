@@ -63,7 +63,7 @@ $(document).ready(function(){
     
    $("#nodeWeightSelector").change(function() { 
        //alert("SET WEIGHT TO "+$("#nodeShapeSelector").val());
-       tinaviz.views.current.set("output/weight",$("#nodeShapeSelector").val(), true);
+       tinaviz.views.current.set("output/weight",$("#nodeWeightSelector").val(), true);
     }); 
     
    $("#nodeShapeSelector").change(function() { 
@@ -218,7 +218,7 @@ toolbar.init = function() {
         max: 100.0,// precision/size
         animate: true,
         slide: function(event, ui) {
-            tinaviz.set("output/scaling", ui.value / 100.0, true);
+            tinaviz.set("output/scaling", ui.value / 100.0);
         }
     }
     );
@@ -228,7 +228,7 @@ toolbar.init = function() {
         max: 300.0, // max disk radius, in pixel
         animate: true,
         slide: function(event, ui) {
-            tinaviz.set("selection/radius", ui.value, true);
+            tinaviz.set("selection/radius", ui.value);
         }
     });
 
@@ -247,6 +247,8 @@ toolbar.init = function() {
 
     **/
 
+
+    /** Pause disabled **
     $("#toggle-paused").button({
         icons: {
             primary:'ui-icon-pause'
@@ -269,6 +271,7 @@ toolbar.init = function() {
             p.button('option','label',"pause");
         }
     });
+    */
 
     $("#toggle-unselect").button({
         icons: {
