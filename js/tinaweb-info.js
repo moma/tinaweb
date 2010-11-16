@@ -61,10 +61,8 @@ function InfoDiv(divid) {
         * dispatch current category displayed
         */
         display_current_category: function() {
-            console.log(tinaviz);
             var current_view = tinaviz.views.current.name();
             var current_cat = tinaviz.views.current.category();
-            console.log(tinaviz);
             if (current_cat !== undefined)
                 var opposite = this.categories[tinaviz.getOppositeCategory(current_cat)];
             //$("#title_acc_1").text("current selection of "+ this.categories[current_cat]);
@@ -81,7 +79,6 @@ function InfoDiv(divid) {
         * dispatch current view displayed
         */
         display_current_view: function() {
-            console.log(tinaviz);
             var current_view = tinaviz.views.current.name();
             if (current_view !== undefined) {
                 var level = $("#level");
@@ -111,11 +108,8 @@ function InfoDiv(divid) {
             var toBe = new Array();
             for (var nodeid in this.selection) {
                 // gets the full neighbourhood for the tag cloud
-                console.log(tinaviz);
-                var nb = tinaviz.getNeighbourhood(viewLevel,nodeid);
-                //alert("over-writing tinaviz 2be selected");
+                var nb = tinaviz.getNeighbourhood(viewLevel, nodeid);
                 for (var nbid in nb) {
-                    //alert(nbid);
                     if ( tempcloud[nbid] !== undefined )
                         tempcloud[nbid]['degree']++;
                     // pushes a node if belongs to the opposite category
@@ -125,7 +119,7 @@ function InfoDiv(divid) {
                             'id': nbid,
                             'label' : decodeJSON(nb[nbid]['label']),
                             'degree' : 1,
-                            'occurrences': parseInt(nb[nbid]['occurrences']),
+                            /*'occurrences': parseInt(nb[nbid]['occurrences']),*/
                             'category': decodeJSON(nb[nbid]['category'])
                         };
                     }
@@ -149,7 +143,7 @@ function InfoDiv(divid) {
                 requests = requests + "%22" + tagLabel.replace(" ","+") + "%22";
                 if (i < sorted_tags.length - 1) requests = requests + "+AND+";
             }
-            console.log(tinaviz);
+
             var current_cat = tinaviz.views.current.category();
 
             if (current_cat !== undefined){
@@ -234,7 +228,6 @@ function InfoDiv(divid) {
         * updates the label and content DOM divs
         */
         updateInfo: function(lastselection) {
-            console.log(tinaviz);
             var layout_name=tinaviz.get("layout/algorithm");
             var decHTMLifEnc = function(str){
                 return str.replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>');
@@ -301,7 +294,7 @@ function InfoDiv(divid) {
 
                     this.selection[id] = lastselection[id];
                     // displays contents only if it's a document
-                    console.log(tinaviz);
+
                     var current_cat = tinaviz.get("category/category");
                     if (current_cat !== undefined) {
                         // jQuery.text automaticcally html encode characters
