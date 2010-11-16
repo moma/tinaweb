@@ -54,63 +54,51 @@ $(document).ready(function(){
     }, function() {
         $(this).css('cursor','auto');
     });
-    
 
-   $("#nodeRadiusSelector").change(function() { 
+
+   $("#nodeRadiusSelector").change(function() {
        //alert("SET RADIUS TO "+$("#nodeRadiusSelector").val());
        tinaviz.views.current.set("output/radius",$("#nodeRadiusSelector").val(), true);
-    }); 
-    
-   $("#nodeWeightSelector").change(function() { 
+    });
+
+   $("#nodeWeightSelector").change(function() {
        //alert("SET WEIGHT TO "+$("#nodeShapeSelector").val());
        tinaviz.views.current.set("output/weight",$("#nodeWeightSelector").val(), true);
     }); 
     
-   $("#nodeShapeSelector").change(function() { 
-       //alert("SET SHAPE TO "+$("#nodeShapeSelector").val());
+   $("#nodeShapeSelector").change(function() {
        tinaviz.views.current.set("output/shape",$("#nodeShapeSelector").val(), true);
-    }); 
-    
-   $("#nodeColorSelector").change(function() { 
+    });
+
+   $("#nodeColorSelector").change(function() {
        //alert("SET COLOR TO "+ $("#nodeColorSelector").val(), true);
        tinaviz.views.current.set("output/color",$("#nodeColorSelector").val(), true);
-    }); 
-    
+    });
+
 });
 
 var toolbar = {
-
     values: {
-    
         search: "",
-        
         sliders: {
-        
             magnify: 0.5,
-            
             cursor_size: 0.5,
-        
             nodeFilter: {
                 min: 0.0,
                 max: 1.0
             },
-            
             edgeFilter: {
                 min: 0.0,
                 max: 1.0
             }
         },
         buttons: {
-        
             pause: false,
             showNodes: true,
             showEdges: true,
             hd: false
-        
         }
-    
     }
-
 };
 
 
@@ -119,7 +107,7 @@ toolbar.checkSearchForm = function() {
       var txt = $("#search_input").val();
       if (txt != toolbar.lastSearch) {
             tinaviz.unselect();
-           toolbar.lastSearch = txt;   
+           toolbar.lastSearch = txt;
           if (txt=="") {
              tinaviz.searchNodes("", "", "", "", false);
           } else {
@@ -131,14 +119,13 @@ toolbar.checkSearchForm = function() {
 };
 
 toolbar.init = function() {
-    
+
     $("search").val(toolbar.values.search);
-    
     $("#search").submit(function() {
         /*
         var txt = $("#search_input").val();
          tinaviz.unselect();
-         
+
         if (txt=="") {
 
         } else {
@@ -154,12 +141,12 @@ toolbar.init = function() {
         */
         return false;
     });
-    
+
     /*
     $("#search").keypress(function() {
        // toolbar.checkSearchForm();
     });*/
- 
+
     $("#level").button({
         text: true,
         icons: {
@@ -189,7 +176,7 @@ toolbar.init = function() {
         values: [toolbar.values.sliders.edgeFilter.min, toolbar.values.sliders.edgeFilter.max * 100.0],
         animate: true,
         slide: function(event, ui) {
-            
+
             tinaviz.set("edgeWeight/min", ui.values[0] / 100.0, false);
             tinaviz.set("edgeWeight/max", ui.values[1] / 100.0, true);
             //tinaviz.set("layout/iter", 0);
@@ -313,10 +300,10 @@ toolbar.init = function() {
         tinaviz.updateNodes(view.name(), next_cat);
 
         view.category(next_cat);
-        
+
         tinaviz.autoCentering();
-             
-         
+
+
         if (view.name()=="macro") {
             // empty the selection, and ask the applet to select opposite nodes
             var i = 0;
@@ -326,11 +313,11 @@ toolbar.init = function() {
                 tinaviz.selectFromId(tinaviz.infodiv.oppositeSelection[nbid], cb);
             }
         }
-    
+
         // update the algorithm
         view.categories[cat].layout.iter = view.get("layout/iter");
         view.set("layout/iter", view.categories[next_cat].layout.iter, true);
-        
+
         tinaviz.infodiv.display_current_category();
 
     });
@@ -347,14 +334,14 @@ toolbar.updateButton = function(button, state) {
 // NEVER CALLED
 toolbar.update = function(vals) {
     console.dir(vals);
-    
+
     for (v in vals) {
         toolbar.values[v] = vals[v];
     }
-    
+
     // simple shortcut
     var values = toolbar.values;
-    
+
     for (v in vals) {
         toolbar.values[v] = vals[v];
     }
@@ -371,7 +358,7 @@ toolbar.update = function(vals) {
         ]);
     $("#sliderNodeWeight").slider( "option", "values", [
         values.sliders.nodeFilter.min,
-        values.sliders.nodeFilter.max * 100.0 
+        values.sliders.nodeFilter.max * 100.0
         ]);
-    
+
 };
