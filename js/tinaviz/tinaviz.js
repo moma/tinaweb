@@ -541,12 +541,12 @@ function Tinaviz(args) {
      * Gets the list of neighbours for a given node
      */
     this.getNeighbourhood = function(view,id) {
-        return $.parseJSON( applet.getNeighbourhood(view,id) );
+        var obj = $.parseJSON( applet.getNeighbourhood(view,id) );
+        return obj;
     }
 
     this.getNeighboursFromDatabase = function(id) {
         var elem = id.split('::');
-
         TinaService.getNGrams(
             0,
             elem[1],
@@ -558,7 +558,7 @@ function Tinaviz(args) {
     }
 
     /**
-     * Callback for clicks on nodes
+     * Callback on every node selection modification
      *
      * @param view
      * @param attr
@@ -576,9 +576,12 @@ function Tinaviz(args) {
         })
     }
 
+    /*
+     * Builds a new view
+     * fired by the callback of the applet's view change
+     */
     this.constructNewViewObject = function(viewName) {
         var view = this.views[viewName];
-
         var reply = {
             layoutCounter: 0,
             category: view.get("category/category"),

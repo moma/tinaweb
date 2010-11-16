@@ -1,6 +1,6 @@
 //      This program is free software; you can redistribute it and/or modify
 //      it under the terms of the GNU General Public License as published by
-//      the Free Software Foundation; either version 2 of the License, or
+//      the Free Software Foundation; either version 3 of the License, or
 //      (at your option) any later version.
 //
 //      This program is distributed in the hope that it will be useful,
@@ -64,8 +64,8 @@ $(document).ready(function(){
    $("#nodeWeightSelector").change(function() {
        //alert("SET WEIGHT TO "+$("#nodeShapeSelector").val());
        tinaviz.views.current.set("output/weight",$("#nodeWeightSelector").val(), true);
-    }); 
-    
+    });
+
    $("#nodeShapeSelector").change(function() {
        tinaviz.views.current.set("output/shape",$("#nodeShapeSelector").val(), true);
     });
@@ -104,18 +104,18 @@ var toolbar = {
 
 toolbar.lastSearch = "";
 toolbar.checkSearchForm = function() {
-      var txt = $("#search_input").val();
-      if (txt != toolbar.lastSearch) {
-            tinaviz.unselect();
-           toolbar.lastSearch = txt;
-          if (txt=="") {
-             tinaviz.searchNodes("", "", "", "", false);
-          } else {
-              var cat = tinaviz.views.current.category();
-               tinaviz.searchNodes(txt, cat, "containsIgnoreCase", "current", true);
-          }
-      }
-   setTimeout("toolbar.checkSearchForm()",200);
+    var txt = $("#search_input").val();
+    if (txt != toolbar.lastSearch) {
+        tinaviz.unselect();
+        toolbar.lastSearch = txt;
+        if (txt=="") {
+            tinaviz.searchNodes("", "", "", "", false);
+        } else {
+            var cat = tinaviz.views.current.category();
+            tinaviz.searchNodes(txt, cat, "containsIgnoreCase", "current", true);
+        }
+    }
+    setTimeout("toolbar.checkSearchForm()",200);
 };
 
 toolbar.init = function() {
