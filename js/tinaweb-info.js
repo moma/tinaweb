@@ -272,21 +272,16 @@ function InfoDiv(divid) {
                     };
 
                     number_of_label++;//preaffichage
-                    if (number_of_label<5){
-                    labelinnerdiv.append( $("<b></b>").html(label) );
-                    }else{
+                    if (number_of_label<5) {
+                        labelinnerdiv.append( $("<b></b>").html(label) );
+                    }
+                    else {
                         if (number_of_label==5){
                            labelinnerdiv.append( $("<b></b>").html("[...]") );
                         }
                     }
-                    if ( current_cat == 'Document' ){
-                        var temp = decodeJSON(node.content);
-                        var content = this.fillContent(node);
-                    }
-                    else{
-                        var content = decHTMLifEnc(jQuery.trim(decodeJSON(node.content)));
-                    }
 
+                    var content = this.getNodeContent(node);
                     // add node to selection cache
                     this.selection[id] = lastselection[id];
                     var tmp = "<b>"+label+"</b>";
@@ -429,10 +424,9 @@ function InfoDiv(divid) {
         },
 
         /*
-        * fills node's content DIV
+        * returns node's contents
         */
-        fillContent: function(node) {
-            // donne le contenu de la div content
+        getNodeContent: function(node) {
             var layout_name = tinaviz.get("layout/algorithm");
             if (layout_name == "phyloforce") {
                 // get node's year
@@ -486,7 +480,7 @@ function InfoDiv(divid) {
         },
 
         /*
-        /* displays node related search queries
+        * displays node related search queries
         */
         getSearchQueries: function(label,CurrentCategRealName){
             var SearchQuery=label.replace(/ /gi ,"+");
