@@ -293,7 +293,6 @@ function Tinaviz(args) {
 
         if (opts.clear) {
             this.views.current.set("layout/iter", 0);
-        //applet.clear();
         }
 
         if (opts.layout) {
@@ -314,7 +313,6 @@ function Tinaviz(args) {
         callbackBeforeImport = opts.before;
         callbackBeforeImport();
 
-        //alert("loading "+args.url);
         $.ajax({
             url: opts.url,
             type: "GET",
@@ -371,11 +369,11 @@ function Tinaviz(args) {
 
     }
 
-    this.setLayout = function(name) {
+    this.setLayout=function(name) {
         this.set("layout/name", name);
     }
 
-    this.event = function(args) {
+    this.event=function(args) {
         var opts = {
             viewChanged: function(view){},
             categoryChanged: function(view){},
@@ -390,34 +388,36 @@ function Tinaviz(args) {
         this.callbackSelectionChanged = opts.selectionChanged;
     }
 
-    /*
+
+
+
+    /**
      * Core method communicating with the applet
      */
     this.get = function(key) {
         return applet.getView().get(key);
     }
 
-    /*
+    /**
      * Set a value to all views
      */
     this.set = function(key, value, sync) {
+
         if (sync===undefined || sync==null) {
             applet.setParam(key,value, true);
         } else {
             applet.setParam(key,value, sync);
         }
+
     }
 
-    /*
-     * Commands switching between view levels
+    /**
+     * Command switching between view levels
      */
     this.setView = function(view) {
         applet.setView(view);
     }
 
-    /*
-     * called by the applet to fill the graph
-     */
     this.askForNeighbours = function(dataset, id, category) {
         switch (category) {
             case 'Document':
@@ -440,6 +440,7 @@ function Tinaviz(args) {
             case 'NGram':
                 TinaService.getNGram(dataset, id, {
                     success: function(data, textStatus, XMLHttpRequest) {
+                        //alert("got" +data.edges);
                         applet.setNeighbourhood(category+"::"+id, $.toJSON(data.edges));
                     },
                     error: function(XMLHttpRequest, textStatus, errorThrown) {
@@ -457,6 +458,7 @@ function Tinaviz(args) {
         }
 
     }
+
 
     /*
      *  Adds a node to the current selection
@@ -481,7 +483,6 @@ function Tinaviz(args) {
             return applet.isEnabled();
         }
     }
-
     /*
      *  Set the current state of the applet to enable
      */
@@ -490,7 +491,7 @@ function Tinaviz(args) {
     }
 
     /*
-    * Search nodes
+    * Simple search nodes
     */
     this.getNodesByLabel = function(label, type) {
         if (label.length < 3) return {};
@@ -534,7 +535,7 @@ function Tinaviz(args) {
         if (applet == null) return {};
         return $.parseJSON(
             applet.getNodeAttributes(view,id)
-        );
+            );
     }
 
     /*
@@ -542,6 +543,7 @@ function Tinaviz(args) {
      */
     this.getNeighbourhood = function(view,id) {
         return $.parseJSON( applet.getNeighbourhood(view,id) );
+
     }
 
     this.getNeighboursFromDatabase = function(id) {
@@ -552,13 +554,16 @@ function Tinaviz(args) {
             elem[1],
             {
                 success: function(data) {
+                //
+                //logNormal("var data = "+data+";");
                 }
             }
-        );
+            );
+
     }
 
     /**
-     * Callback for clicks on nodes
+     * Callback on every node selection modification
      *
      * @param view
      * @param attr
@@ -576,9 +581,12 @@ function Tinaviz(args) {
         })
     }
 
+    /*
+     * Builds a new view
+     * fired by the callback of the applet's view change
+     */
     this.constructNewViewObject = function(viewName) {
         var view = this.views[viewName];
-
         var reply = {
             layoutCounter: 0,
             category: view.get("category/category"),
@@ -624,7 +632,7 @@ function Tinaviz(args) {
         return reply;
     }
 
-    /*
+    /**
     * Callback after CHANGING THE VIEW LEVEL
     */
     this.switchedTo = function(viewName, selected) {
@@ -637,21 +645,21 @@ function Tinaviz(args) {
         return applet.getView().toggleLabels();
     }
 
-    /*
+    /**
      * hide/show nodes
      */
     this.toggleNodes = function() {
         return applet.getView().toggleNodes();
     }
 
-    /*
+    /**
      * hide/show edges
      */
     this.toggleEdges = function() {
         return applet.getView().toggleLinks();
     }
 
-    /*
+    /**
      * play/pause layout engine
      */
     this.togglePause = function() {
@@ -662,14 +670,13 @@ function Tinaviz(args) {
         applet.getView().setPause(value);
     }
 
-    /*
+    /**
      * toggles HD rendering
      */
     this.toggleHD = function() {
         return applet.getView().toggleHD();
     }
-
-    /*
+    /**
      * Get the opposite category name (the NOT DISPLAYED one)
      */
     this.getOppositeCategory = function(cat) {
@@ -681,7 +688,8 @@ function Tinaviz(args) {
         return "Document";
     }
 
-    /*
+
+    /**
      * Manually toggles the view to meso given an id
      */
     this.viewMeso = function(id, category) {
@@ -720,6 +728,7 @@ function Tinaviz(args) {
             this.setView("macro");
             this.updateNodes("macro", current_cat);
         }
+
     }
 
     this.session=function() {
@@ -735,7 +744,7 @@ function Tinaviz(args) {
         }
     }
 
-    /*
+    /**
      * Manually unselects all nodes
      */
     this.unselect= function() {
@@ -743,16 +752,15 @@ function Tinaviz(args) {
         this.infodiv.reset();
     }
 
-    /*
-     * Retrieves list of nodes
+    /**
+     *  Retrieves list of nodes
      *  nodes = tinaviz.getNodes("macro", "NGram")
      */
     this.getNodes = function(view, category) {
         this.infodiv.data[category] = $.parseJSON( applet.getNodes(view, category) );
         return this.infodiv.data[category];
     }
-
-    /*
+    /**
      *  Fires the update of node list cache and display
      */
     this.updateNodes = function(view, category)  {
@@ -764,15 +772,7 @@ function Tinaviz(args) {
             this.infodiv.updateNodeList( this.infodiv.data[category], category );
     }
 
-
-
-    /****************************************
-     *
-     * HTML VIZ DIV ADJUSTING/ACTION
-     *
-     ****************************************/
-
-    /*
+    /**
      * Dynamic div width
      */
     this.size= function(width, height) {
@@ -783,14 +783,14 @@ function Tinaviz(args) {
         wrapper.width = width;
     }
 
-    /*
+    /**
      * Callback changing button states
      */
     this.buttonStateCallback = function(button, enabled) {
         toolbar.updateButton(button, enabled);
     }
 
-    /*
+    /**
      * Callback changing utton states
      */
     this.graphImportedCallback = function(msg) {

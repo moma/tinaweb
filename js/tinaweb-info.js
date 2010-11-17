@@ -1,6 +1,6 @@
 //      This program is free software; you can redistribute it and/or modify
 //      it under the terms of the GNU General Public License as published by
-//      the Free Software Foundation; either version 2 of the License, or
+//      the Free Software Foundation; either version 3 of the License, or
 //      (at your option) any later version.
 //
 //      This program is distributed in the hope that it will be useful,
@@ -471,8 +471,8 @@ function InfoDiv(divid) {
                 htmlstring += titles[i];
                 hash = hashes[i].split('-'); // list of terms
                 for(var j = 0; j < hash.length; j++){
-                    var node=tinaviz.getNodeAttributes("macro",'N::'+hash[j]);
-                    htmlstring+= htmlDecode(node.label.replace(/\+/g," "))+", ";
+                    var node = tinaviz.getNodeAttributes("macro",'N::'+hash[j]);
+                    htmlstring += htmlDecode(node.label.replace(/\+/g," "))+", ";
                 }
                 htmlstring += "<br/>";
             }
