@@ -105,7 +105,7 @@ function InfoDiv(divid) {
             /* builds aggregated tag object */
             if (Object.size( this.selection ) == 0) return;
             var tempcloud = {};
-            var toBe = new Array();
+            this.oppositeSelection = new Array();
             for (var nodeid in this.selection) {
                 // gets the full neighbourhood for the tag cloud
                 var nb = tinaviz.getNeighbourhood(viewLevel, nodeid);
@@ -114,19 +114,19 @@ function InfoDiv(divid) {
                         tempcloud[nbid]['degree']++;
                     // pushes a node if belongs to the opposite category
                     else if (this.selection[nodeid]['category'] != nb[nbid]['category']) {
-                        toBe.push(nbid);
+                        this.oppositeSelection.push(nbid);
                         tempcloud[nbid] = {
                             'id': nbid,
                             'label' : decodeJSON(nb[nbid]['label']),
                             'degree' : 1,
-                            /*'occurrences': parseInt(nb[nbid]['occurrences']),*/
+                            'occurrences': parseInt(nb[nbid]['occurrences']),
                             'category': decodeJSON(nb[nbid]['category'])
                         };
                     }
                 }
 
             }
-            this.oppositeSelection = toBe;
+
             var sorted_tags = numericListSort( Object.values( tempcloud ), 'degree' );
 
             /* some display sizes const */
@@ -171,41 +171,41 @@ function InfoDiv(divid) {
             var nb_displayed_tag=0;
             for (var i = 0; i < sorted_tags.length; i++) {
                 if (nb_displayed_tag<20){
-                nb_displayed_tag++;
-                var tag = sorted_tags[i];
-                var tagid = tag['id'];
-                var tagspan = $("<span id='"+tagid+"'></span>");
-                tagspan.addClass('ui-widget-content');
-                tagspan.addClass('viz_node');
-                tagspan.html(tag['label']);
-                (function() {
-                    var attached_id = tagid;
-                    var attached_cat =  tag['category'];
-                    tagspan.click( function() {
-                        //switch to meso view
-                        tinaviz.viewMeso(attached_id, attached_cat);
-                    });
-                })();
-                // sets the tag's text size
-                if (sorted_tags.length == 1) {
-                    if ( tag['category'] == 'Document' )
-                        tagspan.css('font-size', const_doc_tag);
-                    else
+                    nb_displayed_tag++;
+                    var tag = sorted_tags[i];
+                    var tagid = tag['id'];
+                    var tagspan = $("<span id='"+tagid+"'></span>");
+                    tagspan.addClass('ui-widget-content');
+                    tagspan.addClass('viz_node');
+                    tagspan.html(tag['label']);
+                    (function() {
+                        var attached_id = tagid;
+                        var attached_cat =  tag['category'];
+                        tagspan.click( function() {
+                            //switch to meso view
+                            tinaviz.viewMeso(attached_id, attached_cat);
+                        });
+                    })();
+                    // sets the tag's text size
+                    if (sorted_tags.length == 1) {
+                        if ( tag['category'] == 'Document' )
+                            tagspan.css('font-size', const_doc_tag);
+                        else
+                            tagspan.css('font-size',
+                                Math.floor(sizecoef*(Math.min(20,Math.log(1.5 + tag['occurrences']))))
+                                );
+                        tooltip = "click on a label to switch to its meso view - size is proportional to edge weight";
+                    }
+                    else {
                         tagspan.css('font-size',
-                            Math.floor(sizecoef*(Math.min(20,Math.log(1.5 + tag['occurrences']))))
+                            Math.max(Math.floor(sizecoef*Math.min(2,Math.log( 1.5 + tag['degree'] ))),15)
                             );
-                    tooltip = "click on a label to switch to its meso view - size is proportional to edge weight";
-                }
-                else {
-                    tagspan.css('font-size',
-                        Math.max(Math.floor(sizecoef*Math.min(2,Math.log( 1.5 + tag['degree'] ))),15)
-                        );
-                    tooltip = "click on a label to switch to its meso view - size is proportional to the degree";
-                }
-                // appends the final tag to the cloud paragraph
-                tagcloud.append(tagspan);
-                if (i != sorted_tags.length-1 && sorted_tags.length > 1)
-                    tagcloud.append(", &nbsp;");
+                        tooltip = "click on a label to switch to its meso view - size is proportional to the degree";
+                    }
+                    // appends the final tag to the cloud paragraph
+                    tagcloud.append(tagspan);
+                    if (i != sorted_tags.length-1 && sorted_tags.length > 1)
+                        tagcloud.append(", &nbsp;");
                 }else if(nb_displayed_tag==20){
                     tagcloud.append("[...]");
                     nb_displayed_tag++;
@@ -262,7 +262,7 @@ function InfoDiv(divid) {
                                 yearsArray.push(year_list);
                                 labelsArray.push(label);
                             };
-                            //label=label + " - " + year;
+                        //label=label + " - " + year;
                         }else{ // if no period indication just fill the label array
                             f=find(label,labelsArray);
                             if (f == null){
@@ -277,7 +277,7 @@ function InfoDiv(divid) {
                     }
                     else {
                         if (number_of_label==5){
-                           labelinnerdiv.append( $("<b></b>").html("[...]") );
+                            labelinnerdiv.append( $("<b></b>").html("[...]") );
                         }
                     }
 
@@ -294,7 +294,7 @@ function InfoDiv(divid) {
                     if (current_cat !== undefined) {
                         // jQuery.text automaticcally html encode characters
                         if (layout_name=="phyloforce"){
-                            //on récupère l'année
+                            //on rï¿½cupï¿½re l'annï¿½e
                             var nodeId = jQuery.trim(decodeJSON(node.id));
                             var hashes = nodeId.split('::'); // obsolet and new terms
                             var hash = hashes[1].split('_');

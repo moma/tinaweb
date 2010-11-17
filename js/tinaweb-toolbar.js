@@ -56,23 +56,23 @@ $(document).ready(function(){
     });
 
 
-   $("#nodeRadiusSelector").change(function() {
-       //alert("SET RADIUS TO "+$("#nodeRadiusSelector").val());
-       tinaviz.views.current.set("output/radius",$("#nodeRadiusSelector").val(), true);
+    $("#nodeRadiusSelector").change(function() {
+        //alert("SET RADIUS TO "+$("#nodeRadiusSelector").val());
+        tinaviz.views.current.set("output/radius",$("#nodeRadiusSelector").val(), true);
     });
 
-   $("#nodeWeightSelector").change(function() {
-       //alert("SET WEIGHT TO "+$("#nodeShapeSelector").val());
-       tinaviz.views.current.set("output/weight",$("#nodeWeightSelector").val(), true);
+    $("#nodeWeightSelector").change(function() {
+        //alert("SET WEIGHT TO "+$("#nodeShapeSelector").val());
+        tinaviz.views.current.set("output/weight",$("#nodeWeightSelector").val(), true);
     }); 
     
-   $("#nodeShapeSelector").change(function() {
-       tinaviz.views.current.set("output/shape",$("#nodeShapeSelector").val(), true);
+    $("#nodeShapeSelector").change(function() {
+        tinaviz.views.current.set("output/shape",$("#nodeShapeSelector").val(), true);
     });
 
-   $("#nodeColorSelector").change(function() {
-       //alert("SET COLOR TO "+ $("#nodeColorSelector").val(), true);
-       tinaviz.views.current.set("output/color",$("#nodeColorSelector").val(), true);
+    $("#nodeColorSelector").change(function() {
+        //alert("SET COLOR TO "+ $("#nodeColorSelector").val(), true);
+        tinaviz.views.current.set("output/color",$("#nodeColorSelector").val(), true);
     });
 
 });
@@ -104,18 +104,18 @@ var toolbar = {
 
 toolbar.lastSearch = "";
 toolbar.checkSearchForm = function() {
-      var txt = $("#search_input").val();
-      if (txt != toolbar.lastSearch) {
-            tinaviz.unselect();
-           toolbar.lastSearch = txt;
-          if (txt=="") {
-             tinaviz.searchNodes("", "", "", "", false);
-          } else {
-              var cat = tinaviz.views.current.category();
-               tinaviz.searchNodes(txt, cat, "containsIgnoreCase", "current", true);
-          }
-      }
-   setTimeout("toolbar.checkSearchForm()",200);
+    var txt = $("#search_input").val();
+    if (txt != toolbar.lastSearch) {
+        tinaviz.unselect();
+        toolbar.lastSearch = txt;
+        if (txt=="") {
+            tinaviz.searchNodes("", "", "", "", false);
+        } else {
+            var cat = tinaviz.views.current.category();
+            tinaviz.searchNodes(txt, cat, "containsIgnoreCase", "current", true);
+        }
+    }
+    setTimeout("toolbar.checkSearchForm()",200);
 };
 
 toolbar.init = function() {
@@ -303,11 +303,14 @@ toolbar.init = function() {
 
         tinaviz.autoCentering();
 
-
+        alert("name: "+view.name());
+        
         if (view.name()=="macro") {
             // empty the selection, and ask the applet to select opposite nodes
+            alert("switching in macro");
+            console.log(tinaviz.infodiv.oppositeSelection);
             var i = 0;
-            tinaviz.infodiv.selection = {};
+            tinaviz.infodiv.reset();
             for (var nbid in tinaviz.infodiv.oppositeSelection) {
                 var cb = (++i == tinaviz.infodiv.oppositeSelection.length);
                 tinaviz.selectFromId(tinaviz.infodiv.oppositeSelection[nbid], cb);

@@ -227,7 +227,7 @@ $(document).ready(function(){
                     console.log("tinaviz.autoCenteringt();");
                     tinaviz.autoCentering();
                 }
-                console.log("tinaviz.infodiv.updat("+selection.viewName+", "+selection.data+");");
+                console.log("tinaviz.infodiv.update("+selection.viewName+", "+selection.data+");");
                 tinaviz.infodiv.update(selection.viewName, selection.data);
             },
             viewChanged: function(view) {
