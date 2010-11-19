@@ -179,7 +179,7 @@ toolbar.init = function() {
 
             tinaviz.set("edgeWeight/min", ui.values[0] / 100.0, false);
             tinaviz.set("edgeWeight/max", ui.values[1] / 100.0, true);
-            //tinaviz.set("layout/iter", 0);
+            tinaviz.set("layout/iter", 0);
             if (tinaviz.views.current.name()=="meso") {
                 tinaviz.autoCentering();
             }
@@ -193,7 +193,7 @@ toolbar.init = function() {
         slide: function(event, ui) {
             tinaviz.set("nodeWeight/min", ui.values[0] / 100.0, false);
             tinaviz.set("nodeWeight/max", ui.values[1] / 100.0, true);
-            //tinaviz.set("layout/iter", 0);
+            tinaviz.set("layout/iter", 0);
             if (tinaviz.views.current.name()=="meso") {
                 tinaviz.autoCentering();
             }
@@ -205,7 +205,7 @@ toolbar.init = function() {
         max: 100.0,// precision/size
         animate: true,
         slide: function(event, ui) {
-            tinaviz.set("output/scaling", ui.value / 100.0);
+            tinaviz.set("output/scaling", ui.value / 100.0, true);
         }
     }
     );
@@ -215,7 +215,7 @@ toolbar.init = function() {
         max: 300.0, // max disk radius, in pixel
         animate: true,
         slide: function(event, ui) {
-            tinaviz.set("selection/radius", ui.value);
+            tinaviz.set("selection/radius", ui.value, true);
         }
     });
 
