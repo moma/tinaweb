@@ -1,19 +1,4 @@
-/*
-    Copyright (C) 2009-2011 CREA Lab, CNRS/Ecole Polytechnique UMR 7656 (Fr)
 
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
 function Tinaviz(args) {
 
     var openDefaults = {
@@ -639,20 +624,65 @@ function Tinaviz(args) {
 
     this.constructNewViewObject = function(viewName) {
         var view = this.views[viewName];
-
+        
         var reply = {
             layoutCounter: 0,
-            category: view.get("category/category"),
+
+            name: function() {
+                return applet.getView().getName();
+            },
+
+            // TODO put current viz manipulation methods here
+            set: function(key,value,x) {
+                if (x===undefined || x==null) {
+                    applet.getView().set(key, value, true);
+                } else {
+                    applet.getView().set(key, value, x);
+                }
+            },
+            get: function(key) {
+                //alert("get current "+key);
+                return applet.getView().get(key);
+            },
+
+            category: function(x) {
+                if (x===undefined || x==null) {
+                    return applet.getView().getString("category/category");
+                } else {
+                    applet.getView().set("category/category", x, true);
+                }
+            },
+            filter: function(x,y) {
+                applet.getView().filter(x,y);
+            },
+
+            categories: {
+                Document: {
+                    layout: {
+                        iter: 0
+                    // TODO
+                    // put other layout parameters here
+                    }
+                },
+                NGram: {
+                    layout: {
+                        iter: 0
+                    // TODO
+                    // put other layout parameters here
+                    }
+                }
+            },
+
             nodes: new Array()
         };
 
-        reply.name = viewName;
+
 
         // we add some additionnal steps
         // to be compatible with old LiveConnect
         // implementations
 
-        var i = 0;
+
         
         /*
         var nodesArray = view.getNodesArray();
@@ -678,9 +708,6 @@ function Tinaviz(args) {
         }
          */
 
-        reply.get = function(arg) {
-            return view.get(arg);
-        };
 
         return reply;
     }
