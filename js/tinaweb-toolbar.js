@@ -235,7 +235,7 @@ toolbar.init = function() {
     **/
 
 
-    /** Pause disabled **
+
     $("#toggle-paused").button({
         icons: {
             primary:'ui-icon-pause'
@@ -258,7 +258,6 @@ toolbar.init = function() {
             p.button('option','label',"pause");
         }
     });
-    */
 
     $("#toggle-unselect").button({
         icons: {
