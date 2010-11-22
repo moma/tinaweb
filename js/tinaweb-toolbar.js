@@ -303,11 +303,11 @@ toolbar.init = function() {
 
         tinaviz.autoCentering();
 
-        alert("name: "+view.name());
+        //alert("name: "+view.name());
 
         if (view.name()=="macro") {
             // empty the selection, and ask the applet to select opposite nodes
-            alert("switching in macro");
+            //alert("switching in macro");
             console.log(tinaviz.infodiv.oppositeSelection);
             var i = 0;
             tinaviz.infodiv.reset();
