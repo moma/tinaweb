@@ -1,23 +1,24 @@
-//      This program is free software; you can redistribute it and/or modify
-//      it under the terms of the GNU General Public License as published by
-//      the Free Software Foundation; either version 2 of the License, or
-//      (at your option) any later version.
-//
-//      This program is distributed in the hope that it will be useful,
-//      but WITHOUT ANY WARRANTY; without even the implied warranty of
-//      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//      GNU General Public License for more details.
-//
-//      You should have received a copy of the GNU General Public License
-//      along with this program; if not, write to the Free Software
-//      Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
-//      MA 02110-1301, USA.
+/*
+    Copyright (C) 2009-2011 CREA Lab, CNRS/Ecole Polytechnique UMR 7656 (Fr)
 
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
 
 var tinaviz = {};
 
 $(document).ready(function(){
-    
+
     $("#title").html("<h1>TinaWeb DEMO</h1>");
 
     tinaviz = new Tinaviz({
@@ -29,15 +30,15 @@ $(document).ready(function(){
         // console.log("L29 tinaviz.size("+size.w+", "+size.h+")");
         tinaviz.size(size.w, size.h);
     });
-    
+
     tinaviz.ready(function(){
 
         var size = resize();
         console.log("L36 tinaviz.size("+size.w+", "+size.h+")");
         tinaviz.size(size.w, size.h);
 
- 
-        var prefs = {    
+
+        var prefs = {
             gexf: "default.gexf", // "FET60bipartite_graph_cooccurrences_.gexf"
             view: "macro",
             category: "Document",
@@ -65,7 +66,7 @@ $(document).ready(function(){
         var session = tinaviz.session();
         var macro = tinaviz.views.macro;
         var meso = tinaviz.views.meso;
-        
+
         // session.add("nodes/0/keywords", "newKeyword");
         console.log("session.set(\"edgeWeight/min\", "+parseFloat(prefs.edge_filter_min)+"\")");
         session.set("edgeWeight/min", parseFloat(prefs.edge_filter_min));
@@ -118,11 +119,11 @@ $(document).ready(function(){
 
         console.log("meso.filter(\"Output\", \"output\")");
         meso.filter("Output", "output");
-               
+
         tinaviz.infodiv = InfoDiv('infodiv');
-        
+
         tinaviz.infodiv.reset();
-        
+
         $("#infodiv").accordion({
             fillSpace: true
         });
@@ -148,41 +149,41 @@ $(document).ready(function(){
 
                 var view = tinaviz.views.current;
                 console.log("var view = tinaviz.views.current  (got "+tinaviz.views.current+")");
-                
+
                 // initialize the sliders
                 console.log("$(\"#sliderNodeSize\").slider( \"option\", \"value\",  parseInt(view.get(\"output/nodeSizeRatio\")) *100 );");
-                $("#sliderNodeSize").slider( "option", "value", 
-                    parseInt(view.get("output/nodeSizeRatio")) *100 
+                $("#sliderNodeSize").slider( "option", "value",
+                    parseInt(view.get("output/nodeSizeRatio")) *100
                     );
                 console.log("$(\"#sliderSelectionZone\").slider( \"option\", \"value\",  parseInt(view.get(\"selection/radius\")) *100 );");
-                $("#sliderSelectionZone").slider( "option", "value", 
-                    parseInt(view.get("selection/radius")) * 100 
+                $("#sliderSelectionZone").slider( "option", "value",
+                    parseInt(view.get("selection/radius")) * 100
                     );
                 console.log("$(\"#sliderEdgeWeight\").slider( \"option\", \"values\", [ parseInt( view.get(\"edgeWeight/min\") ), parseInt(view.get(\"edgeWeight/max\")) *100 ]);");
                 $("#sliderEdgeWeight").slider( "option", "values", [
                     parseInt( view.get("edgeWeight/min") ),
-                    parseInt(view.get("edgeWeight/max")) *100 
+                    parseInt(view.get("edgeWeight/max")) *100
                     ]);
                 console.log("$(\"#sliderNodeWeight\").slider( \"option\", \"values\", [ parseInt( view.get(\"nodeWeight/min\") ), parseInt(view.get(\"nodeWeight/max\")) *100 ]);");
                 $("#sliderNodeWeight").slider( "option", "values", [
                     parseInt(view.get("nodeWeight/min") ),
-                    parseInt(view.get("nodeWeight/max")) *100 
+                    parseInt(view.get("nodeWeight/max")) *100
                     ]);
-                
+
                 tinaviz.infodiv.display_current_category();
                 tinaviz.infodiv.display_current_view();
-     
+
                 if (prefs.node_id != "") {
                     console.log("tinaviz.selectFromId("+prefs.node_id+", true)");
                     tinaviz.selectFromId( prefs.node_id, true );
                 }
-             
+
                 if (prefs.search != "") {
                     $("#search_input").val(prefs.search);
                     console.log("tinaviz.searchNodes("+prefs.search+", \"containsIgnoreCase\")");
                     tinaviz.searchNodes(prefs.search, "containsIgnoreCase");
                 }
-                        
+
                 $("#appletInfo").hide();
             },
             error: function(msg) {
@@ -197,16 +198,16 @@ $(document).ready(function(){
         });
         console.log("tinaviz.event({ .. })");
         tinaviz.event({
-        
+
             /*
              * selection.viewName  : string = 'macro'|'meso'
              * selection.mouseMode : strong = 'left'|'doubleLeft'|'right'|'doubleRight'
              * selection.data      : strong = { ... }
-             * 
+             *
              **/
             selectionChanged: function(selection) {
                 tinaviz.infodiv.reset();
-                
+
                 if ( selection.mouseMode == "left" ) {
                 // nothing to do
                 } else if ( selection.mouseMode == "right" ) {
@@ -236,18 +237,18 @@ $(document).ready(function(){
 
                 $("#sliderEdgeWeight").slider( "option", "values", [
                     parseInt( view.get("edgeWeight/min") ),
-                    parseInt(view.get("edgeWeight/max")) *100 
+                    parseInt(view.get("edgeWeight/max")) *100
                     ]);
                 $("#sliderNodeWeight").slider( "option", "values", [
                     parseInt(view.get("nodeWeight/min") ),
-                    parseInt(view.get("nodeWeight/max")) *100 
+                    parseInt(view.get("nodeWeight/max")) *100
                     ]);
                 tinaviz.infodiv.display_current_category();
                 tinaviz.infodiv.display_current_view();
-                
+
                 var showFilter = false;
                 if (view.getName() == "meso") {
-                
+
                     // TODO check selection
                     // if selection has edges with edge of all the same weight, we disable the filter
                     var weight = null;
@@ -266,16 +267,16 @@ $(document).ready(function(){
                             }
                         }
                     }
-                    
-                } 
+
+                }
                 $("#sliderEdgeWeight").slider( "option", "disabled", false );
             },
             categoryChanged: function() {
 
             }
         });
-        
-       
+
+
     });
 
 });

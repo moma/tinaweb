@@ -1,18 +1,19 @@
-//      This program is free software; you can redistribute it and/or modify
-//      it under the terms of the GNU General Public License as published by
-//      the Free Software Foundation; either version 3 of the License, or
-//      (at your option) any later version.
-//
-//      This program is distributed in the hope that it will be useful,
-//      but WITHOUT ANY WARRANTY; without even the implied warranty of
-//      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//      GNU General Public License for more details.
-//
-//      You should have received a copy of the GNU General Public License
-//      along with this program; if not, write to the Free Software
-//      Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
-//      MA 02110-1301, USA.
+/*
+    Copyright (C) 2009-2011 CREA Lab, CNRS/Ecole Polytechnique UMR 7656 (Fr)
 
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
 
 /**
 * Generic GUI Components used by both TinaSoft Desktop and TinaWeb
@@ -82,16 +83,14 @@ function InfoDiv(divid) {
             var current_view = tinaviz.views.current.name();
             if (current_view !== undefined) {
                 var level = $("#level");
-                level.button('option','label',current_view + " level");
+                level.button('option','label', current_view + " level");
                 var title = $("#infodiv > h3:first");
                 if (current_view == "meso") {
                     level.addClass("ui-state-highlight");
-                    $("#level > span").attr("title","zoom out to switch to the macro view");
                     title.addClass("ui-state-highlight");
                 }
                 else {
                     level.removeClass("ui-state-highlight");
-                    $("#level > span").attr("title","zoom in or double click on a node to switch to is meso view");
                     title.removeClass("ui-state-highlight");
                 }
             }
