@@ -297,7 +297,7 @@ function Tinaviz(args) {
         }
         
         if (opts.layout) {
-            this.views.current.set("layout/name", opts.layout)
+            this.views.current.set("layout/algorithm", opts.layout)
         }
         callbackImported = function(msg){
             if (msg=="success") {
@@ -372,7 +372,7 @@ function Tinaviz(args) {
     }
     
     this.setLayout=function(name) {
-        this.set("layout/name", name);
+        this.set("layout/algorithm", name);
     }
     
     this.event=function(args) {
