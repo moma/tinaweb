@@ -206,7 +206,7 @@ toolbar.init = function() {
         max: 100.0,// precision/size
         animate: true,
         slide: function(event, ui) {
-            tinaviz.set("output/scaling", ui.value / 100.0, true);
+            tinaviz.set("output/scaling", ui.value / 100.0, false);
         }
     }
     );
@@ -216,7 +216,7 @@ toolbar.init = function() {
         max: 300.0, // max disk radius, in pixel
         animate: true,
         slide: function(event, ui) {
-            tinaviz.set("selection/radius", ui.value, true);
+            tinaviz.set("selection/radius", ui.value, false);
         }
     });
 
