@@ -331,7 +331,6 @@ function Tinaviz(args) {
         callbackBeforeImport = opts.before;
         callbackBeforeImport();
 
-        //alert("loading "+args.url);
         $.ajax({
             url: opts.url,
             type: "GET",
@@ -477,9 +476,9 @@ function Tinaviz(args) {
 
 
     /*
-         *  Adds a node to the current selection
-         *  callback is boolean activating this.selected() callback
-         */
+     *  Adds a node to the current selection
+     *  callback is boolean activating this.selected() callback
+     */
     this.selectFromId = function(id, callback) {
         if (id===undefined) return;
         applet.selectFromUUID(id,callback);
@@ -490,8 +489,8 @@ function Tinaviz(args) {
     }
 
     /*
-         *  Get the current state of the applet
-         */
+     *  Get the current state of the applet
+     */
     this.isEnabled = function() {
         if (applet == null) {
             return false;
