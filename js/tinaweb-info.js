@@ -101,15 +101,13 @@ function InfoDiv(divid) {
         * updates the tag cloud
         * of the opposite nodes of a given selection
         */
-        updateTagCloud: function( node_list, neighbour_node_list ) {
+        updateTagCloud: function( node_list, neighbours ) {
             /* builds aggregated tag object */
-            node_list = $.parseJSON( node_list );
-            neighbours = $.parseJSON( neighbour_node_list );
             if (Object.size( node_list ) == 0) return;
             /*
              * used in tinaweb-toolbar.js
              */
-            this.neighbours = Object.keys( neighbours );
+            this.neighbours = Object.keys(neighbours);
             if ('degree' in neighbours) {
                 /* Neighbours are sorted with their degree value */
                 neighbours = numericListSort( Object.values( neighbours ), 'degree' );
@@ -345,7 +343,7 @@ function InfoDiv(divid) {
                 return;
             }
             this.updateInfo(lastselection);
-            tinaviz.getNeighbourhood(view, Object.keys( lastselection ));
+            tinaviz.getNeighbourhood(view, Object.keys(this.selection) );
         },
 
         /*

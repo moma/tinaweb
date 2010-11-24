@@ -42,6 +42,18 @@ Object.values = function(obj) {
     return values;
 };
 
+/*
+ * utility returning a list
+ * from the values of a given object
+ */
+Object.keys = function(obj) {
+    var keys = new Array();
+    for (key in obj) {
+        keys.push(key);
+    }
+    return keys;
+};
+
 function decHTMLifEnc(str) {
     return str.replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>');
 }
