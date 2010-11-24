@@ -42,8 +42,9 @@ function InfoDiv(divid) {
     return {
         id: divid,
         selection : {},
-        neighbours : {},
-        oppositeSelection : new Array(),
+        neighbours : [],
+        node_list_cache: {},
+        last_category: "",
         label : $( "#node_label" ),
         contents : $( "#node_contents" ),
         cloud : $( "#node_neighbourhood" ),
@@ -52,12 +53,12 @@ function InfoDiv(divid) {
         cloudSearchCopy : $( "#node_neighbourhoodCopy" ),
         unselect_button: $( "#toggle-unselect" ),
         table: $("#node_table > tbody"),
-        data: {},
+
         categories: {
             'NGram' : 'NGrams',
             'Document' : 'Documents'
         },
-        last_category: "",
+
         /*
         * dispatch current category displayed
         */
@@ -106,10 +107,9 @@ function InfoDiv(divid) {
             neighbours = $.parseJSON( neighbour_node_list );
             if (Object.size( node_list ) == 0) return;
             /*
-             * TODO REPLACE by Object.keys(this.selection)
              * used in tinaweb-toolbar.js
              */
-            this.oppositeSelection = Object.keys( neighbours );
+            this.neighbours = Object.keys( neighbours );
             if ('degree' in neighbours) {
                 /* Neighbours are sorted with their degree value */
                 neighbours = numericListSort( Object.values( neighbours ), 'degree' );
@@ -154,14 +154,14 @@ function InfoDiv(divid) {
             var tagcloud = $("<p></p>");
             var nb_displayed_tag=0;
             for (var i = 0; i < neighbours.length; i++) {
-                if (nb_displayed_tag<20){
+                if (nb_displayed_tag<20) {
                     nb_displayed_tag++;
                     var tag = neighbours[i];
                     var tagid = tag['id'];
                     var tagspan = $("<span id='"+tagid+"'></span>");
                     tagspan.addClass('ui-widget-content');
                     tagspan.addClass('viz_node');
-                    tagspan.text(tag['label']);
+                    tagspan.html(tag['label']);
                     (function() {
                         var attached_id = tagid;
                         var attached_cat =  tag['category'];
@@ -190,14 +190,14 @@ function InfoDiv(divid) {
                     tagcloud.append(tagspan);
                     if (i != neighbours.length-1 && neighbours.length > 1)
                         tagcloud.append(", &nbsp;");
-                }else if(nb_displayed_tag==20){
+                }
+                else if (nb_displayed_tag == 20) {
                     tagcloud.append("[...]");
                     nb_displayed_tag++;
-
-                }else {
+                }
+                else {
                     break;
                 };
-
             }
             // updates the main cloud div
             this.cloud.empty();
@@ -328,9 +328,6 @@ function InfoDiv(divid) {
                 this.contents.empty();
                 this.label.append( alphabeticJquerySort( labelinnerdiv, "b", ", &nbsp;" ));
                 this.contents.append( contentinnerdiv );
-
-            //this.attributes.empty();
-            //this.contents.append( attributeTable );
             }
             else {
                 this.reset();
@@ -349,7 +346,6 @@ function InfoDiv(divid) {
             }
             this.updateInfo(lastselection);
             tinaviz.getNeighbourhood(view, Object.keys( lastselection ));
-            return;
         },
 
         /*
@@ -375,24 +371,20 @@ function InfoDiv(divid) {
                 +"</p>"
                 )
             );
-
+            // empty all cache variables
             this.cloudSearchCopy.empty();
             this.cloudSearch.empty();
-
             this.cloud.empty();
             this.selection = {};
-            this.oppositeSelection = new Array(),
-            this.neighbours = {};
-            this.data = {};
+            this.neighbours = [];
             this.last_category = "";
             return;
         },
 
         /*
-        * Init the node list
+        * Displays the list of all nodes in the current view/category received from applet
         */
         updateNodeList: function(node_list, category) {
-            if (category != this.last_category) {
                 this.table.empty();
                 this.last_category = category;
                 for (var i = 0; i < node_list.length; i++ ) {
@@ -401,10 +393,12 @@ function InfoDiv(divid) {
                         var rowId = decodeJSON(node_list[i]['id']);
                         var rowCat = category;
                         // asynchronously displays the node list
+                        /*$.doTimeout(0, function(rowLabel, rowId, rowCat) {
+                            displayNodeRow(rowLabel, rowId, rowCat);
+                        });*/
                         setTimeout("displayNodeRow(\""+rowLabel+"\",\""+rowId+"\",\""+rowCat+"\")", 0);
                     })();
                 }
-            }
         },
 
         /*
