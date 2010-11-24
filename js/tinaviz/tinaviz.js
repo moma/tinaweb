@@ -1,3 +1,20 @@
+/*
+    Copyright (C) 2009-2011 CREA Lab, CNRS/Ecole Polytechnique UMR 7656 (Fr)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
 
 function Tinaviz(args) {
 
@@ -35,7 +52,7 @@ function Tinaviz(args) {
             return;
         }
     };
-    
+
     /**
      * Called by the applet
      */
@@ -47,7 +64,7 @@ function Tinaviz(args) {
             return;
         }
     };
-    
+
     /**
      * Called by the applet
      */
@@ -63,7 +80,7 @@ function Tinaviz(args) {
 
     this.views = {
         current: {
-            name: function() { 
+            name: function() {
                 return applet.getView().getName();
             },
 
@@ -90,7 +107,7 @@ function Tinaviz(args) {
             filter: function(x,y) {
                 applet.getView().filter(x,y);
             },
-            
+
             categories: {
                 Document: {
                     layout: {
@@ -109,7 +126,7 @@ function Tinaviz(args) {
             }
         },
         macro: {
-            name: function() { 
+            name: function() {
                 return 'macro';
             },
 
@@ -121,7 +138,7 @@ function Tinaviz(args) {
                     applet.getView("macro").set(key, value,x);
                 }
             },
-            
+
             get: function(key) {
                 return applet.getView('macro').get(key);
             },
@@ -151,13 +168,13 @@ function Tinaviz(args) {
                     }
                 }
             },
-            
+
             filter: function(x,y) {
                 applet.getView('macro').filter(x,y);
             }
         },
         meso: {
-            name: function() { 
+            name: function() {
                 return 'meso';
             },
 
@@ -198,7 +215,7 @@ function Tinaviz(args) {
                     // put other layout parameters here
                     }
                 }
-            }, 
+            },
             filter: function(x,y) {
                 applet.getView('meso').filter(x,y);
             }
@@ -295,7 +312,7 @@ function Tinaviz(args) {
             this.views.current.set("layout/iter", 0);
         //applet.clear();
         }
-        
+
         if (opts.layout) {
             this.views.current.set("layout/algorithm", opts.layout)
         }
@@ -310,10 +327,10 @@ function Tinaviz(args) {
         if (args["url"] === undefined) {
             return;
         }
-        
+
         callbackBeforeImport = opts.before;
         callbackBeforeImport();
-        
+
         //alert("loading "+args.url);
         $.ajax({
             url: opts.url,
@@ -370,28 +387,26 @@ function Tinaviz(args) {
 
 
     }
-    
+
     this.setLayout=function(name) {
         this.set("layout/algorithm", name);
     }
-    
+
     this.event=function(args) {
         var opts = {
             viewChanged: function(view){},
             categoryChanged: function(view){},
-            selectionChanged: function(selection){}
+            selectionChanged: function(selection){},
+            getNeighbourhood: function(node_list, neighbours){}
         };
         for (x in args) {
             opts[x]=args[x]
         }
-
         this.callbackViewChanged = opts.viewChanged;
         this.callbackCategoryChanged = opts.categoryChanged;
         this.callbackSelectionChanged = opts.selectionChanged;
+        this.callbackGetNeighbourhood = opts.getNeighbourhood;
     }
-
-    
-
 
     /**
      * Core method communicating with the applet
@@ -404,7 +419,6 @@ function Tinaviz(args) {
      * Set a value to all views
      */
     this.set = function(key, value, sync) {
-          
         if (sync===undefined || sync==null) {
             applet.setParam(key,value, true);
         } else {
@@ -412,49 +426,15 @@ function Tinaviz(args) {
         }
 
     }
-    
+
     /**
      * Commands switching between view levels
      */
     this.setView = function(view) {
         applet.setView(view);
     }
-    
-    this.askForNeighbours = function(dataset, id, category) {
-        // alert("askForNeighbours("+dataset+","+id+","+category+")");
 
-        /*
- *
- *{"py/object": "tinasoft.pytextminer.document.Document", 
- *  "ngramEmpty": " ",
- * "forbChars": "[^a-zA-Z\\s\\@\u00c2\u00c6\u00c7\u00c8\u00c9\u00ca\u00ce\u00db\u00d9\u00e0\u00e2\u00e6\u00e7\u00e8\u00e9\u00ea\u00ee\u0128\u00f4\u00d4\u00f9\u00fb\u00fc\\,\\.\\;\\:\\!\\?\"'\\[\\]\\{\\}\\(\\)\\<\\>]", 
- * "author": null, 
- * "ngramSep": "[\\s]+", 
- * "doc_acrnm": "MOLSPINQIP ",
- *  "label": "MOLSPINQIP ", 
- *  "edges": {
- *  "Whitelist": {}, 
- *  "Corpora": {},
- *   "Cluster": {}, 
- *   "NGram": {}, 
- *   "Corpus": {"FET": 1},
- *    "Document": {
- *    "56": null, 
- *    "54": null,
- *     "42": null, 
- *     "43": null,
- *      "60": null,
- *       "53": null,
- *        "52": null, 
- *        "23": null, 
- *        "24": null, 
- *        "25": null, 
- *        "26": null,
- *         "27": null,
- *          "20": null, 
- *          "21": null, "22": null, "49": null, "46": null, "47": null, "44": null, "28": null, "29": null, "40": null, "41": null, "1": null, "3": null, "2": null, "5": null, "4": null, "7": null, "6": null, "9": null, "18": null, "39": null, "38": null, "59": null, "14": null, "11": null, "10": null, "13": null, "12": null, "15": null, "58": null, "17": null, "16": null, "19": null, "32": null, "31": null, "30": null, "51": null, "36": null, "35": null, "34": null, "33": null, "55": null, "37": null, "48": null, "57": null, "50": null}}, "ngramMin": 1, "date": null, "ngramMax": 3, "id": "31"}
- *
- */
+    this.askForNeighbours = function(dataset, id, category) {
         switch (category) {
             case 'Document':
                 TinaService.getDocument(dataset, id, {
@@ -492,7 +472,7 @@ function Tinaviz(args) {
 
                 break;
         }
-       
+
     }
 
 
@@ -527,17 +507,17 @@ function Tinaviz(args) {
     }
 
     /*
-        * Search nodes
-        */
+    * Search nodes
+    */
     this.getNodesByLabel = function(label, type) {
         if (label.length < 3) return {};
         return $.parseJSON( applet.getNodesByLabel(label, type));
     }
 
     /*
-        * Search and select nodes
-        * viewToSearch: visualization,macro,meso,current
-        */
+    * Search and select nodes
+    * viewToSearch: visualization,macro,meso,current
+    */
     this.searchNodes= function(matchLabel, matchCategory,  matchType, viewToSearch, center) {
         if (matchLabel.length < 3) return;
         applet.selectNodesByLabel(matchLabel, matchCategory, matchType, viewToSearch, center);
@@ -545,8 +525,8 @@ function Tinaviz(args) {
 
 
     /*
-        * Highlight nodes
-        */
+    * Highlight nodes
+    */
     this.highlightNodes= function(label, type) {
         var matchlist = this.getNodesByLabel(label, type);
         for (var i = 0; i < matchlist.length; i++ ) {
@@ -558,15 +538,15 @@ function Tinaviz(args) {
 
 
     /*
-        * recenter the graph
-        */
+    * recenter the graph
+    */
     this.autoCentering= function() {
         applet.autoCentering();
     }
 
     /*
-         *  Gets attributes o a given node
-         */
+     *  Gets attributes o a given node
+     */
     this.getNodeAttributes = function(view,id) {
         if (applet == null) return {};
         return $.parseJSON(
@@ -575,56 +555,47 @@ function Tinaviz(args) {
     }
 
     /*
-         * Gets the list of neighbours for a given node
-         */
-    this.getNeighbourhood = function(view,id) {
-        //alert("view: "+view+" id:"+id);
-        //alert(applet.getNeighbourhood(view,id));
-        return $.parseJSON( applet.getNeighbourhood(view,id) );
+     * Calls for the list of neighbours for a given node list
+     * its callback is defined in this.event, called from main.js
+     */
+    this.getNeighbourhood = function(view, node_list) {
+        applet.getNeighbourhood(view, $.toJSON( node_list ));
     }
-    
+
+    /*
+     * Gets neighbours from TinaService using AJAX
+     */
     this.getNeighboursFromDatabase = function(id) {
         var elem = id.split('::');
-        //logNormal("var data = TinaService.getNgrams("+elem[1]+");");
-
         TinaService.getNGrams(
             0,
             elem[1],
             {
                 success: function(data) {
-                //
-                //logNormal("var data = "+data+";");
                 }
             }
-            );
-
+        );
     }
 
-
-
-
     /**
-     * Callback for clicks on nodes
-     * 
-     * @param view 
+     * Callback after clicks on nodes
+     *
+     * @param view
      * @param attr
      * @param mouse
      * @return
      */
     this.selected = function(view, attr, mouse) {
-
-        var data = $.parseJSON(attr);
-        
         this.callbackSelectionChanged({
             'viewName':view,
-            'data':data,
+            'data':$.parseJSON(attr),
             'mouseMode':mouse
         })
     }
 
     this.constructNewViewObject = function(viewName) {
         var view = this.views[viewName];
-        
+
         var reply = {
             layoutCounter: 0,
 
@@ -683,7 +654,7 @@ function Tinaviz(args) {
         // implementations
 
 
-        
+
         /*
         var nodesArray = view.getNodesArray();
         for (i=0;i < nodesArray.length;i++) {
@@ -713,21 +684,23 @@ function Tinaviz(args) {
     }
 
     /**
-        * Callback after CHANGING THE VIEW LEVEL
-        */
+    * Callback after CHANGING THE VIEW LEVEL
+    */
     this.switchedTo = function(viewName, selected) {
         var view = this.constructNewViewObject(viewName);
         this.callbackViewChanged(view);
     }
 
-
+    /**
+     * hide/show labvels
+     */
     this.toggleLabels = function() {
         return applet.getView().toggleLabels();
     }
 
     /**
-         * hide/show nodes
-         */
+     * hide/show nodes
+     */
     this.toggleNodes = function() {
         return applet.getView().toggleNodes();
     }
@@ -745,19 +718,18 @@ function Tinaviz(args) {
     this.togglePause = function() {
         return applet.getView().togglePause();
     }
-    
+
     this.setPause = function(value) {
         applet.getView().setPause(value);
     }
 
-
-    
     /**
      * toggles HD rendering
      */
     this.toggleHD = function() {
         return applet.getView().toggleHD();
     }
+
     /**
      * Get the opposite category name (the NOT DISPLAYED one)
      */
@@ -766,10 +738,8 @@ function Tinaviz(args) {
             return "NGram";
         else if (cat == "NGram")
             return "Document";
-        //else alert("error, cannot get opposite category of "+cat);
         return "Document";
     }
-
 
     /**
      * Manually toggles the view to meso given an id
@@ -860,7 +830,7 @@ function Tinaviz(args) {
      * HTML VIZ DIV ADJUSTING/ACTION
      *
      ****************************************/
-    
+
     /**
      * Dynamic div width
      */

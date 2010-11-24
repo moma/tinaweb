@@ -100,47 +100,32 @@ function InfoDiv(divid) {
         * updates the tag cloud
         * of the opposite nodes of a given selection
         */
-        updateTagCloud: function( viewLevel ) {
+        updateTagCloud: function( node_list, neighbour_node_list ) {
             /* builds aggregated tag object */
-            if (Object.size( this.selection ) == 0) return;
-            var tempcloud = {};
-            this.oppositeSelection = new Array();
-            for (var nodeid in this.selection) {
-                // gets the full neighbourhood for the tag cloud
-                var nb = tinaviz.getNeighbourhood(viewLevel, nodeid);
-                for (var nbid in nb) {
-                    if ( tempcloud[nbid] !== undefined )
-                        tempcloud[nbid]['degree']++;
-                    // pushes a node if belongs to the opposite category
-                    else if (this.selection[nodeid]['category'] != nb[nbid]['category']) {
-                        this.oppositeSelection.push(nbid);
-                        tempcloud[nbid] = {
-                            'id': nbid,
-                            'label' : decodeJSON(nb[nbid]['label']),
-                            'degree' : 1,
-                            'occurrences': parseInt(nb[nbid]['occurrences']),
-                            'category': decodeJSON(nb[nbid]['category'])
-                        };
-                    }
-                }
-
+            node_list = $.parseJSON( node_list );
+            neighbours = $.parseJSON( neighbour_node_list );
+            if (Object.size( node_list ) == 0) return;
+            /*
+             * TODO REPLACE by Object.keys(this.selection)
+             * used in tinaweb-toolbar.js
+             */
+            this.oppositeSelection = Object.keys( neighbours );
+            if ('degree' in neighbours) {
+                /* Neighbours are sorted with their degree value */
+                neighbours = numericListSort( Object.values( neighbours ), 'degree' );
             }
-
-            var sorted_tags = numericListSort( Object.values( tempcloud ), 'degree' );
-
             /* some display sizes const */
-
             // Modif david
             this.cloudSearch.empty();
             var Googlerequests = "http://www.google.com/#q=";
             var PubMedrequests = "http://www.ncbi.nlm.nih.gov/pubmed?term=";
             var requests="";
-            for (var i = 0; i < sorted_tags.length; i++) {
-                var tag = sorted_tags[i];
-                tagLabel=tag.label;
-                tagLabel=jQuery.trim(tagLabel);
+            for (var i = 0; i < neighbours.length; i++) {
+                var tag = neighbours[i];
+                tagLabel = tag.label;
+                tagLabel = jQuery.trim(tagLabel);
                 requests = requests + "%22" + tagLabel.replace(" ","+") + "%22";
-                if (i < sorted_tags.length - 1) requests = requests + "+AND+";
+                if (i < neighbours.length - 1) requests = requests + "+AND+";
             }
 
             var current_cat = tinaviz.views.current.category();
@@ -151,14 +136,14 @@ function InfoDiv(divid) {
                     var tmp="";
                     tmp = "Search on: <a href=\"";
                     tmp += Googlerequests;
-                    tmp +=requests;
-                    tmp +='" alt="search on google" target="_BLANK"><img src="'
-                    tmp +=tinaviz.getPath()
-                    tmp +='css/branding/google.png" />Google</a> &nbsp;'
-                    tmp +=' <a href="'+PubMedrequests+requests
-                    tmp +='" alt="search on PubMed" target="_BLANK"><img src="'
-                    tmp +=tinaviz.getPath()
-                    tmp +='css/branding/pubmed.png" />Pubmed</a>' ;
+                    tmp += requests;
+                    tmp += '" alt="search on google" target="_BLANK"><img src="'
+                    tmp += tinaviz.getPath()
+                    tmp += 'css/branding/google.png" />Google</a> &nbsp;'
+                    tmp += ' <a href="'+PubMedrequests+requests
+                    tmp += '" alt="search on PubMed" target="_BLANK"><img src="'
+                    tmp += tinaviz.getPath()
+                    tmp += 'css/branding/pubmed.png" />Pubmed</a>' ;
                     this.cloudSearch.append(tmp);
                 }
             }
@@ -168,15 +153,15 @@ function InfoDiv(divid) {
             /* displays tag cloud */
             var tagcloud = $("<p></p>");
             var nb_displayed_tag=0;
-            for (var i = 0; i < sorted_tags.length; i++) {
+            for (var i = 0; i < neighbours.length; i++) {
                 if (nb_displayed_tag<20){
                     nb_displayed_tag++;
-                    var tag = sorted_tags[i];
+                    var tag = neighbours[i];
                     var tagid = tag['id'];
                     var tagspan = $("<span id='"+tagid+"'></span>");
                     tagspan.addClass('ui-widget-content');
                     tagspan.addClass('viz_node');
-                    tagspan.html(tag['label']);
+                    tagspan.text(tag['label']);
                     (function() {
                         var attached_id = tagid;
                         var attached_cat =  tag['category'];
@@ -186,7 +171,7 @@ function InfoDiv(divid) {
                         });
                     })();
                     // sets the tag's text size
-                    if (sorted_tags.length == 1) {
+                    if (neighbours.length == 1) {
                         if ( tag['category'] == 'Document' )
                             tagspan.css('font-size', const_doc_tag);
                         else
@@ -203,7 +188,7 @@ function InfoDiv(divid) {
                     }
                     // appends the final tag to the cloud paragraph
                     tagcloud.append(tagspan);
-                    if (i != sorted_tags.length-1 && sorted_tags.length > 1)
+                    if (i != neighbours.length-1 && neighbours.length > 1)
                         tagcloud.append(", &nbsp;");
                 }else if(nb_displayed_tag==20){
                     tagcloud.append("[...]");
@@ -214,12 +199,12 @@ function InfoDiv(divid) {
                 };
 
             }
-            // updates the main cloud  div
+            // updates the main cloud div
             this.cloud.empty();
             this.cloud.append( '<h3>selection related to '+ oppositeRealName + ': <span class="ui-icon ui-icon-help icon-right" title="'+tooltip+'"></span></h3>' );
             this.cloud.append( tagcloud );
             this.cloudSearchCopy.empty();
-            this.cloudSearchCopy.append( '<h3>Global search on '+ oppositeRealName + ': <span class="ui-icon ui-icon-help icon-right" title="'+tooltip+'"></span></h3>' );
+            this.cloudSearchCopy.append( '<h3>global search on '+ oppositeRealName + ': <span class="ui-icon ui-icon-help icon-right" title="'+tooltip+'"></span></h3>' );
             this.cloudSearchCopy.append( tagcloud.clone());
         },
 
@@ -354,7 +339,7 @@ function InfoDiv(divid) {
         },
 
         /*
-        * Main method recceiving a new node selection
+        * Main method receiving a new node selection
         * and dispatching infodiv updates
         */
         update: function(view, lastselection) {
@@ -363,7 +348,7 @@ function InfoDiv(divid) {
                 return;
             }
             this.updateInfo(lastselection);
-            this.updateTagCloud("macro");
+            tinaviz.getNeighbourhood(view, Object.keys( lastselection ));
             return;
         },
 

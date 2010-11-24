@@ -288,27 +288,17 @@ toolbar.init = function() {
         /**
          * Manually toggles the category, and do the bipartite work
          */
-
-
         var view = tinaviz.views.current;
         // get and set the new category to display
         var cat = view.category();
-
         var next_cat = tinaviz.getOppositeCategory( cat );
-
         // update the node list
         tinaviz.updateNodes(view.name(), next_cat);
-
         view.category(next_cat);
-
         tinaviz.autoCentering();
-
-        //alert("name: "+view.name());
 
         if (view.name()=="macro") {
             // empty the selection, and ask the applet to select opposite nodes
-            //alert("switching in macro");
-            console.log(tinaviz.infodiv.oppositeSelection);
             var i = 0;
             tinaviz.infodiv.reset();
             for (var nbid in tinaviz.infodiv.oppositeSelection) {
@@ -316,7 +306,6 @@ toolbar.init = function() {
                 tinaviz.selectFromId(tinaviz.infodiv.oppositeSelection[nbid], cb);
             }
         }
-
         // update the algorithm
         view.categories[cat].layout.iter = view.get("layout/iter");
         view.set("layout/iter", view.categories[next_cat].layout.iter, true);
