@@ -580,7 +580,11 @@ function Tinaviz(args) {
     this.getNeighbourhood = function(view,id) {
         //alert("view: "+view+" id:"+id);
         //alert(applet.getNeighbourhood(view,id));
-        return $.parseJSON( applet.getNeighbourhood(view,id) );
+        var rawNeighbourhood = applet.getNeighbourhood(view,id);
+        console.log("rawNeighbourhood:"+rawNeighbourhood);
+        var neighbourhood = $.parseJSON( rawNeighbourhood );
+        console.log("neighbourhood:"+neighbourhood);
+        return neighbourhood;
     }
     
     this.getNeighboursFromDatabase = function(id) {
