@@ -755,13 +755,15 @@ function Tinaviz(args) {
         this.updateNodes("meso", category);
     }
 
-    this.getCategory= function() {
+    this.getCategory = function() {
         return this.get("category/category");
     }
-    this.setCategory= function(value) {
+
+    this.setCategory = function(value) {
         this.set("category/category", value,false);
     }
-    this.toggleView= function() {
+
+    this.toggleView = function() {
         var current_cat = this.getCategory();
         if (this.views.current.name() == "macro") {
             // check if selection is empty
@@ -780,12 +782,11 @@ function Tinaviz(args) {
 
     }
 
-    this.session=function() {
+    this.session = function() {
         return applet.getSession();
     }
 
-
-    this.getView=function(view) {
+    this.getView = function(view) {
         if (applet == null) return;
         if (view===undefined) {
             applet.getView();
@@ -803,23 +804,26 @@ function Tinaviz(args) {
     }
 
     /**
-     *  Retrieves list of nodes
+     *  Retrieves list of all nodes
      *  nodes = tinaviz.getNodes("macro", "NGram")
      */
     this.getNodes = function(view, category) {
-        this.infodiv.data[category] = $.parseJSON( applet.getNodes(view, category) );
-        return this.infodiv.data[category];
+        var nodes = applet.getNodes(view, category);
+        this.infodiv.node_list_cache[category] = $.parseJSON( nodes );
+        return this.infodiv.node_list_cache[category];
     }
     /**
-     *  Fires the update of node list cache and display
+     *  Fires the update of all nodes list cache and display
      */
     this.updateNodes = function(view, category)  {
         if ( category == this.infodiv.last_category ) return;
         this.infodiv.display_current_category();
-        if (this.infodiv.data[category] === undefined || this.infodiv.data[category].length == 0)
+        if (this.infodiv.node_list_cache[category] === undefined || this.infodiv.node_list_cache[category].length == 0) {
             this.infodiv.updateNodeList( this.getNodes( view, category ), category );
-        else
-            this.infodiv.updateNodeList( this.infodiv.data[category], category );
+        }
+        else {
+            this.infodiv.updateNodeList( this.infodiv.node_list_cache[category], category );
+        }
     }
 
 

@@ -139,14 +139,8 @@ $(document).ready(function(){
                 tinaviz.infodiv.reset();
             },
             success: function() {
-                // init the node list with ngrams
-                console.log("tinaviz.updateNodes("+prefs.view+", "+prefs.category+")");
+                // init the node list with prefs.category
                 tinaviz.updateNodes( prefs.view, prefs.category );
-
-                // cache the document list.hide
-                console.log("tinaviz.getNodes("+prefs.view+", \"Document\")");
-                tinaviz.getNodes( prefs.view, "Document" );
-
                 var view = tinaviz.views.current;
                 console.log("var view = tinaviz.views.current  (got "+tinaviz.views.current+")");
 
@@ -183,8 +177,9 @@ $(document).ready(function(){
                     console.log("tinaviz.searchNodes("+prefs.search+", \"containsIgnoreCase\")");
                     tinaviz.searchNodes(prefs.search, "containsIgnoreCase");
                 }
-
                 $("#appletInfo").hide();
+                // caches the ngrams list
+                tinaviz.getNodes( prefs.view, "NGrams" );
             },
             error: function(msg) {
                 $("#appletInfo").html("Error, couldn't load graph: "+msg);
@@ -231,6 +226,9 @@ $(document).ready(function(){
                 console.log("tinaviz.infodiv.update("+selection.viewName+", "+selection.data+");");
                 tinaviz.infodiv.update(selection.viewName, selection.data);
             },
+            getNeighbourhood: function(selection_list, neighbour_node_list) {
+                tinaviz.infodiv.updateTagCloud(selection_list, neighbour_node_list);
+            },
             viewChanged: function(view) {
                 console.log("tinaviz.autoCentering()");
                 tinaviz.autoCentering();
@@ -247,7 +245,7 @@ $(document).ready(function(){
                 tinaviz.infodiv.display_current_view();
 
                 var showFilter = false;
-                if (view.name == "meso") {
+                if (view.name() == "meso") {
 
                     // TODO check selection
                     // if selection has edges with edge of all the same weight, we disable the filter

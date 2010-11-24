@@ -181,7 +181,7 @@ toolbar.init = function() {
             tinaviz.set("edgeWeight/min", ui.values[0] / 100.0, false);
             tinaviz.set("edgeWeight/max", ui.values[1] / 100.0, true);
             tinaviz.set("layout/iter", 0);
-            if (tinaviz.views.current.name()=="meso") {
+            if (tinaviz.views.current.name() == "meso") {
                 tinaviz.autoCentering();
             }
         }
@@ -195,7 +195,7 @@ toolbar.init = function() {
             tinaviz.set("nodeWeight/min", ui.values[0] / 100.0, false);
             tinaviz.set("nodeWeight/max", ui.values[1] / 100.0, true);
             tinaviz.set("layout/iter", 0);
-            if (tinaviz.views.current.name()=="meso") {
+            if (tinaviz.views.current.name() == "meso") {
                 tinaviz.autoCentering();
             }
         }
@@ -296,24 +296,21 @@ toolbar.init = function() {
         tinaviz.updateNodes(view.name(), next_cat);
         view.category(next_cat);
         tinaviz.autoCentering();
-
-        if (view.name()=="macro") {
+        if (view.name() == "macro") {
             // empty the selection, and ask the applet to select opposite nodes
             var i = 0;
             tinaviz.infodiv.reset();
-            for (var nbid in tinaviz.infodiv.oppositeSelection) {
-                var cb = (++i == tinaviz.infodiv.oppositeSelection.length);
-                tinaviz.selectFromId(tinaviz.infodiv.oppositeSelection[nbid], cb);
+            for (var pos in tinaviz.infodiv.neighbours) {
+                var cb = (++i == tinaviz.infodiv.neighbours.length);
+                tinaviz.selectFromId(tinaviz.infodiv.neighbours[pos], cb);
             }
         }
         // update the algorithm
         view.categories[cat].layout.iter = view.get("layout/iter");
         view.set("layout/iter", view.categories[next_cat].layout.iter, true);
-
         tinaviz.infodiv.display_current_category();
 
     });
-
     toolbar.checkSearchForm();
 };
 
