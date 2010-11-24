@@ -251,7 +251,7 @@ function Tinaviz(args) {
     this.branding = opts.branding;
     this.iframeFileName = "iframe.html";
 
-    this.init= function() {
+    this._initCallback = function() {
         if (this.xulrunner == true) {
             wrapper = $('#vizframe').contents().find("#tinaviz")[0];
         } else {
@@ -552,6 +552,15 @@ function Tinaviz(args) {
             applet.getNodeAttributes(view,id)
             );
     }
+    
+
+    // called by the applet
+    this._callbackGetNeighbourhood = function(selection_list_str,neighbour_node_list_str) {
+        // do some magic before calling the callback
+        var selection_list = $.parseJSON(selection_list_str);
+        var neighbour_node_list = $.parseJSON(neighbour_node_list_str)
+        this.callbackGetNeighbourhood(selection_list, neighbour_node_list);
+    }
 
     /*
      * Calls for the list of neighbours for a given node list
@@ -584,7 +593,7 @@ function Tinaviz(args) {
      * @param mouse
      * @return
      */
-    this.selected = function(view, attr, mouse) {
+    this._callbackSelectionChanged = function(view, attr, mouse) {
         this.callbackSelectionChanged({
             'viewName':view,
             'data':$.parseJSON(attr),
@@ -685,7 +694,7 @@ function Tinaviz(args) {
     /**
     * Callback after CHANGING THE VIEW LEVEL
     */
-    this.switchedTo = function(viewName, selected) {
+    this._callbackViewChanged = function(viewName, selected) {
         var view = this.constructNewViewObject(viewName);
         this.callbackViewChanged(view);
     }
@@ -844,14 +853,14 @@ function Tinaviz(args) {
     /**
      * Callback changing button states
      */
-    this.buttonStateCallback = function(button, enabled) {
+    this._buttonStateCallback = function(button, enabled) {
         toolbar.updateButton(button, enabled);
     }
 
     /**
      * Callback changing utton states
      */
-    this.graphImportedCallback = function(msg) {
+    this._graphImportedCallback = function(msg) {
         callbackImported(msg);
     }
 
