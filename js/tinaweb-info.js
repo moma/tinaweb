@@ -55,7 +55,7 @@ function InfoDiv(divid) {
         table: $("#node_table > tbody"),
 
         categories: {
-            'NGram' : 'NGrams',
+            'NGram' : 'Keyphrases',
             'Document' : 'Documents'
         },
 
@@ -97,6 +97,30 @@ function InfoDiv(divid) {
             }
         },
 
+        mergeNeighbours: function( category, neighbours ) {
+            merged = [];
+
+            for(node in neighbours) {
+                for(neighb in neighbours[node]){
+                    if (neighb in merged)
+                        merged[neighb]['degree']++;
+                    else if (neighbours[node][neighb]['category'] != category) {
+                        merged[neighb] = {
+                            'id': neighb,
+                            'label': neighbours[node][neighb]['label'],
+                            'degree': 1,
+                            'weight': neighbours[node][neighb]['weight'],
+                        };
+
+                    }
+                }
+            }
+            this.neighbours = Object.keys( merged );
+            merged = numericListSort( Object.values( merged ), 'degree' );
+            console.log(merged);
+            return merged;
+        },
+
         /*
         * updates the tag cloud
         * of the opposite nodes of a given selection
@@ -104,14 +128,8 @@ function InfoDiv(divid) {
         updateTagCloud: function( node_list, neighbours ) {
             /* builds aggregated tag object */
             if (Object.size( node_list ) == 0) return;
-            /*
-             * used in tinaweb-toolbar.js
-             */
-            this.neighbours = Object.keys(neighbours);
-            if ('degree' in neighbours) {
-                /* Neighbours are sorted with their degree value */
-                neighbours = numericListSort( Object.values( neighbours ), 'degree' );
-            }
+            var current_cat = tinaviz.views.current.category();
+            neighbours = this.mergeNeighbours( current_cat, neighbours );
             /* some display sizes const */
             // Modif david
             this.cloudSearch.empty();
@@ -125,8 +143,6 @@ function InfoDiv(divid) {
                 requests = requests + "%22" + tagLabel.replace(" ","+") + "%22";
                 if (i < neighbours.length - 1) requests = requests + "+AND+";
             }
-
-            var current_cat = tinaviz.views.current.category();
 
             if (current_cat !== undefined){
                 var oppositeRealName = this.categories[tinaviz.getOppositeCategory(current_cat)];
@@ -174,7 +190,7 @@ function InfoDiv(divid) {
                             tagspan.css('font-size', const_doc_tag);
                         else
                             tagspan.css('font-size',
-                                Math.floor(sizecoef*(Math.min(20,Math.log(1.5 + tag['occurrences']))))
+                                Math.floor(sizecoef*(Math.min(20,Math.log(1.5 + tag['weight']))))
                                 );
                         tooltip = "click on a label to switch to its meso view - size is proportional to edge weight";
                     }
