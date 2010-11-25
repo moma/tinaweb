@@ -45,6 +45,7 @@ function Tinaviz(args) {
     this.clear = function() {
         applet.clear();
     };
+
     /**
      * Called by the applet
      */
@@ -910,8 +911,8 @@ function Tinaviz(args) {
         document.write = func;
         return buff;
     }
-    //alert( this.getHTML() );
     this.tag.html( this.getHTML() );
+    //this.clear();
 }
 
 

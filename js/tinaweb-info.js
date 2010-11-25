@@ -237,43 +237,11 @@ function InfoDiv(divid) {
                 var node = lastselection[id];
                 // ERROR : MISSING CATEGORY in the node list returned from Tinaviz !!!!
                 if (node.category == current_cat)  {
-                    var label = jQuery.trim(decodeJSON(node.label));
+                    var label = this.getNodeLabel( node );
+                    labelinnerdiv.empty();
                     // limiting number of displayed labels
                     number_of_label++;
                     // prepares label and content to be displayed
-                    /*
-                     * TODO move Phyloviz/Phyloweb method to childs of Infodiv
-                     */
-                    /*
-                    var nodeId = jQuery.trim(decodeJSON(node.id));
-                    var hashes = nodeId.split('::'); // obsolet and new terms
-                    if (hashes[1] !== undefined) {
-
-                        var hash = hashes[1].split('_');
-                        var years=hash[0].split('-');
-                        var year=years[1];
-                        if (year !== undefined){
-                            f=find(label,labelsArray);
-                            if (f != null){
-                                year_list=yearsArray[f[0]];
-                                year_list.push(year);
-                                yearsArray[f[0]]=year_list;
-                            }else{
-                                year_list= new Array();
-                                year_list.push(year);
-                                yearsArray.push(year_list);
-                                labelsArray.push(label);
-                            };
-                        //label=label + " - " + year;
-                        }
-                        else { // if no period indication just fill the label array
-                            f=find(label,labelsArray);
-                            if (f == null){
-                                labelsArray.push(label);
-                            }
-                        };
-
-                    };*/
                     if (number_of_label < 5) {
                         labelinnerdiv.append( $("<b></b>").html(label) );
                     }
@@ -282,48 +250,19 @@ function InfoDiv(divid) {
                             labelinnerdiv.append( $("<b></b>").html("[...]") );
                         }
                     }
-                    var content = this.getNodeContent(node);
                     // add node to selection cache
                     this.selection.push(id);
                     // displays contents only if it's a document
                     contentinnerdiv.append( $("<b></b>").html(
                         this.getNodeContentLabel(label, node)
                     ));
-                    contentinnerdiv.append( $("<p></p>").html( content ) );
+                    contentinnerdiv.append( $("<p></p>").html( this.getNodeContent(node) ) );
                     contentinnerdiv.append( $("<p></p>").html(
                         this.getSearchQueries( htmlDecode(label), this.categories[current_cat])
                     ));
                 }
                 //contentinnerdiv.append("<br/");
             }
-            /*
-             * TODO move Phyloviz/Phyloweb method to childs of Infodiv
-             */
-            /*
-            if ( yearsArray[0] != undefined) { // we have phylogenetic data
-                labelinnerdiv.empty();
-                var numEltMax=3; // highest number of labels display in phylo mode
-                num_labels=labelsArray.length;
-                if (num_labels>numEltMax){ // display of max 5 labels
-                    num_labels=numEltMax;
-                }
-                var labels="<b></b>";
-                for (i=0;i<num_labels;i=i+1){
-                    currentLabel=labelsArray[i];
-                    years=yearsArray[i].sort(sortNumber);
-                    if (years.length==1){
-                        labelinnerdiv.append($("<b></b>").html(currentLabel + " (" + years[0] + ")"));
-                    }else if(years.length==2){
-                        labelinnerdiv.append( $("<b></b>").html(currentLabel + " (" + years[0]+ "," + years[1] + ")"));
-                    }else {
-                        labelinnerdiv.append( $("<b></b>").html(currentLabel + " (" + years[0]+ ", ... " + years[years.length-1] + ")"));
-                    }
-                }
-                if (labelsArray.length > numEltMax){ // display of max 5 labels
-                    labelinnerdiv.append( $("<b></b>").html("[...]"));
-                }
-            }
-            **/
 
             if (this.selection.length != 0) {
                 this.label.empty();
@@ -388,100 +327,51 @@ function InfoDiv(divid) {
         * Displays the list of all nodes in the current view/category received from applet
         */
         updateNodeList: function(node_list, category) {
-                this.table.empty();
-                this.last_category = category;
-                for (var i = 0; i < node_list.length; i++ ) {
-                    (function () {
-                        var rowLabel = decodeJSON(node_list[i]['label']);
-                        var rowId = decodeJSON(node_list[i]['id']);
-                        var rowCat = category;
-                        // asynchronously displays the node list
-                        /*$.doTimeout(0, function(rowLabel, rowId, rowCat) {
-                            displayNodeRow(rowLabel, rowId, rowCat);
-                        });*/
-                        setTimeout("displayNodeRow(\""+rowLabel+"\",\""+rowId+"\",\""+rowCat+"\")", 0);
-                    })();
-                }
+            this.table.empty();
+            this.last_category = category;
+            for (var i = 0; i < node_list.length; i++ ) {
+                (function () {
+                    var rowLabel = decodeJSON(node_list[i]['label']);
+                    var rowId = decodeJSON(node_list[i]['id']);
+                    var rowCat = category;
+                    // asynchronously displays the node list
+                    /*$.doTimeout(0, function(rowLabel, rowId, rowCat) {
+                        displayNodeRow(rowLabel, rowId, rowCat);
+                    });*/
+                    setTimeout("displayNodeRow(\""+rowLabel+"\",\""+rowId+"\",\""+rowCat+"\")", 0);
+                })();
+            }
+        },
+
+        getNodeLabel: function( node ) {
+            return jQuery.trim(decodeJSON(node.label));
         },
 
         /*
         * returns node's contents
         */
         getNodeContent: function(node) {
-            var layout_name = tinaviz.get("layout/algorithm");
-            if (layout_name == "phyloforce") {
-                // get node's year
-                var nodeId = jQuery.trim(decodeJSON(node.id));
-                var hashes = nodeId.split('::'); // obsolet and new terms
-                var hash = hashes[1].split('_');
-                var year=hash[0];
-                var content = this.getPhyloNodeHtml(node);
-            }
-            else {
-                var content = this.getGenericNodeHtml(node);
-            }
-            return content;
-        },
-
-        /*
-        * returns node's contents
-        */
-        getNodeContentLabel: function(label, node) {
-            var layout_name = tinaviz.get("layout/algorithm");
-            var period = "";
-            if (layout_name == "phyloforce") {
-                //on r�cup�re l'ann�e
-                var nodeId = jQuery.trim(decodeJSON(node.id));
-                var hashes = nodeId.split('::'); // obsolete and new terms
-                var hash = hashes[1].split('_');
-                var period = " - " + hash[0];
-            }
-            var content_label = label + period;
-            return content_label;
-        },
-
-        /*
-        * displays node contents in the generic case
-        */
-        getGenericNodeHtml: function(node) {
             if (node.content === undefined) {
                 return "";
             }
             else {
                 return decodeHTML(jQuery.trim(decodeJSON(node.content)));
             }
+            return content;
         },
 
         /*
-        * displays node contents if in phyloweb context
+        * returns node's content's label
         */
-        getPhyloNodeHtml: function(node) {
-            var content = decodeJSON(node.ccntent);
-            var vars = [],  htmlstring, hash;
-            var titles= [];
-            titles[0]='<b>Lost: </b>';
-            titles[1]='<b>New: </b>';
-            var htmlstring="";
-
-            var hashes = content.split('_'); // obsolet and new terms
-            for(var i = 0; i < hashes.length; i++){
-                if (hashes[i]=='.') continue;
-                htmlstring += titles[i];
-                hash = hashes[i].split('-'); // list of terms
-                for(var j = 0; j < hash.length; j++){
-                    var node = tinaviz.getNodeAttributes("macro",'N::'+hash[j]);
-                    htmlstring += htmlDecode(node.label.replace(/\+/g," "))+", ";
-                }
-                htmlstring += "<br/>";
-            }
-            return htmlstring;
+        getNodeContentLabel: function(label, node) {
+            return label;
         },
 
         /*
         * displays node related search queries
         */
-        getSearchQueries: function(label,CurrentCategRealName){
-            var SearchQuery=label.replace(/ /gi ,"+");
+        getSearchQueries: function(label, CurrentCategRealName) {
+            var SearchQuery = label.replace(/ /gi ,"+");
             //var WikiQuery=label.replace("+","_");
             if (CurrentCategRealName == "projects"){
                 return $("<p></p>").html(
@@ -539,4 +429,107 @@ function InfoDiv(divid) {
         }
 
     } // end of return
+};
+
+/*
+* Infodiv object need viz object to retrieve data
+*/
+function PhyloInfoDiv(divid) {
+    // heritage
+    return {
+        getNodeLabel: function( node ) {
+            var nodeId = jQuery.trim(decodeJSON(node.id));
+            var hashes = nodeId.split('::'); // obsolet and new terms
+            if (hashes[1] !== undefined) {
+                var hash = hashes[1].split('_');
+                var years=hash[0].split('-');
+                var year=years[1];
+                if (year !== undefined){
+                    f=find(label,labelsArray);
+                    if (f != null){
+                        year_list=yearsArray[f[0]];
+                        year_list.push(year);
+                        yearsArray[f[0]]=year_list;
+                    }else{
+                        year_list= new Array();
+                        year_list.push(year);
+                        yearsArray.push(year_list);
+                        labelsArray.push(label);
+                    };
+                //label=label + " - " + year;
+                }
+                else { // if no period indication just fill the label array
+                    f=find(label,labelsArray);
+                    if (f == null){
+                        labelsArray.push(label);
+                    }
+                }
+            }
+            if ( yearsArray[0] != undefined) {
+                var numEltMax = 3; // highest number of labels display in phylo mode
+                num_labels=labelsArray.length;
+                if (num_labels > numEltMax) { // display of max 5 labels
+                    num_labels = numEltMax;
+                }
+                var labels= $("<b></b>");
+                for ( i=0; i<num_labels; i=i+1 ) {
+                    currentLabel = labelsArray[i];
+                    years = yearsArray[i].sort(sortNumber);
+                    if (years.length == 1){
+                        labels.append( currentLabel + " (" + years[0] + ")" );
+                    }else if(years.length==2){
+                        labels.append( currentLabel + " (" + years[0]+ "," + years[1] + ")");
+                    }else {
+                        labels.append( currentLabel + " (" + years[0]+ ", ... " + years[years.length-1] + ")" );
+                    }
+                }
+                if (labelsArray.length > numEltMax){ // display of max 5 labels
+                    labels.append( "[...]" );
+                }
+            }
+            return labels;
+        },
+
+        /*
+        * returns node's contents
+        */
+        getNodeContent: function(node) {
+            // get node's year
+            var nodeId = jQuery.trim(decodeJSON(node.id));
+            var hashes = nodeId.split('::'); // obsolet and new terms
+            var hash = hashes[1].split('_');
+            var year=hash[0];
+            var content = decodeJSON(node.ccntent);
+            var vars = [],  htmlstring, hash;
+            var titles= [];
+            titles[0]='<b>Lost: </b>';
+            titles[1]='<b>New: </b>';
+            var htmlstring="";
+
+            var hashes = content.split('_'); // obsolet and new terms
+            for(var i = 0; i < hashes.length; i++){
+                if (hashes[i]=='.') continue;
+                htmlstring += titles[i];
+                hash = hashes[i].split('-'); // list of terms
+                for(var j = 0; j < hash.length; j++){
+                    var node = tinaviz.getNodeAttributes("macro",'N::'+hash[j]);
+                    htmlstring += htmlDecode(node.label.replace(/\+/g," "))+", ";
+                }
+                htmlstring += "<br/>";
+            }
+            return htmlstring;
+        },
+
+        /*
+        * returns node's content's label
+        */
+        getNodeContentLabel: function(label, node) {
+            var nodeId = jQuery.trim(decodeJSON(node.id));
+            var hashes = nodeId.split('::'); // obsolete and new terms
+            var hash = hashes[1].split('_');
+            var period = " - " + hash[0];
+            return label + period;
+        }
+    }
+
 };
