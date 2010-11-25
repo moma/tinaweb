@@ -140,7 +140,7 @@ $(document).ready(function(){
             },
             success: function() {
                 // init the node list with prefs.category
-                tinaviz.updateNodes( prefs.view, prefs.category );
+                tinaviz.infodiv.updateNodeList( prefs.view, prefs.category );
                 var view = tinaviz.views.current;
                 console.log("var view = tinaviz.views.current  (got "+tinaviz.views.current+")");
 
@@ -216,8 +216,8 @@ $(document).ready(function(){
                         console.log("tinaviz.setView(\"meso\")");
                         tinaviz.setView("meso");
                     }
-                    console.log("tinaviz.updateNodes(\"meso\", "+macroCategory+");");
-                    tinaviz.updateNodes("meso", macroCategory);
+                    console.log("tinaviz.infodiv.updateNodeList(\"meso\", "+macroCategory+");");
+                    tinaviz.infodiv.updateNodeList("meso", macroCategory);
                     console.log("tinaviz.views.meso.set(\"layout/iter\", 0);");
                     tinaviz.views.meso.set("layout/iter", 0);
                     console.log("tinaviz.autoCenteringt();");
