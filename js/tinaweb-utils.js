@@ -18,7 +18,6 @@
 function IsNumeric(n) {
     return !isNaN(parseFloat(n)) && isFinite(n);
 }
-
 /*
  * utility modifying the Object prototype
  * to get its lenght
@@ -54,7 +53,7 @@ Object.keys = function(obj) {
     return keys;
 };
 
-function decHTMLifEnc(str) {
+function decodeHTML(str) {
     return str.replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>');
 }
 

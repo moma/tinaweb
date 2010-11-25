@@ -41,6 +41,10 @@ function Tinaviz(args) {
     for (x in args) {
         opts[x] = args[x]
     }
+
+    this.clear = function() {
+        applet.clear();
+    };
     /**
      * Called by the applet
      */
@@ -594,6 +598,7 @@ function Tinaviz(args) {
      * @return
      */
     this._callbackSelectionChanged = function(view, attr, mouse) {
+        //console.log("_callbackSelectionChanged : "+ attr);
         this.callbackSelectionChanged({
             'viewName':view,
             'data':$.parseJSON(attr),
@@ -776,7 +781,7 @@ function Tinaviz(args) {
         var current_cat = this.getCategory();
         if (this.views.current.name() == "macro") {
             // check if selection is empty
-            if (Object.size(this.infodiv.selection) != 0) {
+            if (this.infodiv.selection.length != 0) {
                 this.views.meso.set("category/category", current_cat, false);
                 this.setView("meso");
                 this.updateNodes("meso", current_cat);
