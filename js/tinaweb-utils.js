@@ -58,9 +58,9 @@ function decodeHTML(str) {
 }
 
 /*
- * Tri alphabetique
+ * Sorts list of objects containing a text values, given a textkey
  */
-function  alphabeticListSort(listitems,textkey) {
+function  alphabeticListSort(listitems, textkey) {
     listitems.sort(function(a, b) {
         var compA = a[textkey].toUpperCase();
         var compB = b[textkey].toUpperCase();
@@ -69,10 +69,14 @@ function  alphabeticListSort(listitems,textkey) {
     return listitems;
 
 };
-function  numericListSort(listitems,textkey) {
+
+/*
+ * Sorts list of objects containing a numeric values, given a valuekey
+ */
+function  numericListSort(listitems, valuekey) {
     listitems.sort(function(a, b) {
-    var compA = parseFloat(a[textkey]);
-    var compB = parseFloat(b[textkey]);
+    var compA = parseFloat(a[valuekey]);
+    var compB = parseFloat(b[valuekey]);
         return (compA > compB) ? -1 : (compA <= compB) ? 1 : 0;
     })
     return listitems;
@@ -84,7 +88,7 @@ function sortNumber(a,b) {
 }
 
 /*
-* Generic sorting DOM lists
+* Generic sorting Jquery object lists
 */
 function alphabeticJquerySort(parentdiv, childrendiv, separator) {
     var listitems = parentdiv.children(childrendiv).get();

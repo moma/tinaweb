@@ -22,15 +22,16 @@
 /*
 * Asynchronously displays a row from the node list
 */
+
 function displayNodeRow(label, id, category) {
     $("#node_table > tbody").append(
         $("<tr></tr>").append(
-            $("<td id='"+id+"'></td>").text(label).click( function(eventObject) {
-                //switch to meso view
+            $("<td id='node_list_"+id+"'></td>").text(label).click( function(eventObject) {
+                alert("viewMeso will be called " + label + id + category);
                 tinaviz.viewMeso(id, category);
             })
-            )
-        );
+        )
+    );
 };
 
 /*
@@ -42,15 +43,18 @@ var InfoDiv = {
     neighbours : [],
     node_list_cache: {},
     last_category: "",
-    label : $( "#node_label" ),
-    contents : $( "#node_contents" ),
-    cloud : $( "#node_neighbourhood" ),
-    // Modif David
-    cloudSearch: $("#node_neighbourhoodForSearch"),
-    cloudSearchCopy : $( "#node_neighbourhoodCopy" ),
-    unselect_button: $( "#toggle-unselect" ),
-    node_list: $("#node_table > tbody"),
 
+    node_table: null,
+    label : null,
+    contents : null,
+    cloud : null,
+    cloudSearch: null,
+    cloudSearchCopy : null,
+    unselect_button: null,
+    /*
+     * Internal name -> Display Names
+     * Default
+     */
     categories: {
         'NGram' : 'Keyphrases',
         'Document' : 'Documents'
@@ -164,6 +168,7 @@ var InfoDiv = {
         /* displays tag cloud */
         var tagcloud = $("<p></p>");
         var nb_displayed_tag=0;
+
         for (var i = 0; i < neighbours.length; i++) {
             if (nb_displayed_tag<20) {
                 nb_displayed_tag++;
@@ -258,10 +263,11 @@ var InfoDiv = {
                     this.getSearchQueries( htmlDecode(label), this.categories[current_cat])
                 ));
             }
-            //contentinnerdiv.append("<br/");
+            //contentinnerdiv.append("<br/>");
         }
 
         if (this.selection.length != 0) {
+
             this.label.empty();
             this.unselect_button.show();
             this.contents.empty();
@@ -295,6 +301,7 @@ var InfoDiv = {
     * Resets the entire infodiv
     */
     reset: function() {
+
         if (this.id ==  null) {
             alert("error : infodiv not initialized with its HTML DIV id");
             return;
@@ -308,9 +315,9 @@ var InfoDiv = {
             +"<br/>"
             +"<i>Basic interactions</i><br/><br/>"
             +"Click on a node to select/unselect and get its information.  In case of multiple selection, the button <img src='"
-            +tinaviz.getPath()
+            + tinaviz.getPath()
             +"css/branding/unselect.png' alt='unselect' align='top' height=20/>  clears all selections.<br/><br/>The switch button <img src='"
-            +tinaviz.getPath()+"css/branding/switch.png' alt='switch' align='top' height=20 /> allows to change the view type."
+            + tinaviz.getPath()+"css/branding/switch.png' alt='switch' align='top' height=20 /> allows to change the view type."
             +"<br/><br/>"
             +"<i>Graph manipulation</i><br/><br/>"
             +"Link and node sizes indicate their strength.<br/><br/> To fold/unfold the graph (keep only strong links or weak links), use the 'edges filter' sliders.<br/><br/> To select a more of less specific area of the graph, use the 'nodes filter' slider.</b><br/><br/>"
@@ -325,7 +332,6 @@ var InfoDiv = {
         this.selection = [];
         this.neighbours = [];
         this.last_category = "";
-        alert("end reset");
         return;
     },
 
@@ -333,18 +339,26 @@ var InfoDiv = {
     * Displays the list of all nodes in the current view/category received from applet
     */
     updateNodeList: function(view, category) {
+
         if ( category == this.last_category ) return;
         this.display_current_category();
+
+        if (this.node_list_cache === undefined) {
+            this.node_list_cache={};
+        }
+
         if (this.node_list_cache[category] === undefined || this.node_list_cache[category].length == 0) {
             this.node_list_cache[category] = tinaviz.getNodes( view, category )
         }
 
-        this.node_list.empty();
+        this.node_table.empty();
         this.last_category = category;
-        for (var i = 0; i < this.node_list_cache[category].length; i++ ) {
+        var node_list = this.node_list_cache[category]
+        for (var i = 0; i < node_list .length; i++ ) {
+
             (function () {
-                var rowLabel = decodeJSON(this.node_list_cache[category][i]['label']);
-                var rowId = decodeJSON(this.node_list_cache[category][i]['id']);
+                var rowLabel = decodeJSON(node_list[i]['label']);
+                var rowId = decodeJSON(node_list[i]['id']);
                 var rowCat = category;
                 // asynchronously displays the node list
                 /*$.doTimeout(0, function(rowLabel, rowId, rowCat) {
@@ -513,7 +527,6 @@ var PhyloInfoDiv = {
         titles[0]='<b>Lost: </b>';
         titles[1]='<b>New: </b>';
         var htmlstring="";
-
         var hashes = content.split('_'); // obsolet and new terms
         for(var i = 0; i < hashes.length; i++){
             if (hashes[i]=='.') continue;
@@ -539,4 +552,4 @@ var PhyloInfoDiv = {
         return label + period;
     }
 };
-//PhyloInfoDiv = $.extend( true, InfoDiv, PhyloInfoDiv );
+PhyloInfoDiv = $.extend( true, {}, InfoDiv, PhyloInfoDiv );

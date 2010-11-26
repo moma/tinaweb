@@ -479,7 +479,6 @@ function Tinaviz(args) {
 
     }
 
-
     /*
      *  Adds a node to the current selection
      *  callback is boolean activating this.selected() callback
@@ -539,7 +538,6 @@ function Tinaviz(args) {
         //applet.
         }
     }
-
 
     /*
     * recenter the graph
@@ -760,7 +758,6 @@ function Tinaviz(args) {
      */
     this.viewMeso = function(id, category) {
         // selects unique node
-        //logNormal("calling viewMeso("+id+","+category+")");
         this.unselect();
         this.selectFromId(id, true);
         // sets the category of the graph
