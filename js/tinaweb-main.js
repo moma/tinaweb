@@ -59,77 +59,71 @@ $(document).ready(function(){
             prefs[x] = urlVars[x];
         }
 
-        console.log("tinaviz.setView("+prefs.view+")");
         tinaviz.setView(prefs.view);
 
-        console.log("tinaviz.session()");
         var session = tinaviz.session();
         var macro = tinaviz.views.macro;
         var meso = tinaviz.views.meso;
 
         // session.add("nodes/0/keywords", "newKeyword");
-        console.log("session.set(\"edgeWeight/min\", "+parseFloat(prefs.edge_filter_min)+"\")");
         session.set("edgeWeight/min", parseFloat(prefs.edge_filter_min));
-        console.log("session.set(\"edgeWeight/max\", "+parseFloat(prefs.edge_filter_max)+"\")");
         session.set("edgeWeight/max", parseFloat(prefs.edge_filter_max));
-        console.log("session.set(\"nodeWeight/min\", "+parseFloat(prefs.node_filter_min)+"\")");
         session.set("nodeWeight/min", parseFloat(prefs.node_filter_min));
-        console.log("session.set(\"nodeWeight/max\", "+parseFloat(prefs.node_filter_max)+"\")");
         session.set("nodeWeight/max", parseFloat(prefs.node_filter_max));
-        console.log("session.set(\"category/category\", "+prefs.category+"\")");
         session.set("category/category", prefs.category);
-        console.log("session.set(\"output/nodeSizeMin\", "+5.0+"\")");
         session.set("output/nodeSizeMin", 5.0);
-        console.log("session.set(\"output/nodeSizeMax\", "+20.0+"\")");
         session.set("output/nodeSizeMax", 20.0);
-        console.log("session.set(\"output/nodeSizeRatio\", "+parseFloat(prefs.magnify)+"\")");
         session.set("output/nodeSizeRatio", parseFloat(prefs.magnify));
-        console.log("session.set(\"selection/radius\",\""+parseFloat(prefs.cursor_size)+"\")");
         session.set("selection/radius", parseFloat(prefs.cursor_size));
-        console.log("session.set(\"layout/algorithm\",\""+prefs.layout+"\")");
         session.set("layout/algorithm", prefs.layout)
-        console.log("session.set(\"edge/shape\", \""+prefs.edge_rendering+"\")");
         session.set("rendering/edge/shape", prefs.edge_rendering);
-        console.log("session.set(\"data/source\",\"gexf\")");
         session.set("data/source", "gexf");
 
-        console.log("macro.filter(\"Category\",\"category\")");
         macro.filter("Category", "category");
-        console.log("macro.filter(\"NodeWeightRange\",\"nodeWeight\")");
         macro.filter("NodeWeightRange", "nodeWeight");
-        console.log("macro.filter(\"EdgeWeightRange\",\"edgeWeight\")");
         macro.filter("EdgeWeightRange", "edgeWeight");
-        console.log("macro.fitler(\"Output\",\"output\")");
         macro.filter("Output", "output");
 
-        console.log("meso.filter(\"SubGraphCopyStandalone\", \"category\")");
         meso.filter("SubGraphCopyStandalone", "category");
-        console.log("meso.filter(\"category/source\", \"macro\")");
         meso.set("category/source", "macro");
-        console.log("meso.filter(\"category/category\", \"Document\")");
         meso.set("category/category", "Document");
-        console.log("meso.filter(\"category/mode\", \"keep\"");
         meso.set("category/mode", "keep");
 
-        console.log("meso.filter(\"NodeWeightRangeHack\", \"nodeWeight\")");
         meso.filter("NodeWeightRangeHack", "nodeWeight");
 
-        console.log("meso.filter(\"EdgeWeightRangeHack\", \"edgeWeight\")");
         meso.filter("EdgeWeightRangeHack", "edgeWeight");
 
         console.log("meso.filter(\"Output\", \"output\")");
         meso.filter("Output", "output");
 
-        tinaviz.infodiv = InfoDiv('infodiv');
 
+        /*
+         * Initialization of the Infodiv
+         */
+        var layout_name = tinaviz.get("layout/algorithm");
+        // use of different Infodiv-s following the type of graph
+        if ( layout_name == "phyloforce" ) {
+            tinaviz.infodiv = PhyloInfoDiv;
+        }
+        else {
+            tinaviz.infodiv = InfoDiv;
+        }
+        tinaviz.infodiv.id = 'infodiv';
+        tinaviz.infodiv.label = $( "#node_label" );
+        tinaviz.infodiv.contents = $( "#node_contents" );
+        tinaviz.infodiv.cloud = $( "#node_neighbourhood" );
+        tinaviz.infodiv.cloudSearch = $("#node_neighbourhoodForSearch");
+        tinaviz.infodiv.cloudSearchCopy = $( "#node_neighbourhoodCopy" );
+        tinaviz.infodiv.unselect_button= $( "#toggle-unselect" );
+        tinaviz.infodiv.node_table = $( "#node_table > tbody" );
+        tinaviz.infodiv.categories = {
+            'NGram' : 'Keyphrases',
+            'Document' : 'Documents'
+        };
         tinaviz.infodiv.reset();
-
-        $("#infodiv").accordion({
-            fillSpace: true
-        });
-        console.log("toolbar.init()");
+        $("#infodiv").accordion();
         toolbar.init();
-        console.log("tinaviz.open({ ... })");
+
         tinaviz.open({
             before: function() {
                 $('#appletInfo').show();
@@ -140,7 +134,9 @@ $(document).ready(function(){
             },
             success: function() {
                 // init the node list with prefs.category
-                tinaviz.infodiv.updateNodeList( prefs.view, prefs.category );
+                tinaviz.infodiv.updateNodeList( "macro", prefs.category );
+                tinaviz.infodiv.display_current_category();
+                tinaviz.infodiv.display_current_view();
                 var view = tinaviz.views.current;
                 console.log("var view = tinaviz.views.current  (got "+tinaviz.views.current+")");
 
@@ -164,8 +160,6 @@ $(document).ready(function(){
                     parseInt(view.get("nodeWeight/max")) *100
                     ]);
 
-                tinaviz.infodiv.display_current_category();
-                tinaviz.infodiv.display_current_view();
 
                 if (prefs.node_id != "") {
                     console.log("tinaviz.selectFromId("+prefs.node_id+", true)");
@@ -185,13 +179,13 @@ $(document).ready(function(){
                 $("#appletInfo").html("Error, couldn't load graph: "+msg);
             }
         });
-        console.log("tinaviz.open({   view: "+prefs.view+", url: "+prefs.gexf+", layout: "+prefs.layout+" })");
+
         tinaviz.open({
             view: prefs.view,
             url: prefs.gexf,
             layout: prefs.layout
         });
-        console.log("tinaviz.event({ .. })");
+
         tinaviz.event({
 
             /*
@@ -201,8 +195,6 @@ $(document).ready(function(){
              *
              **/
             selectionChanged: function(selection) {
-                tinaviz.infodiv.reset();
-
                 if ( selection.mouseMode == "left" ) {
                 // nothing to do
                 } else if ( selection.mouseMode == "right" ) {
@@ -210,27 +202,22 @@ $(document).ready(function(){
                 } else if (selection.mouseMode == "doubleLeft") {
                     var macroCategory = tinaviz.views.macro.category();
                     //console.log("selected doubleLeft ("+selection.viewName+","+selection.data+")");
-                    console.log("tinaviz.views.meso.category("+macroCategory+")");
                     tinaviz.views.meso.category(macroCategory);
                     if (selection.viewName == "macro") {
                         console.log("tinaviz.setView(\"meso\")");
                         tinaviz.setView("meso");
                     }
-                    console.log("tinaviz.infodiv.updateNodeList(\"meso\", "+macroCategory+");");
                     tinaviz.infodiv.updateNodeList("meso", macroCategory);
-                    console.log("tinaviz.views.meso.set(\"layout/iter\", 0);");
                     tinaviz.views.meso.set("layout/iter", 0);
-                    console.log("tinaviz.autoCenteringt();");
                     tinaviz.autoCentering();
                 }
-                console.log("tinaviz.infodiv.update("+selection.viewName+", "+selection.data+");");
                 tinaviz.infodiv.update(selection.viewName, selection.data);
             },
+
             getNeighbourhood: function(selection_list, neighbour_node_list) {
                 tinaviz.infodiv.updateTagCloud(selection_list, neighbour_node_list);
             },
             viewChanged: function(view) {
-                console.log("tinaviz.autoCentering()");
                 tinaviz.autoCentering();
 
                 $("#sliderEdgeWeight").slider( "option", "values", [
@@ -274,7 +261,8 @@ $(document).ready(function(){
             }
         });
 
-
+        var size = resize();
+        tinaviz.size(size.w, size.h);
     });
 
 });
