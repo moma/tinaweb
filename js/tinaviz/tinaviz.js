@@ -41,6 +41,11 @@ function Tinaviz(args) {
     for (x in args) {
         opts[x] = args[x]
     }
+
+    this.clear = function() {
+        applet.clear();
+    };
+
     /**
      * Called by the applet
      */
@@ -474,7 +479,6 @@ function Tinaviz(args) {
 
     }
 
-
     /*
      *  Adds a node to the current selection
      *  callback is boolean activating this.selected() callback
@@ -535,7 +539,6 @@ function Tinaviz(args) {
         }
     }
 
-
     /*
     * recenter the graph
     */
@@ -594,6 +597,7 @@ function Tinaviz(args) {
      * @return
      */
     this._callbackSelectionChanged = function(view, attr, mouse) {
+        //console.log("_callbackSelectionChanged : "+ attr);
         this.callbackSelectionChanged({
             'viewName':view,
             'data':$.parseJSON(attr),
@@ -754,14 +758,13 @@ function Tinaviz(args) {
      */
     this.viewMeso = function(id, category) {
         // selects unique node
-        //logNormal("calling viewMeso("+id+","+category+")");
         this.unselect();
         this.selectFromId(id, true);
         // sets the category of the graph
         this.views.meso.set("category/category", category);
         //this.set("macro", "category/category", category);
         this.setView("meso");
-        this.updateNodes("meso", category);
+        this.infoviz.updateNodeList("meso", category);
     }
 
     this.getCategory = function() {
@@ -776,17 +779,17 @@ function Tinaviz(args) {
         var current_cat = this.getCategory();
         if (this.views.current.name() == "macro") {
             // check if selection is empty
-            if (Object.size(this.infodiv.selection) != 0) {
+            if (this.infodiv.selection.length != 0) {
                 this.views.meso.set("category/category", current_cat, false);
                 this.setView("meso");
-                this.updateNodes("meso", current_cat);
+                this.infoviz.updateNodeList("meso", current_cat);
             } else {
                 alert("please first select some nodes before switching to meso level");
             }
         } else if (this.views.current.name() == "meso") {
             this.views.macro.set("category/category", current_cat, false);
             this.setView("macro");
-            this.updateNodes("macro", current_cat);
+            this.infoviz.updateNodeList("macro", current_cat);
         }
 
     }
@@ -818,24 +821,8 @@ function Tinaviz(args) {
      */
     this.getNodes = function(view, category) {
         var nodes = applet.getNodes(view, category);
-        this.infodiv.node_list_cache[category] = $.parseJSON( nodes );
-        return this.infodiv.node_list_cache[category];
+        return $.parseJSON( nodes );
     }
-    /**
-     *  Fires the update of all nodes list cache and display
-     */
-    this.updateNodes = function(view, category)  {
-        if ( category == this.infodiv.last_category ) return;
-        this.infodiv.display_current_category();
-        if (this.infodiv.node_list_cache[category] === undefined || this.infodiv.node_list_cache[category].length == 0) {
-            this.infodiv.updateNodeList( this.getNodes( view, category ), category );
-        }
-        else {
-            this.infodiv.updateNodeList( this.infodiv.node_list_cache[category], category );
-        }
-    }
-
-
 
     /****************************************
      *
@@ -905,8 +892,8 @@ function Tinaviz(args) {
         document.write = func;
         return buff;
     }
-    //alert( this.getHTML() );
     this.tag.html( this.getHTML() );
+    //this.clear();
 }
 
 

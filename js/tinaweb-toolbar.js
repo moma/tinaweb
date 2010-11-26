@@ -293,7 +293,7 @@ toolbar.init = function() {
         var cat = view.category();
         var next_cat = tinaviz.getOppositeCategory( cat );
         // update the node list
-        tinaviz.updateNodes(view.name(), next_cat);
+        tinaviz.infodiv.updateNodeList(view.name(), next_cat);
         view.category(next_cat);
         tinaviz.autoCentering();
         if (view.name() == "macro") {
