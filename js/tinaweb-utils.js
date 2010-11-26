@@ -53,10 +53,6 @@ Object.keys = function(obj) {
     return keys;
 };
 
-function decodeHTML(str) {
-    return str.replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>');
-}
-
 /*
  * Sorts list of objects containing a text values, given a textkey
  */
@@ -134,6 +130,14 @@ function decodeJSON(encvalue) {
     else
         return "";
 }
+
+/*
+ * OBSOLETE
+ * replace by htmlDecode
+ */
+/*function decodeHTML(str) {
+    return str.replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>');
+}*/
 
 
 /* useful for fullscreen mode */

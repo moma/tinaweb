@@ -173,11 +173,11 @@ var InfoDiv = {
             if (nb_displayed_tag<20) {
                 nb_displayed_tag++;
                 var tag = neighbours[i];
-                var tagid = tag['id'];
+                var tagid = htmlDecode(decodeJSON(tag['id']));
                 var tagspan = $("<span id='"+tagid+"'></span>");
                 tagspan.addClass('ui-widget-content');
                 tagspan.addClass('viz_node');
-                tagspan.html(tag['label']);
+                tagspan.html(htmlDecode(decodeJSON(tag['label'])));
                 (function() {
                     var attached_id = tagid;
                     var attached_cat =  tag['category'];
@@ -228,37 +228,35 @@ var InfoDiv = {
     * updates the label and content DOM divs
     */
     updateInfo: function(lastselection) {
-        var layout_name=tinaviz.get("layout/algorithm");
         var current_cat = tinaviz.get("category/category");
         var labelinnerdiv = $("<div></div>");
         var contentinnerdiv = $("<div></div>");
         var number_of_label = 0;
-        var labelsArray=new Array();
-        var yearsArray=new Array();
         for(var id in lastselection) {
+
             var node = lastselection[id];
             // ERROR : MISSING CATEGORY in the node list returned from Tinaviz !!!!
             if (node.category == current_cat)  {
                 var label = this.getNodeLabel( node );
-                labelinnerdiv.empty();
+
                 // limiting number of displayed labels
                 number_of_label++;
                 // prepares label and content to be displayed
                 if (number_of_label < 5) {
-                    labelinnerdiv.append( $("<b></b>").html(label) );
+                    labelinnerdiv.append( $("<b></b>").text(label) );
                 }
                 else {
                     if (number_of_label == 5) {
-                        labelinnerdiv.append( $("<b></b>").html("[...]") );
+                        labelinnerdiv.append( $("<b></b>").text("[...]") );
                     }
                 }
                 // add node to selection cache
                 this.selection.push(id);
                 // displays contents only if it's a document
-                contentinnerdiv.append( $("<b></b>").html(
+                contentinnerdiv.append( $("<b></b>").text(
                     this.getNodeContentLabel(label, node)
                 ));
-                contentinnerdiv.append( $("<p></p>").html( this.getNodeContent(node) ) );
+                contentinnerdiv.append( $("<p></p>").text( this.getNodeContent(node) ) );
                 contentinnerdiv.append( $("<p></p>").html(
                     this.getSearchQueries( htmlDecode(label), this.categories[current_cat])
                 ));
@@ -267,7 +265,6 @@ var InfoDiv = {
         }
 
         if (this.selection.length != 0) {
-
             this.label.empty();
             this.unselect_button.show();
             this.contents.empty();
@@ -293,6 +290,7 @@ var InfoDiv = {
             this.reset();
             return;
         }
+        this.selection = []
         this.updateInfo( lastselection );
         tinaviz.getNeighbourhood( view, this.selection );
     },
@@ -357,7 +355,7 @@ var InfoDiv = {
         for (var i = 0; i < node_list .length; i++ ) {
 
             (function () {
-                var rowLabel = decodeJSON(node_list[i]['label']);
+                var rowLabel = htmlDecode(decodeJSON(node_list[i]['label']));
                 var rowId = decodeJSON(node_list[i]['id']);
                 var rowCat = category;
                 // asynchronously displays the node list
@@ -370,7 +368,7 @@ var InfoDiv = {
     },
 
     getNodeLabel: function( node ) {
-        return jQuery.trim(decodeJSON(node.label));
+        return htmlDecode(decodeJSON(node.label));
     },
 
     /*
@@ -381,16 +379,15 @@ var InfoDiv = {
             return "";
         }
         else {
-            return decodeHTML(jQuery.trim(decodeJSON(node.content)));
+            return htmlDecode(decodeJSON(node.content));
         }
-        return content;
     },
 
     /*
     * returns node's content's label
     */
     getNodeContentLabel: function(label, node) {
-        return label;
+        return htmlDecode(label);
     },
 
     /*
@@ -460,20 +457,23 @@ var InfoDiv = {
 */
 var PhyloInfoDiv = {
     getNodeLabel: function( node ) {
-        var nodeId = jQuery.trim(decodeJSON(node.id));
+        var label = htmlDecode(decodeJSON(node.label));
+        var labelsArray = new Array();
+        var yearsArray = new Array();
+        var nodeId = decodeJSON(node.id);
         var hashes = nodeId.split('::'); // obsolet and new terms
         if (hashes[1] !== undefined) {
             var hash = hashes[1].split('_');
-            var years=hash[0].split('-');
-            var year=years[1];
+            var years = hash[0].split('-');
+            var year = years[1];
             if (year !== undefined){
-                f=find(label,labelsArray);
+                f = find(label, labelsArray);
                 if (f != null){
-                    year_list=yearsArray[f[0]];
+                    year_list = yearsArray[f[0]];
                     year_list.push(year);
-                    yearsArray[f[0]]=year_list;
+                    yearsArray[f[0]] = year_list;
                 }else{
-                    year_list= new Array();
+                    year_list = new Array();
                     year_list.push(year);
                     yearsArray.push(year_list);
                     labelsArray.push(label);
@@ -517,11 +517,11 @@ var PhyloInfoDiv = {
     */
     getNodeContent: function(node) {
         // get node's year
-        var nodeId = jQuery.trim(decodeJSON(node.id));
+        var nodeId = decodeJSON(node.id);
         var hashes = nodeId.split('::'); // obsolet and new terms
         var hash = hashes[1].split('_');
         var year=hash[0];
-        var content = decodeJSON(node.ccntent);
+        var content = htmlDecode(decodeJSON(node.ccntent));
         var vars = [],  htmlstring, hash;
         var titles= [];
         titles[0]='<b>Lost: </b>';
@@ -534,7 +534,7 @@ var PhyloInfoDiv = {
             hash = hashes[i].split('-'); // list of terms
             for(var j = 0; j < hash.length; j++){
                 var node = tinaviz.getNodeAttributes("macro",'N::'+hash[j]);
-                htmlstring += htmlDecode(node.label.replace(/\+/g," "))+", ";
+                htmlstring += htmlDecode(decodeJSON(node.label)) + ", ";
             }
             htmlstring += "<br/>";
         }
@@ -545,11 +545,11 @@ var PhyloInfoDiv = {
     * returns node's content's label
     */
     getNodeContentLabel: function(label, node) {
-        var nodeId = jQuery.trim(decodeJSON(node.id));
+        var nodeId = decodeJSON(node.id);
         var hashes = nodeId.split('::'); // obsolete and new terms
         var hash = hashes[1].split('_');
         var period = " - " + hash[0];
-        return label + period;
+        return htmlDecode(label + period);
     }
 };
 PhyloInfoDiv = $.extend( true, {}, InfoDiv, PhyloInfoDiv );
