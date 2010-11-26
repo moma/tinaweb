@@ -34,7 +34,6 @@ $(document).ready(function(){
     tinaviz.ready(function(){
 
         var size = resize();
-        console.log("L36 tinaviz.size("+size.w+", "+size.h+")");
         tinaviz.size(size.w, size.h);
 
 
