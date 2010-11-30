@@ -764,7 +764,7 @@ function Tinaviz(args) {
         this.views.meso.set("category/category", category);
         //this.set("macro", "category/category", category);
         this.setView("meso");
-        this.infoviz.updateNodeList("meso", category);
+        //this.infoviz.updateNodeList("meso", category);
     }
 
     this.getCategory = function() {
@@ -782,14 +782,14 @@ function Tinaviz(args) {
             if (this.infodiv.selection.length != 0) {
                 this.views.meso.set("category/category", current_cat, false);
                 this.setView("meso");
-                this.infoviz.updateNodeList("meso", current_cat);
+                //this.infodiv.updateNodeList("meso", current_cat);
             } else {
                 alert("please first select some nodes before switching to meso level");
             }
         } else if (this.views.current.name() == "meso") {
             this.views.macro.set("category/category", current_cat, false);
             this.setView("macro");
-            this.infoviz.updateNodeList("macro", current_cat);
+            //this.infodiv.updateNodeList("macro", current_cat);
         }
 
     }

@@ -292,7 +292,7 @@ var InfoDiv = {
         }
         this.selection = []
         this.updateInfo( lastselection );
-        tinaviz.getNeighbourhood( view, this.selection );
+        tinaviz.getNeighbourhood( "macro", this.selection );
     },
 
     /*
