@@ -88,9 +88,9 @@ $(document).ready(function(){
         meso.set("category/category", "Document");
         meso.set("category/mode", "keep");
 
-        meso.filter("NodeWeightRangeHack", "nodeWeight");
+        //meso.filter("NodeWeightRangeHack", "nodeWeight");
 
-        meso.filter("EdgeWeightRangeHack", "edgeWeight");
+        //meso.filter("EdgeWeightRangeHack", "edgeWeight");
 
         console.log("meso.filter(\"Output\", \"output\")");
         meso.filter("Output", "output");

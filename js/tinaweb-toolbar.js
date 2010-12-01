@@ -288,14 +288,19 @@ toolbar.init = function() {
         /**
          * Manually toggles the category, and do the bipartite work
          */
+        tinaviz.togglePause();
         var view = tinaviz.views.current;
-        // get and set the new category to display
         var cat = view.category();
+        // store the layout state (iteration counter) in a JS-side buffer
+        view.categories[cat].layout.iter = view.get("layout/iter");
+
         var next_cat = tinaviz.getOppositeCategory( cat );
+        view.category(next_cat);
+        view.set("layout/iter", view.categories[next_cat].layout.iter, false);
+        tinaviz.autoCentering();
+        
         // update the node list
         tinaviz.infodiv.updateNodeList(view.name(), next_cat);
-        view.category(next_cat);
-        tinaviz.autoCentering();
         if (view.name() == "macro") {
             // empty the selection, and ask the applet to select opposite nodes
             var i = 0;
@@ -305,10 +310,8 @@ toolbar.init = function() {
                 tinaviz.selectFromId(tinaviz.infodiv.neighbours[pos], cb);
             }
         }
-        // update the algorithm
-        view.categories[cat].layout.iter = view.get("layout/iter");
-        view.set("layout/iter", view.categories[next_cat].layout.iter, true);
         tinaviz.infodiv.display_current_category();
+        tinaviz.togglePause();
 
     });
     toolbar.checkSearchForm();
