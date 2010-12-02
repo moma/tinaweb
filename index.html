@@ -25,32 +25,30 @@
         <link rel="shortcut icon" href="css/branding/favicon.ico" type="image/x-icon" />
 
         <!-- JQUERY -->
-        <script type="text/javascript" src="js/jquery/jquery-1.4.2.min.js" language="javascript"></script>
+        <script type="text/javascript" src="js/jquery/jquery-1.4.4.min.js" language="javascript"></script>
+        <script type="text/javascript" src="js/jquery/jquery.ba-dotimeout.min.js" language="javascript"></script>
+        <script type="text/javascript" src="js/jquery/jquery.json-2.2.min.js" language="javascript"></script>
 
         <!-- JQUERY UI -->
         <script type="text/javascript" src="js/jquery-ui/jquery-ui-1.8.min.js" language="javascript"></script>
-
+        <script src='js/rating/jquery.ratings.js' type="text/javascript" language="javascript"></script>
+        <link href='js/rating/jquery.ratings.16.css' type="text/css" rel="stylesheet"/>
+        <!--TINAWEB APPLET LOADER -->
+        <script type="text/javascript" src="js/tinaviz/deployJava.js" language="javascript"></script>
         <!-- TINAVIZ -->
         <script type="text/javascript" src="js/tinaviz/tinaviz.js" language="javascript"></script>
-
         <!-- WE USE TINAWEB UTILS-->
         <script type="text/javascript" src="js/tinaweb-utils.js" language="javascript"></script>
-
         <!-- WE USE TINAWEB INFO PANEL -->
         <script type="text/javascript" src="js/tinaweb-info.js" language="javascript"></script>
-
         <!-- WE USE TINAWEB INFO PANEL -->
         <script type="text/javascript" src="js/tinaweb-toolbar.js" language="javascript"></script>
-
-        <!-- WE USE TINAWEB INFO PANEL -->
+        <!-- TINAWEB MAIN -->
         <script type="text/javascript" src="js/tinaweb-main.js" language="javascript"></script>
-
-        <!-- UNCOMMENT THE FOLLOWING LINE TO ENABLE DEBUG -->
-        <!--<script type="text/javascript" src="js/firebug-lite/firebug-lite-beta.js" language="javascript"></script>-->
-
+        <!-- TINASOFT UTILITIES -->
+        <script type="text/javascript" src="js/cache.js"></script>
         <!-- JQUERY UI CSS -->
         <link type="text/css" rel="stylesheet" href="css/start/jquery-ui-1.8.2.custom.css"/>
-
         <!--TINASOFT CSS -->
         <link type="text/css" rel="stylesheet" href="css/tinaweb.css"/>
 
@@ -72,11 +70,9 @@
                                 <span class="sliderLabel noSelect">magnify</span>
                                 <div id="sliderNodeSize"></div>
                             </div>
-                            
                             <div class="slider smallslider">
                                 <span class="sliderLabel noSelect">cursor size</span>
                                 <div id="sliderSelectionZone"></div>
-
                             </div>
                         </div>
 
@@ -90,7 +86,7 @@
                                 <div id="sliderNodeWeight"></div>
                             </div>
                         </div>
-                        
+
                         <button id="toggle-autoCentering" class="fg-button toolbar-right">center</button>
                         <form id="search" action="#" class="toolbar-right">
                             <input id="search_input" type="text" value="" />

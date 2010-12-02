@@ -1,18 +1,19 @@
-//      This program is free software; you can redistribute it and/or modify
-//      it under the terms of the GNU General Public License as published by
-//      the Free Software Foundation; either version 2 of the License, or
-//      (at your option) any later version.
-//
-//      This program is distributed in the hope that it will be useful,
-//      but WITHOUT ANY WARRANTY; without even the implied warranty of
-//      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//      GNU General Public License for more details.
-//
-//      You should have received a copy of the GNU General Public License
-//      along with this program; if not, write to the Free Software
-//      Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
-//      MA 02110-1301, USA.
+/*
+    Copyright (C) 2009-2011 CREA Lab, CNRS/Ecole Polytechnique UMR 7656 (Fr)
 
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
 /* useful for fullscreen mode */
 var tinaviz = {};
 
@@ -54,70 +55,78 @@ $(document).ready(function(){
     }, function() {
         $(this).css('cursor','auto');
     });
-    
+
+
+    $("#nodeRadiusSelector").change(function() {
+        //alert("SET RADIUS TO "+$("#nodeRadiusSelector").val());
+        tinaviz.views.current.set("output/radius",$("#nodeRadiusSelector").val(), true);
+    });
+
+    $("#nodeWeightSelector").change(function() {
+        //alert("SET WEIGHT TO "+$("#nodeShapeSelector").val());
+        tinaviz.views.current.set("output/weight",$("#nodeWeightSelector").val(), true);
+    });
+
+    $("#nodeShapeSelector").change(function() {
+        tinaviz.views.current.set("output/shape",$("#nodeShapeSelector").val(), true);
+    });
+
+    $("#nodeColorSelector").change(function() {
+        //alert("SET COLOR TO "+ $("#nodeColorSelector").val(), true);
+        tinaviz.views.current.set("output/color",$("#nodeColorSelector").val(), true);
+    });
+
 });
 
 var toolbar = {
-
     values: {
-    
         search: "",
-        
         sliders: {
-        
             magnify: 0.5,
-            
             cursor_size: 0.5,
-        
             nodeFilter: {
                 min: 0.0,
                 max: 1.0
             },
-            
             edgeFilter: {
                 min: 0.0,
                 max: 1.0
             }
         },
         buttons: {
-        
             pause: false,
             showNodes: true,
             showEdges: true,
             hd: false
-        
         }
-    
     }
-
 };
 
 
 toolbar.lastSearch = "";
 toolbar.checkSearchForm = function() {
-      var txt = $("#search_input").val();
-      if (txt != toolbar.lastSearch) {
-            tinaviz.unselect();
-           toolbar.lastSearch = txt;   
-          if (txt=="") {
-             tinaviz.searchNodes("", "", "", "", false);
-          } else {
-              var cat = tinaviz.getCategory();
-               tinaviz.searchNodes(txt, cat, "containsIgnoreCase", "current", true);
-          }
-      }
-   setTimeout("toolbar.checkSearchForm()",200);
+    var txt = $("#search_input").val();
+    if (txt != toolbar.lastSearch) {
+        tinaviz.unselect();
+        toolbar.lastSearch = txt;
+        if (txt=="") {
+            tinaviz.searchNodes("", "", "", "", false);
+        } else {
+            var cat = tinaviz.views.current.category();
+            tinaviz.searchNodes(txt, cat, "containsIgnoreCase", "current", true);
+        }
+    }
+    setTimeout("toolbar.checkSearchForm()",200);
 };
 
 toolbar.init = function() {
-    
+
     $("search").val(toolbar.values.search);
-    
     $("#search").submit(function() {
         /*
         var txt = $("#search_input").val();
          tinaviz.unselect();
-         
+
         if (txt=="") {
 
         } else {
@@ -133,12 +142,12 @@ toolbar.init = function() {
         */
         return false;
     });
-    
+
     /*
     $("#search").keypress(function() {
        // toolbar.checkSearchForm();
     });*/
- 
+
     $("#level").button({
         text: true,
         icons: {
@@ -168,11 +177,13 @@ toolbar.init = function() {
         values: [toolbar.values.sliders.edgeFilter.min, toolbar.values.sliders.edgeFilter.max * 100.0],
         animate: true,
         slide: function(event, ui) {
-            tinaviz.current.set("edgeWeight/min", ui.values[0] / 100.0);
-            tinaviz.current.set("edgeWeight/max", ui.values[1] / 100.0);
-            tinaviz.current.set("layout/iter", 0);
-            tinaviz.current.commitProperties();
-            if (tinaviz.getViewName()=="meso") tinaviz.autoCentering();
+
+            tinaviz.set("edgeWeight/min", ui.values[0] / 100.0, false);
+            tinaviz.set("edgeWeight/max", ui.values[1] / 100.0, true);
+            tinaviz.set("layout/iter", 0);
+            if (tinaviz.views.current.name() == "meso") {
+                tinaviz.autoCentering();
+            }
         }
     });
 
@@ -181,11 +192,12 @@ toolbar.init = function() {
         values: [toolbar.values.sliders.nodeFilter.min, toolbar.values.sliders.nodeFilter.max * 100.0],
         animate: true,
         slide: function(event, ui) {
-            tinaviz.current.set("nodeWeight/min", ui.values[0] / 100.0);
-            tinaviz.current.set("nodeWeight/max", ui.values[1] / 100.0);
-            tinaviz.current.set("layout/iter", 0);
-            tinaviz.current.commitProperties();
-            if (tinaviz.getViewName()=="meso") tinaviz.autoCentering();
+            tinaviz.set("nodeWeight/min", ui.values[0] / 100.0, false);
+            tinaviz.set("nodeWeight/max", ui.values[1] / 100.0, true);
+            tinaviz.set("layout/iter", 0);
+            if (tinaviz.views.current.name() == "meso") {
+                tinaviz.autoCentering();
+            }
         }
     });
 
@@ -194,8 +206,7 @@ toolbar.init = function() {
         max: 100.0,// precision/size
         animate: true,
         slide: function(event, ui) {
-            tinaviz.current.set("output/nodeSizeRatio", ui.value / 100.0);
-            tinaviz.current.commitProperties();
+            tinaviz.set("output/scaling", ui.value / 100.0, false);
         }
     }
     );
@@ -205,8 +216,7 @@ toolbar.init = function() {
         max: 300.0, // max disk radius, in pixel
         animate: true,
         slide: function(event, ui) {
-            tinaviz.current.set("selection/radius", ui.value);
-            tinaviz.current.commitProperties();
+            tinaviz.set("selection/radius", ui.value, false);
         }
     });
 
@@ -224,6 +234,8 @@ toolbar.init = function() {
     });
 
     **/
+
+
 
     $("#toggle-paused").button({
         icons: {
@@ -253,6 +265,7 @@ toolbar.init = function() {
             primary:'ui-icon-close'
         }
     }).click(function(event) {
+        toolbar.lastsearch = "";
         tinaviz.unselect();
     });
 
@@ -275,38 +288,32 @@ toolbar.init = function() {
         /**
          * Manually toggles the category, and do the bipartite work
          */
-
-        var viewName = tinaviz.getViewName();
-        var view = tinaviz.views[viewName];
-        // get and set the new category to display
-        var cat = view.get("category/category");
+        tinaviz.togglePause();
+        var view = tinaviz.views.current;
+        var cat = view.category();
+        // store the layout state (iteration counter) in a JS-side buffer
+        view.categories[cat].layout.iter = view.get("layout/iter");
 
         var next_cat = tinaviz.getOppositeCategory( cat );
-
-        // update the node list
-        tinaviz.updateNodes(viewName, next_cat);
-
-        // update the algorithm
-        view.categories[cat].layout.iter = view.get("layout/iter");
-        view.set("layout/iter", view.categories[next_cat].layout.iter);
-        view.set("category/category", next_cat);
-        view.commitProperties();
-            
+        view.category(next_cat);
+        view.set("layout/iter", view.categories[next_cat].layout.iter, false);
         tinaviz.autoCentering();
-
-        if (viewName=="macro") {
+        
+        // update the node list
+        tinaviz.infodiv.updateNodeList(view.name(), next_cat);
+        if (view.name() == "macro") {
             // empty the selection, and ask the applet to select opposite nodes
             var i = 0;
-            tinaviz.infodiv.selection = {};
-            for (var nbid in tinaviz.infodiv.oppositeSelection) {
-                var cb = (++i == tinaviz.infodiv.oppositeSelection.length);
-                tinaviz.selectFromId(tinaviz.infodiv.oppositeSelection[nbid], cb);
+            tinaviz.infodiv.reset();
+            for (var pos in tinaviz.infodiv.neighbours) {
+                var cb = (++i == tinaviz.infodiv.neighbours.length);
+                tinaviz.selectFromId(tinaviz.infodiv.neighbours[pos], cb);
             }
         }
         tinaviz.infodiv.display_current_category();
-        
-    });
+        tinaviz.togglePause();
 
+    });
     toolbar.checkSearchForm();
 };
 
@@ -316,16 +323,17 @@ toolbar.updateButton = function(button, state) {
     $("#toggle-"+button).toggleClass("ui-state-active", state);
 };
 
+// NEVER CALLED
 toolbar.update = function(vals) {
     console.dir(vals);
-    
+
     for (v in vals) {
         toolbar.values[v] = vals[v];
     }
-    
+
     // simple shortcut
     var values = toolbar.values;
-    
+
     for (v in vals) {
         toolbar.values[v] = vals[v];
     }
@@ -333,7 +341,7 @@ toolbar.update = function(vals) {
 
     console.log(values);
     // initialize the sliders
-    alert("gettings values");
+    //alert("gettings values");
     $("#sliderNodeSize").slider( "option", "value", values.magnify * 100.0 );
     $("#sliderSelectionZone").slider( "option", "value", values.cursor_size * 100.0 );
     $("#sliderEdgeWeight").slider( "option", "values", [
@@ -342,7 +350,7 @@ toolbar.update = function(vals) {
         ]);
     $("#sliderNodeWeight").slider( "option", "values", [
         values.sliders.nodeFilter.min,
-        values.sliders.nodeFilter.max * 100.0 
+        values.sliders.nodeFilter.max * 100.0
         ]);
-    
+
 };

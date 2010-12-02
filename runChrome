@@ -1,4 +1,4 @@
 #!/bin/sh
-cp ../tinaviz/js/tinaviz.js js/tinaviz/
-cp ../tinaviz/dist/tinaviz-all.jar js/tinaviz/
+#cp ../tinaviz/js/tinaviz.js js/tinaviz/
+#cp ../tinaviz/dist/tinaviz-all.jar js/tinaviz/
 chromium-browser index.html

@@ -1,24 +1,23 @@
-//      This program is free software; you can redistribute it and/or modify
-//      it under the terms of the GNU General Public License as published by
-//      the Free Software Foundation; either version 2 of the License, or
-//      (at your option) any later version.
-//
-//      This program is distributed in the hope that it will be useful,
-//      but WITHOUT ANY WARRANTY; without even the implied warranty of
-//      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//      GNU General Public License for more details.
-//
-//      You should have received a copy of the GNU General Public License
-//      along with this program; if not, write to the Free Software
-//      Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
-//      MA 02110-1301, USA.
+/*
+    Copyright (C) 2009-2011 CREA Lab, CNRS/Ecole Polytechnique UMR 7656 (Fr)
 
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
 
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
 
 function IsNumeric(n) {
     return !isNaN(parseFloat(n)) && isFinite(n);
 }
-
 /*
  * utility modifying the Object prototype
  * to get its lenght
@@ -42,54 +41,66 @@ Object.values = function(obj) {
     return values;
 };
 
-
-
-function content2html(content){
-    var vars = [],  htmlstring, hash;
-    var titles= [];
-    titles[0]='<b>Lost:</b>';
-    titles[1]='<b>New:</b>';
-    var htmlstring=$("");
-    // %2b = ,
-    // %2c = +
-    //alert(content);
-    console.log("content:"+content);
-    var hashes = content.split('_'); // obsolet and new terms
-
-    for(var i = 0; i < hashes.length; i++){    
-        htmlstring.html(titles[i]);
-        //alert("hashes i:"+[i]);
-        if (hashes[i]=='.') continue;
-        hash = hashes[i].split('-'); // list of terms
-        for(var j = 0; j < hash.length; j++){
-            //alert("hash j:"+hash[j]);
-            //var node=tinaviz.getNodeAttributes(hash[j]);    
-            var node=tinaviz.getNodeAttributes("macro",hash[j]);   
-            //alert("here");
-            console.log("received from node attributes = "+node);
-            console.dir(node);
-            
-            htmlstring.html(node['label']);
-        //alert(decodeJSON(node['label']));
-        }
-        htmlstring.html("<br/>");      
+/*
+ * utility returning a list
+ * from the values of a given object
+ */
+Object.keys = function(obj) {
+    var keys = new Array();
+    for (key in obj) {
+        keys.push(key);
     }
-    return htmlstring;
-}
+    return keys;
+};
 
 /*
- * Tri alphabetique
+ * Sorts list of objects containing a text values, given a textkey
  */
-
-function  alphabeticListSort(listitems,textkey) {
+function  alphabeticListSort(listitems, textkey) {
     listitems.sort(function(a, b) {
         var compA = a[textkey].toUpperCase();
         var compB = b[textkey].toUpperCase();
-        return (compA < compB) ? -1 : (compA > compB) ? 1 : 0;
+        return (compA < compB) ? -1 : (compA >= compB) ? 1 : 0;
     })
     return listitems;
 
 };
+
+/*
+ * Sorts list of objects containing a numeric values, given a valuekey
+ */
+function  numericListSort(listitems, valuekey) {
+    listitems.sort(function(a, b) {
+    var compA = parseFloat(a[valuekey]);
+    var compB = parseFloat(b[valuekey]);
+        return (compA > compB) ? -1 : (compA <= compB) ? 1 : 0;
+    })
+    return listitems;
+};
+
+
+function sortNumber(a,b) {
+    return a - b;
+}
+
+/*
+* Generic sorting Jquery object lists
+*/
+function alphabeticJquerySort(parentdiv, childrendiv, separator) {
+    var listitems = parentdiv.children(childrendiv).get();
+    listitems.sort(function(a, b) {
+        var compA = $(a).html().toUpperCase();
+        var compB = $(b).html().toUpperCase();
+        return (compA < compB) ? -1 : (compA > compB) ? 1 : 0;
+    })
+    $.each(listitems, function(idx, itm) {
+        if ( idx != 0 && idx != listitems.length )
+            parentdiv.append(separator);
+        parentdiv.append(itm);
+    });
+    return parentdiv;
+}
+
 
 /*
  * To html entities
@@ -119,6 +130,14 @@ function decodeJSON(encvalue) {
     else
         return "";
 }
+
+/*
+ * OBSOLETE
+ * replace by htmlDecode
+ */
+/*function decodeHTML(str) {
+    return str.replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>');
+}*/
 
 
 /* useful for fullscreen mode */
@@ -153,7 +172,7 @@ function getScreenHeight() {
     return y;
 }
 
-var resize = function() {
+function resize() {
     var infoDivWidth = 390;
 
     var size = {
@@ -165,10 +184,26 @@ var resize = function() {
     $("#infodiv").css('width', infoDivWidth);
     $("#infodivparent").css('height', size.h);
     return size;
-};
+}
 
-function getUrlVars()
-{
+function find(element,array){
+    // Find the position of element in the array list,n return
+    var pos = null;
+    for (var i = 0; i < array.length; i++) {
+        if (array[i] == element) {
+            if (pos != null){
+                pos.push(i);
+            }else{
+                pos=new Array();
+                pos.push(i);
+            }
+
+        }
+    }
+    return pos;
+}
+
+function getUrlVars() {
     var vars = [], hash;
     var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
     for(var i = 0; i < hashes.length; i++)
@@ -179,123 +214,3 @@ function getUrlVars()
     }
     return vars;
 }
-
-
-/* JSON PLUGIN FOR JQUERY - http://code.google.com/p/jquery-json */
-(function($){
-    $.toJSON=function(o)
-
-    {
-        if(typeof(JSON)=='object'&&JSON.stringify)
-            return JSON.stringify(o);
-        var type=typeof(o);
-        if(o===null)
-            return"null";
-        if(type=="undefined")
-            return undefined;
-        if(type=="number"||type=="boolean")
-            return o+"";
-        if(type=="string")
-            return $.quoteString(o);
-        if(type=='object')
-
-        {
-            if(typeof o.toJSON=="function")
-                return $.toJSON(o.toJSON());
-            if(o.constructor===Date)
-
-            {
-                var month=o.getUTCMonth()+1;
-                if(month<10)month='0'+month;
-                var day=o.getUTCDate();
-                if(day<10)day='0'+day;
-                var year=o.getUTCFullYear();
-                var hours=o.getUTCHours();
-                if(hours<10)hours='0'+hours;
-                var minutes=o.getUTCMinutes();
-                if(minutes<10)minutes='0'+minutes;
-                var seconds=o.getUTCSeconds();
-                if(seconds<10)seconds='0'+seconds;
-                var milli=o.getUTCMilliseconds();
-                if(milli<100)milli='0'+milli;
-                if(milli<10)milli='0'+milli;
-                return'"'+year+'-'+month+'-'+day+'T'+
-                hours+':'+minutes+':'+seconds+'.'+milli+'Z"';
-            }
-            if(o.constructor===Array)
-            {
-                var ret=[];
-                for(var i=0;i<o.length;i++)
-                    ret.push($.toJSON(o[i])||"null");
-                return"["+ret.join(",")+"]";
-            }
-            var pairs=[];
-            for(var k in o){
-                var name;
-                var type=typeof k;
-                if(type=="number")
-                    name='"'+k+'"';
-                else if(type=="string")
-                    name=$.quoteString(k);else
-                    continue;
-                if(typeof o[k]=="function")
-                    continue;
-                var val=$.toJSON(o[k]);
-                pairs.push(name+":"+val);
-            }
-            return"{"+pairs.join(", ")+"}";
-        }
-    };
-    
-    $.evalJSON=function(src)
-
-    {
-        if(typeof(JSON)=='object'&&JSON.parse)
-            return JSON.parse(src);
-        return eval("("+src+")");
-    };
-
-    $.secureEvalJSON=function(src)
-
-    {
-        if(typeof(JSON)=='object'&&JSON.parse)
-            return JSON.parse(src);
-        var filtered=src;
-        filtered=filtered.replace(/\\["\\\/bfnrtu]/g,'@');
-        filtered=filtered.replace(/"[^"\\\n\r]*"|true|false|null|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?/g,']');
-        filtered=filtered.replace(/(?:^|:|,)(?:\s*\[)+/g,'');
-        if(/^[\],:{}\s]*$/.test(filtered))
-            return eval("("+src+")");else
-            throw new SyntaxError("Error parsing JSON, source is not valid.");
-    };
-
-    $.quoteString=function(string)
-
-    {
-        if(string.match(_escapeable))
-
-        {
-            return'"'+string.replace(_escapeable,function(a)
-
-            {
-                    var c=_meta[a];
-                    if(typeof c==='string')return c;
-                    c=a.charCodeAt();
-                    return'\\u00'+Math.floor(c/16).toString(16)+(c%16).toString(16);
-                })+'"';
-        }
-        return'"'+string+'"';
-    };
-
-    var _escapeable=/["\\\x00-\x1f\x7f-\x9f]/g;
-    var _meta={
-        '\b':'\\b',
-        '\t':'\\t',
-        '\n':'\\n',
-        '\f':'\\f',
-        '\r':'\\r',
-        '"':'\\"',
-        '\\':'\\\\'
-    };
-
-})(jQuery);

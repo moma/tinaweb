@@ -1,17 +1,3 @@
-//      This program is free software; you can redistribute it and/or modify
-//      it under the terms of the GNU General Public License as published by
-//      the Free Software Foundation; either version 2 of the License, or
-//      (at your option) any later version.
-//
-//      This program is distributed in the hope that it will be useful,
-//      but WITHOUT ANY WARRANTY; without even the implied warranty of
-//      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//      GNU General Public License for more details.
-//
-//      You should have received a copy of the GNU General Public License
-//      along with this program; if not, write to the Free Software
-//      Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
-//      MA 02110-1301, USA.
 
 var deployJava={debug:null,firefoxJavaVersion:null,myInterval:null,preInstallJREList:null,returnPage:null,brand:null,locale:null,installType:null,EAInstallEnabled:false,EarlyAccessURL:null,getJavaURL:'http://java.sun.com/webapps/getjava/BrowserRedirect?host=java.com',appleRedirectPage:'http://www.apple.com/support/downloads/',oldMimeType:'application/npruntime-scriptable-plugin;DeploymentToolkit',mimeType:'application/java-deployment-toolkit',launchButtonPNG:'http://java.sun.com/products/jfc/tsc/articles/swing2d/webstart.png',browserName:null,browserName2:null,getJREs:function(){var list=new Array();if(deployJava.isPluginInstalled()){var plugin=deployJava.getPlugin();var VMs=plugin.jvms;for(var i=0;i<VMs.getLength();i++){list[i]=VMs.get(i).version;}}else{var browser=deployJava.getBrowser();if(browser=='MSIE'){if(deployJava.testUsingActiveX('1.7.0')){list[0]='1.7.0';}else if(deployJava.testUsingActiveX('1.6.0')){list[0]='1.6.0';}else if(deployJava.testUsingActiveX('1.5.0')){list[0]='1.5.0';}else if(deployJava.testUsingActiveX('1.4.2')){list[0]='1.4.2';}else if(deployJava.testForMSVM()){list[0]='1.1';}}else if(browser=='Netscape Family'){deployJava.getJPIVersionUsingMimeType();if(deployJava.firefoxJavaVersion!=null){list[0]=deployJava.firefoxJavaVersion;}else if(deployJava.testUsingMimeTypes('1.7')){list[0]='1.7.0';}else if(deployJava.testUsingMimeTypes('1.6')){list[0]='1.6.0';}else if(deployJava.testUsingMimeTypes('1.5')){list[0]='1.5.0';}else if(deployJava.testUsingMimeTypes('1.4.2')){list[0]='1.4.2';}else if(deployJava.browserName2=='Safari'){if(deployJava.testUsingPluginsArray('1.7.0')){list[0]='1.7.0';}else if(deployJava.testUsingPluginsArray('1.6')){list[0]='1.6.0';}else if(deployJava.testUsingPluginsArray('1.5')){list[0]='1.5.0';}else if(deployJava.testUsingPluginsArray('1.4.2')){list[0]='1.4.2';}}}}
 if(deployJava.debug){for(var i=0;i<list.length;++i){alert('We claim to have detected Java SE '+list[i]);}}
@@ -40,7 +26,7 @@ versionPattern);return false;}},isWebStartInstalled:function(minimumVersion){var
 if(minimumVersion=='undefined'||minimumVersion==null){minimumVersion='1.4.2';}
 var retval=false;var regex="^(\\d+)(?:\\.(\\d+)(?:\\.(\\d+)(?:_(\\d+))?)?)?$";var matchData=minimumVersion.match(regex);if(matchData!=null){retval=deployJava.versionCheck(minimumVersion+'+');}else{if(deployJava.debug){alert('Invalid minimumVersion argument to isWebStartInstalled(): '+minimumVersion);}
 retval=deployJava.versionCheck('1.4.2+');}
-return retval;},getJPIVersionUsingMimeType:function(){for(var i=0;i<navigator.mimeTypes.length;++i){var s=navigator.mimeTypes[i].type;var m=s.match(/^application\/x-java-applet;jpi-version=(.*)$/);if(m!=null){deployJava.firefoxJavaVersion=m[1];break;}}},launchWebStartApplication:function(jnlp){return false;},createWebStartLaunchButtonEx:function(jnlp,minimumVersion){if(deployJava.returnPage==null){deployJava.returnPage=jnlp;}
+return retval;},getJPIVersionUsingMimeType:function(){for(var i=0;i<navigator.mimeTypes.length;++i){var s=navigator.mimeTypes[i].type;var m=s.match(/^application\/x-java-applet;jpi-version=(.*)$/);if(m!=null){deployJava.firefoxJavaVersion=m[1];if('Opera'!=deployJava.browserName2){break;}}}},launchWebStartApplication:function(jnlp){return false;},createWebStartLaunchButtonEx:function(jnlp,minimumVersion){if(deployJava.returnPage==null){deployJava.returnPage=jnlp;}
 var url='javascript:deployJava.launchWebStartApplication(\''+jnlp+'\');';document.write('<'+'a href="'+url+'" onMouseOver="window.status=\'\'; '+'return true;"><'+'img '+'src="'+deployJava.launchButtonPNG+'" '+'border="0" /><'+'/'+'a'+'>');},createWebStartLaunchButton:function(jnlp,minimumVersion){if(deployJava.returnPage==null){deployJava.returnPage=jnlp;}
 var url='javascript:'+'if (!deployJava.isWebStartInstalled(&quot;'+
 minimumVersion+'&quot;)) {'+'if (deployJava.installLatestJRE()) {'+'if (deployJava.launch(&quot;'+jnlp+'&quot;)) {}'+'}'+'} else {'+'if (deployJava.launch(&quot;'+jnlp+'&quot;)) {}'+'}';document.write('<'+'a href="'+url+'" onMouseOver="window.status=\'\'; '+'return true;"><'+'img '+'src="'+deployJava.launchButtonPNG+'" '+'border="0" /><'+'/'+'a'+'>');},launch:function(jnlp){document.location=jnlp;return true;},isPluginInstalled:function(){var plugin=deployJava.getPlugin();if(plugin&&plugin.jvms){return true;}else{return false;}},isAutoUpdateEnabled:function(){if(deployJava.isPluginInstalled()){return deployJava.getPlugin().isAutoUpdateEnabled();}
@@ -48,7 +34,7 @@ return false;},setAutoUpdateEnabled:function(){if(deployJava.isPluginInstalled()
 return false;},setInstallerType:function(type){deployJava.installType=type;if(deployJava.isPluginInstalled()){return deployJava.getPlugin().setInstallerType(type);}
 return false;},setAdditionalPackages:function(packageList){if(deployJava.isPluginInstalled()){return deployJava.getPlugin().setAdditionalPackages(packageList);}
 return false;},setEarlyAccess:function(enabled){deployJava.EAInstallEnabled=enabled;},isPlugin2:function(){if(deployJava.isPluginInstalled()){if(deployJava.versionCheck('1.6.0_10+')){try{return deployJava.getPlugin().isPlugin2();}catch(err){}}}
-return false;},allowPlugin:function(){deployJava.getBrowser();var ret=('Chrome'!=deployJava.browserName2&&'Safari'!=deployJava.browserName2&&'Opera'!=deployJava.browserName2);return ret;},getPlugin:function(){deployJava.refresh();var ret=null;if(deployJava.allowPlugin()){ret=document.getElementById('deployJavaPlugin');}
+return false;},allowPlugin:function(){deployJava.getBrowser();var ret=('Safari'!=deployJava.browserName2&&'Opera'!=deployJava.browserName2);return ret;},getPlugin:function(){deployJava.refresh();var ret=null;if(deployJava.allowPlugin()){ret=document.getElementById('deployJavaPlugin');}
 return ret;},compareVersionToPattern:function(version,patternArray,familyMatch){var regex="^(\\d+)(?:\\.(\\d+)(?:\\.(\\d+)(?:_(\\d+))?)?)?$";var matchData=version.match(regex);if(matchData!=null){var index=0;var result=new Array();for(var i=1;i<matchData.length;++i){if((typeof matchData[i]=='string')&&(matchData[i]!=''))
 {result[index]=matchData[i];index++;}}
 var l=Math.min(result.length,patternArray.length);if(familyMatch){for(var i=0;i<l;++i){if(result[i]!=patternArray[i])return false;}
@@ -84,5 +70,3 @@ if(loc==null)try{loc=navigator.systemLanguage;}catch(err){}
 if(loc==null)try{loc=navigator.language;}catch(err){}
 if(loc!=null){loc.replace("-","_")
 deployJava.locale=loc;}}}};deployJava.do_initialize();
-
-
