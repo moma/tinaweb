@@ -588,6 +588,10 @@ function Tinaviz(args) {
             );
     }
 
+    this.getGEXF = function(view) {
+        return tinaviz.getGEXF(view);
+    }
+
     /**
      * Callback after clicks on nodes
      *
