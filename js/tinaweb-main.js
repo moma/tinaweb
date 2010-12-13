@@ -19,7 +19,7 @@ var tinaviz = {};
 
 $(document).ready(function(){
 
-    $("#title").html("<h1>TinaWeb DEMO</h1>");
+    $("#title").html("<img alt='' src='https://library.iscpif.fr/images/banner.png' style='float: left;' border='0' height='150'><h1>Réseau des Chercheurs Systèmes Complexes - ISC-PIF</h1><br/> ");
 
     tinaviz = new Tinaviz({
         tag: $("#vizdiv")
