@@ -288,7 +288,8 @@ toolbar.init = function() {
         /**
          * Manually toggles the category, and do the bipartite work
          */
-        tinaviz.togglePause();
+        var oldPause = tinaviz.getPause();
+        tinaviz.setPause(true);
         var view = tinaviz.views.current;
         var cat = view.category();
         // store the layout state (iteration counter) in a JS-side buffer
@@ -306,12 +307,13 @@ toolbar.init = function() {
             var i = 0;
             tinaviz.infodiv.reset();
             for (var pos in tinaviz.infodiv.neighbours) {
-                var cb = (++i == tinaviz.infodiv.neighbours.length);
-                tinaviz.selectFromId(tinaviz.infodiv.neighbours[pos], cb);
+                console.log("switch category, selecting node from id "+tinaviz.infodiv.neighbours[pos]);
+                tinaviz.selectFromId(tinaviz.infodiv.neighbours[pos],
+                                    (++i == tinaviz.infodiv.neighbours.length));
             }
         }
         tinaviz.infodiv.display_current_category();
-        tinaviz.togglePause();
+        tinaviz.setPause(oldPause);
 
     });
     toolbar.checkSearchForm();

@@ -13,7 +13,7 @@
 
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 
 
 function Tinaviz(args) {
@@ -293,6 +293,9 @@ function Tinaviz(args) {
     this.getPath=function() {
         return this.path;
     }
+    this.getPause=function() {
+        return this.applet.getPause();
+    }
     this.open=function(args) {
 
         var opts = {};
@@ -358,7 +361,7 @@ function Tinaviz(args) {
                     alert("Couldn't import graph: "+e);
                     opts.error(e);
                 }
-                */
+                 */
             },
             success: function(gexf) {
                 var f = false;
@@ -438,13 +441,23 @@ function Tinaviz(args) {
         applet.setView(view);
     }
 
+    this._setNeighbourhood = function(id,rawNeighbourhood) {
+        //alert("got" +data.edges);
+        console.log("_setNeighbourhood("+id+"): applet.setNeighbourhood("+id+", "+$.toJSON(rawNeighbourhood)+");")
+        var jsonNeighbourhood = $.toJSON(rawNeighbourhood);
+        if (jsonNeighbourhood == null | jsonNeighbourhood == undefined) {
+            console.error("_setNeighbourhood("+id+"): invalid neigbourhood, "+rawNeighbourhood+" cannot be JSONified");
+            jsonNeighbourhood = {};
+        }
+        applet.setNeighbourhood(id, jsonNeighbourhood);
+
+    }
     this.askForNeighbours = function(dataset, id, category) {
         switch (category) {
             case 'Document':
                 TinaService.getDocument(dataset, id, {
                     success: function(data, textStatus, XMLHttpRequest) {
-                        //alert("got" +data.edges);
-                        applet.setNeighbourhood(category+"::"+id, $.toJSON(data.edges));
+                        tinaviz._setNeighbourhood(category+"::"+id, data.edges);
                     },
                     error: function(XMLHttpRequest, textStatus, errorThrown) {
 
@@ -460,8 +473,7 @@ function Tinaviz(args) {
             case 'NGram':
                 TinaService.getNGram(dataset, id, {
                     success: function(data, textStatus, XMLHttpRequest) {
-                        //alert("got" +data.edges);
-                        applet.setNeighbourhood(category+"::"+id, $.toJSON(data.edges));
+                         tinaviz._setNeighbourhood(category+"::"+id, data.edges);
                     },
                     error: function(XMLHttpRequest, textStatus, errorThrown) {
 
@@ -503,24 +515,24 @@ function Tinaviz(args) {
         }
     }
     /*
-         *  Set the current state of the applet to enable
-         */
+     *  Set the current state of the applet to enable
+     */
     this.setEnabled = function(value) {
         applet.setEnabled(value);
     }
 
     /*
-    * Search nodes
-    */
+     * Search nodes
+     */
     this.getNodesByLabel = function(label, type) {
         if (label.length < 3) return {};
         return $.parseJSON( applet.getNodesByLabel(label, type));
     }
 
     /*
-    * Search and select nodes
-    * viewToSearch: visualization,macro,meso,current
-    */
+     * Search and select nodes
+     * viewToSearch: visualization,macro,meso,current
+     */
     this.searchNodes= function(matchLabel, matchCategory,  matchType, viewToSearch, center) {
         if (matchLabel.length < 3) return;
         applet.selectNodesByLabel(matchLabel, matchCategory, matchType, viewToSearch, center);
@@ -528,8 +540,8 @@ function Tinaviz(args) {
 
 
     /*
-    * Highlight nodes
-    */
+     * Highlight nodes
+     */
     this.highlightNodes= function(label, type) {
         var matchlist = this.getNodesByLabel(label, type);
         for (var i = 0; i < matchlist.length; i++ ) {
@@ -540,8 +552,8 @@ function Tinaviz(args) {
     }
 
     /*
-    * recenter the graph
-    */
+     * recenter the graph
+     */
     this.autoCentering= function() {
         applet.autoCentering();
     }
@@ -700,8 +712,8 @@ function Tinaviz(args) {
     }
 
     /**
-    * Callback after CHANGING THE VIEW LEVEL
-    */
+     * Callback after CHANGING THE VIEW LEVEL
+     */
     this._callbackViewChanged = function(viewName, selected) {
         var view = this.constructNewViewObject(viewName);
         this.callbackViewChanged(view);
@@ -768,7 +780,7 @@ function Tinaviz(args) {
         this.views.meso.set("category/category", category);
         //this.set("macro", "category/category", category);
         this.setView("meso");
-        //this.infoviz.updateNodeList("meso", category);
+    //this.infoviz.updateNodeList("meso", category);
     }
 
     this.getCategory = function() {
@@ -786,14 +798,14 @@ function Tinaviz(args) {
             if (this.infodiv.selection.length != 0) {
                 this.views.meso.set("category/category", current_cat, false);
                 this.setView("meso");
-                //this.infodiv.updateNodeList("meso", current_cat);
+            //this.infodiv.updateNodeList("meso", current_cat);
             } else {
                 alert("please first select some nodes before switching to meso level");
             }
         } else if (this.views.current.name() == "meso") {
             this.views.macro.set("category/category", current_cat, false);
             this.setView("macro");
-            //this.infodiv.updateNodeList("macro", current_cat);
+        //this.infodiv.updateNodeList("macro", current_cat);
         }
 
     }
@@ -897,7 +909,7 @@ function Tinaviz(args) {
         return buff;
     }
     this.tag.html( this.getHTML() );
-    //this.clear();
+//this.clear();
 }
 
 
