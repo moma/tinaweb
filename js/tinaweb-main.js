@@ -37,7 +37,7 @@ $(document).ready(function(){
         tinaviz.size(size.w, size.h);
 
         var prefs = {
-            gexf: "French_bipartite_graph.gexf",
+            gexf: "default.gexf",
 
             view: "macro",
             category: "Document",
