@@ -887,8 +887,8 @@ function Tinaviz(args) {
         }
         var res = deployJava.writeAppletTag({
             id: "tinaviz",
-            code: 'tinaviz.Main.class',
-            archive: path+'tinaviz-all.jar',
+            code: 'eu.tinasoft.app.tinaviz.Main.class',
+            archive: path+'tinaviz-1.0-SNAPSHOT.jar',
             width: 10,
             height: 10,
             image: 'css/branding/appletLoading.gif',
