@@ -350,11 +350,11 @@ function Tinaviz(args) {
             /*
                 try {
                     if (opts.url.search("://") != -1) {
-                        tinaviz.logNormal("applet.getView().openURI("+opts.url+", "+opts.clear+");");
+                        tinaviz.logNormal("applet.openURI("+opts.url+", "+opts.clear+");");
                         applet.getView().openURI(opts.url, opts.clear);
                     } else {
                         var sPath = document.location.href;
-                        tinaviz.logNormal("applet.getView().openURI("+(sPath.substring(0, sPath.lastIndexOf('/') + 1) + opts.url)+", "+opts.clear+");");
+                        tinaviz.logNormal("applet.openURI("+(sPath.substring(0, sPath.lastIndexOf('/') + 1) + opts.url)+", "+opts.clear+");");
                         applet.getView().openURI(sPath.substring(0, sPath.lastIndexOf('/') + 1) + opts.url, opts.clear);
                     }
                 } catch (e) {
@@ -368,7 +368,7 @@ function Tinaviz(args) {
                 // alert("success, calling updateFromString");
                 try {
                     tinaviz.logNormal("view.openString(.., "+opts.clear+")");
-                    applet.getView().openString(gexf, opts.clear);
+                    applet.openString(gexf, opts.clear);
                 } catch (e) {
                     tinaviz.logNormal("Couldn't load graph using openString, trying with openURI..");
                     f = true;
@@ -376,12 +376,12 @@ function Tinaviz(args) {
                 if (f) {
                     try {
                         if (opts.url.search("://") != -1) {
-                            tinaviz.logNormal("applet.getView().openURI("+opts.url+", "+opts.clear+");");
-                            applet.getView().openURI(opts.url, opts.clear);
+                            tinaviz.logNormal("applet.openURI("+opts.url+", "+opts.clear+");");
+                            applet.openURI(opts.url, opts.clear);
                         } else {
                             var sPath = document.location.href;
-                            tinaviz.logNormal("applet.getView().openURI("+(sPath.substring(0, sPath.lastIndexOf('/') + 1) + opts.url)+", "+opts.clear+");");
-                            applet.getView().openURI(sPath.substring(0, sPath.lastIndexOf('/') + 1) + opts.url, opts.clear);
+                            tinaviz.logNormal("applet.openURI("+(sPath.substring(0, sPath.lastIndexOf('/') + 1) + opts.url)+", "+opts.clear+");");
+                            applet.openURI(sPath.substring(0, sPath.lastIndexOf('/') + 1) + opts.url, opts.clear);
                         }
                     } catch (e) {
                         tinaviz.logError("Couldn't import graph: "+e);
