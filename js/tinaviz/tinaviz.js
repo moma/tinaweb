@@ -723,39 +723,39 @@ function Tinaviz(args) {
      * hide/show labvels
      */
     this.toggleLabels = function() {
-        return applet.getView().toggleLabels();
+        return applet.toggleLabels();
     }
 
     /**
      * hide/show nodes
      */
     this.toggleNodes = function() {
-        return applet.getView().toggleNodes();
+        return applet.toggleNodes();
     }
 
     /**
      * hide/show edges
      */
     this.toggleEdges = function() {
-        return applet.getView().toggleLinks();
+        return applet.toggleLinks();
     }
 
     /**
      * play/pause layout engine
      */
     this.togglePause = function() {
-        return applet.getView().togglePause();
+        return applet.togglePause();
     }
 
     this.setPause = function(value) {
-        applet.getView().setPause(value);
+        applet.setPause(value);
     }
 
     /**
      * toggles HD rendering
      */
     this.toggleHD = function() {
-        return applet.getView().toggleHD();
+        return applet.toggleHD();
     }
 
     /**
@@ -887,8 +887,8 @@ function Tinaviz(args) {
         }
         var res = deployJava.writeAppletTag({
             id: "tinaviz",
-            code: 'eu.tinasoft.app.tinaviz.Main.class',
-            archive: path+'tinaviz-1.0-SNAPSHOT.jar',
+            code: 'eu.tinasoft.tinaviz.Main.class',
+            archive: path+'tinaviz-2.0-SNAPSHOT.jar',
             width: 10,
             height: 10,
             image: 'css/branding/appletLoading.gif',
