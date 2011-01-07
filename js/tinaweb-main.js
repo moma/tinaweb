@@ -79,9 +79,9 @@ $(document).ready(function(){
         session.set("data/source", "gexf");
 
         macro.filter("Category", "category");
-        macro.filter("NodeWeightRange", "nodeWeight");
-        macro.filter("EdgeWeightRange", "edgeWeight");
-        macro.filter("Output", "output");
+        //macro.filter("NodeWeightRange", "nodeWeight");
+        //macro.filter("EdgeWeightRange", "edgeWeight");
+        //macro.filter("Output", "output");
 
         meso.filter("SubGraphCopyStandalone", "category");
         meso.set("category/source", "macro");
