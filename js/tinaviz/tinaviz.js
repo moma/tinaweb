@@ -29,6 +29,9 @@ function Tinaviz(args) {
         layout: "tinaforce"
     };
 
+    var cbCounter = 0;
+    var callbacks = {};
+
     var opts = {
         context: "",
         path: "",
@@ -45,6 +48,39 @@ function Tinaviz(args) {
     this.clear = function() {
         applet.clear();
     };
+
+    this.callCb = function(id,data) {
+        $.doTimeout( 1000, function() {
+            callbacks[id]($.parseJSON(data))
+        });
+       
+    }
+
+    // call with:  makeCb("test.tina", function(data) {})
+    this.makeCb = function(key,cb) {
+        ++cbCounter;
+        var id = "" + cbCounter;
+        callbacks[id] = cb;
+        applet.getWithCb(id, key);
+    }
+
+        /**
+     * Core method communicating with the applet
+     */
+    this.get = function(key) {
+       // return applet.get(key);
+    }
+
+    /**
+     * Set a value to all views
+     */
+    this.set = function(key, json) {
+        applet.msgNoCb(key,$.toJSON(json));
+    }
+    
+    //this.set = function(key, json) {
+    //    applet.msgNoCb(key,$.toJSON(json));
+    //}
 
     /**
      * Called by the applet
@@ -80,150 +116,6 @@ function Tinaviz(args) {
         catch (e){
             alert(msg);
             return;
-        }
-    };
-
-    this.views = {
-        current: {
-            name: function() {
-                return applet.getView().getName();
-            },
-
-            // TODO put current viz manipulation methods here
-            set: function(key,value,x) {
-                if (x===undefined || x==null) {
-                    applet.getView().set(key, value, true);
-                } else {
-                    applet.getView().set(key, value, x);
-                }
-            },
-            get: function(key) {
-                //alert("get current "+key);
-                return applet.getView().get(key);
-            },
-
-            category: function(x) {
-                if (x===undefined || x==null) {
-                    return applet.getView().getString("category/category");
-                } else {
-                    applet.getView().set("category/category", x, true);
-                }
-            },
-            filter: function(x,y) {
-                applet.getView().filter(x,y);
-            },
-
-            categories: {
-                Document: {
-                    layout: {
-                        iter: 0
-                    // TODO
-                    // put other layout parameters here
-                    }
-                },
-                NGram: {
-                    layout: {
-                        iter: 0
-                    // TODO
-                    // put other layout parameters here
-                    }
-                }
-            }
-        },
-        macro: {
-            name: function() {
-                return 'macro';
-            },
-
-            // setters/getters used for communication with the applet
-            set: function(key,value,x) {
-                if (x===undefined || x==null) {
-                    applet.getView("macro").set(key, value,true);
-                } else {
-                    applet.getView("macro").set(key, value,x);
-                }
-            },
-
-            get: function(key) {
-                return applet.getView('macro').get(key);
-            },
-
-            category: function(x) {
-                if (x===undefined || x==null) {
-                    return applet.getView('macro').getString("category/category");
-                } else {
-                    applet.getView('macro').set("category/category", x, true);
-                }
-            },
-            selection: new Array(),
-
-            categories: {
-                Document: {
-                    layout: {
-                        iter: 0
-                    // TODO
-                    // put other layout parameters here
-                    }
-                },
-                NGram: {
-                    layout: {
-                        iter: 0
-                    // TODO
-                    // put other layout parameters here
-                    }
-                }
-            },
-
-            filter: function(x,y) {
-                applet.getView('macro').filter(x,y);
-            }
-        },
-        meso: {
-            name: function() {
-                return 'meso';
-            },
-
-            // setters/getters used for communication with the applet
-            set: function(key,value,x) {
-                if (x===undefined || x==null) {
-                    applet.getView("meso").set(key, value,true);
-                } else {
-                    applet.getView("meso").set(key, value,x);
-                }
-            },
-            get: function(key) {
-                return applet.getView('meso').get(key);
-            },
-
-            category: function(x) {
-                if (x===undefined || x==null) {
-                    return applet.getView('meso').getString("category/category");
-                } else {
-                    applet.getView('meso').set("category/category", x, true);
-                }
-            },
-
-            selection: new Array(),
-
-            categories: {
-                Document: {
-                    layout: {
-                        iter: 0
-                    // TODO
-                    // put other layout parameters here
-                    }
-                },
-                NGram: {
-                    layout: {
-                        iter: 0
-                    // TODO
-                    // put other layout parameters here
-                    }
-                }
-            },
-            filter: function(x,y) {
-                applet.getView('meso').filter(x,y);
-            }
         }
     };
 
@@ -317,12 +209,12 @@ function Tinaviz(args) {
         }
 
         if (opts.clear) {
-            this.views.current.set("layout/iter", 0);
+            this.set("layout.iter", 0);
         //applet.clear();
         }
 
         if (opts.layout) {
-            this.views.current.set("layout/algorithm", opts.layout)
+            this.set("layout.algorithm", opts.layout)
         }
         callbackImported = function(msg){
             if (msg=="success") {
@@ -368,7 +260,7 @@ function Tinaviz(args) {
                 // alert("success, calling updateFromString");
                 try {
                     tinaviz.logNormal("view.openString(.., "+opts.clear+")");
-                    applet.openString(gexf, opts.clear);
+                    applet.openString(gexf);
                 } catch (e) {
                     tinaviz.logNormal("Couldn't load graph using openString, trying with openURI..");
                     f = true;
@@ -377,11 +269,11 @@ function Tinaviz(args) {
                     try {
                         if (opts.url.search("://") != -1) {
                             tinaviz.logNormal("applet.openURI("+opts.url+", "+opts.clear+");");
-                            applet.openURI(opts.url, opts.clear);
+                            this.openURI(opts.url);
                         } else {
                             var sPath = document.location.href;
                             tinaviz.logNormal("applet.openURI("+(sPath.substring(0, sPath.lastIndexOf('/') + 1) + opts.url)+", "+opts.clear+");");
-                            applet.openURI(sPath.substring(0, sPath.lastIndexOf('/') + 1) + opts.url, opts.clear);
+                            this.openURI(sPath.substring(0, sPath.lastIndexOf('/') + 1) + opts.url);
                         }
                     } catch (e) {
                         tinaviz.logError("Couldn't import graph: "+e);
@@ -396,7 +288,7 @@ function Tinaviz(args) {
     }
 
     this.setLayout=function(name) {
-        this.set("layout/algorithm", name);
+        this.set("layout.algorithm", name);
     }
 
     this.event=function(args) {
@@ -415,31 +307,6 @@ function Tinaviz(args) {
         this.callbackGetNeighbourhood = opts.getNeighbourhood;
     }
 
-    /**
-     * Core method communicating with the applet
-     */
-    this.get = function(key) {
-        return applet.getView().get(key);
-    }
-
-    /**
-     * Set a value to all views
-     */
-    this.set = function(key, value, sync) {
-        if (sync===undefined || sync==null) {
-            applet.setParam(key,value, true);
-        } else {
-            applet.setParam(key,value, sync);
-        }
-
-    }
-
-    /**
-     * Commands switching between view levels
-     */
-    this.setView = function(view) {
-        applet.setView(view);
-    }
 
     this._setNeighbourhood = function(id,rawNeighbourhood) {
         //alert("got" +data.edges);
@@ -473,7 +340,7 @@ function Tinaviz(args) {
             case 'NGram':
                 TinaService.getNGram(dataset, id, {
                     success: function(data, textStatus, XMLHttpRequest) {
-                         tinaviz._setNeighbourhood(category+"::"+id, data.edges);
+                        tinaviz._setNeighbourhood(category+"::"+id, data.edges);
                     },
                     error: function(XMLHttpRequest, textStatus, errorThrown) {
 
@@ -491,17 +358,9 @@ function Tinaviz(args) {
 
     }
 
-    /*
-     *  Adds a node to the current selection
-     *  callback is boolean activating this.selected() callback
-     */
-    this.selectFromId = function(id, callback) {
-        if (id===undefined) return;
-        applet.selectFromUUID(id,callback);
-    }
 
-    this.resetLayoutCounter= function(view) {
-        this.views[view].set("layout/iter",0,false);
+    this.select = function(id) {
+        applet.select(id);
     }
 
     /*
@@ -551,12 +410,6 @@ function Tinaviz(args) {
         }
     }
 
-    /*
-     * recenter the graph
-     */
-    this.autoCentering= function() {
-        applet.autoCentering();
-    }
 
     /*
      *  Gets attributes o a given node
@@ -567,7 +420,6 @@ function Tinaviz(args) {
             applet.getNodeAttributes(view,id)
             );
     }
-
 
     // called by the applet
     this._callbackGetNeighbourhood = function(selection_list_str,neighbour_node_list_str) {
@@ -600,9 +452,7 @@ function Tinaviz(args) {
             );
     }
 
-    this.getGEXF = function(view) {
-        return tinaviz.getGEXF(view);
-    }
+
 
     /**
      * Callback after clicks on nodes
@@ -621,95 +471,6 @@ function Tinaviz(args) {
         })
     }
 
-    this.constructNewViewObject = function(viewName) {
-        var view = this.views[viewName];
-
-        var reply = {
-            layoutCounter: 0,
-
-            name: function() {
-                return applet.getView().getName();
-            },
-
-            // TODO put current viz manipulation methods here
-            set: function(key,value,x) {
-                if (x===undefined || x==null) {
-                    applet.getView().set(key, value, true);
-                } else {
-                    applet.getView().set(key, value, x);
-                }
-            },
-            get: function(key) {
-                //alert("get current "+key);
-                return applet.getView().get(key);
-            },
-
-            category: function(x) {
-                if (x===undefined || x==null) {
-                    return applet.getView().getString("category/category");
-                } else {
-                    applet.getView().set("category/category", x, true);
-                }
-            },
-            filter: function(x,y) {
-                applet.getView().filter(x,y);
-            },
-
-            categories: {
-                Document: {
-                    layout: {
-                        iter: 0
-                    // TODO
-                    // put other layout parameters here
-                    }
-                },
-                NGram: {
-                    layout: {
-                        iter: 0
-                    // TODO
-                    // put other layout parameters here
-                    }
-                }
-            },
-
-            nodes: new Array()
-        };
-
-
-
-        // we add some additionnal steps
-        // to be compatible with old LiveConnect
-        // implementations
-
-
-
-        /*
-        var nodesArray = view.getNodesArray();
-        for (i=0;i < nodesArray.length;i++) {
-            node = nodesArray[i];
-            var n = {
-                edges: new Array()
-            };
-            console.log("creating the reply:"+node);
-            console.dir(node);
-            if (node===undefined) {
-                console.log("node was undefined");
-            } else {
-            var edgesArray = node.getWeightsArray();
-                var j = 0;
-                for (j=0;edgesArray.length;j++) {
-                    n.edges.push({
-                        weight: edgesArray[j]
-                    });
-                }
-            }
-            reply.nodes.push(n);
-        }
-         */
-
-
-        return reply;
-    }
 
     /**
      * Callback after CHANGING THE VIEW LEVEL
@@ -719,44 +480,14 @@ function Tinaviz(args) {
         this.callbackViewChanged(view);
     }
 
-    /**
-     * hide/show labvels
-     */
-    this.toggleLabels = function() {
-        return applet.toggleLabels();
-    }
-
-    /**
-     * hide/show nodes
-     */
-    this.toggleNodes = function() {
-        return applet.toggleNodes();
-    }
-
-    /**
-     * hide/show edges
-     */
-    this.toggleEdges = function() {
-        return applet.toggleLinks();
-    }
 
     /**
      * play/pause layout engine
      */
     this.togglePause = function() {
-        return applet.togglePause();
+        applet.togglePause();
     }
 
-    this.setPause = function(value) {
-        applet.setPause(value);
-    }
-
-    /**
-     * toggles HD rendering
-     */
-    this.toggleHD = function() {
-        return applet.toggleHD();
-    }
 
     /**
      * Get the opposite category name (the NOT DISPLAYED one)
@@ -808,19 +539,6 @@ function Tinaviz(args) {
         //this.infodiv.updateNodeList("macro", current_cat);
         }
 
-    }
-
-    this.session = function() {
-        return applet.getSession();
-    }
-
-    this.getView = function(view) {
-        if (applet == null) return;
-        if (view===undefined) {
-            applet.getView();
-        } else {
-            applet.getView(view);
-        }
     }
 
     /**
