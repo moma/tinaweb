@@ -279,22 +279,21 @@ toolbar.init = function() {
          */
         var oldPause = tinaviz.getPause();
         tinaviz.pause();
-        var view = tinaviz.views.current;
-        var cat = view.category();
+        var cat = tinaviz.getCategory();
         // store the layout state (iteration counter) in a JS-side buffer
         
         // DISABLED FOR TINAVIZ 2
         //view.categories[cat].layout.iter = view.get("layout/iter");
 
         var next_cat = tinaviz.getOppositeCategory( cat );
-        view.category(next_cat);
+        tinaviz.setCategory(next_cat);
         //view.set("layout/iter", view.categories[next_cat].layout.iter);
         //tinaviz.autoCentering();
         tinaviz.recenter();
-        
+        var viewName = tinaviz.getView();
         // update the node list
-        tinaviz.infodiv.updateNodeList(view.name(), next_cat);
-        if (view.name() == "macro") {
+        tinaviz.infodiv.updateNodeList(viewName, next_cat);
+        if (viewName == "macro") {
             // empty the selection, and ask the applet to select opposite nodes
             var i = 0;
             tinaviz.infodiv.reset();

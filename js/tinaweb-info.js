@@ -64,8 +64,8 @@ var InfoDiv = {
     * dispatch current category displayed
     */
     display_current_category: function() {
-        var current_view = tinaviz.views.current.name();
-        var current_cat = tinaviz.views.current.category();
+        var current_view = tinaviz.getView();
+        var current_cat = tinaviz.getCategory();
         if (current_cat !== undefined)
             var opposite = this.categories[tinaviz.getOppositeCategory(current_cat)];
         //$("#title_acc_1").text("current selection of "+ this.categories[current_cat]);
@@ -82,7 +82,7 @@ var InfoDiv = {
     * dispatch current view displayed
     */
     display_current_view: function() {
-        var current_view = tinaviz.views.current.name();
+        var current_view = tinaviz.getView();
         if (current_view !== undefined) {
             var level = $("#level");
             level.button('option','label', current_view + " level");
@@ -129,7 +129,7 @@ var InfoDiv = {
         if (Object.size( node_list ) == 0) {
             return;
         }
-        var current_cat = tinaviz.views.current.category();
+        var current_cat = tinaviz.getCategory();
         neighbours = this.mergeNeighbours( current_cat, neighbours );
         /* some display sizes const */
         // Modif david

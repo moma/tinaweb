@@ -36,7 +36,6 @@ $(document).ready(function(){
         var size = resize();
         tinaviz.size(size.w, size.h);
 
-
         var prefs = {
             gexf: "default.gexf", // "FET60bipartite_graph_cooccurrences_.gexf"
             view: "macro",
@@ -57,12 +56,6 @@ $(document).ready(function(){
         for (x in urlVars) {
             prefs[x] = urlVars[x];
         }
-
-        //tinaviz.setView(prefs.view);
-
-        //var macro = tinaviz.views.macro;
-        //var meso = tinaviz.views.meso;
-
         tinaviz.set("filter.edge.min", parseFloat(prefs.edge_filter_min), "Double");
         tinaviz.set("filter.edge.max", parseFloat(prefs.edge_filter_max), "Double");
         tinaviz.set("filter.node.min", parseFloat(prefs.node_filter_min), "Double");
@@ -74,30 +67,10 @@ $(document).ready(function(){
         tinaviz.set("selectionRadius", parseFloat(prefs.cursor_size), "Double");
         tinaviz.set("layout.algorithm", prefs.layout, "String");
 
-        //tinaviz.set("data/source", "gexf");
-
-        //macro.filter("Category", "category");
-        //macro.filter("NodeWeightRange", "nodeWeight");
-        //macro.filter("EdgeWeightRange", "edgeWeight");
-        //macro.filter("Output", "output");
-
-        //meso.filter("SubGraphCopyStandalone", "category");
-        //meso.set("category/source", "macro");
-        //meso.set("category/category", "Document");
-        //meso.set("category/mode", "keep");
-
-        //meso.filter("NodeWeightRangeHack", "nodeWeight");
-
-        //meso.filter("EdgeWeightRangeHack", "edgeWeight");
-
-        //console.log("meso.filter(\"Output\", \"output\")");
-        //meso.filter("Output", "output");
-
-
         /*
          * Initialization of the Infodiv
          */
-        // var layout_name = tinaviz.get("layout/algorithm");
+        // var layout_name = tinaviz.get("layout.algorithm");
         // use of different Infodiv-s following the type of graph
         //if ( layout_name == "phyloforce" ) {
         //   tinaviz.infodiv = PhyloInfoDiv;
@@ -168,8 +141,6 @@ $(document).ready(function(){
                     tinaviz.searchNodes(prefs.search, "containsIgnoreCase");
                 }
                 $("#appletInfo").hide();
-                // caches the ngrams list
-                tinaviz.getNodes( prefs.view, "NGrams" );
             },
             error: function(msg) {
                 $("#appletInfo").html("Error, couldn't load graph: "+msg);
@@ -183,7 +154,6 @@ $(document).ready(function(){
         });
 
         tinaviz.event({
-
             /*
              * selection.viewName  : string = 'macro'|'meso'
              * selection.mouseMode : strong = 'left'|'doubleLeft'|'right'|'doubleRight'
@@ -207,12 +177,12 @@ $(document).ready(function(){
             },
             viewChanged: function(view) {
                 $("#sliderEdgeWeight").slider( "option", "values", [
-                    parseInt( view.get("filter.edge.min") ),
-                    parseInt(view.get("filter.edge.max")) *100
+                    parseInt( view.get("filter.edge.weight.min") ),
+                    parseInt(view.get("filter.edge.weight.max")) *100
                     ]);
                 $("#sliderNodeWeight").slider( "option", "values", [
-                    parseInt(view.get("filter.node.min") ),
-                    parseInt(view.get("filter.node.max")) *100
+                    parseInt(view.get("filter.node.weight.min") ),
+                    parseInt(view.get("filter.node.weight.max")) *100
                     ]);
                 tinaviz.infodiv.display_current_category();
                 tinaviz.infodiv.display_current_view();
