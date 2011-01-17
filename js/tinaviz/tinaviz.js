@@ -371,13 +371,13 @@ function Tinaviz(args) {
 
 
     this.recenter = function() {
-        this.set("recenter",true);
+        this.set("recenter",true, "Boolean");
     }
     this.setLayout = function(name) {
-        this.set("layout.algorithm", name);
+        this.set("layout.algorithm", name, "String");
     }
     this.setPause = function(value) {
-        this.set("pause",value);
+        this.set("pause",value, "Boolean");
     }
     this.getPause = function() {
         return this.get("pause");
@@ -396,7 +396,7 @@ function Tinaviz(args) {
       */
       
     this.select = function(uuid) {
-          applet.set("select", uuid);
+          applet.set("select", uuid, "String");
     }
 
     /**
@@ -424,7 +424,7 @@ function Tinaviz(args) {
     }
 
     this.setCategory = function(value) {
-        this.set("filter.node.category", value);
+        this.set("filter.node.category", value, "String");
     }
     
     /**
@@ -443,7 +443,7 @@ function Tinaviz(args) {
      *
      */
     this.setView = function(view) {
-        this.set("filter.view", view);
+        this.set("filter.view", view, "String");
     }
     
     /**
@@ -557,12 +557,18 @@ function Tinaviz(args) {
      */
 
     this.set = function(key, obj, t) {
-         alert("key:"+key+" obj: "+obj);
+         //alert("key:"+key+" obj: "+obj);
         if (t === undefined) {
-            applet.set(key,$.toJSON(obj));
+            this.logNormal("set("+key+","+obj+")");
+            applet.set(key,obj);
         } else {
+           if (t=="json") {
            applet.setAs(key,$.toJSON(obj), t);
-        }
+           } else {
+           this.logNormal("setAs("+key+","+obj+","+t+")");
+           applet.setAs(key, obj, t);
+           }
+        } 
     }
     
     /**
