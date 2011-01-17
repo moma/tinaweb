@@ -45,80 +45,6 @@ function Tinaviz(args) {
         opts[x] = args[x]
     }
 
-    this.clear = function() {
-        applet.clear();
-    };
-
-    this.callCb = function(id,data) {
-        $.doTimeout( 1000, function() {
-            callbacks[id]($.parseJSON(data))
-        });
-       
-    }
-
-    // call with:  makeCb("test.tina", function(data) {})
-    this.makeCb = function(key,cb) {
-        ++cbCounter;
-        var id = "" + cbCounter;
-        callbacks[id] = cb;
-        applet.getWithCb(id, key);
-    }
-
-        /**
-     * Core method communicating with the applet
-     */
-    this.get = function(key) {
-       // return applet.get(key);
-    }
-
-    /**
-     * Set a value to all views
-     */
-    this.set = function(key, json) {
-        applet.msgNoCb(key,$.toJSON(json));
-    }
-    
-    //this.set = function(key, json) {
-    //    applet.msgNoCb(key,$.toJSON(json));
-    //}
-
-    /**
-     * Called by the applet
-     */
-    this.logNormal = function(msg) {
-        try {
-            console.log(msg);
-        }
-        catch (e){
-            return;
-        }
-    };
-
-    /**
-     * Called by the applet
-     */
-    this.logDebug = function(msg) {
-        try {
-            console.log(msg);
-        }
-        catch (e){
-            return;
-        }
-    };
-
-    /**
-     * Called by the applet
-     */
-    this.logError = function(msg) {
-        try {
-            console.error(msg);
-        }
-        catch (e){
-            alert(msg);
-            return;
-        }
-    };
-
     // PRIVATE MEMBERS
     var wrapper = null;
     var applet = null;
@@ -174,7 +100,7 @@ function Tinaviz(args) {
     }
     this.setupDefaults=function() {
         // setup defaults
-        this.setPause(opts.pause);
+        this.set("pause",false);
     }
     this.ready=function(cb) {
         // TODO: if not ready, append to the callbacks
@@ -185,9 +111,7 @@ function Tinaviz(args) {
     this.getPath=function() {
         return this.path;
     }
-    this.getPause=function() {
-        return this.applet.getPause();
-    }
+
     this.open=function(args) {
 
         var opts = {};
@@ -206,11 +130,6 @@ function Tinaviz(args) {
             for (x in opts) {
                 openDefaults[x] = opts[x];
             }
-        }
-
-        if (opts.clear) {
-            this.set("layout.iter", 0);
-        //applet.clear();
         }
 
         if (opts.layout) {
@@ -259,7 +178,7 @@ function Tinaviz(args) {
                 var f = false;
                 // alert("success, calling updateFromString");
                 try {
-                    tinaviz.logNormal("view.openString(.., "+opts.clear+")");
+                    tinaviz.logNormal("view.openString(..)");
                     applet.openString(gexf);
                 } catch (e) {
                     tinaviz.logNormal("Couldn't load graph using openString, trying with openURI..");
@@ -268,12 +187,12 @@ function Tinaviz(args) {
                 if (f) {
                     try {
                         if (opts.url.search("://") != -1) {
-                            tinaviz.logNormal("applet.openURI("+opts.url+", "+opts.clear+");");
-                            this.openURI(opts.url);
+                            tinaviz.logNormal("applet.openURI("+opts.url+");");
+                            applet.openURI(opts.url);
                         } else {
                             var sPath = document.location.href;
-                            tinaviz.logNormal("applet.openURI("+(sPath.substring(0, sPath.lastIndexOf('/') + 1) + opts.url)+", "+opts.clear+");");
-                            this.openURI(sPath.substring(0, sPath.lastIndexOf('/') + 1) + opts.url);
+                            tinaviz.logNormal("applet.openURI("+(sPath.substring(0, sPath.lastIndexOf('/') + 1) + opts.url)+");");
+                            applet.openURI(sPath.substring(0, sPath.lastIndexOf('/') + 1) + opts.url);
                         }
                     } catch (e) {
                         tinaviz.logError("Couldn't import graph: "+e);
@@ -287,9 +206,6 @@ function Tinaviz(args) {
 
     }
 
-    this.setLayout=function(name) {
-        this.set("layout.algorithm", name);
-    }
 
     this.event=function(args) {
         var opts = {
@@ -359,27 +275,6 @@ function Tinaviz(args) {
     }
 
 
-    this.select = function(id) {
-        applet.select(id);
-    }
-
-    /*
-     *  Get the current state of the applet
-     */
-    this.isEnabled = function() {
-        if (applet == null) {
-            return false;
-        } else {
-            return applet.isEnabled();
-        }
-    }
-    /*
-     *  Set the current state of the applet to enable
-     */
-    this.setEnabled = function(value) {
-        applet.setEnabled(value);
-    }
-
     /*
      * Search nodes
      */
@@ -404,12 +299,9 @@ function Tinaviz(args) {
     this.highlightNodes= function(label, type) {
         var matchlist = this.getNodesByLabel(label, type);
         for (var i = 0; i < matchlist.length; i++ ) {
-            applet.highlightFromId( decodeJSON( matchlist[i]['id'] ) );
-        // todo: auto center!!
-        //applet.
+            this.select(decodeJSON( matchlist[i]['id'] ) );
         }
     }
-
 
     /*
      *  Gets attributes o a given node
@@ -443,16 +335,13 @@ function Tinaviz(args) {
     this.getNeighboursFromDatabase = function(id) {
         var elem = id.split('::');
         TinaService.getNGrams(
-            0,
-            elem[1],
+            0, elem[1],
             {
                 success: function(data) {
                 }
             }
-            );
+         );
     }
-
-
 
     /**
      * Callback after clicks on nodes
@@ -481,14 +370,43 @@ function Tinaviz(args) {
     }
 
 
-    /**
-     * play/pause layout engine
-     */
+    this.recenter = function() {
+        this.set("recenter",true);
+    }
+    this.setLayout = function(name) {
+        this.set("layout.algorithm", name);
+    }
+    this.setPause = function(value) {
+        this.set("pause",value);
+    }
+    this.getPause = function() {
+        return this.get("pause");
+    }
+    this.pause = function() {
+        this.setPause(true);
+    }
     this.togglePause = function() {
-        applet.togglePause();
+        var n = !this.getPause();
+        this.setPause(n);
+        return n;
     }
 
+   /**
+      * Select a node from it's ID (String)
+      */
+      
+    this.select = function(uuid) {
+          applet.set("select", uuid);
+    }
 
+    /**
+     * Manually unselect all nodes
+     */
+    this.unselect = function() {
+        this.select("");
+        this.infodiv.reset();
+    }
+    
     /**
      * Get the opposite category name (the NOT DISPLAYED one)
      */
@@ -500,57 +418,79 @@ function Tinaviz(args) {
         return "Document";
     }
 
-    /**
-     * Manually toggles the view to meso given an id
-     */
-    this.viewMeso = function(id, category) {
-        // selects unique node
-        this.unselect();
-        this.selectFromId(id, true);
-        // sets the category of the graph
-        this.views.meso.set("category/category", category);
-        //this.set("macro", "category/category", category);
-        this.setView("meso");
-    //this.infoviz.updateNodeList("meso", category);
-    }
-
+  
     this.getCategory = function() {
-        return this.get("category/category");
+        return this.get("filter.node.category");
     }
 
     this.setCategory = function(value) {
-        this.set("category/category", value,false);
+        this.set("filter.node.category", value);
+    }
+    
+    /**
+     * Get the current view: eg. "macro", "meso"..
+     *
+     */
+    this.getView = function() {
+        return this.get("filter.view");
     }
 
+    /**
+     * Set the current view. Will force the applet
+     * to show the new corresponding graph
+     * argument: 
+     *  - view: String. eg. "macro", "meso"..
+     *
+     */
+    this.setView = function(view) {
+        this.set("filter.view", view);
+    }
+    
+    /**
+     * Manual toggle of the current view (Eg. when button is pressed)
+     *
+     */
     this.toggleView = function() {
         var current_cat = this.getCategory();
-        if (this.views.current.name() == "macro") {
+        if (this.getView() == "macro") {
             // check if selection is empty
             if (this.infodiv.selection.length != 0) {
-                this.views.meso.set("category/category", current_cat, false);
+                this.setCategory(current_cat);
                 this.setView("meso");
             //this.infodiv.updateNodeList("meso", current_cat);
             } else {
                 alert("please first select some nodes before switching to meso level");
             }
-        } else if (this.views.current.name() == "meso") {
-            this.views.macro.set("category/category", current_cat, false);
+        } else if (this.getView() == "meso") {
+            this.setCategory(current_cat);
             this.setView("macro");
-        //this.infodiv.updateNodeList("macro", current_cat);
+            //this.infodiv.updateNodeList("macro", current_cat);
         }
-
     }
 
     /**
-     * Manually unselects all nodes
+     * Switch to meso view of a particular node
+     * arguments: 
+     *   - id: String
+     *   - category: String
      */
-    this.unselect= function() {
-        applet.unselect();
-        this.infodiv.reset();
+    this.viewMeso = function(id, category) {
+        // selects unique node
+        this.unselect();
+        this.select(id);
+        // sets the category of the graph
+        this.setCategory(category);
+        //this.set("macro", "filter.node.category", category);
+        this.setView("meso");
+        //this.infoviz.updateNodeList("meso", category);
     }
+
+
 
     /**
      *  Retrieves list of all nodes
+     *
+     *  Usage:
      *  nodes = tinaviz.getNodes("macro", "NGram")
      */
     this.getNodes = function(view, category) {
@@ -558,16 +498,10 @@ function Tinaviz(args) {
         return $.parseJSON( nodes );
     }
 
-    /****************************************
-     *
-     * HTML VIZ DIV ADJUSTING/ACTION
-     *
-     ****************************************/
-
     /**
      * Dynamic div width
      */
-    this.size= function(width, height) {
+    this.size = function(width, height) {
         if (wrapper == null || applet == null) return;
         $('#tinaviz').css("height",""+(height)+"px");
         $('#tinaviz').css("width",""+(width)+"px");
@@ -589,6 +523,93 @@ function Tinaviz(args) {
         callbackImported(msg);
     }
 
+
+    this.callCb = function(id,data) {
+        $.doTimeout( 1000, function() {
+            callbacks[id]($.parseJSON(data))
+        });
+       
+    }
+
+    // call with:  makeCb("test.tina", function(data) {})
+    this.makeCb = function(key,cb) {
+        ++cbCounter;
+        var id = "" + cbCounter;
+        callbacks[id] = cb;
+        applet.getWithCb(id, key);
+    }
+
+        /**
+     * Core method communicating with the applet
+     */
+    this.get = function(key) {
+        return applet.get(key);
+    }
+
+    /**
+     * Set a value to all views
+     * Argument "t" is optional. But if given, must be a string with one of these values:
+     * "String" 
+     * "Int"
+     * "Double" 
+     * "Float" 
+     * "Boolean" : 1, 0, true, false
+     */
+
+    this.set = function(key, obj, t) {
+         alert("key:"+key+" obj: "+obj);
+        if (t === undefined) {
+            applet.set(key,$.toJSON(obj));
+        } else {
+           applet.setAs(key,$.toJSON(obj), t);
+        }
+    }
+    
+    /**
+     * Set a value, to be converted to a Scala type
+
+    
+    //this.set = function(key, json) {
+    //    applet.msgNoCb(key,$.toJSON(json));
+    //}
+
+    /**
+     * Called by the applet
+     */
+    this.logNormal = function(msg) {
+        try {
+            console.log(msg);
+        }
+        catch (e){
+            return;
+        }
+    };
+
+    /**
+     * Called by the applet
+     */
+    this.logDebug = function(msg) {
+        try {
+            console.log(msg);
+        }
+        catch (e){
+            return;
+        }
+    };
+
+    /**
+     * Called by the applet
+     */
+    this.logError = function(msg) {
+        try {
+            console.error(msg);
+        }
+        catch (e){
+            alert(msg);
+            return;
+        }
+    };
+    
     this.getHTML = function() {
         var path = this.libPath;
         var context = this.context;
@@ -627,19 +648,5 @@ function Tinaviz(args) {
         return buff;
     }
     this.tag.html( this.getHTML() );
-//this.clear();
 }
 
-
-/*
- JQUERY TINAVIZ PLUGIN - FOR NEXT VERSION OF TINAVIZ
-
-(function($){
- $.fn.truncate = function() {
-    tinaviz = new Tinaviz();
-    this.tag.html( tinaviz.getHTML() );
-    return tinaviz;
- };
-})(jQuery);
-
- */

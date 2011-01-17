@@ -63,18 +63,17 @@ $(document).ready(function(){
         //var macro = tinaviz.views.macro;
         //var meso = tinaviz.views.meso;
 
-        tinaviz.set({
-            "filter.edge.min": parseFloat(prefs.edge_filter_min),
-            "filter.edge.max": parseFloat(prefs.edge_filter_max),
-            "filter.node.min": parseFloat(prefs.node_filter_min),
-            "filter.node.max": parseFloat(prefs.node_filter_max),
-            "filter.category": prefs.category,
-            "output/nodeSizeMin": 5.0,
-            "output/nodeSizeMax": 20.0,
-            "scaleRatio": parseFloat(prefs.magnify),
-            "selection.radius": parseFloat(prefs.cursor_size),
-            "layout.algorithm": prefs.layout
-        })
+        tinaviz.set("filter.edge.min", parseFloat(prefs.edge_filter_min), "Double");
+        tinaviz.set("filter.edge.max", parseFloat(prefs.edge_filter_max), "Double");
+        tinaviz.set("filter.node.min", parseFloat(prefs.node_filter_min), "Double");
+        tinaviz.set("filter.node.max", parseFloat(prefs.node_filter_max), "Double");
+        tinaviz.set("filter.node.category", prefs.category, "String");
+        tinaviz.set("output/nodeSizeMin", 5.0, "Double");
+        tinaviz.set("output/nodeSizeMax", 20.0, "Double");
+        tinaviz.set("scaleRatio", parseFloat(prefs.magnify), "Double");
+        tinaviz.set("selectionRadius", parseFloat(prefs.cursor_size), "Double");
+        tinaviz.set("layout.algorithm", prefs.layout, "String");
+
         //tinaviz.set("data/source", "gexf");
 
         //macro.filter("Category", "category");
