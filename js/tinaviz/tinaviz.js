@@ -38,8 +38,8 @@ function Tinaviz(args) {
         engine: 'software',
         branding: true,
         pause: false,
-        width: 0,
-        height: 0
+        width: 800,
+        height: 600
     };
     for (x in args) {
         opts[x] = args[x]
@@ -620,6 +620,8 @@ function Tinaviz(args) {
         var path = this.libPath;
         var context = this.context;
         var engine = this.engine;
+        var w = this.width;
+        var h = this.height;
 
         var brand = "true";
         if (this.branding == false) brand = "false";
@@ -634,8 +636,8 @@ function Tinaviz(args) {
             id: "tinaviz",
             code: 'eu.tinasoft.tinaviz.Main.class',
             archive: path+'tinaviz-2.0-SNAPSHOT.jar',
-            width: 10,
-            height: 10,
+            width: w,
+            height: h,
             image: 'css/branding/appletLoading.gif',
             standby: "Loading Tinaviz..."
         }, {

@@ -21,13 +21,15 @@ $(document).ready(function(){
 
     $("#title").html("<h1>TinaWeb DEMO</h1>");
 
+    var size = resize();
     tinaviz = new Tinaviz({
-        tag: $("#vizdiv")
+        tag: $("#vizdiv"),
+         width: size.w,
+        height: size.h
     });
 
     $(window).bind('resize', function() {
         var size = resize();
-        // console.log("L29 tinaviz.size("+size.w+", "+size.h+")");
         tinaviz.size(size.w, size.h);
     });
 
