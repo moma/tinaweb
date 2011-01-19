@@ -19,13 +19,12 @@ var tinaviz = {};
 
 $(document).ready(function(){
 
-    $("#title").html("<h1>TinaWeb DEMO</h1>");
-
     var size = resize();
     tinaviz = new Tinaviz({
         tag: $("#vizdiv"),
-         width: size.w,
-        height: size.h
+        width: size.w,
+        height: size.h,
+        path : $('meta[name=tinaviz]').attr("content")
     });
 
     $(window).bind('resize', function() {
@@ -72,14 +71,16 @@ $(document).ready(function(){
         /*
          * Initialization of the Infodiv
          */
-        // var layout_name = tinaviz.get("layout.algorithm");
+        // DEBUGGING
+        var layout_name = prefs.layout;
         // use of different Infodiv-s following the type of graph
-        //if ( layout_name == "phyloforce" ) {
-        //   tinaviz.infodiv = PhyloInfoDiv;
-        // }
-        //else {
-        tinaviz.infodiv = InfoDiv;
-        //}
+        if ( layout_name == "phyloforce" ) {
+            tinaviz.infodiv = PhyloInfoDiv;
+        }
+        else {
+            tinaviz.infodiv = InfoDiv;
+        }
+
         tinaviz.infodiv.id = 'infodiv';
         tinaviz.infodiv.label = $( "#node_label" );
         tinaviz.infodiv.contents = $( "#node_contents" );
@@ -190,7 +191,7 @@ $(document).ready(function(){
                 tinaviz.infodiv.display_current_view();
                 // TODO check selection
                 // if selection has edges with edge of all the same weight, we disable the filter
-    
+
                 $("#sliderEdgeWeight").slider( "option", "disabled", false );
             },
             categoryChanged: function() {
