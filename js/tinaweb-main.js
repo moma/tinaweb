@@ -100,7 +100,7 @@ $(document).ready(function(){
         tinaviz.open({
             before: function() {
                 $('#appletInfo').show();
-                $('#appletInfo').html("please wait while loading the graph..");
+                $('#appletInfo').html("Please wait while loading the graph");
                 $('#appletInfo').effect('pulsate', {}, 'fast');
                 console.log("tinaviz.infodiv.reset()");
                 tinaviz.infodiv.reset();
@@ -110,8 +110,6 @@ $(document).ready(function(){
                 tinaviz.infodiv.updateNodeList( "macro", prefs.category );
                 tinaviz.infodiv.display_current_category();
                 tinaviz.infodiv.display_current_view();
-
-
                 // initialize the sliders
                 console.log("$(\"#sliderNodeSize\").slider( \"option\", \"value\",  parseInt(view.get(\"output/nodeSizeRatio\")) *100 );");
                 $("#sliderNodeSize").slider( "option", "value",
