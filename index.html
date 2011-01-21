@@ -1,30 +1,33 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<!--
-        This program is free software; you can redistribute it and/or modify
-        it under the terms of the GNU General Public License as published by
-        the Free Software Foundation; either version 2 of the License, or
-        (at your option) any later version.
+    <!--
+    Copyright (C) 2009-2011 CREA Lab, CNRS/Ecole Polytechnique UMR 7656 (Fr)
 
-        This program is distributed in the hope that it will be useful,
-        but WITHOUT ANY WARRANTY; without even the implied warranty of
-        MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-        GNU General Public License for more details.
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
 
-        You should have received a copy of the GNU General Public License
-        along with this program; if not, write to the Free Software
-        Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
-        MA 02110-1301, USA.
--->
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
 
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+    -->
 <html xml:lang="en-GB" xmlns="http://www.w3.org/1999/xhtml">
     <head>
         <title>Tinaweb DEMO</title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <meta name="description" content="TinaViz" />
         <meta name="keywords" content="TinaViz" />
+        <meta name="tinaviz" content="" />
         <link rel="shortcut icon" href="css/branding/favicon.ico" type="image/x-icon" />
+        <!-- CSS LINKS -->
         <!-- JQUERY UI CSS -->
         <link type="text/css" rel="stylesheet" href="css/eggplant/jquery-ui-1.8.1.custom.css"/>
+        <link type="text/css" rel="stylesheet" href="tinaweb/css/ui.spinner.css"/>
+        <!--<link href='js/rating/jquery.ratings.16.css' type="text/css" rel="stylesheet"/>-->
         <!--TINASOFT CSS -->
         <link type="text/css" rel="stylesheet" href="css/tinaweb.css"/>
         <!-- JQUERY -->
@@ -35,7 +38,8 @@
         <!-- JQUERY UI -->
         <script type="text/javascript" src="js/jquery-ui/jquery-ui-1.8.min.js" language="javascript"></script>
         <script src='js/rating/jquery.ratings.js' type="text/javascript" language="javascript"></script>
-        <!--<link href='js/rating/jquery.ratings.16.css' type="text/css" rel="stylesheet"/>-->
+        <script type="text/javascript" src="tinaweb/js/jquery-ui/ui.spinner.min.js" language="javascript"></script>
+
         <!--TINAWEB APPLET LOADER -->
         <script type="text/javascript" src="js/tinaviz/deployJava.js" language="javascript"></script>
         <!-- TINAVIZ -->
@@ -59,7 +63,7 @@
             <div id="hd"  class="ui-widget">
                 <div id="hdb">
                     <div id="htoolbar" class="toolbardiv fg-toolbar ui-widget-header ui-corner-all ui-helper-clearfix">
-                        <div id="title" class="noSelect"></div>
+                        <div id="title" class="noSelect">Tinaweb Demo</div>
 
                         <button id="toggle-paused" class="fg-button toolbar-left">play</button>
                         <button id="toggle-switch" class="fg-button toolbar-left">switch category</button>
