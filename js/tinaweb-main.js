@@ -19,15 +19,16 @@ var tinaviz = {};
 
 $(document).ready(function(){
 
-    $("#title").html("<h1>TinaWeb DEMO</h1>");
-
+    var size = resize();
     tinaviz = new Tinaviz({
-        tag: $("#vizdiv")
+        tag: $("#vizdiv"),
+        width: size.w,
+        height: size.h,
+        path : $('meta[name=tinaviz]').attr("content")
     });
 
     $(window).bind('resize', function() {
         var size = resize();
-        // console.log("L29 tinaviz.size("+size.w+", "+size.h+")");
         tinaviz.size(size.w, size.h);
     });
 
@@ -70,14 +71,16 @@ $(document).ready(function(){
         /*
          * Initialization of the Infodiv
          */
-        // var layout_name = tinaviz.get("layout.algorithm");
+        // DEBUGGING
+        var layout_name = prefs.layout;
         // use of different Infodiv-s following the type of graph
-        //if ( layout_name == "phyloforce" ) {
-        //   tinaviz.infodiv = PhyloInfoDiv;
-        // }
-        //else {
-        tinaviz.infodiv = InfoDiv;
-        //}
+        if ( layout_name == "phyloforce" ) {
+            tinaviz.infodiv = PhyloInfoDiv;
+        }
+        else {
+            tinaviz.infodiv = InfoDiv;
+        }
+
         tinaviz.infodiv.id = 'infodiv';
         tinaviz.infodiv.label = $( "#node_label" );
         tinaviz.infodiv.contents = $( "#node_contents" );
@@ -97,7 +100,7 @@ $(document).ready(function(){
         tinaviz.open({
             before: function() {
                 $('#appletInfo').show();
-                $('#appletInfo').html("please wait while loading the graph..");
+                $('#appletInfo').html("Please wait while loading the graph");
                 $('#appletInfo').effect('pulsate', {}, 'fast');
                 console.log("tinaviz.infodiv.reset()");
                 tinaviz.infodiv.reset();
@@ -107,8 +110,6 @@ $(document).ready(function(){
                 tinaviz.infodiv.updateNodeList( "macro", prefs.category );
                 tinaviz.infodiv.display_current_category();
                 tinaviz.infodiv.display_current_view();
-
-
                 // initialize the sliders
                 console.log("$(\"#sliderNodeSize\").slider( \"option\", \"value\",  parseInt(view.get(\"output/nodeSizeRatio\")) *100 );");
                 $("#sliderNodeSize").slider( "option", "value",
@@ -188,7 +189,7 @@ $(document).ready(function(){
                 tinaviz.infodiv.display_current_view();
                 // TODO check selection
                 // if selection has edges with edge of all the same weight, we disable the filter
-    
+
                 $("#sliderEdgeWeight").slider( "option", "disabled", false );
             },
             categoryChanged: function() {
