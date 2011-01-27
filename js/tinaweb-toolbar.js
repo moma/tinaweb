@@ -187,8 +187,8 @@ toolbar.init = function() {
         values: [toolbar.values.sliders.nodeFilter.min, toolbar.values.sliders.nodeFilter.max * 100.0],
         animate: true,
         slide: function(event, ui) {
-            tinaviz.set("filter.edge.weight.min", ui.values[0] / 100.0, "Double");
-            tinaviz.set("filter.edge.weight.max", ui.values[1] / 100.0, "Double");
+            tinaviz.set("filter.node.weight.min", ui.values[0] / 100.0, "Double");
+            tinaviz.set("filter.node.weight.max", ui.values[1] / 100.0, "Double");
         }
     });
 
