@@ -351,11 +351,12 @@ function Tinaviz(args) {
      * @param mouse
      * @return
      */
-    this._callbackSelectionChanged = function(view, attr, mouse) {
+    this._callbackSelectionChanged = function(selection, mouse) {
         //console.log("_callbackSelectionChanged : "+ attr);
+
         this.callbackSelectionChanged({
-            'viewName':view,
-            'data':$.parseJSON(attr),
+            'viewName':'macro',
+            'data':$.parseJSON(selection),
             'mouseMode':mouse
         })
     }
