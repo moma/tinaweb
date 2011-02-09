@@ -228,7 +228,7 @@ var InfoDiv = {
     * updates the label and content DOM divs
     */
     updateInfo: function(lastselection) {
-        var current_cat = tinaviz.get("category/category");
+        var current_cat = tinaviz.getCategory();
         var labelinnerdiv = $("<div></div>");
         var contentinnerdiv = $("<div></div>");
         var number_of_label = 0;
