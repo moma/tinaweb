@@ -452,20 +452,17 @@ function Tinaviz(args) {
      *
      */
     this.toggleView = function() {
-        var current_cat = this.getCategory();
         if (this.getView() == "macro") {
             // check if selection is empty
             if (this.infodiv.selection.length != 0) {
-                this.setCategory(current_cat);
                 this.setView("meso");
-            //this.infodiv.updateNodeList("meso", current_cat);
+            this.infodiv.updateNodeList("meso", this.getCategory());
             } else {
-                alert("please first select some nodes before switching to meso level");
+                alert("You need to select a node before switching to meso view");
             }
         } else if (this.getView() == "meso") {
-            this.setCategory(current_cat);
             this.setView("macro");
-            //this.infodiv.updateNodeList("macro", current_cat);
+            this.infodiv.updateNodeList("macro", this.getCategory());
         }
     }
 
