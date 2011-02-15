@@ -187,8 +187,8 @@ toolbar.init = function() {
         values: [toolbar.values.sliders.nodeFilter.min, toolbar.values.sliders.nodeFilter.max * 100.0],
         animate: true,
         slide: function(event, ui) {
-            tinaviz.set("filter.edge.weight.min", ui.values[0] / 100.0, "Double");
-            tinaviz.set("filter.edge.weight.max", ui.values[1] / 100.0, "Double");
+            tinaviz.set("filter.node.weight.min", ui.values[0] / 100.0, "Double");
+            tinaviz.set("filter.node.weight.max", ui.values[1] / 100.0, "Double");
         }
     });
 
@@ -277,8 +277,8 @@ toolbar.init = function() {
         /**
          * Manually toggles the category, and do the bipartite work
          */
-        var oldPause = tinaviz.getPause();
-        tinaviz.pause();
+        //var oldPause = tinaviz.getPause();
+        //tinaviz.pause();
         var cat = tinaviz.getCategory();
         // store the layout state (iteration counter) in a JS-side buffer
         
@@ -299,11 +299,11 @@ toolbar.init = function() {
             tinaviz.infodiv.reset();
             for (var pos in tinaviz.infodiv.neighbours) {
                 console.log("switch category, selecting node from id "+tinaviz.infodiv.neighbours[pos]);
-                tinaviz.select(tinaviz.infodiv.neighbours[pos]);
+                //tinaviz.select(tinaviz.infodiv.neighbours[pos]);
             }
         }
         tinaviz.infodiv.display_current_category();
-        tinaviz.setPause(oldPause);
+        //tinaviz.setPause(oldPause);
 
     });
     toolbar.checkSearchForm();

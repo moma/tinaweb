@@ -15,6 +15,25 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+// defaults
+var prefs = {
+            gexf: "default.gexf", // "FET60bipartite_graph_cooccurrences_.gexf"
+            view: "macro",
+            category: "Document",
+            node_id: "",
+            search: "",
+            magnify: "0.5",
+            cursor_size: "1.0",
+            edge_filter_min: "0.0",
+            edge_filter_max: "1.0",
+            node_filter_min: "0.0",
+            node_filter_max: "1.0",
+            layout: "tinaforce",
+            edge_rendering: "curve",
+            pause: "false"
+
+};
+
 var tinaviz = {};
 
 $(document).ready(function(){
@@ -37,36 +56,22 @@ $(document).ready(function(){
         var size = resize();
         tinaviz.size(size.w, size.h);
 
-        var prefs = {
-            gexf: "default.gexf", // "FET60bipartite_graph_cooccurrences_.gexf"
-            view: "macro",
-            category: "Document",
-            node_id: "",
-            search: "",
-            magnify: "0.5",
-            cursor_size: "1.0",
-            edge_filter_min: "0.0",
-            edge_filter_max: "1.0",
-            node_filter_min: "0.0",
-            node_filter_max: "1.0",
-            layout: "tinaforce",
-            edge_rendering: "curve"
 
-        };
         var urlVars = getUrlVars();
         for (x in urlVars) {
             prefs[x] = urlVars[x];
         }
-        tinaviz.set("filter.edge.min", parseFloat(prefs.edge_filter_min), "Double");
-        tinaviz.set("filter.edge.max", parseFloat(prefs.edge_filter_max), "Double");
-        tinaviz.set("filter.node.min", parseFloat(prefs.node_filter_min), "Double");
-        tinaviz.set("filter.node.max", parseFloat(prefs.node_filter_max), "Double");
+        tinaviz.set("filter.edge.weight.min", parseFloat(prefs.edge_filter_min), "Double");
+        tinaviz.set("filter.edge.weight.max", parseFloat(prefs.edge_filter_max), "Double");
+        tinaviz.set("filter.node.weight.min", parseFloat(prefs.node_filter_min), "Double");
+        tinaviz.set("filter.node.weight.max", parseFloat(prefs.node_filter_max), "Double");
         tinaviz.set("filter.node.category", prefs.category, "String");
-        tinaviz.set("output/nodeSizeMin", 5.0, "Double");
-        tinaviz.set("output/nodeSizeMax", 20.0, "Double");
-        tinaviz.set("scaleRatio", parseFloat(prefs.magnify), "Double");
+        //tinaviz.set("output/nodeSizeMin", 5.0, "Double");
+        //tinaviz.set("output/nodeSizeMax", 20.0, "Double");
+        tinaviz.set("filter.node.size", parseFloat(prefs.magnify), "Double");
         tinaviz.set("selectionRadius", parseFloat(prefs.cursor_size), "Double");
         tinaviz.set("layout.algorithm", prefs.layout, "String");
+        tinaviz.set("pause", prefs.pause, "Boolean")
 
         /*
          * Initialization of the Infodiv
@@ -111,23 +116,23 @@ $(document).ready(function(){
                 tinaviz.infodiv.display_current_category();
                 tinaviz.infodiv.display_current_view();
                 // initialize the sliders
-                console.log("$(\"#sliderNodeSize\").slider( \"option\", \"value\",  parseInt(view.get(\"output/nodeSizeRatio\")) *100 );");
+                console.log("$(\"#sliderNodeSize\").slider( \"option\", \"value\",  parseInt(view.get(\"filter.node.size\")) *100 );");
                 $("#sliderNodeSize").slider( "option", "value",
-                    parseInt(tinaviz.get("scaleRatio")) *100
+                    parseInt(tinaviz.get("filter.node.size")) *100
                     );
-                console.log("$(\"#sliderSelectionZone\").slider( \"option\", \"value\",  parseInt(view.get(\"selection/radius\")) *100 );");
+                console.log("$(\"#sliderSelectionZone\").slider( \"option\", \"value\",  parseInt(view.get(\"selectionRadius\")) *100 );");
                 $("#sliderSelectionZone").slider( "option", "value",
-                    parseInt(tinaviz.get("selection.radius")) * 100
+                    parseInt(tinaviz.get("selectionRadius")) * 100
                     );
-                console.log("$(\"#sliderEdgeWeight\").slider( \"option\", \"values\", [ parseInt( view.get(\"edgeWeight/min\") ), parseInt(view.get(\"edgeWeight/max\")) *100 ]);");
+                console.log("$(\"#sliderEdgeWeight\").slider( \"option\", \"values\", [ parseInt( view.get(\"filter.edge.weight.min\") ), parseInt(view.get(\"filter.edge.weight.max\")) *100 ]);");
                 $("#sliderEdgeWeight").slider( "option", "values", [
-                    parseInt( tinaviz.get("filter.edge.min") ),
-                    parseInt(tinaviz.get("filter.edge.max")) *100
+                    parseInt( tinaviz.get("filter.edge.weight.min") ),
+                    parseInt(tinaviz.get("filter.edge.weight.max")) *100
                     ]);
                 console.log("$(\"#sliderNodeWeight\").slider( \"option\", \"values\", [ parseInt( view.get(\"nodeWeight/min\") ), parseInt(view.get(\"nodeWeight/max\")) *100 ]);");
                 $("#sliderNodeWeight").slider( "option", "values", [
-                    parseInt(tinaviz.get("filter.node.min") ),
-                    parseInt(tinaviz.get("filter.node.max")) *100
+                    parseInt(tinaviz.get("filter.node.weight.min") ),
+                    parseInt(tinaviz.get("filter.node.weight.max")) *100
                     ]);
 
 

@@ -1,4 +1,4 @@
-/*
+ko/*
     Copyright (C) 2009-2011 CREA Lab, CNRS/Ecole Polytechnique UMR 7656 (Fr)
 
     This program is free software: you can redistribute it and/or modify
@@ -351,11 +351,12 @@ function Tinaviz(args) {
      * @param mouse
      * @return
      */
-    this._callbackSelectionChanged = function(view, attr, mouse) {
+    this._callbackSelectionChanged = function(selection, mouse) {
         //console.log("_callbackSelectionChanged : "+ attr);
+
         this.callbackSelectionChanged({
-            'viewName':view,
-            'data':$.parseJSON(attr),
+            'viewName':'macro',
+            'data':$.parseJSON(selection),
             'mouseMode':mouse
         })
     }
@@ -451,20 +452,17 @@ function Tinaviz(args) {
      *
      */
     this.toggleView = function() {
-        var current_cat = this.getCategory();
         if (this.getView() == "macro") {
             // check if selection is empty
             if (this.infodiv.selection.length != 0) {
-                this.setCategory(current_cat);
                 this.setView("meso");
-            //this.infodiv.updateNodeList("meso", current_cat);
+            this.infodiv.updateNodeList("meso", this.getCategory());
             } else {
-                alert("please first select some nodes before switching to meso level");
+                alert("You need to select a node before switching to meso view");
             }
         } else if (this.getView() == "meso") {
-            this.setCategory(current_cat);
             this.setView("macro");
-            //this.infodiv.updateNodeList("macro", current_cat);
+            this.infodiv.updateNodeList("macro", this.getCategory());
         }
     }
 
