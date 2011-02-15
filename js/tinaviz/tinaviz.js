@@ -1,4 +1,4 @@
-/*
+ko/*
     Copyright (C) 2009-2011 CREA Lab, CNRS/Ecole Polytechnique UMR 7656 (Fr)
 
     This program is free software: you can redistribute it and/or modify
