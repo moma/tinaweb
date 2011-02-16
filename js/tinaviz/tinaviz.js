@@ -395,7 +395,7 @@ function Tinaviz(args) {
    /**
       * Select a node from it's ID (String)
       */
-      
+
     this.select = function(uuid) {
           applet.set("select", uuid, "String");
     }
@@ -407,7 +407,7 @@ function Tinaviz(args) {
         this.select("");
         this.infodiv.reset();
     }
-    
+
     /**
      * Get the opposite category name (the NOT DISPLAYED one)
      */
@@ -419,7 +419,7 @@ function Tinaviz(args) {
         return "Document";
     }
 
-  
+
     this.getCategory = function() {
         return this.get("filter.node.category");
     }
@@ -427,7 +427,7 @@ function Tinaviz(args) {
     this.setCategory = function(value) {
         this.set("filter.node.category", value, "String");
     }
-    
+
     /**
      * Get the current view: eg. "macro", "meso"..
      *
@@ -439,14 +439,14 @@ function Tinaviz(args) {
     /**
      * Set the current view. Will force the applet
      * to show the new corresponding graph
-     * argument: 
+     * argument:
      *  - view: String. eg. "macro", "meso"..
      *
      */
     this.setView = function(view) {
         this.set("filter.view", view, "String");
     }
-    
+
     /**
      * Manual toggle of the current view (Eg. when button is pressed)
      *
@@ -468,7 +468,7 @@ function Tinaviz(args) {
 
     /**
      * Switch to meso view of a particular node
-     * arguments: 
+     * arguments:
      *   - id: String
      *   - category: String
      */
@@ -526,7 +526,7 @@ function Tinaviz(args) {
         $.doTimeout( 1000, function() {
             callbacks[id]($.parseJSON(data))
         });
-       
+
     }
 
     // call with:  makeCb("test.tina", function(data) {})
@@ -547,10 +547,10 @@ function Tinaviz(args) {
     /**
      * Set a value to all views
      * Argument "t" is optional. But if given, must be a string with one of these values:
-     * "String" 
+     * "String"
      * "Int"
-     * "Double" 
-     * "Float" 
+     * "Double"
+     * "Float"
      * "Boolean" : 1, 0, true, false
      */
 
@@ -566,13 +566,13 @@ function Tinaviz(args) {
            this.logNormal("setAs("+key+","+obj+","+t+")");
            applet.setAs(key, obj, t);
            }
-        } 
+        }
     }
-    
+
     /**
      * Set a value, to be converted to a Scala type
 
-    
+
     //this.set = function(key, json) {
     //    applet.msgNoCb(key,$.toJSON(json));
     //}
@@ -613,7 +613,7 @@ function Tinaviz(args) {
             return;
         }
     };
-    
+
     this.getHTML = function() {
         var path = this.libPath;
         var context = this.context;
@@ -655,4 +655,3 @@ function Tinaviz(args) {
     }
     this.tag.html( this.getHTML() );
 }
-
