@@ -27,6 +27,8 @@
         <!-- JQUERY UI CSS -->
         <link type="text/css" rel="stylesheet" href="css/start/jquery-ui-1.8.1.custom.css"/>
         <link type="text/css" rel="stylesheet" href="tinaweb/css/ui.spinner.css"/>
+        <link type="text/css" rel="stylesheet" href="tinaweb/css/jquery.qtip.min.css"/>
+        <link type="text/css" rel="stylesheet" href="tinaweb/css/ui.notify.css"/>
         <!--<link href='js/rating/jquery.ratings.16.css' type="text/css" rel="stylesheet"/>-->
         <!--TINASOFT CSS -->
         <link type="text/css" rel="stylesheet" href="css/tinaweb.css"/>
@@ -34,10 +36,11 @@
         <script type="text/javascript" src="js/jquery/jquery-1.4.4.min.js" language="javascript"></script>
         <script type="text/javascript" src="js/jquery/jquery.ba-dotimeout.min.js" language="javascript"></script>
         <script type="text/javascript" src="js/jquery/jquery.json-2.2.min.js" language="javascript"></script>
-
+        <script type="text/javascript" src="tinaweb/js/jquery/jquery.qtip.min.js" language="javascript"></script>
+        <script type="text/javascript" src="tinaweb/js/jquery/jquery.notify.min.js" language="javascript"></script>
         <!-- JQUERY UI -->
         <script type="text/javascript" src="js/jquery-ui/jquery-ui-1.8.9.custom.min.js" language="javascript"></script>
-        <script src='js/rating/jquery.ratings.js' type="text/javascript" language="javascript"></script>
+        <!--<script type="text/javascript" src='js/rating/jquery.ratings.js' language="javascript"></script>-->
         <script type="text/javascript" src="tinaweb/js/jquery-ui/ui.spinner.min.js" language="javascript"></script>
 
         <!--TINAWEB APPLET LOADER -->
@@ -60,7 +63,13 @@
 
     </head>
     <body>
-
+        <div id="notification">
+            <div id="basic-template">
+                <a class="ui-notify-cross ui-notify-close" href="#">x</a>
+                <h1>#{title}</h1>
+                <p>#{text}</p>
+            </div>
+        </div>
         <div id="doc3" class="yui-t5 ui-widget">
             <div id="hd"  class="ui-widget">
                 <div id="hdb">

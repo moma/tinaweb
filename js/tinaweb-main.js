@@ -85,13 +85,17 @@ $(document).ready(function(){
 
         tinaviz.open({
             before: function() {
-                $('#appletInfo').show();
-                $('#appletInfo').html("Please wait while loading the graph");
-                $('#appletInfo').effect('pulsate', {}, 'fast');
-                console.log("tinaviz.infodiv.reset()");
+                $("#notification").notify("create", {
+                    title: 'Tinasoft Notification',
+                    text: 'Please wait while loading the network'
+                });
+                /*$('#appletInfo').show();
+                $('#appletInfo').text("Please wait while loading the graph");
+                $('#appletInfo').effect('pulsate', {}, 'fast');*/
                 tinaviz.infodiv.reset();
             },
             success: function() {
+                //$("#appletInfo").hide();
                 // init the node list with prefs.category
                 tinaviz.infodiv.updateNodeList( "macro", prefs.category );
                 tinaviz.infodiv.display_current_category();
@@ -127,10 +131,12 @@ $(document).ready(function(){
                     console.log("tinaviz.searchNodes("+prefs.search+", \"containsIgnoreCase\")");
                     tinaviz.searchNodes(prefs.search, "containsIgnoreCase");
                 }
-                $("#appletInfo").hide();
             },
             error: function(msg) {
-                $("#appletInfo").html("Error, couldn't load graph: "+msg);
+                $("#notification").notify("create", {
+                    title: 'Tinasoft Notification',
+                    text: 'Error loading the network, please consult logs'
+                });
             }
         });
 
