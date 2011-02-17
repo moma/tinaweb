@@ -18,6 +18,7 @@
 var tinaviz = {};
 
 $(document).ready(function(){
+    $("#notification").notify();
 
     var size = resize();
     tinaviz = new Tinaviz({
