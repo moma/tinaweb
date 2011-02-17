@@ -130,10 +130,10 @@ function Tinaviz(args) {
             for (x in opts) {
                 openDefaults[x] = opts[x];
             }
-        } else if (args["url"] == "") {
+        } else {
+
+         if (args["url"] != "") {
              // we canced the loading if the URL is empty
-            return;
-        }
 
         if (opts.layout) {
             this.set("layout.algorithm", opts.layout)
@@ -145,7 +145,6 @@ function Tinaviz(args) {
                 opts.error(msg);
             }
         };
-
 
         callbackBeforeImport = opts.before;
         callbackBeforeImport();
@@ -203,6 +202,8 @@ function Tinaviz(args) {
             }
         });
 
+         }
+       }
 
     }
 
