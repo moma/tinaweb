@@ -134,11 +134,18 @@ $(document).ready(function(){
             }
         });
 
-        tinaviz.open({
-            view: prefs.view,
-            url: prefs.gexf,
-            layout: prefs.layout
-        });
+        /*
+        * opens a gexf only if preferences specify one
+        */
+
+        if (prefs.gexf !== undefined) {
+            tinaviz.open({
+                view: prefs.view,
+                url: prefs.gexf,
+                layout: prefs.layout
+            });
+        }
+
 
         tinaviz.event({
             /*
