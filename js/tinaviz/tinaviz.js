@@ -130,7 +130,9 @@ function Tinaviz(args) {
             for (x in opts) {
                 openDefaults[x] = opts[x];
             }
-        } else if (args["url"] == "") {
+        }
+
+         if (args["url"] == "") {
              // we canced the loading if the URL is empty
             return;
         }
