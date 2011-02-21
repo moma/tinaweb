@@ -107,46 +107,49 @@ toolbar.lastSearch = "";
 toolbar.checkSearchForm = function() {
     var txt = $("#search_input").val();
     if (txt != toolbar.lastSearch) {
-        tinaviz.unselect();
+        // tinaviz.highlightByPattern("", "");
         toolbar.lastSearch = txt;
-        if (txt=="") {
-            tinaviz.searchNodes("", "", "", "", false);
-        } else {
-            var cat = tinaviz.views.current.category();
-            tinaviz.searchNodes(txt, cat, "containsIgnoreCase", "current", true);
-        }
+        //if (txt=="") {
+            //tinaviz.highlightByPattern("", "");
+        //} 
+        //else {
+            //var cat = tinaviz.views.current.category();
+            tinaviz.highlightByPattern(txt, "containsIgnoreCase");
+        //}
     }
     setTimeout("toolbar.checkSearchForm()",200);
 };
 
 toolbar.init = function() {
 
+   //  $("#search").autocomplete({ source: ["aaa","bbb","ccc"] });
+    
     $("search").val(toolbar.values.search);
     $("#search").submit(function() {
-        /*
+        
         var txt = $("#search_input").val();
          tinaviz.unselect();
 
-        if (txt=="") {
+        //if (txt=="") {
 
-        } else {
+        //} else {
             // earchNodes= function(matchLabel, matchCategory, matchView, matchType, targetView)
-            var cat = tinaviz.getCategory();
+           // var cat = tinaviz.getCategory();
             //if (cat=="Document") {
             //    var cat2 = tinaviz.getOppositeCategory(cat);
             //    tinaviz.searchNodes(txt,cat2, "current", "containsIgnoreCase", "visualization");
             //} else {
-                tinaviz.searchNodes(txt, cat, "containsIgnoreCase", "current");
+           tinaviz.selectByPattern(txt, "containsIgnoreCase");
            // }
-        }
-        */
-        return false;
+        //}
+    
+     return false;
     });
 
-    /*
+
     $("#search").keypress(function() {
-       // toolbar.checkSearchForm();
-    });*/
+       toolbar.checkSearchForm();
+    });
 
     $("#level").button({
         text: true,
@@ -167,7 +170,7 @@ toolbar.init = function() {
         if (txt=="") {
             tinaviz.unselect();
         } else {
-            tinaviz.searchNodes(txt, "containsIgnoreCase");
+            tinaviz.selectByPattern(txt, "containsIgnoreCase");
         }
     });
 

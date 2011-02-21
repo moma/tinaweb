@@ -198,13 +198,10 @@ function Tinaviz(args) {
                         opts.error(e);
                     }
                 }
-
             }
         });
-
          }
        }
-
     }
 
 
@@ -223,7 +220,6 @@ function Tinaviz(args) {
         this.callbackSelectionChanged = opts.selectionChanged;
         this.callbackGetNeighbourhood = opts.getNeighbourhood;
     }
-
 
     this._setNeighbourhood = function(id,rawNeighbourhood) {
         //alert("got" +data.edges);
@@ -260,21 +256,16 @@ function Tinaviz(args) {
                         tinaviz._setNeighbourhood(category+"::"+id, data.edges);
                     },
                     error: function(XMLHttpRequest, textStatus, errorThrown) {
-
                     },
                     complete: function(XMLHttpRequest, textStatus) {
-
                     },
                     beforeSend: function() {
                     }
                 }
                 );
-
                 break;
         }
-
     }
-
 
     /*
      * Search nodes
@@ -286,23 +277,26 @@ function Tinaviz(args) {
 
     /*
      * Search and select nodes
-     * viewToSearch: visualization,macro,meso,current
      */
-    this.searchNodes= function(matchLabel, matchCategory,  matchType, viewToSearch, center) {
-        if (matchLabel.length < 3) return;
-        applet.selectNodesByLabel(matchLabel, matchCategory, matchType, viewToSearch, center);
+    this.selectByPattern = function(pattern, patternMode) {
+        if (pattern.length > 0 && pattern.length < 3) return;
+        applet.selectByPattern(pattern, patternMode);
     }
-
-
+    
     /*
-     * Highlight nodes
+     * Search and highlight nodes
      */
-    this.highlightNodes= function(label, type) {
-        var matchlist = this.getNodesByLabel(label, type);
-        for (var i = 0; i < matchlist.length; i++ ) {
-            this.select(decodeJSON( matchlist[i]['id'] ) );
-        }
+    this.highlightByPattern = function(pattern, patternMode) {
+        //if (pattern.length < 3) return;
+        applet.highlightByPattern(pattern, patternMode);
     }
+
+    //this.highlightNodes= function(label, type) {
+    //    var matchlist = this.getNodesByLabel(label, type);
+    //    for (var i = 0; i < matchlist.length; i++ ) {
+    //        this.select(decodeJSON( matchlist[i]['id'] ) );
+    //    }
+    //}
 
     /*
      *  Gets attributes o a given node
@@ -398,7 +392,7 @@ function Tinaviz(args) {
       */
 
     this.select = function(uuid) {
-          applet.set("select", uuid, "String");
+          applet.setAs("select", uuid, "String");
     }
 
     /**
