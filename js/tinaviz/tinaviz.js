@@ -174,17 +174,9 @@ function Tinaviz(args) {
                  */
             },
             success: function(gexf) {
-                var f = false;
+
                 // alert("success, calling updateFromString");
-                try {
-                    tinaviz.logNormal("view.openString(..)");
-                    applet.openString(gexf);
-                } catch (e) {
-                    tinaviz.logNormal("Couldn't load graph using openString, trying with openURI..");
-                    f = true;
-                }
-                if (f) {
-                    try {
+                   try {
                         if (opts.url.search("://") != -1) {
                             tinaviz.logNormal("applet.openURI("+opts.url+");");
                             applet.openURI(opts.url);
@@ -197,7 +189,6 @@ function Tinaviz(args) {
                         tinaviz.logError("Couldn't import graph: "+e);
                         opts.error(e);
                     }
-                }
             }
         });
          }
