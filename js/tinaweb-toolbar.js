@@ -150,6 +150,15 @@ toolbar.init = function() {
     $("#search").keypress(function() {
        toolbar.checkSearchForm();
     });
+    
+    $("#export-view").button({
+       text: true
+        //icons: {
+        //    primary: 'ui-icon-help'
+        //}
+    }).click( function(eventObject) {
+        tinaviz.set("export","gexf", "String");
+    });
 
     $("#level").button({
         text: true,
