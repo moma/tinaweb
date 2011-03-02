@@ -188,7 +188,7 @@ toolbar.init = function() {
         range: true,
         values: [toolbar.values.sliders.edgeFilter.min, toolbar.values.sliders.edgeFilter.max * 100.0],
         animate: true,
-        slide: function(event, ui) {
+        change: function(event, ui) {
             tinaviz.set("filter.edge.weight.min", ui.values[0] / 100.0, "Double");
             tinaviz.set("filter.edge.weight.max", ui.values[1] / 100.0, "Double");
         }
@@ -198,7 +198,7 @@ toolbar.init = function() {
         range: true,
         values: [toolbar.values.sliders.nodeFilter.min, toolbar.values.sliders.nodeFilter.max * 100.0],
         animate: true,
-        slide: function(event, ui) {
+        change: function(event, ui) {
             tinaviz.set("filter.node.weight.min", ui.values[0] / 100.0, "Double");
             tinaviz.set("filter.node.weight.max", ui.values[1] / 100.0, "Double");
         }
@@ -208,7 +208,7 @@ toolbar.init = function() {
         value: toolbar.values.sliders.magnify * 100.0,
         max: 100.0,// precision/size
         animate: true,
-        slide: function(event, ui) {
+        change: function(event, ui) {
             tinaviz.set("filter.node.size", ui.value / 100.0, "Double");
         }
     }
@@ -218,7 +218,7 @@ toolbar.init = function() {
         value: toolbar.values.sliders.cursor_size,
         max: 300.0, // max disk radius, in pixel
         animate: true,
-        slide: function(event, ui) {
+        change: function(event, ui) {
             tinaviz.set("selectionRadius", ui.value, "Double");
         }
     });
