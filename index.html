@@ -75,7 +75,12 @@
             <div id="hd"  class="ui-widget">
                 <div id="hdb">
                     <div id="htoolbar" class="toolbardiv fg-toolbar ui-widget-header ui-corner-all ui-helper-clearfix">
-                        <div id="title" class="noSelect">Tinaweb Demo</div>
+                            <div id="title" class="noSelect" style="font-size: 1.2em; height: 23px;">
+                                <div style="float: left; width: 600px; font-size: 1.2em;">Tinaweb</div>
+                                <div style="float: left; width: 300px;">Documents</div>
+                                <div style="float: left; width: 300px;">NGrams</div>
+                                <div></div>
+                            </div>
 
                         <button id="toggle-paused" class="fg-button toolbar-left">play</button>
                         <button id="toggle-switch" class="fg-button toolbar-left">switch category</button>
@@ -92,16 +97,28 @@
                             </div>
                         </div>
 
-                        <div id="sliders_topology" class="sliders toolbar-left">
-                            <div class="slider">
-                                <span class="sliderLabel noSelect">edges filter</span>
-                                <div id="sliderEdgeWeight"></div>
+                            <div id="sliders_A" class="sliders toolbar-left">
+                                <div class="slider">
+                                    <span class="sliderLabel noSelect">edges</span>
+                                    <div id="sliderAEdgeWeight"></div>
+                                </div>
+                                <div class="slider">
+                                    <span class="sliderLabel noSelect">nodes</span>
+                                    <div id="sliderANodeWeight"></div>
+                                </div>
                             </div>
-                            <div class="slider">
-                                <span class="sliderLabel noSelect">nodes filter</span>
-                                <div id="sliderNodeWeight"></div>
+
+                         <div id="sliders_B" class="sliders toolbar-left">
+                                <div class="slider">
+                                    <span class="sliderLabel noSelect">edges</span>
+                                    <div id="sliderBEdgeWeight"></div>
+                                </div>
+                                <div class="slider">
+                                    <span class="sliderLabel noSelect">nodes</span>
+                                    <div id="sliderBNodeWeight"></div>
+                                </div>
                             </div>
-                        </div>
+
                         <button id="export-view" class="fg-button toolbar-right">export</button>
                         <button id="toggle-recenter" class="fg-button toolbar-right">center</button>
                         <form id="search" action="#" class="toolbar-right">
