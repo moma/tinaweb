@@ -256,7 +256,7 @@ var InfoDiv = {
                 contentinnerdiv.append( $("<b></b>").text(
                     this.getNodeContentLabel(label, node)
                 ));
-                contentinnerdiv.append( $("<p></p>").text( this.getNodeContent(node) ) );
+                contentinnerdiv.append( $("<p></p>").html( this.getNodeContent(node) ) );
                 contentinnerdiv.append( $("<p></p>").html(
                     this.getSearchQueries( htmlDecode(label), this.categories[current_cat])
                 ));
@@ -522,7 +522,7 @@ var PhyloInfoDiv = {
         var hashes = nodeId.split('::'); // obsolet and new terms
         var hash = hashes[1].split('_');
         var year=hash[0];
-        var content = htmlDecode(decodeJSON(node.ccntent));
+        var content = htmlDecode(decodeJSON(node.content));
         var vars = [],  htmlstring, hash;
         var titles= [];
         titles[0]='<b>Lost: </b>';
