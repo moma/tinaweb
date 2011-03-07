@@ -44,14 +44,19 @@ $(document).ready(function(){
         for (x in urlVars) {
             prefs[x] = urlVars[x];
         }
-        tinaviz.set("filter.edge.weight.min", parseFloat(prefs.edge_filter_min), "Double");
-        tinaviz.set("filter.edge.weight.max", parseFloat(prefs.edge_filter_max), "Double");
-        tinaviz.set("filter.node.weight.min", parseFloat(prefs.node_filter_min), "Double");
-        tinaviz.set("filter.node.weight.max", parseFloat(prefs.node_filter_max), "Double");
+        tinaviz.set("filter.a.edge.weight.min", parseFloat(prefs.edge_filter_min), "Double");
+        tinaviz.set("filter.a.edge.weight.max", parseFloat(prefs.edge_filter_max), "Double");
+        tinaviz.set("filter.a.node.weight.min", parseFloat(prefs.node_filter_min), "Double");
+        tinaviz.set("filter.a.node.weight.max", parseFloat(prefs.node_filter_max), "Double");
+        tinaviz.set("filter.a.node.size", parseFloat(prefs.magnify), "Double");
+        tinaviz.set("filter.b.edge.weight.min", parseFloat(prefs.edge_filter_min), "Double");
+        tinaviz.set("filter.b.edge.weight.max", parseFloat(prefs.edge_filter_max), "Double");
+        tinaviz.set("filter.b.node.weight.min", parseFloat(prefs.node_filter_min), "Double");
+        tinaviz.set("filter.b.node.weight.max", parseFloat(prefs.node_filter_max), "Double");
+        tinaviz.set("filter.b.node.size", parseFloat(prefs.magnify), "Double");
         tinaviz.set("filter.node.category", prefs.category, "String");
         //tinaviz.set("output/nodeSizeMin", 5.0, "Double");
         //tinaviz.set("output/nodeSizeMax", 20.0, "Double");
-        tinaviz.set("filter.node.size", parseFloat(prefs.magnify), "Double");
         tinaviz.set("selectionRadius", parseFloat(prefs.cursor_size), "Double");
         tinaviz.set("layout.algorithm", prefs.layout, "String");
         tinaviz.set("pause", prefs.pause, "Boolean")
@@ -103,6 +108,41 @@ $(document).ready(function(){
                 $("#level").button("enable");
                 $("#search_button").button("enable");
 
+
+                // init the node list with prefs.category
+                tinaviz.infodiv.updateNodeList( "macro", prefs.category );
+                tinaviz.infodiv.display_current_category();
+                tinaviz.infodiv.display_current_view();
+                // initialize the sliders
+                $("#sliderANodeSize").slider( "option", "value",
+                    parseInt(tinaviz.get("filter.a.node.size")) *100
+                    );
+                $("#sliderBNodeSize").slider( "option", "value",
+                    parseInt(tinaviz.get("filter.b.node.size")) *100
+                 );
+                $("#sliderSelectionZone").slider( "option", "value",
+                    parseInt(tinaviz.get("selectionRadius")) * 100
+                    );
+                $("#sliderAEdgeWeight").slider( "option", "values", [
+                    parseInt( tinaviz.get("filter.a.edge.weight.min") ),
+                    parseInt(tinaviz.get("filter.a.edge.weight.max")) *100
+                ]);
+
+                $("#sliderANodeWeight").slider( "option", "values", [
+                    parseInt(tinaviz.get("filter.a.node.weight.min") ),
+                    parseInt(tinaviz.get("filter.a.node.weight.max")) *100
+                ]);
+
+                  $("#sliderBEdgeWeight").slider( "option", "values", [
+                    parseInt(tinaviz.get("filter.b.edge.weight.min") ),
+                    parseInt(tinaviz.get("filter.b.edge.weight.max")) *100
+                 ]);
+
+                $("#sliderBNodeWeight").slider( "option", "values", [
+                    parseInt(tinaviz.get("filter.b.node.weight.min") ),
+                    parseInt(tinaviz.get("filter.b.node.weight.max")) *100
+                ]);
+
                 // default settings
                 $("#sliderSelectionZone").slider( "enable" );
                 $("#sliderANodeWeight").slider( "enable" );
@@ -112,48 +152,12 @@ $(document).ready(function(){
                 $("#sliderBEdgeWeight").slider( "disable" );
                 $("#sliderBNodeSize").slider( "disable" );
 
-                // init the node list with prefs.category
-                tinaviz.infodiv.updateNodeList( "macro", prefs.category );
-                tinaviz.infodiv.display_current_category();
-                tinaviz.infodiv.display_current_view();
-                // initialize the sliders
-                console.log("$(\"#sliderNodeSize\").slider( \"option\", \"value\",  parseInt(view.get(\"filter.node.size\")) *100 );");
-                $("#sliderNodeSize").slider( "option", "value",
-                    parseInt(tinaviz.get("filter.node.size")) *100
-                    );
-                console.log("$(\"#sliderSelectionZone\").slider( \"option\", \"value\",  parseInt(view.get(\"selectionRadius\")) *100 );");
-                $("#sliderSelectionZone").slider( "option", "value",
-                    parseInt(tinaviz.get("selectionRadius")) * 100
-                    );
-                //console.log("$(\"#sliderEdgeWeight\").slider( \"option\", \"values\", [ parseInt( view.get(\"filter.edge.weight.min\") ), parseInt(view.get(\"filter.edge.weight.max\")) *100 ]);");
-                $("#sliderAEdgeWeight").slider( "option", "values", [
-                    parseInt( tinaviz.get("filter.edge.weight.min") ),
-                    parseInt(tinaviz.get("filter.edge.weight.max")) *100
-                ]);
-                //console.log("$(\"#sliderNodeWeight\").slider( \"option\", \"values\", [ parseInt( view.get(\"nodeWeight/min\") ), parseInt(view.get(\"nodeWeight/max\")) *100 ]);");
-                $("#sliderANodeWeight").slider( "option", "values", [
-                    parseInt(tinaviz.get("filter.node.weight.min") ),
-                    parseInt(tinaviz.get("filter.node.weight.max")) *100
-                ]);
-
-                  $("#sliderBEdgeWeight").slider( "option", "values", [
-                    parseInt( tinaviz.get("filter.edge.weight.min") ),
-                    parseInt(tinaviz.get("filter.edge.weight.max")) *100
-                 ]);
-                               //console.log("$(\"#sliderNodeWeight\").slider( \"option\", \"values\", [ parseInt( view.get(\"nodeWeight/min\") ), parseInt(view.get(\"nodeWeight/max\")) *100 ]);");
-                $("#sliderBNodeWeight").slider( "option", "values", [
-                    parseInt(tinaviz.get("filter.node.weight.min") ),
-                    parseInt(tinaviz.get("filter.node.weight.max")) *100
-                ]);
-
                 if (prefs.node_id != "") {
-                    console.log("tinaviz.select("+prefs.node_id+")");
                     tinaviz.select(prefs.node_id);
                 }
 
                 if (prefs.search != "") {
                     $("#search_input").val(prefs.search);
-                    console.log("tinaviz.searchNodes("+prefs.search+", \"containsIgnoreCase\")");
                     tinaviz.selectByPattern(prefs.search, "containsIgnoreCase");
                 }
             },
@@ -201,14 +205,22 @@ $(document).ready(function(){
                 tinaviz.infodiv.updateTagCloud(selection_list, neighbour_node_list);
             },
             viewChanged: function(view) {
-                $("#sliderEdgeWeight").slider( "option", "values", [
-                    parseInt( view.get("filter.edge.weight.min") ),
-                    parseInt(view.get("filter.edge.weight.max")) *100
-                    ]);
-                $("#sliderNodeWeight").slider( "option", "values", [
-                    parseInt(view.get("filter.node.weight.min") ),
-                    parseInt(view.get("filter.node.weight.max")) *100
-                    ]);
+                $("#sliderAEdgeWeight").slider( "option", "values", [
+                    parseInt( view.get("filter.a.edge.weight.min") ),
+                    parseInt(view.get("filter.a.edge.weight.max")) *100
+                ]);
+                $("#sliderANodeWeight").slider( "option", "values", [
+                    parseInt(view.get("filter.a.node.weight.min") ),
+                    parseInt(view.get("filter.a.node.weight.max")) *100
+                ]);
+                $("#sliderBEdgeWeight").slider( "option", "values", [
+                    parseInt( view.get("filter.b.edge.weight.min") ),
+                    parseInt(view.get("filter.b.edge.weight.max")) *100
+                ]);
+                $("#sliderBNodeWeight").slider( "option", "values", [
+                    parseInt(view.get("filter.b.node.weight.min") ),
+                    parseInt(view.get("filter.b.node.weight.max")) *100
+                ]);
                 tinaviz.infodiv.display_current_category();
                 tinaviz.infodiv.display_current_view();
                 // TODO check selection

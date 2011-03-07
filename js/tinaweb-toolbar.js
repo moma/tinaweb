@@ -189,8 +189,8 @@ toolbar.init = function() {
         values: [toolbar.values.sliders.edgeFilter.min, toolbar.values.sliders.edgeFilter.max * 100.0],
         animate: true,
         change: function(event, ui) {
-            tinaviz.set("filter.edge.weight.min", ui.values[0] / 100.0, "Double");
-            tinaviz.set("filter.edge.weight.max", ui.values[1] / 100.0, "Double");
+            tinaviz.set("filter.a.edge.weight.min", ui.values[0] / 100.0, "Double");
+            tinaviz.set("filter.a.edge.weight.max", ui.values[1] / 100.0, "Double");
         }
     });
 
@@ -199,8 +199,8 @@ toolbar.init = function() {
         values: [toolbar.values.sliders.nodeFilter.min, toolbar.values.sliders.nodeFilter.max * 100.0],
         animate: true,
         change: function(event, ui) {
-            tinaviz.set("filter.node.weight.min", ui.values[0] / 100.0, "Double");
-            tinaviz.set("filter.node.weight.max", ui.values[1] / 100.0, "Double");
+            tinaviz.set("filter.a.node.weight.min", ui.values[0] / 100.0, "Double");
+            tinaviz.set("filter.a.node.weight.max", ui.values[1] / 100.0, "Double");
         }
     });
 
@@ -210,8 +210,8 @@ toolbar.init = function() {
         values: [toolbar.values.sliders.edgeFilter.min, toolbar.values.sliders.edgeFilter.max * 100.0],
         animate: true,
         change: function(event, ui) {
-            tinaviz.set("filter.edge.weight.min", ui.values[0] / 100.0, "Double");
-            tinaviz.set("filter.edge.weight.max", ui.values[1] / 100.0, "Double");
+            tinaviz.set("filter.b.edge.weight.min", ui.values[0] / 100.0, "Double");
+            tinaviz.set("filter.b.edge.weight.max", ui.values[1] / 100.0, "Double");
         }
     });
 
@@ -220,8 +220,8 @@ toolbar.init = function() {
         values: [toolbar.values.sliders.nodeFilter.min, toolbar.values.sliders.nodeFilter.max * 100.0],
         animate: true,
         change: function(event, ui) {
-            tinaviz.set("filter.node.weight.min", ui.values[0] / 100.0, "Double");
-            tinaviz.set("filter.node.weight.max", ui.values[1] / 100.0, "Double");
+            tinaviz.set("filter.b.node.weight.min", ui.values[0] / 100.0, "Double");
+            tinaviz.set("filter.b.node.weight.max", ui.values[1] / 100.0, "Double");
         }
     });
 
@@ -230,7 +230,7 @@ toolbar.init = function() {
         max: 100.0,// precision/size
         animate: true,
         change: function(event, ui) {
-            tinaviz.set("filter.node.size", ui.value / 100.0, "Double");
+            tinaviz.set("filter.a.node.size", ui.value / 100.0, "Double");
         }
     }
     );
@@ -240,7 +240,7 @@ toolbar.init = function() {
         max: 100.0,// precision/size
         animate: true,
         change: function(event, ui) {
-            tinaviz.set("filter.node.size", ui.value / 100.0, "Double");
+            tinaviz.set("filter.b.node.size", ui.value / 100.0, "Double");
         }
     }
     );
