@@ -97,9 +97,22 @@ $(document).ready(function(){
                 tinaviz.infodiv.reset();
             },
             success: function() {
-                //$("#appletInfo").hide();
+                $("#notification").hide();
+
+                $("#export-view").button("enable");
+                $("#level").button("enable");
+                $("#search_button").button("enable");
+
+                // default settings
+                $("#sliderSelectionZone").slider( "enable" );
+                $("#sliderANodeWeight").slider( "enable" );
+                $("#sliderAEdgeWeight").slider( "enable" );
+                $("#sliderANodeSize").slider( "enable" );
+                $("#sliderBNodeWeight").slider( "disable" );
+                $("#sliderBEdgeWeight").slider( "disable" );
+                $("#sliderBNodeSize").slider( "disable" );
+
                 // init the node list with prefs.category
-                alert("success");
                 tinaviz.infodiv.updateNodeList( "macro", prefs.category );
                 tinaviz.infodiv.display_current_category();
                 tinaviz.infodiv.display_current_view();

@@ -504,7 +504,7 @@ function Tinaviz(args) {
      * Callback changing utton states
      */
     this._graphImportedCallback = function(msg) {
-        callbackImported(msg);
+        callbackImported($.parseJSON(msg));
     }
 
 

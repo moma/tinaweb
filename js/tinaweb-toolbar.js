@@ -245,9 +245,13 @@ toolbar.init = function() {
     }
     );
     // default settings
-    $("#sliderANodeWeight").slider( "enable" );
-    $("#sliderAEdgeWeight").slider( "enable" );
-    $("#sliderANodeSize").slider( "enable" );
+    $("#export-view").button("disable");
+    $("#level").button("disable");
+    $("#search_button").button("disable");
+    $("#sliderSelectionZone").slider( "disable" );
+    $("#sliderANodeWeight").slider( "disable" );
+    $("#sliderAEdgeWeight").slider( "disable" );
+    $("#sliderANodeSize").slider( "disable" );
     $("#sliderBNodeWeight").slider( "disable" );
     $("#sliderBEdgeWeight").slider( "disable" );
     $("#sliderBNodeSize").slider( "disable" );
