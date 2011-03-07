@@ -225,7 +225,7 @@ toolbar.init = function() {
         }
     });
 
-    $("#sliderNodeSize").slider({
+    $("#sliderANodeSize").slider({
         value: toolbar.values.sliders.magnify * 100.0,
         max: 100.0,// precision/size
         animate: true,
@@ -234,6 +234,24 @@ toolbar.init = function() {
         }
     }
     );
+
+    $("#sliderBNodeSize").slider({
+        value: toolbar.values.sliders.magnify * 100.0,
+        max: 100.0,// precision/size
+        animate: true,
+        change: function(event, ui) {
+            tinaviz.set("filter.node.size", ui.value / 100.0, "Double");
+        }
+    }
+    );
+    // default settings
+    $("#sliderANodeWeight").slider( "enable" );
+    $("#sliderAEdgeWeight").slider( "enable" );
+    $("#sliderANodeSize").slider( "enable" );
+    $("#sliderBNodeWeight").slider( "disable" );
+    $("#sliderBEdgeWeight").slider( "disable" );
+    $("#sliderBNodeSize").slider( "disable" );
+
 
     $("#sliderSelectionZone").slider({
         value: toolbar.values.sliders.cursor_size,
@@ -327,6 +345,23 @@ toolbar.init = function() {
         // update the node list
         tinaviz.infodiv.updateNodeList(viewName, next_cat);
         if (viewName == "macro") {
+            if (next_cat=="Document") {
+                // disable
+            $("#sliderANodeWeight").slider( "enable" );
+            $("#sliderAEdgeWeight").slider( "enable" );
+            $("#sliderANodeSize").slider( "enable" );
+            $("#sliderBNodeWeight").slider( "disable" );
+            $("#sliderBEdgeWeight").slider( "disable" );
+            $("#sliderBNodeSize").slider( "disable" );
+            } else if (next_cat=="NGram") {
+            $("#sliderANodeWeight").slider( "disable" );
+            $("#sliderAEdgeWeight").slider( "disable" );
+            $("#sliderANodeSize").slider( "disable" );
+            $("#sliderBNodeWeight").slider( "enable" );
+            $("#sliderBEdgeWeight").slider( "enable" );
+            $("#sliderBNodeSize").slider( "enable" );
+            }
+
             // empty the selection, and ask the applet to select opposite nodes
             var i = 0;
             tinaviz.infodiv.reset();
@@ -334,6 +369,15 @@ toolbar.init = function() {
                 console.log("switch category, selecting node from id "+tinaviz.infodiv.neighbours[pos]);
                 //tinaviz.select(tinaviz.infodiv.neighbours[pos]);
             }
+        } else {
+
+            // always enable
+            $("#sliderANodeWeight").slider( "enable" );
+            $("#sliderAEdgeWeight").slider( "enable" );
+            $("#sliderANodeSize").slider( "enable" );
+            $("#sliderBNodeWeight").slider( "enable" );
+            $("#sliderBEdgeWeight").slider( "enable" );
+            $("#sliderBNodeSize").slider( "enable" );
         }
         tinaviz.infodiv.display_current_category();
         //tinaviz.setPause(oldPause);
