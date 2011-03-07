@@ -229,19 +229,19 @@ $(document).ready(function(){
                  if (viewName == "macro") {
                             if (next_cat=="Document") {
                                 // disable
-                            $("#sliderANodeWeight").slider( "enable" );
-                            $("#sliderAEdgeWeight").slider( "enable" );
-                            $("#sliderANodeSize").slider( "enable" );
-                            $("#sliderBNodeWeight").slider( "disable" );
-                            $("#sliderBEdgeWeight").slider( "disable" );
-                            $("#sliderBNodeSize").slider( "disable" );
+                                $("#sliderANodeWeight").slider( "enable" );
+                                $("#sliderAEdgeWeight").slider( "enable" );
+                                $("#sliderANodeSize").slider( "enable" );
+                                $("#sliderBNodeWeight").slider( "disable" );
+                                $("#sliderBEdgeWeight").slider( "disable" );
+                                $("#sliderBNodeSize").slider( "disable" );
                             } else if (next_cat=="NGram") {
-                            $("#sliderANodeWeight").slider( "disable" );
-                            $("#sliderAEdgeWeight").slider( "disable" );
-                            $("#sliderANodeSize").slider( "disable" );
-                            $("#sliderBNodeWeight").slider( "enable" );
-                            $("#sliderBEdgeWeight").slider( "enable" );
-                            $("#sliderBNodeSize").slider( "enable" );
+                                $("#sliderANodeWeight").slider( "disable" );
+                                $("#sliderAEdgeWeight").slider( "disable" );
+                                $("#sliderANodeSize").slider( "disable" );
+                                $("#sliderBNodeWeight").slider( "enable" );
+                                $("#sliderBEdgeWeight").slider( "enable" );
+                                $("#sliderBNodeSize").slider( "enable" );
                             }
                  } else {
 
