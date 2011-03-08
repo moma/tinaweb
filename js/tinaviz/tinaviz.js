@@ -358,7 +358,7 @@ function Tinaviz(args) {
 
 
     this.recenter = function() {
-        this.set("recenter",true, "Boolean");
+        applet.recenter()
     }
     this.setLayout = function(name) {
         this.set("layout.algorithm", name, "String");

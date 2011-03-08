@@ -98,51 +98,48 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                 <div class="toolbar-left" style="width: 80px;">
                     <div>&nbsp;</div>
                     <div style="height: 16px;">
-                        Documents:
+                        Node Filter:
                     </div>
                     <div style="height: 16px;">
-                        NGrams:
+                        Edge Filter:
+                    </div>
+                    <div style="height: 16px;">
+                        Size:
                     </div>
                 </div>
 
-                <!-- block for Node Filter -->
+                <!-- block for Category A Filter -->
                 <div class="toolbar-left" style="width: 130px;">
                     <div>
-                        Node Filter
+                        Documents
                     </div>
                     <div style="height: 16px; width: 100px;">
-                        <div id="sliderANodeWeight"></div>
+                        <div id="sliderANodeWeight" class="greenstart"></div>
+                    </div>
+                    <div style="height: 16px; width: 100px;">
+                        <div id="sliderAEdgeWeight" class="greenstart"></div>
+                    </div>
+                     <div style="height: 16px; width: 100px;">
+                        <div id="sliderANodeSize" class="greenstart"></div>
+                    </div>
+                </div>
+
+                 <!-- block for Category B Filter -->
+                <div class="toolbar-left" style="width: 130px;">
+                    <div>
+                        NGrams
                     </div>
                     <div style="height: 16px; width: 100px;">
                         <div id="sliderBNodeWeight" class="redstart"></div>
                     </div>
-                </div>
-
-                <!-- block for Edge Filter -->
-                <div class="toolbar-left" style="width: 130px;">
-                    <div>
-                        Edge Filter
-                    </div>
-                    <div style="height: 16px; width: 100px;">
-                        <div id="sliderAEdgeWeight"></div>
-                    </div>
                     <div style="height: 16px; width: 100px;">
                         <div id="sliderBEdgeWeight" class="redstart"></div>
                     </div>
-                </div>
-
-                <!-- block for Size Filter -->
-                <div class="toolbar-left" style="width: 130px;">
-                    <div>
-                        Size
-                    </div>
-                    <div style="height: 16px; width: 100px;">
-                        <div id="sliderANodeSize"></div>
-                    </div>
-                    <div style="height: 16px; width: 100px;">
+                     <div style="height: 16px; width: 100px;">
                         <div id="sliderBNodeSize" class="redstart"></div>
                     </div>
                 </div>
+
 
                 <button id="export-view" class="fg-button toolbar-right">export</button>
                 <button id="toggle-recenter" class="fg-button toolbar-right">center</button>
