@@ -19,15 +19,18 @@ var tinaviz = {};
 
 $(document).ready(function(){
 
-    $("#title").html("<img alt='' src='https://library.iscpif.fr/images/banner.png' style='float: left;' border='0' height='150'><h1>Réseau des Chercheurs Systèmes Complexes - ISC-PIF</h1><br/> ");
+    $("#notification").notify();
 
+    var size = resize();
     tinaviz = new Tinaviz({
-        tag: $("#vizdiv")
+        tag: $("#vizdiv"),
+        width: size.w,
+        height: size.h,
+        path : $('meta[name=tinaviz]').attr("content")
     });
 
     $(window).bind('resize', function() {
         var size = resize();
-        // console.log("L29 tinaviz.size("+size.w+", "+size.h+")");
         tinaviz.size(size.w, size.h);
     });
 
@@ -36,70 +39,33 @@ $(document).ready(function(){
         var size = resize();
         tinaviz.size(size.w, size.h);
 
-        var prefs = {
-            gexf: "default.gexf",
-
-            view: "macro",
-            category: "Document",
-            node_id: "",
-            search: "",
-            magnify: "0.5",
-            cursor_size: "1.0",
-            edge_filter_min: "0.0",
-            edge_filter_max: "1.0",
-            node_filter_min: "0.0",
-            node_filter_max: "1.0",
-            layout: "tinaforce",
-            edge_rendering: "curve"
-
-        };
         var urlVars = getUrlVars();
         for (x in urlVars) {
             prefs[x] = urlVars[x];
         }
+        tinaviz.set("filter.a.edge.weight.min", parseFloat(prefs.edge_filter_min), "Double");
+        tinaviz.set("filter.a.edge.weight.max", parseFloat(prefs.edge_filter_max), "Double");
+        tinaviz.set("filter.a.node.weight.min", parseFloat(prefs.node_filter_min), "Double");
+        tinaviz.set("filter.a.node.weight.max", parseFloat(prefs.node_filter_max), "Double");
+        tinaviz.set("filter.a.node.size", parseFloat(prefs.magnify), "Double");
+        tinaviz.set("filter.b.edge.weight.min", parseFloat(prefs.edge_filter_min), "Double");
+        tinaviz.set("filter.b.edge.weight.max", parseFloat(prefs.edge_filter_max), "Double");
+        tinaviz.set("filter.b.node.weight.min", parseFloat(prefs.node_filter_min), "Double");
+        tinaviz.set("filter.b.node.weight.max", parseFloat(prefs.node_filter_max), "Double");
+        tinaviz.set("filter.b.node.size", parseFloat(prefs.magnify), "Double");
+        tinaviz.set("filter.node.category", prefs.category, "String");
 
-        tinaviz.setView(prefs.view);
-
-        var session = tinaviz.session();
-        var macro = tinaviz.views.macro;
-        var meso = tinaviz.views.meso;
-
-        // session.add("nodes/0/keywords", "newKeyword");
-        session.set("edgeWeight/min", parseFloat(prefs.edge_filter_min));
-        session.set("edgeWeight/max", parseFloat(prefs.edge_filter_max));
-        session.set("nodeWeight/min", parseFloat(prefs.node_filter_min));
-        session.set("nodeWeight/max", parseFloat(prefs.node_filter_max));
-        session.set("category/category", prefs.category);
-        session.set("output/nodeSizeMin", 5.0);
-        session.set("output/nodeSizeMax", 20.0);
-        session.set("output/nodeSizeRatio", parseFloat(prefs.magnify));
-        session.set("selection/radius", parseFloat(prefs.cursor_size));
-        session.set("layout/algorithm", prefs.layout)
-        session.set("rendering/edge/shape", prefs.edge_rendering);
-        session.set("data/source", "gexf");
-
-        macro.filter("Category", "category");
-        macro.filter("NodeWeightRange", "nodeWeight");
-        macro.filter("EdgeWeightRange", "edgeWeight");
-        macro.filter("Output", "output");
-
-        meso.filter("SubGraphCopyStandalone", "category");
-        meso.set("category/source", "macro");
-        meso.set("category/category", "Document");
-        meso.set("category/mode", "keep");
-
-        meso.filter("NodeWeightRangeHack", "nodeWeight");
-
-        meso.filter("EdgeWeightRangeHack", "edgeWeight");
-
-        console.log("meso.filter(\"Output\", \"output\")");
-        meso.filter("Output", "output");
-
+        //tinaviz.set("output/nodeSizeMin", 5.0, "Double");
+        //tinaviz.set("output/nodeSizeMax", 20.0, "Double");
+        tinaviz.set("selectionRadius", parseFloat(prefs.cursor_size), "Double");
+        tinaviz.set("layout.algorithm", prefs.layout, "String");
+        tinaviz.set("pause", prefs.pause, "Boolean")
 
         /*
          * Initialization of the Infodiv
          */
-        var layout_name = tinaviz.get("layout/algorithm");
+        // DEBUGGING
+        var layout_name = prefs.layout;
         // use of different Infodiv-s following the type of graph
         if ( layout_name == "phyloforce" ) {
             tinaviz.infodiv = PhyloInfoDiv;
@@ -107,6 +73,7 @@ $(document).ready(function(){
         else {
             tinaviz.infodiv = InfoDiv;
         }
+
         tinaviz.infodiv.id = 'infodiv';
         tinaviz.infodiv.label = $( "#node_label" );
         tinaviz.infodiv.contents = $( "#node_contents" );
@@ -125,68 +92,100 @@ $(document).ready(function(){
 
         tinaviz.open({
             before: function() {
-                $('#appletInfo').show();
-                $('#appletInfo').html("please wait while loading the graph..");
-                $('#appletInfo').effect('pulsate', {}, 'fast');
-                console.log("tinaviz.infodiv.reset()");
+                $("#notification").notify("create", {
+                    title: 'Tinasoft Notification',
+                    text: 'Please wait while loading the network'
+                });
+                /*$('#appletInfo').show();
+                $('#appletInfo').text("Please wait while loading the graph");
+                $('#appletInfo').effect('pulsate', {}, 'fast');*/
                 tinaviz.infodiv.reset();
             },
             success: function() {
+
+                $("#notification").hide();
+                $("#appletInfo").hide();
+                $("#export-view").button("enable");
+                $("#level").button("enable");
+                $("#search_button").button("enable");
+
                 // init the node list with prefs.category
                 tinaviz.infodiv.updateNodeList( "macro", prefs.category );
                 tinaviz.infodiv.display_current_category();
                 tinaviz.infodiv.display_current_view();
-                var view = tinaviz.views.current;
-                console.log("var view = tinaviz.views.current  (got "+tinaviz.views.current+")");
 
                 // initialize the sliders
-                console.log("$(\"#sliderNodeSize\").slider( \"option\", \"value\",  parseInt(view.get(\"output/nodeSizeRatio\")) *100 );");
-                $("#sliderNodeSize").slider( "option", "value",
-                    parseInt(view.get("output/nodeSizeRatio")) *100
+                $("#sliderANodeSize").slider( "option", "value",
+                    parseInt(tinaviz.get("filter.a.node.size")) *100
                     );
-                console.log("$(\"#sliderSelectionZone\").slider( \"option\", \"value\",  parseInt(view.get(\"selection/radius\")) *100 );");
+                $("#sliderBNodeSize").slider( "option", "value",
+                    parseInt(tinaviz.get("filter.b.node.size")) *100
+                 );
                 $("#sliderSelectionZone").slider( "option", "value",
-                    parseInt(view.get("selection/radius")) * 100
+                    parseInt(tinaviz.get("selectionRadius")) * 100
                     );
-                console.log("$(\"#sliderEdgeWeight\").slider( \"option\", \"values\", [ parseInt( view.get(\"edgeWeight/min\") ), parseInt(view.get(\"edgeWeight/max\")) *100 ]);");
-                $("#sliderEdgeWeight").slider( "option", "values", [
-                    parseInt( view.get("edgeWeight/min") ),
-                    parseInt(view.get("edgeWeight/max")) *100
-                    ]);
-                console.log("$(\"#sliderNodeWeight\").slider( \"option\", \"values\", [ parseInt( view.get(\"nodeWeight/min\") ), parseInt(view.get(\"nodeWeight/max\")) *100 ]);");
-                $("#sliderNodeWeight").slider( "option", "values", [
-                    parseInt(view.get("nodeWeight/min") ),
-                    parseInt(view.get("nodeWeight/max")) *100
-                    ]);
+                $("#sliderAEdgeWeight").slider( "option", "values", [
+                    parseInt( tinaviz.get("filter.a.edge.weight.min") ),
+                    parseInt(tinaviz.get("filter.a.edge.weight.max")) *100
+                ]);
 
+                $("#sliderANodeWeight").slider( "option", "values", [
+                    parseInt(tinaviz.get("filter.a.node.weight.min") ),
+                    parseInt(tinaviz.get("filter.a.node.weight.max")) *100
+                ]);
+
+                  $("#sliderBEdgeWeight").slider( "option", "values", [
+                    parseInt(tinaviz.get("filter.b.edge.weight.min") ),
+                    parseInt(tinaviz.get("filter.b.edge.weight.max")) *100
+                 ]);
+
+                $("#sliderBNodeWeight").slider( "option", "values", [
+                    parseInt(tinaviz.get("filter.b.node.weight.min") ),
+                    parseInt(tinaviz.get("filter.b.node.weight.max")) *100
+                ]);
+
+                // default settings
+                $("#sliderSelectionZone").slider( "enable" );
+                $("#sliderANodeWeight").slider( "enable" );
+                $("#sliderAEdgeWeight").slider( "enable" );
+                $("#sliderANodeSize").slider( "enable" );
+                $("#sliderBNodeWeight").slider( "disable" );
+                $("#sliderBEdgeWeight").slider( "disable" );
+                $("#sliderBNodeSize").slider( "disable" );
 
                 if (prefs.node_id != "") {
-                    console.log("tinaviz.selectFromId("+prefs.node_id+", true)");
-                    tinaviz.selectFromId( prefs.node_id, true );
+                    tinaviz.select(prefs.node_id);
                 }
 
                 if (prefs.search != "") {
                     $("#search_input").val(prefs.search);
-                    console.log("tinaviz.searchNodes("+prefs.search+", \"containsIgnoreCase\")");
-                    tinaviz.searchNodes(prefs.search, "containsIgnoreCase");
+                    tinaviz.selectByPattern(prefs.search, "containsIgnoreCase");
                 }
-                $("#appletInfo").hide();
-                // caches the ngrams list
-                tinaviz.getNodes( prefs.view, "NGrams" );
+               var size = resize();
+               tinaviz.size(size.w, size.h);
             },
             error: function(msg) {
-                $("#appletInfo").html("Error, couldn't load graph: "+msg);
+                $("#notification").notify("create", {
+                    title: 'Tinasoft Notification',
+                    text: 'Error loading the network, please consult logs'
+                });
             }
         });
 
-        tinaviz.open({
-            view: prefs.view,
-            url: prefs.gexf,
-            layout: prefs.layout
-        });
+        /*
+        * opens a gexf only if preferences specify one
+        */
+
+        if (prefs.gexf !== undefined) {
+            tinaviz.open({
+                view: prefs.view,
+                url: prefs.gexf,
+                layout: prefs.layout
+            });
+        }
+
 
         tinaviz.event({
-
             /*
              * selection.viewName  : string = 'macro'|'meso'
              * selection.mouseMode : strong = 'left'|'doubleLeft'|'right'|'doubleRight'
@@ -199,61 +198,65 @@ $(document).ready(function(){
                 } else if ( selection.mouseMode == "right" ) {
                 // nothing to do
                 } else if (selection.mouseMode == "doubleLeft") {
-                    var macroCategory = tinaviz.views.macro.category();
-                    //console.log("selected doubleLeft ("+selection.viewName+","+selection.data+")");
-                    tinaviz.views.meso.category(macroCategory);
-                    if (selection.viewName == "macro") {
-                        console.log("tinaviz.setView(\"meso\")");
-                        tinaviz.setView("meso");
-                    }
+                    var macroCategory = tinaviz.get("meso.category");
                     tinaviz.infodiv.updateNodeList("meso", macroCategory);
-                    tinaviz.views.meso.set("layout/iter", 0);
-                    tinaviz.autoCentering();
                 }
                 tinaviz.infodiv.update(selection.viewName, selection.data);
             },
-
+            /** Callback for get neighbourhood **/
             getNeighbourhood: function(selection_list, neighbour_node_list) {
                 tinaviz.infodiv.updateTagCloud(selection_list, neighbour_node_list);
             },
             viewChanged: function(view) {
-                tinaviz.autoCentering();
-
-                $("#sliderEdgeWeight").slider( "option", "values", [
-                    parseInt( view.get("edgeWeight/min") ),
-                    parseInt(view.get("edgeWeight/max")) *100
-                    ]);
-                $("#sliderNodeWeight").slider( "option", "values", [
-                    parseInt(view.get("nodeWeight/min") ),
-                    parseInt(view.get("nodeWeight/max")) *100
-                    ]);
+                $("#sliderAEdgeWeight").slider( "option", "values", [
+                    parseInt( view.get("filter.a.edge.weight.min") ),
+                    parseInt(view.get("filter.a.edge.weight.max")) *100
+                ]);
+                $("#sliderANodeWeight").slider( "option", "values", [
+                    parseInt(view.get("filter.a.node.weight.min") ),
+                    parseInt(view.get("filter.a.node.weight.max")) *100
+                ]);
+                $("#sliderBEdgeWeight").slider( "option", "values", [
+                    parseInt( view.get("filter.b.edge.weight.min") ),
+                    parseInt(view.get("filter.b.edge.weight.max")) *100
+                ]);
+                $("#sliderBNodeWeight").slider( "option", "values", [
+                    parseInt(view.get("filter.b.node.weight.min") ),
+                    parseInt(view.get("filter.b.node.weight.max")) *100
+                ]);
                 tinaviz.infodiv.display_current_category();
                 tinaviz.infodiv.display_current_view();
+                // TODO check selection
+                // if selection has edges with edge of all the same weight, we disable the filter
 
-                var showFilter = false;
-                if (view.name() == "meso") {
-
-                    // TODO check selection
-                    // if selection has edges with edge of all the same weight, we disable the filter
-                    var weight = null;
-                    for (node in view.nodes) {
-                        //alert("node:"+node);
-                        for (out in node.outputs) {
-                            //alert("node weight:"+out.weight);
-                            if (weight == null) {
-                                weight = out.weight;
+                 if (viewName == "macro") {
+                            if (next_cat=="Document") {
+                                // disable
+                                $("#sliderANodeWeight").slider( "enable" );
+                                $("#sliderAEdgeWeight").slider( "enable" );
+                                $("#sliderANodeSize").slider( "enable" );
+                                $("#sliderBNodeWeight").slider( "disable" );
+                                $("#sliderBEdgeWeight").slider( "disable" );
+                                $("#sliderBNodeSize").slider( "disable" );
+                            } else if (next_cat=="NGram") {
+                                $("#sliderANodeWeight").slider( "disable" );
+                                $("#sliderAEdgeWeight").slider( "disable" );
+                                $("#sliderANodeSize").slider( "disable" );
+                                $("#sliderBNodeWeight").slider( "enable" );
+                                $("#sliderBEdgeWeight").slider( "enable" );
+                                $("#sliderBNodeSize").slider( "enable" );
                             }
-                            else {
-                                if (weight != out.weight) {
-                                    showFilter = true;
-                                    break;
-                                }
-                            }
-                        }
-                    }
+                 } else {
 
+                    // always enable
+                    $("#sliderANodeWeight").slider( "enable" );
+                    $("#sliderAEdgeWeight").slider( "enable" );
+                    $("#sliderANodeSize").slider( "enable" );
+                    $("#sliderBNodeWeight").slider( "enable" );
+                    $("#sliderBEdgeWeight").slider( "enable" );
+                    $("#sliderBNodeSize").slider( "enable" );
                 }
-                $("#sliderEdgeWeight").slider( "option", "disabled", false );
+
             },
             categoryChanged: function() {
 

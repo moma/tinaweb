@@ -121,7 +121,7 @@ function htmlDecode(value){
  */
 function decodeJSON(encvalue) {
     if (encvalue !== undefined)
-        return jQuery.trim(decodeURIComponent(encvalue)
+        return jQuery.trim(encvalue
             .replace(/\+/g, " ").replace(/%21/g, "!")
             .replace(/%27/g, "'").replace(/%28/g, "(")
             .replace(/%29/g, ")").replace(/%2A/g, "*")

@@ -27,7 +27,7 @@ function displayNodeRow(label, id, category) {
     $("#node_table > tbody").append(
         $("<tr></tr>").append(
             $("<td id='node_list_"+id+"'></td>").text(label).click( function(eventObject) {
-                alert("viewMeso will be called " + label + id + category);
+                //alert("viewMeso will be called " + label + id + category);
                 tinaviz.viewMeso(id, category);
             })
         )
@@ -64,8 +64,8 @@ var InfoDiv = {
     * dispatch current category displayed
     */
     display_current_category: function() {
-        var current_view = tinaviz.views.current.name();
-        var current_cat = tinaviz.views.current.category();
+        var current_view = tinaviz.getView();
+        var current_cat = tinaviz.getCategory();
         if (current_cat !== undefined)
             var opposite = this.categories[tinaviz.getOppositeCategory(current_cat)];
         //$("#title_acc_1").text("current selection of "+ this.categories[current_cat]);
@@ -82,7 +82,7 @@ var InfoDiv = {
     * dispatch current view displayed
     */
     display_current_view: function() {
-        var current_view = tinaviz.views.current.name();
+        var current_view = tinaviz.getView();
         if (current_view !== undefined) {
             var level = $("#level");
             level.button('option','label', current_view + " level");
@@ -125,11 +125,12 @@ var InfoDiv = {
     * of the opposite nodes of a given selection
     */
     updateTagCloud: function( node_list, neighbours ) {
+        // alert("updateTagCloud called!: "+neighbours);
         /* builds aggregated tag object */
         if (Object.size( node_list ) == 0) {
             return;
         }
-        var current_cat = tinaviz.views.current.category();
+        var current_cat = tinaviz.getCategory();
         neighbours = this.mergeNeighbours( current_cat, neighbours );
         /* some display sizes const */
         // Modif david
@@ -174,6 +175,7 @@ var InfoDiv = {
                 nb_displayed_tag++;
                 var tag = neighbours[i];
                 var tagid = htmlDecode(decodeJSON(tag['id']));
+                //alert("got id: "+tagid);
                 var tagspan = $("<span id='"+tagid+"'></span>");
                 tagspan.addClass('ui-widget-content');
                 tagspan.addClass('viz_node');
@@ -198,7 +200,7 @@ var InfoDiv = {
                 }
                 else {
                     tagspan.css('font-size',
-                        Math.max(Math.floor(sizecoef*Math.min(2,Math.log( 1.5 + tag['degree'] ))),15)
+                        Math.max(Math.floor(sizecoef*Math.min(2,Math.log( 1.5 + tag['inDegree'] + tag['outDegree'] ))),15)
                         );
                     tooltip = "click on a label to switch to its meso view - size is proportional to the degree";
                 }
@@ -228,7 +230,7 @@ var InfoDiv = {
     * updates the label and content DOM divs
     */
     updateInfo: function(lastselection) {
-        var current_cat = tinaviz.get("category/category");
+        var current_cat = tinaviz.getCategory();
         var labelinnerdiv = $("<div></div>");
         var contentinnerdiv = $("<div></div>");
         var number_of_label = 0;
@@ -256,7 +258,7 @@ var InfoDiv = {
                 contentinnerdiv.append( $("<b></b>").text(
                     this.getNodeContentLabel(label, node)
                 ));
-                contentinnerdiv.append( $("<p></p>").text( this.getNodeContent(node) ) );
+                contentinnerdiv.append( $("<p></p>").html( this.getNodeContent(node) ) );
                 contentinnerdiv.append( $("<p></p>").html(
                     this.getSearchQueries( htmlDecode(label), this.categories[current_cat])
                 ));
@@ -282,6 +284,7 @@ var InfoDiv = {
     * and dispatching infodiv updates
     */
     update: function(view, lastselection) {
+        // alert("updated called!");
         if (this.id == null) {
             alert("error : infodiv not initialized with its HTML DIV id");
             return;
@@ -348,14 +351,15 @@ var InfoDiv = {
         if (this.node_list_cache[category] === undefined || this.node_list_cache[category].length == 0) {
             this.node_list_cache[category] = tinaviz.getNodes( view, category )
         }
-
         this.node_table.empty();
         this.last_category = category;
         var node_list = this.node_list_cache[category]
+        // alert("node list: "+node_list)
         for (var i = 0; i < node_list .length; i++ ) {
 
             (function () {
                 var rowLabel = htmlDecode(decodeJSON(node_list[i]['label']));
+                // alert("label: "+node_list[i]['label']+"  cleanedLabel: "+rowLabel)
                 var rowId = decodeJSON(node_list[i]['id']);
                 var rowCat = category;
                 // asynchronously displays the node list
@@ -521,7 +525,7 @@ var PhyloInfoDiv = {
         var hashes = nodeId.split('::'); // obsolet and new terms
         var hash = hashes[1].split('_');
         var year=hash[0];
-        var content = htmlDecode(decodeJSON(node.ccntent));
+        var content = htmlDecode(decodeJSON(node.content));
         var vars = [],  htmlstring, hash;
         var titles= [];
         titles[0]='<b>Lost: </b>';
