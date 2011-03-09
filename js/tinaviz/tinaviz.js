@@ -390,7 +390,7 @@ function Tinaviz(args) {
      * Manually unselect all nodes
      */
     this.unselect = function() {
-        this.select("");
+        applet.setAs("select", "", "String");
         this.infodiv.reset();
     }
 
