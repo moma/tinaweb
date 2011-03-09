@@ -59,21 +59,16 @@ $(document).ready(function(){
 
     $("#nodeRadiusSelector").change(function() {
         //alert("SET RADIUS TO "+$("#nodeRadiusSelector").val());
-        tinaviz.set("filter.map.node.radius",$("#nodeRadiusSelector").val(), "Double");
-    });
-
-    $("#nodeWeightSelector").change(function() {
-        //alert("SET WEIGHT TO "+$("#nodeShapeSelector").val());
-        tinaviz.set("filter.map.node.weight",$("#nodeWeightSelector").val(), "Double");
+        tinaviz.set("filter.map.node.radius",$("#nodeRadiusSelector").val(), "String");
     });
 
     $("#nodeShapeSelector").change(function() {
-        tinaviz.set("filter.map.node.shape",$("#nodeShapeSelector").val(), "Double");
+        tinaviz.set("filter.map.node.shape",$("#nodeShapeSelector").val(), "String");
     });
 
     $("#nodeColorSelector").change(function() {
         //alert("SET COLOR TO "+ $("#nodeColorSelector").val(), true);
-        tinaviz.set("filter.map.node.color",$("#nodeColorSelector").val(), "Double");
+        tinaviz.set("filter.map.node.color",$("#nodeColorSelector").val(), "String");
     });
 
 });
@@ -248,6 +243,7 @@ toolbar.init = function() {
     $("#export-view").button("disable");
     $("#level").button("disable");
     $("#search_button").button("disable");
+    $("#toggle-recenter").button("disable");
     $("#sliderSelectionZone").slider( "disable" );
     $("#sliderANodeWeight").slider( "disable" );
     $("#sliderAEdgeWeight").slider( "disable" );
