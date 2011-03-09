@@ -102,17 +102,18 @@ $(document).ready(function(){
                 tinaviz.infodiv.reset();
             },
             success: function() {
-                $("#notification").hide();
 
+                $("#notification").hide();
+                $("#appletInfo").hide();
                 $("#export-view").button("enable");
                 $("#level").button("enable");
                 $("#search_button").button("enable");
-
 
                 // init the node list with prefs.category
                 tinaviz.infodiv.updateNodeList( "macro", prefs.category );
                 tinaviz.infodiv.display_current_category();
                 tinaviz.infodiv.display_current_view();
+
                 // initialize the sliders
                 $("#sliderANodeSize").slider( "option", "value",
                     parseInt(tinaviz.get("filter.a.node.size")) *100
@@ -160,6 +161,8 @@ $(document).ready(function(){
                     $("#search_input").val(prefs.search);
                     tinaviz.selectByPattern(prefs.search, "containsIgnoreCase");
                 }
+               var size = resize();
+               tinaviz.size(size.w, size.h);
             },
             error: function(msg) {
                 $("#notification").notify("create", {
