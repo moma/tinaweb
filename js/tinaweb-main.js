@@ -203,7 +203,7 @@ $(document).ready(function(){
                 }
                 tinaviz.infodiv.update(selection.viewName, selection.data);
             },
-
+            /** Callback for get neighbourhood **/
             getNeighbourhood: function(selection_list, neighbour_node_list) {
                 tinaviz.infodiv.updateTagCloud(selection_list, neighbour_node_list);
             },

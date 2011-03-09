@@ -27,7 +27,7 @@ function displayNodeRow(label, id, category) {
     $("#node_table > tbody").append(
         $("<tr></tr>").append(
             $("<td id='node_list_"+id+"'></td>").text(label).click( function(eventObject) {
-                alert("viewMeso will be called " + label + id + category);
+                //alert("viewMeso will be called " + label + id + category);
                 tinaviz.viewMeso(id, category);
             })
         )
@@ -125,6 +125,7 @@ var InfoDiv = {
     * of the opposite nodes of a given selection
     */
     updateTagCloud: function( node_list, neighbours ) {
+        // alert("updateTagCloud called!: "+neighbours);
         /* builds aggregated tag object */
         if (Object.size( node_list ) == 0) {
             return;
@@ -174,6 +175,7 @@ var InfoDiv = {
                 nb_displayed_tag++;
                 var tag = neighbours[i];
                 var tagid = htmlDecode(decodeJSON(tag['id']));
+                //alert("got id: "+tagid);
                 var tagspan = $("<span id='"+tagid+"'></span>");
                 tagspan.addClass('ui-widget-content');
                 tagspan.addClass('viz_node');
@@ -198,7 +200,7 @@ var InfoDiv = {
                 }
                 else {
                     tagspan.css('font-size',
-                        Math.max(Math.floor(sizecoef*Math.min(2,Math.log( 1.5 + tag['degree'] ))),15)
+                        Math.max(Math.floor(sizecoef*Math.min(2,Math.log( 1.5 + tag['inDegree'] + tag['outDegree'] ))),15)
                         );
                     tooltip = "click on a label to switch to its meso view - size is proportional to the degree";
                 }
@@ -282,6 +284,7 @@ var InfoDiv = {
     * and dispatching infodiv updates
     */
     update: function(view, lastselection) {
+        // alert("updated called!");
         if (this.id == null) {
             alert("error : infodiv not initialized with its HTML DIV id");
             return;

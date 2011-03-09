@@ -302,8 +302,11 @@ function Tinaviz(args) {
     // called by the applet
     this._callbackGetNeighbourhood = function(selection_list_str,neighbour_node_list_str) {
         // do some magic before calling the callback
+        //alert("var selection_list = $.parseJSON("+selection_list_str+");");
         var selection_list = $.parseJSON(selection_list_str);
+        //alert("var neighbour_node_list = $.parseJSON("+neighbour_node_list_str+");");
         var neighbour_node_list = $.parseJSON(neighbour_node_list_str);
+        //alert("this.callbackGetNeighbourhood(selection_list, neighbour_node_list);");
         this.callbackGetNeighbourhood(selection_list, neighbour_node_list);
     }
 
@@ -313,6 +316,7 @@ function Tinaviz(args) {
      */
     this.getNeighbourhood = function(view, node_list) {
         applet.getNeighbourhood(view, $.toJSON( node_list ));
+        // do not return.. this is a callback call
     }
 
     /*
