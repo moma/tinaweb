@@ -188,6 +188,7 @@ var InfoDiv = {
                         tinaviz.viewMeso(attached_id, attached_cat);
                     });
                 })();
+               // alert("weight: "+tag['weight']+"  inDegree: "+tag['inDegree']+"  outDegree: "+tag['outDegree']);
                 // sets the tag's text size
                 if (neighbours.length == 1) {
                     if ( tag['category'] == 'Document' )
@@ -200,7 +201,7 @@ var InfoDiv = {
                 }
                 else {
                     tagspan.css('font-size',
-                        Math.max(Math.floor(sizecoef*Math.min(2,Math.log( 1.5 + tag['inDegree'] + tag['outDegree'] ))),15)
+                        Math.max(Math.floor(sizecoef*Math.min(2,Math.log( 1.5 + tag['degree']))),15)
                         );
                     tooltip = "click on a label to switch to its meso view - size is proportional to the degree";
                 }
