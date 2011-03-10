@@ -106,10 +106,12 @@ var InfoDiv = {
                     merged[neighb]['degree']++;
                 else if (neighbours[node][neighb]['category'] != category) {
                     merged[neighb] = {
-                        'id': neighb,
+                        'spanid': neighb,
+                        'id':  neighbours[node][neighb]['id'],
                         'label': neighbours[node][neighb]['label'],
                         'degree': 1,
                         'weight': neighbours[node][neighb]['weight'],
+                        'category': neighbours[node][neighb]['category'],
                     };
 
                 }
@@ -174,17 +176,19 @@ var InfoDiv = {
             if (nb_displayed_tag<20) {
                 nb_displayed_tag++;
                 var tag = neighbours[i];
-                var tagid = htmlDecode(decodeJSON(tag['id']));
+
                 //alert("got id: "+tagid);
-                var tagspan = $("<span id='"+tagid+"'></span>");
+                var tagspan = $("<span id='"+tag.spanid+"'></span>");
                 tagspan.addClass('ui-widget-content');
                 tagspan.addClass('viz_node');
-                tagspan.html(htmlDecode(decodeJSON(tag['label'])));
+                tagspan.html(tag.label);
+
                 (function() {
-                    var attached_id = tagid;
-                    var attached_cat =  tag['category'];
+                    var attached_id = tag.id;
+                    var attached_cat =  tag.category;
                     tagspan.click( function() {
                         //switch to meso view
+                        //alert("calling tinaviz.viewMeso("+attached_id+", "+attached_cat+")");
                         tinaviz.viewMeso(attached_id, attached_cat);
                     });
                 })();
@@ -195,13 +199,13 @@ var InfoDiv = {
                         tagspan.css('font-size', const_doc_tag);
                     else
                         tagspan.css('font-size',
-                            Math.floor(sizecoef*(Math.min(20,Math.log(1.5 + tag['weight']))))
+                            Math.floor(sizecoef*(Math.min(20,Math.log(1.5 + tag.weight))))
                             );
                     tooltip = "click on a label to switch to its meso view - size is proportional to edge weight";
                 }
                 else {
                     tagspan.css('font-size',
-                        Math.max(Math.floor(sizecoef*Math.min(2,Math.log( 1.5 + tag['degree']))),15)
+                        Math.max(Math.floor(sizecoef*Math.min(2,Math.log( 1.5 + tag.degree))),15)
                         );
                     tooltip = "click on a label to switch to its meso view - size is proportional to the degree";
                 }

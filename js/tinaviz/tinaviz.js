@@ -447,7 +447,7 @@ function Tinaviz(args) {
             // check if selection is empty
             if (this.infodiv.selection.length != 0) {
                 this.setView("meso");
-            this.infodiv.updateNodeList("meso", this.getCategory());
+                this.infodiv.updateNodeList("meso", this.getCategory());
             } else {
                 alert("You need to select a node before switching to meso view");
             }
@@ -466,12 +466,19 @@ function Tinaviz(args) {
     this.viewMeso = function(id, category) {
         // selects unique node
         this.unselect();
-        this.select(id);
-        // sets the category of the graph
         this.setCategory(category);
+        this.select(""+category+"::"+id);
+
+
+        // sets the category of the graph
+
         //this.set("macro", "filter.node.category", category);
         this.setView("meso");
+
+        this.recenter();
+
         //this.infoviz.updateNodeList("meso", category);
+        this.infodiv.updateNodeList("meso", this.getCategory());
     }
 
 
