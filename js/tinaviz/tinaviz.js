@@ -360,15 +360,17 @@ function Tinaviz(args) {
         this.callbackViewChanged(view);
     }
 
-
     this.recenter = function() {
-        applet.recenter()
+        applet.setAs("camera.target", "all", "String");
+    }
+    this.centerOnSelection = function() {
+        applet.setAs("camera.target", "selection", "String");
     }
     this.setLayout = function(name) {
         this.set("layout.algorithm", name, "String");
     }
     this.setPause = function(value) {
-        this.set("pause",value, "Boolean");
+        this.set("pause", value, "Boolean");
     }
     this.getPause = function() {
         return this.get("pause");

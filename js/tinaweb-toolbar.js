@@ -135,6 +135,7 @@ toolbar.init = function() {
             //    tinaviz.searchNodes(txt,cat2, "current", "containsIgnoreCase", "visualization");
             //} else {
            tinaviz.selectByPattern(txt, "containsIgnoreCase");
+           tinaviz.centerOnSelection();
            // }
         //}
     
@@ -175,6 +176,7 @@ toolbar.init = function() {
             tinaviz.unselect();
         } else {
             tinaviz.selectByPattern(txt, "containsIgnoreCase");
+            tinaviz.centerOnSelection();
         }
     });
 
@@ -186,6 +188,7 @@ toolbar.init = function() {
         change: function(event, ui) {
             tinaviz.set("filter.a.edge.weight.min", ui.values[0] / 100.0, "Double");
             tinaviz.set("filter.a.edge.weight.max", ui.values[1] / 100.0, "Double");
+            if (tinaviz.getView()=="meso") tinaviz.recenter();
         }
     });
 
@@ -196,6 +199,7 @@ toolbar.init = function() {
         change: function(event, ui) {
             tinaviz.set("filter.a.node.weight.min", ui.values[0] / 100.0, "Double");
             tinaviz.set("filter.a.node.weight.max", ui.values[1] / 100.0, "Double");
+            if (tinaviz.getView()=="meso") tinaviz.recenter();
         }
     });
 
@@ -207,6 +211,7 @@ toolbar.init = function() {
         change: function(event, ui) {
             tinaviz.set("filter.b.edge.weight.min", ui.values[0] / 100.0, "Double");
             tinaviz.set("filter.b.edge.weight.max", ui.values[1] / 100.0, "Double");
+            if (tinaviz.getView()=="meso") tinaviz.recenter();
         }
     });
 
@@ -217,6 +222,7 @@ toolbar.init = function() {
         change: function(event, ui) {
             tinaviz.set("filter.b.node.weight.min", ui.values[0] / 100.0, "Double");
             tinaviz.set("filter.b.node.weight.max", ui.values[1] / 100.0, "Double");
+            if (tinaviz.getView()=="meso") tinaviz.recenter();
         }
     });
 
@@ -226,6 +232,7 @@ toolbar.init = function() {
         animate: true,
         change: function(event, ui) {
             tinaviz.set("filter.a.node.size", ui.value / 100.0, "Double");
+            //if (tinaviz.getView()=="meso") tinaviz.recenter();
         }
     }
     );
@@ -236,6 +243,7 @@ toolbar.init = function() {
         animate: true,
         change: function(event, ui) {
             tinaviz.set("filter.b.node.size", ui.value / 100.0, "Double");
+            //if (tinaviz.getView()=="meso") tinaviz.recenter();
         }
     }
     );
