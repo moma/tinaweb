@@ -115,6 +115,7 @@ $(document).ready(function(){
                 tinaviz.infodiv.display_current_view();
 
                 // initialize the sliders
+                /*
                 $("#sliderANodeSize").slider( "option", "value",
                     parseInt(tinaviz.get("filter.a.node.size")) *100
                     );
@@ -143,6 +144,7 @@ $(document).ready(function(){
                     parseInt(tinaviz.get("filter.b.node.weight.min") ),
                     parseInt(tinaviz.get("filter.b.node.weight.max")) *100
                 ]);
+                */
 
                 // default settings
                 $("#sliderSelectionZone").slider( "enable" );
