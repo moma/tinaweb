@@ -397,7 +397,6 @@ function Tinaviz(args) {
      */
     this.unselect = function() {
         applet.setAs("select", "", "String");
-        this.infodiv.reset();
     }
 
     /**

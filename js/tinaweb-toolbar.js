@@ -124,6 +124,7 @@ toolbar.init = function() {
         
         var txt = $("#search_input").val();
          tinaviz.unselect();
+         tinaviz.infodiv.reset();
 
         //if (txt=="") {
 
@@ -174,6 +175,7 @@ toolbar.init = function() {
         var txt = $("#search_input").val();
         if (txt=="") {
             tinaviz.unselect();
+            tinaviz.infodiv.reset();
         } else {
             tinaviz.selectByPattern(txt, "containsIgnoreCase");
             tinaviz.centerOnSelection();
@@ -315,6 +317,7 @@ toolbar.init = function() {
     }).click(function(event) {
         toolbar.lastsearch = "";
         tinaviz.unselect();
+        tinaviz.infodiv.reset();
     });
 
     $("#toggle-recenter").button({
