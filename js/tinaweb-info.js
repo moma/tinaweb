@@ -360,19 +360,21 @@ var InfoDiv = {
         this.last_category = category;
         var node_list = this.node_list_cache[category]
         // alert("node list: "+node_list)
-        for (var i = 0; i < node_list .length; i++ ) {
+        if (node_list != null) {
+            for (var i = 0; i < node_list.length; i++ ) {
 
-            (function () {
-                var rowLabel = htmlDecode(decodeJSON(node_list[i]['label']));
-                // alert("label: "+node_list[i]['label']+"  cleanedLabel: "+rowLabel)
-                var rowId = decodeJSON(node_list[i]['id']);
-                var rowCat = category;
-                // asynchronously displays the node list
-                /*$.doTimeout(0, function(rowLabel, rowId, rowCat) {
-                    displayNodeRow(rowLabel, rowId, rowCat);
-                });*/
-                setTimeout("displayNodeRow(\""+rowLabel+"\",\""+rowId+"\",\""+rowCat+"\")", 0);
-            })();
+                (function () {
+                    var rowLabel = htmlDecode(decodeJSON(node_list[i]['label']));
+                    // alert("label: "+node_list[i]['label']+"  cleanedLabel: "+rowLabel)
+                    var rowId = decodeJSON(node_list[i]['id']);
+                    var rowCat = category;
+                    // asynchronously displays the node list
+                    /*$.doTimeout(0, function(rowLabel, rowId, rowCat) {
+                        displayNodeRow(rowLabel, rowId, rowCat);
+                    });*/
+                    setTimeout("displayNodeRow(\""+rowLabel+"\",\""+rowId+"\",\""+rowCat+"\")", 0);
+                })();
+            }
         }
     },
 
