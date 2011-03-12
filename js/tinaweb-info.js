@@ -354,23 +354,19 @@ var InfoDiv = {
         }
 
         if (this.node_list_cache[category] === undefined || this.node_list_cache[category].length == 0) {
-            this.node_list_cache[category] = tinaviz.getNodes( view, category )
+            this.node_list_cache[category] = alphabeticListSort( tinaviz.getNodes( view, category ), 'label' )
         }
         this.node_table.empty();
         this.last_category = category;
         var node_list = this.node_list_cache[category]
-        // alert("node list: "+node_list)
+
         for (var i = 0; i < node_list .length; i++ ) {
 
             (function () {
                 var rowLabel = htmlDecode(decodeJSON(node_list[i]['label']));
-                // alert("label: "+node_list[i]['label']+"  cleanedLabel: "+rowLabel)
                 var rowId = decodeJSON(node_list[i]['id']);
                 var rowCat = category;
                 // asynchronously displays the node list
-                /*$.doTimeout(0, function(rowLabel, rowId, rowCat) {
-                    displayNodeRow(rowLabel, rowId, rowCat);
-                });*/
                 setTimeout("displayNodeRow(\""+rowLabel+"\",\""+rowId+"\",\""+rowCat+"\")", 0);
             })();
         }
