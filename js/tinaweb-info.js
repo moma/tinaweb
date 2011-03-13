@@ -27,7 +27,8 @@ function displayNodeRow(label, id, category) {
     $("#node_table > tbody").append(
         $("<tr></tr>").append(
             $("<td id='node_list_"+id+"'></td>").text(label).click( function(eventObject) {
-                //alert("viewMeso will be called " + label + id + category);
+                //switch to meso view
+                console.log("calling tinaviz.viewMeso("+attached_id+", "+attached_cat+")");
                 tinaviz.viewMeso(id, category);
             })
         )
@@ -83,6 +84,7 @@ var InfoDiv = {
     */
     display_current_view: function() {
         var current_view = tinaviz.getView();
+        console.log("display_current_view "+current_view);
         if (current_view !== undefined) {
             var level = $("#level");
             level.button('option','label', current_view + " level");
@@ -99,6 +101,7 @@ var InfoDiv = {
     },
 
     mergeNeighbours: function( category, neighbours ) {
+        //console.log(neighbours);
         merged = [];
         for(node in neighbours) {
             for(neighb in neighbours[node]){
@@ -111,7 +114,7 @@ var InfoDiv = {
                         'label': neighbours[node][neighb]['label'],
                         'degree': 1,
                         'weight': neighbours[node][neighb]['weight'],
-                        'category': neighbours[node][neighb]['category'],
+                        'category': neighbours[node][neighb]['category']
                     };
 
                 }
@@ -127,13 +130,14 @@ var InfoDiv = {
     * of the opposite nodes of a given selection
     */
     updateTagCloud: function( node_list, neighbours ) {
-        // alert("updateTagCloud called!: "+neighbours);
+
         /* builds aggregated tag object */
         if (Object.size( node_list ) == 0) {
             return;
         }
         var current_cat = tinaviz.getCategory();
         neighbours = this.mergeNeighbours( current_cat, neighbours );
+        //console.log( neighbours );
         /* some display sizes const */
         // Modif david
         this.cloudSearch.empty();
@@ -177,7 +181,6 @@ var InfoDiv = {
                 nb_displayed_tag++;
                 var tag = neighbours[i];
 
-                //alert("got id: "+tagid);
                 var tagspan = $("<span id='"+tag.spanid+"'></span>");
                 tagspan.addClass('ui-widget-content');
                 tagspan.addClass('viz_node');
@@ -188,7 +191,7 @@ var InfoDiv = {
                     var attached_cat =  tag.category;
                     tagspan.click( function() {
                         //switch to meso view
-                        //alert("calling tinaviz.viewMeso("+attached_id+", "+attached_cat+")");
+                        console.log("calling tinaviz.viewMeso("+attached_id+", "+attached_cat+")");
                         tinaviz.viewMeso(attached_id, attached_cat);
                     });
                 })();

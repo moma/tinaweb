@@ -336,14 +336,11 @@ function Tinaviz(args) {
     /**
      * Callback after clicks on nodes
      *
-     * @param view
-     * @param attr
+     * @param selection
      * @param mouse
      * @return
      */
     this._callbackSelectionChanged = function(selection, mouse) {
-        //console.log("_callbackSelectionChanged : "+ attr);
-
         this.callbackSelectionChanged({
             'viewName':'macro',
             'data':$.parseJSON(selection),
@@ -356,6 +353,7 @@ function Tinaviz(args) {
      * Callback after CHANGING THE VIEW LEVEL
      */
     this._callbackViewChanged = function(viewName, selected) {
+        alert("_callbackViewChanged");
         var view = this.constructNewViewObject(viewName);
         this.callbackViewChanged(view);
     }
@@ -384,10 +382,9 @@ function Tinaviz(args) {
         return n;
     }
 
-   /**
-      * Select a node from it's ID (String)
-      */
-
+    /**
+    * Select a node from it's ID (String)
+    */
     this.select = function(uuid) {
           this.set("select", uuid, "String");
     }
