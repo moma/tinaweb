@@ -361,10 +361,10 @@ function Tinaviz(args) {
     }
 
     this.recenter = function() {
-        applet.setAs("camera.target", "all", "String");
+         this.set("camera.target", "all", "String");
     }
     this.centerOnSelection = function() {
-        applet.setAs("camera.target", "selection", "String");
+         this.set("camera.target", "selection", "String");
     }
     this.setLayout = function(name) {
         this.set("layout.algorithm", name, "String");
@@ -389,14 +389,14 @@ function Tinaviz(args) {
       */
 
     this.select = function(uuid) {
-          applet.setAs("select", uuid, "String");
+          this.set("select", uuid, "String");
     }
 
     /**
      * Manually unselect all nodes
      */
     this.unselect = function() {
-        applet.setAs("select", "", "String");
+         this.set("select", "", "String");
     }
 
     /**
@@ -416,7 +416,7 @@ function Tinaviz(args) {
     }
 
     this.setCategory = function(value) {
-        this.set("filter.node.category", value, "String");
+         this.set("filter.node.category", value, "String");
     }
 
     /**
