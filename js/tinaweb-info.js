@@ -28,7 +28,7 @@ function displayNodeRow(label, id, category) {
         $("<tr></tr>").append(
             $("<td id='node_list_"+id+"'></td>").text(label).click( function(eventObject) {
                 //switch to meso view
-                console.log("calling tinaviz.viewMeso("+attached_id+", "+attached_cat+")");
+                //console.log("calling tinaviz.viewMeso("+attached_id+", "+attached_cat+")");
                 tinaviz.viewMeso(id, category);
             })
         )
@@ -84,7 +84,7 @@ var InfoDiv = {
     */
     display_current_view: function() {
         var current_view = tinaviz.getView();
-        console.log("display_current_view "+current_view);
+        //console.log("display_current_view "+current_view);
         if (current_view !== undefined) {
             var level = $("#level");
             level.button('option','label', current_view + " level");
@@ -191,7 +191,7 @@ var InfoDiv = {
                     var attached_cat =  tag.category;
                     tagspan.click( function() {
                         //switch to meso view
-                        console.log("calling tinaviz.viewMeso("+attached_id+", "+attached_cat+")");
+                        //console.log("calling tinaviz.viewMeso("+attached_id+", "+attached_cat+")");
                         tinaviz.viewMeso(attached_id, attached_cat);
                     });
                 })();

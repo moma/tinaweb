@@ -439,6 +439,7 @@ function Tinaviz(args) {
      * Manual toggle of the current view (Eg. when button is pressed)
      *
      */
+     /*
     this.toggleView = function() {
         if (this.getView() == "macro") {
             // check if selection is empty
@@ -452,7 +453,7 @@ function Tinaviz(args) {
             this.setView("macro");
             this.infodiv.updateNodeList("macro", this.getCategory());
         }
-    }
+    } */
 
     /**
      * Switch to meso view of a particular node

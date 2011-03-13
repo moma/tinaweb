@@ -29,6 +29,7 @@ $(document).ready(function(){
         path : $('meta[name=tinaviz]').attr("content")
     });
 
+
     $(window).bind('resize', function() {
         var size = resize();
         tinaviz.size(size.w, size.h);
@@ -38,7 +39,13 @@ $(document).ready(function(){
 
         var size = resize();
         tinaviz.size(size.w, size.h);
-
+         /*
+         $.doTimeout( 2000, function(){
+              var size = resize();
+              tinaviz.size(size.w, size.h);
+              return true;
+         });
+         */
 
         var urlVars = getUrlVars();
         for (x in urlVars) {

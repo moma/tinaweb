@@ -377,8 +377,8 @@ toolbar.init = function() {
             var i = 0;
             tinaviz.infodiv.reset();
             for (var pos in tinaviz.infodiv.neighbours) {
-                console.log("switch category, selecting node from id "+tinaviz.infodiv.neighbours[pos]);
-                //tinaviz.select(tinaviz.infodiv.neighbours[pos]);
+                //console.log("switch category, selecting node from id "+tinaviz.infodiv.neighbours[pos]);
+                tinaviz.select(tinaviz.infodiv.neighbours[pos]);
             }
         } else {
 
