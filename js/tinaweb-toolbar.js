@@ -336,7 +336,6 @@ toolbar.init = function() {
             primary: 'ui-icon-arrows'
         }
     }).click(function(event) {
-        alert("clicked on category switch");
         var cat = tinaviz.getCategory();
         var next_cat = tinaviz.getOppositeCategory( cat );
         var viewName = tinaviz.getView();
@@ -367,18 +366,20 @@ toolbar.init = function() {
 
        var neighbours = tinaviz.infodiv.neighbours;
        console.log(neighbours);
-       tinaviz.infodiv.reset();
        tinaviz.setCategory(next_cat);
+       tinaviz.infodiv.reset();
        tinaviz.infodiv.updateNodeList(viewName, next_cat);
        console.log(neighbours);
+       tinaviz.infodiv.display_current_category();
        for (var pos in neighbours) {
                 //console.log("switch category, selecting node from id "+tinaviz.infodiv.neighbours[pos]);
-                 alert("selecting "+neighbours[pos]);
-                 tinaviz.select(neighbours[pos]);
+                 //alert("selecting "+neighbours[pos]);
+                 // too fast
+                 //tinaviz.select(neighbours[pos]);
         }
 
         tinaviz.centerOnSelection();
-        tinaviz.infodiv.display_current_category();
+
     });
     toolbar.checkSearchForm();
 };

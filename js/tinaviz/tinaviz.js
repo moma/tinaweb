@@ -465,7 +465,7 @@ function Tinaviz(args) {
         // selects unique node
         this.unselect();
         this.setCategory(category);
-        this.select(""+category+"::"+id);
+        this.select(id);
 
 
         // sets the category of the graph

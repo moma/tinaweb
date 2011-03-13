@@ -104,6 +104,9 @@ var InfoDiv = {
         //console.log(neighbours);
         merged = [];
         for(node in neighbours) {
+
+             //var nb = tinaviz.getNeighbourhood(viewLevel,nodeid);
+
             for(neighb in neighbours[node]){
                 if (neighb in merged)
                     merged[neighb]['degree']++;
@@ -261,8 +264,10 @@ var InfoDiv = {
                     }
                 }
                 // add node to selection cache
-                alert("pushing node "+node["id"]+" to selection cache");
-                this.selection.push(node["id"]);
+                //alert("pushing node "+node["id"]+" to selection cache");
+                this.selection.push(node["id"]); /* fix by julian, replaced id: (was 0, 1, 2..)
+                                                   by node["id"]: ("Document:443", "NGram::a1f4b56e5463...") */
+
                 // displays contents only if it's a document
                 contentinnerdiv.append( $("<b></b>").text(
                     this.getNodeContentLabel(label, node)
