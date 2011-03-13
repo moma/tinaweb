@@ -150,12 +150,13 @@ function Tinaviz(args) {
         callbackBeforeImport();
 
         $.ajax({
-            cache: false,
             url: opts.url,
             type: "GET",
             dataType: "text", // if we use 'text', we need to disable cache
+            cache: false, //
             error: function(e,f,g) {
                 tinaviz.logNormal("AJAX error = "+e.statusText);
+
             /*
                 try {
                     if (opts.url.search("://") != -1) {
@@ -438,7 +439,7 @@ function Tinaviz(args) {
      * Manual toggle of the current view (Eg. when button is pressed)
      *
      */
-     /*
+
     this.toggleView = function() {
         if (this.getView() == "macro") {
             // check if selection is empty
@@ -452,7 +453,7 @@ function Tinaviz(args) {
             this.setView("macro");
             this.infodiv.updateNodeList("macro", this.getCategory());
         }
-    } */
+    }
 
     /**
      * Switch to meso view of a particular node
