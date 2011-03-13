@@ -363,15 +363,19 @@ var InfoDiv = {
         this.last_category = category;
         var node_list = this.node_list_cache[category]
 
-        for (var i = 0; i < node_list .length; i++ ) {
+        // alert("node list: "+node_list)
+        if (node_list != null) {
+            for (var i = 0; i < node_list.length; i++ ) {
 
-            (function () {
-                var rowLabel = htmlDecode(decodeJSON(node_list[i]['label']));
-                var rowId = decodeJSON(node_list[i]['id']);
-                var rowCat = category;
-                // asynchronously displays the node list
-                setTimeout("displayNodeRow(\""+rowLabel+"\",\""+rowId+"\",\""+rowCat+"\")", 0);
-            })();
+                (function () {
+                    var rowLabel = htmlDecode(decodeJSON(node_list[i]['label']));
+                    // alert("label: "+node_list[i]['label']+"  cleanedLabel: "+rowLabel)
+                    var rowId = decodeJSON(node_list[i]['id']);
+                    var rowCat = category;
+                    // asynchronously displays the node list
+                    setTimeout("displayNodeRow(\""+rowLabel+"\",\""+rowId+"\",\""+rowCat+"\")", 0);
+                })();
+            }
         }
     },
 
