@@ -150,13 +150,12 @@ function Tinaviz(args) {
         callbackBeforeImport();
 
         $.ajax({
+            cache: false,
             url: opts.url,
             type: "GET",
             dataType: "text", // if we use 'text', we need to disable cache
-            cache: "false", //
             error: function(e,f,g) {
                 tinaviz.logNormal("AJAX error = "+e.statusText);
-
             /*
                 try {
                     if (opts.url.search("://") != -1) {
