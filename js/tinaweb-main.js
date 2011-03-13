@@ -102,8 +102,10 @@ $(document).ready(function(){
                 tinaviz.infodiv.reset();
             },
             success: function() {
-
-                $("#notification").hide();
+                $("#notification").notify("create", {
+                    title: 'Tinasoft Notification',
+                    text: 'You can now explore the graph'
+                });
                 $("#appletInfo").hide();
                 $("#export-view").button("enable");
                 $("#level").button("enable");
@@ -209,7 +211,9 @@ $(document).ready(function(){
             getNeighbourhood: function(selection_list, neighbour_node_list) {
                 tinaviz.infodiv.updateTagCloud(selection_list, neighbour_node_list);
             },
+            /** Callback of changing view **/
             viewChanged: function(view) {
+                console.log("viewChanged to "+view);
                 $("#sliderAEdgeWeight").slider( "option", "values", [
                     parseInt( view.get("filter.a.edge.weight.min") ),
                     parseInt(view.get("filter.a.edge.weight.max")) *100
@@ -226,6 +230,7 @@ $(document).ready(function(){
                     parseInt(view.get("filter.b.node.weight.min") ),
                     parseInt(view.get("filter.b.node.weight.max")) *100
                 ]);
+
                 tinaviz.infodiv.display_current_category();
                 tinaviz.infodiv.display_current_view();
                 // TODO check selection
