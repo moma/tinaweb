@@ -212,6 +212,8 @@ $(document).ready(function(){
                     var macroCategory = tinaviz.get("meso.category");
                     tinaviz.infodiv.updateNodeList("meso", macroCategory);
                 }
+                console.log("calling: tinaviz.infodiv.update("+selection.viewName+", "+selection.data+")");
+                console.log(selection.data);
                 tinaviz.infodiv.update(selection.viewName, selection.data);
             },
             /** Callback for get neighbourhood **/

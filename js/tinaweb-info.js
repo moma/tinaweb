@@ -40,7 +40,7 @@ function displayNodeRow(label, id, category) {
 */
 var InfoDiv = {
     id: null,
-    selection : {},
+    selection : [],
     neighbours : [],
     node_list_cache: {},
     last_category: "",
@@ -261,7 +261,8 @@ var InfoDiv = {
                     }
                 }
                 // add node to selection cache
-                this.selection.push(id);
+                alert("pushing node "+node["id"]+" to selection cache");
+                this.selection.push(node["id"]);
                 // displays contents only if it's a document
                 contentinnerdiv.append( $("<b></b>").text(
                     this.getNodeContentLabel(label, node)
@@ -301,9 +302,9 @@ var InfoDiv = {
             this.reset();
             return;
         }
-        this.selection = []
+        this.selection =  [];
         this.updateInfo( lastselection );
-        tinaviz.getNeighbourhood( "macro", this.selection );
+        tinaviz.getNeighbourhood( "macro", this.selection ); // this is an asynchronous call - nothing is returned
     },
 
     /*
