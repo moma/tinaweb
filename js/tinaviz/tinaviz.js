@@ -486,7 +486,7 @@ function Tinaviz(args) {
         tinaviz.unselect();
         // selects unique node
         tinaviz.setView("macro");
-        $.doTimeout( 400, function(){
+        //$.doTimeout( 400, function(){
             tinaviz.setCategory(category);
             tinaviz.unselect();
             //alert("setting category to "+category);
@@ -499,7 +499,7 @@ function Tinaviz(args) {
 
             //this.set("macro", "filter.node.category", category);
             //alert("setting view");
-            $.doTimeout( 400, function(){
+            $.doTimeout(400, function(){
                   tinaviz.setView("meso");
             //alert("recentering");
 
@@ -512,9 +512,10 @@ function Tinaviz(args) {
                         $("#sliderBNodeSize").slider( "enable" );
             //this.infoviz.updateNodeList("meso", category);
               tinaviz.recenter();
+              false;
             });
-
-        });
+         //   false;
+       // });
 
     }
 
