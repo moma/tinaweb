@@ -433,6 +433,20 @@ function Tinaviz(args) {
      */
     this.setView = function(view) {
         this.set("filter.view", view, "String");
+        $.doTimeout( 400, function(){
+                  tinaviz.setView("meso");
+            //alert("recentering");
+
+                    // always enable
+                        $("#sliderANodeWeight").slider( "enable" );
+                        $("#sliderAEdgeWeight").slider( "enable" );
+                        $("#sliderANodeSize").slider( "enable" );
+                        $("#sliderBNodeWeight").slider( "enable" );
+                        $("#sliderBEdgeWeight").slider( "enable" );
+                        $("#sliderBNodeSize").slider( "enable" );
+            //this.infoviz.updateNodeList("meso", category);
+              tinaviz.recenter();
+            });
     }
 
     /**
@@ -469,7 +483,7 @@ function Tinaviz(args) {
                         $("#sliderBNodeWeight").slider( "disable" );
                         $("#sliderBEdgeWeight").slider( "disable" );
                         $("#sliderBNodeSize").slider( "disable" );
-
+        tinaviz.unselect();
         // selects unique node
         tinaviz.setView("macro");
         $.doTimeout( 400, function(){

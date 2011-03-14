@@ -222,7 +222,7 @@ $(document).ready(function(){
             },
             /** Callback of changing view **/
             viewChanged: function(view) {
-
+alert("view");
                 $("#sliderAEdgeWeight").slider( "option", "values", [
                     parseInt( view.get("filter.a.edge.weight.min") ),
                     parseInt(view.get("filter.a.edge.weight.max")) *100
