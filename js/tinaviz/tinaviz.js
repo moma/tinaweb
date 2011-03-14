@@ -435,7 +435,7 @@ function Tinaviz(args) {
     this.setView = function(view) {
 
         this.set("filter.view", view, "String");
-
+         var cat = this.getCategory();
         this.infodiv.updateNodeList(view, this.getCategory());
 
         $.doTimeout(400, function(){
@@ -445,7 +445,7 @@ function Tinaviz(args) {
 
            // MACRO
            if (view == "macro") {
-                if (next_cat=="Document") {
+                if (cat=="Document") {
                      // disable
                      $("#sliderANodeWeight").slider( "enable" );
                      $("#sliderAEdgeWeight").slider( "enable" );
@@ -453,7 +453,7 @@ function Tinaviz(args) {
                      $("#sliderBNodeWeight").slider( "disable" );
                      $("#sliderBEdgeWeight").slider( "disable" );
                      $("#sliderBNodeSize").slider( "disable" );
-                 } else if (next_cat=="NGram") {
+                 } else if (cat=="NGram") {
                      $("#sliderANodeWeight").slider( "disable" );
                      $("#sliderAEdgeWeight").slider( "disable" );
                      $("#sliderANodeSize").slider( "disable" );
