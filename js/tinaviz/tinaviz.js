@@ -464,19 +464,34 @@ function Tinaviz(args) {
     this.viewMeso = function(id, category) {
         // selects unique node
         this.unselect();
-        this.setCategory(category);
-        this.select(id);
 
+        alert("setting category to "+category);
+        this.setCategory(category);
+        tinaviz.infodiv.updateNodeList("meso", category);
+
+        alert("selecting "+id);
+        this.select(id, "containsIgnoreCase");
+
+                   // always enable
+                    $("#sliderANodeWeight").slider( "enable" );
+                    $("#sliderAEdgeWeight").slider( "enable" );
+                    $("#sliderANodeSize").slider( "enable" );
+                    $("#sliderBNodeWeight").slider( "enable" );
+                    $("#sliderBEdgeWeight").slider( "enable" );
+                    $("#sliderBNodeSize").slider( "enable" );
 
         // sets the category of the graph
 
         //this.set("macro", "filter.node.category", category);
-        this.setView("meso");
-
-        this.recenter();
-
+        alert("setting view");
+        $.doTimeout( 1000, function(){
+              tinaviz.setView("meso");
+        //alert("recentering");
+              tinaviz.recenter();
         //this.infoviz.updateNodeList("meso", category);
-        this.infodiv.updateNodeList("meso", this.getCategory());
+
+        });
+
     }
 
 

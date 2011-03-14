@@ -212,8 +212,8 @@ $(document).ready(function(){
                     var macroCategory = tinaviz.get("meso.category");
                     tinaviz.infodiv.updateNodeList("meso", macroCategory);
                 }
-                console.log("calling: tinaviz.infodiv.update("+selection.viewName+", "+selection.data+")");
-                console.log(selection.data);
+                //console.log("calling: tinaviz.infodiv.update("+selection.viewName+", "+selection.data+")");
+                //console.log(selection.data);
                 tinaviz.infodiv.update(selection.viewName, selection.data);
             },
             /** Callback for get neighbourhood **/
@@ -222,7 +222,7 @@ $(document).ready(function(){
             },
             /** Callback of changing view **/
             viewChanged: function(view) {
-                console.log("viewChanged to "+view);
+
                 $("#sliderAEdgeWeight").slider( "option", "values", [
                     parseInt( view.get("filter.a.edge.weight.min") ),
                     parseInt(view.get("filter.a.edge.weight.max")) *100
