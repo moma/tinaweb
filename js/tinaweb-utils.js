@@ -71,8 +71,20 @@ function  alphabeticListSort(listitems, textkey) {
  */
 function  numericListSort(listitems, valuekey) {
     listitems.sort(function(a, b) {
-    var compA = parseFloat(a[valuekey]);
-    var compB = parseFloat(b[valuekey]);
+        var compA = parseFloat(a[valuekey]);
+        var compB = parseFloat(b[valuekey]);
+        return (compA > compB) ? -1 : (compA <= compB) ? 1 : 0;
+    })
+    return listitems;
+};
+
+/*
+ * Sorts list of objects on the length of list, given a valuekey
+ */
+function  numericLengthSort(listitems, valuekey) {
+    listitems.sort(function(a, b) {
+        var compA = a[valuekey].length;
+        var compB = b[valuekey].length;
         return (compA > compB) ? -1 : (compA <= compB) ? 1 : 0;
     })
     return listitems;
