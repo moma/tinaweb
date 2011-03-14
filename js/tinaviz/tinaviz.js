@@ -352,11 +352,12 @@ function Tinaviz(args) {
     /**
      * Callback after CHANGING THE VIEW LEVEL
      */
+     /*
     this._callbackViewChanged = function(viewName, selected) {
         alert("_callbackViewChanged");
         var view = this.constructNewViewObject(viewName);
         this.callbackViewChanged(view);
-    }
+    }*/
 
     this.recenter = function() {
          this.set("camera.target", "all", "String");
@@ -432,21 +433,46 @@ function Tinaviz(args) {
      *
      */
     this.setView = function(view) {
-        this.set("filter.view", view, "String");
-        $.doTimeout( 400, function(){
-                  tinaviz.setView("meso");
-            //alert("recentering");
 
-                    // always enable
-                        $("#sliderANodeWeight").slider( "enable" );
-                        $("#sliderAEdgeWeight").slider( "enable" );
-                        $("#sliderANodeSize").slider( "enable" );
-                        $("#sliderBNodeWeight").slider( "enable" );
-                        $("#sliderBEdgeWeight").slider( "enable" );
-                        $("#sliderBNodeSize").slider( "enable" );
-            //this.infoviz.updateNodeList("meso", category);
-              tinaviz.recenter();
-            });
+        this.set("filter.view", view, "String");
+
+        this.infodiv.updateNodeList(view, this.getCategory());
+
+        $.doTimeout(400, function(){
+
+           tinaviz.infodiv.display_current_category();
+           tinaviz.infodiv.display_current_view();
+
+           // MACRO
+           if (view == "macro") {
+                if (next_cat=="Document") {
+                     // disable
+                     $("#sliderANodeWeight").slider( "enable" );
+                     $("#sliderAEdgeWeight").slider( "enable" );
+                     $("#sliderANodeSize").slider( "enable" );
+                     $("#sliderBNodeWeight").slider( "disable" );
+                     $("#sliderBEdgeWeight").slider( "disable" );
+                     $("#sliderBNodeSize").slider( "disable" );
+                 } else if (next_cat=="NGram") {
+                     $("#sliderANodeWeight").slider( "disable" );
+                     $("#sliderAEdgeWeight").slider( "disable" );
+                     $("#sliderANodeSize").slider( "disable" );
+                     $("#sliderBNodeWeight").slider( "enable" );
+                     $("#sliderBEdgeWeight").slider( "enable" );
+                     $("#sliderBNodeSize").slider( "enable" );
+                }
+            // MESO
+            } else {
+                 $("#sliderANodeWeight").slider( "enable" );
+                 $("#sliderAEdgeWeight").slider( "enable" );
+                 $("#sliderANodeSize").slider( "enable" );
+                 $("#sliderBNodeWeight").slider( "enable" );
+                 $("#sliderBEdgeWeight").slider( "enable" );
+                 $("#sliderBNodeSize").slider( "enable" );
+                 tinaviz.recenter();
+            }
+            false;
+        });
     }
 
     /**
@@ -459,13 +485,12 @@ function Tinaviz(args) {
             // check if selection is empty
             if (this.infodiv.selection.length != 0) {
                 this.setView("meso");
-                this.infodiv.updateNodeList("meso", this.getCategory());
+
             } else {
                 alert("You need to select a node before switching to meso view");
             }
         } else if (this.getView() == "meso") {
             this.setView("macro");
-            this.infodiv.updateNodeList("macro", this.getCategory());
         }
     }
 
@@ -514,6 +539,7 @@ function Tinaviz(args) {
               tinaviz.recenter();
               false;
             });
+
          //   false;
        // });
 

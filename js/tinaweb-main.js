@@ -220,60 +220,7 @@ $(document).ready(function(){
             getNeighbourhood: function(selection_list, neighbour_node_list) {
                 tinaviz.infodiv.updateTagCloud(selection_list, neighbour_node_list);
             },
-            /** Callback of changing view **/
-            viewChanged: function(view) {
-alert("view");
-                $("#sliderAEdgeWeight").slider( "option", "values", [
-                    parseInt( view.get("filter.a.edge.weight.min") ),
-                    parseInt(view.get("filter.a.edge.weight.max")) *100
-                ]);
-                $("#sliderANodeWeight").slider( "option", "values", [
-                    parseInt(view.get("filter.a.node.weight.min") ),
-                    parseInt(view.get("filter.a.node.weight.max")) *100
-                ]);
-                $("#sliderBEdgeWeight").slider( "option", "values", [
-                    parseInt( view.get("filter.b.edge.weight.min") ),
-                    parseInt(view.get("filter.b.edge.weight.max")) *100
-                ]);
-                $("#sliderBNodeWeight").slider( "option", "values", [
-                    parseInt(view.get("filter.b.node.weight.min") ),
-                    parseInt(view.get("filter.b.node.weight.max")) *100
-                ]);
 
-                tinaviz.infodiv.display_current_category();
-                tinaviz.infodiv.display_current_view();
-                // TODO check selection
-                // if selection has edges with edge of all the same weight, we disable the filter
-
-                 if (viewName == "macro") {
-                            if (next_cat=="Document") {
-                                // disable
-                                $("#sliderANodeWeight").slider( "enable" );
-                                $("#sliderAEdgeWeight").slider( "enable" );
-                                $("#sliderANodeSize").slider( "enable" );
-                                $("#sliderBNodeWeight").slider( "disable" );
-                                $("#sliderBEdgeWeight").slider( "disable" );
-                                $("#sliderBNodeSize").slider( "disable" );
-                            } else if (next_cat=="NGram") {
-                                $("#sliderANodeWeight").slider( "disable" );
-                                $("#sliderAEdgeWeight").slider( "disable" );
-                                $("#sliderANodeSize").slider( "disable" );
-                                $("#sliderBNodeWeight").slider( "enable" );
-                                $("#sliderBEdgeWeight").slider( "enable" );
-                                $("#sliderBNodeSize").slider( "enable" );
-                            }
-                 } else {
-
-                    // always enable
-                    $("#sliderANodeWeight").slider( "enable" );
-                    $("#sliderAEdgeWeight").slider( "enable" );
-                    $("#sliderANodeSize").slider( "enable" );
-                    $("#sliderBNodeWeight").slider( "enable" );
-                    $("#sliderBEdgeWeight").slider( "enable" );
-                    $("#sliderBNodeSize").slider( "enable" );
-                }
-
-            },
             categoryChanged: function() {
 
             }
