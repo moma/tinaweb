@@ -28,7 +28,7 @@ function displayNodeRow(label, id, category) {
         $("<tr></tr>").append(
             $("<td id='node_list_"+id+"'></td>").text(label).click( function(eventObject) {
                 //switch to meso view
-                console.log("calling tinaviz.viewMeso("+attached_id+", "+attached_cat+")");
+                //console.log("calling tinaviz.viewMeso("+attached_id+", "+attached_cat+")");
                 tinaviz.viewMeso(id, category);
             })
         )
@@ -40,7 +40,7 @@ function displayNodeRow(label, id, category) {
 */
 var InfoDiv = {
     id: null,
-    selection : {},
+    selection : [],
     neighbours : [],
     node_list_cache: {},
     last_category: "",
@@ -84,7 +84,7 @@ var InfoDiv = {
     */
     display_current_view: function() {
         var current_view = tinaviz.getView();
-        console.log("display_current_view "+current_view);
+        //console.log("display_current_view "+current_view);
         if (current_view !== undefined) {
             var level = $("#level");
             level.button('option','label', current_view + " level");
@@ -104,6 +104,9 @@ var InfoDiv = {
         //console.log(neighbours);
         merged = [];
         for(node in neighbours) {
+
+             //var nb = tinaviz.getNeighbourhood(viewLevel,nodeid);
+
             for(neighb in neighbours[node]){
                 if (neighb in merged)
                     merged[neighb]['degree']++;
@@ -191,7 +194,7 @@ var InfoDiv = {
                     var attached_cat =  tag.category;
                     tagspan.click( function() {
                         //switch to meso view
-                        console.log("calling tinaviz.viewMeso("+attached_id+", "+attached_cat+")");
+                        //console.log("calling tinaviz.viewMeso("+attached_id+", "+attached_cat+")");
                         tinaviz.viewMeso(attached_id, attached_cat);
                     });
                 })();
@@ -261,7 +264,10 @@ var InfoDiv = {
                     }
                 }
                 // add node to selection cache
-                this.selection.push(id);
+                //alert("pushing node "+node["id"]+" to selection cache");
+                this.selection.push(node["id"]); /* fix by julian, replaced id: (was 0, 1, 2..)
+                                                   by node["id"]: ("Document:443", "NGram::a1f4b56e5463...") */
+
                 // displays contents only if it's a document
                 contentinnerdiv.append( $("<b></b>").text(
                     this.getNodeContentLabel(label, node)
@@ -301,9 +307,9 @@ var InfoDiv = {
             this.reset();
             return;
         }
-        this.selection = []
+        this.selection =  [];
         this.updateInfo( lastselection );
-        tinaviz.getNeighbourhood( "macro", this.selection );
+        tinaviz.getNeighbourhood( "macro", this.selection ); // this is an asynchronous call - nothing is returned
     },
 
     /*

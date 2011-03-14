@@ -336,53 +336,26 @@ toolbar.init = function() {
             primary: 'ui-icon-arrows'
         }
     }).click(function(event) {
-        /**
-         * Manually toggles the category, and do the bipartite work
-         */
-        //var oldPause = tinaviz.getPause();
-        //tinaviz.pause();
         var cat = tinaviz.getCategory();
-        // store the layout state (iteration counter) in a JS-side buffer
-        
-        // DISABLED FOR TINAVIZ 2
-        //view.categories[cat].layout.iter = view.get("layout/iter");
-
         var next_cat = tinaviz.getOppositeCategory( cat );
-        tinaviz.setCategory(next_cat);
-        //view.set("layout/iter", view.categories[next_cat].layout.iter);
-        //tinaviz.autoCentering();
-        tinaviz.recenter();
         var viewName = tinaviz.getView();
-        // update the node list
-        tinaviz.infodiv.updateNodeList(viewName, next_cat);
         if (viewName == "macro") {
             if (next_cat=="Document") {
-                // disable
-            $("#sliderANodeWeight").slider( "enable" );
-            $("#sliderAEdgeWeight").slider( "enable" );
-            $("#sliderANodeSize").slider( "enable" );
-            $("#sliderBNodeWeight").slider( "disable" );
-            $("#sliderBEdgeWeight").slider( "disable" );
-            $("#sliderBNodeSize").slider( "disable" );
+                $("#sliderANodeWeight").slider( "enable" );
+                $("#sliderAEdgeWeight").slider( "enable" );
+                $("#sliderANodeSize").slider( "enable" );
+                $("#sliderBNodeWeight").slider( "disable" );
+                $("#sliderBEdgeWeight").slider( "disable" );
+                $("#sliderBNodeSize").slider( "disable" );
             } else if (next_cat=="NGram") {
-            $("#sliderANodeWeight").slider( "disable" );
-            $("#sliderAEdgeWeight").slider( "disable" );
-            $("#sliderANodeSize").slider( "disable" );
-            $("#sliderBNodeWeight").slider( "enable" );
-            $("#sliderBEdgeWeight").slider( "enable" );
-            $("#sliderBNodeSize").slider( "enable" );
-            }
-
-            // empty the selection, and ask the applet to select opposite nodes
-            var i = 0;
-            tinaviz.infodiv.reset();
-            for (var pos in tinaviz.infodiv.neighbours) {
-                console.log("switch category, selecting node from id "+tinaviz.infodiv.neighbours[pos]);
-                //tinaviz.select(tinaviz.infodiv.neighbours[pos]);
+                $("#sliderANodeWeight").slider( "disable" );
+                $("#sliderAEdgeWeight").slider( "disable" );
+                $("#sliderANodeSize").slider( "disable" );
+                $("#sliderBNodeWeight").slider( "enable" );
+                $("#sliderBEdgeWeight").slider( "enable" );
+                $("#sliderBNodeSize").slider( "enable" );
             }
         } else {
-
-            // always enable
             $("#sliderANodeWeight").slider( "enable" );
             $("#sliderAEdgeWeight").slider( "enable" );
             $("#sliderANodeSize").slider( "enable" );
@@ -390,8 +363,22 @@ toolbar.init = function() {
             $("#sliderBEdgeWeight").slider( "enable" );
             $("#sliderBNodeSize").slider( "enable" );
         }
-        tinaviz.infodiv.display_current_category();
-        //tinaviz.setPause(oldPause);
+
+       var neighbours = tinaviz.infodiv.neighbours;
+       console.log(neighbours);
+       tinaviz.setCategory(next_cat);
+       tinaviz.infodiv.reset();
+       tinaviz.infodiv.updateNodeList(viewName, next_cat);
+       console.log(neighbours);
+       tinaviz.infodiv.display_current_category();
+       for (var pos in neighbours) {
+                //console.log("switch category, selecting node from id "+tinaviz.infodiv.neighbours[pos]);
+                 //alert("selecting "+neighbours[pos]);
+                 // too fast
+                 //tinaviz.select(neighbours[pos]);
+        }
+
+        tinaviz.centerOnSelection();
 
     });
     toolbar.checkSearchForm();
