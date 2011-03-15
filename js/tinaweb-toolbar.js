@@ -365,11 +365,11 @@ toolbar.init = function() {
         }
 
        var neighbours = tinaviz.infodiv.neighbours;
-       console.log(neighbours);
+       //console.log(neighbours);
        tinaviz.setCategory(next_cat);
        tinaviz.infodiv.reset();
        tinaviz.infodiv.updateNodeList(viewName, next_cat);
-       console.log(neighbours);
+       //console.log(neighbours);
        tinaviz.infodiv.display_current_category();
        if (viewName=="macro") {
            for (var pos in neighbours) {
