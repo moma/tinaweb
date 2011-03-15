@@ -94,7 +94,7 @@ $(document).ready(function(){
             'Document' : 'Documents'
         };
         tinaviz.infodiv.reset();
-        $("#infodiv").accordion();
+        $("#infodiv").accordion({collapsible: true, fillSpace: true});
         toolbar.init();
 
         tinaviz.open({
