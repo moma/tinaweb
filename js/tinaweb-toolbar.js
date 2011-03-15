@@ -371,11 +371,13 @@ toolbar.init = function() {
        tinaviz.infodiv.updateNodeList(viewName, next_cat);
        console.log(neighbours);
        tinaviz.infodiv.display_current_category();
-       for (var pos in neighbours) {
+       if (viewName=="macro") {
+           for (var pos in neighbours) {
                 //console.log("switch category, selecting node from id "+tinaviz.infodiv.neighbours[pos]);
                  //alert("selecting "+neighbours[pos]);
                  // too fast
                  tinaviz.select(neighbours[pos]);
+           }
         }
 
         tinaviz.centerOnSelection();
