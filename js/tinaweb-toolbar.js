@@ -187,7 +187,7 @@ toolbar.init = function() {
         range: true,
         values: [toolbar.values.sliders.edgeFilter.min, toolbar.values.sliders.edgeFilter.max * 200.0],
         animate: true,
-        change: function(event, ui) {
+        slide: function(event, ui) {
             tinaviz.set("filter.a.edge.weight.min", ui.values[0] / 200.0, "Double");
             tinaviz.set("filter.a.edge.weight.max", ui.values[1] / 200.0, "Double");
             if (tinaviz.getView()=="meso") tinaviz.recenter();
@@ -198,7 +198,7 @@ toolbar.init = function() {
         range: true,
         values: [toolbar.values.sliders.nodeFilter.min, toolbar.values.sliders.nodeFilter.max * 200.0],
         animate: true,
-        change: function(event, ui) {
+        slide: function(event, ui) {
             tinaviz.set("filter.a.node.weight.min", ui.values[0] / 200.0, "Double");
             tinaviz.set("filter.a.node.weight.max", ui.values[1] / 200.0, "Double");
             if (tinaviz.getView()=="meso") tinaviz.recenter();
@@ -210,7 +210,7 @@ toolbar.init = function() {
         range: true,
         values: [toolbar.values.sliders.edgeFilter.min, toolbar.values.sliders.edgeFilter.max * 200.0],
         animate: true,
-        change: function(event, ui) {
+        slide: function(event, ui) {
             tinaviz.set("filter.b.edge.weight.min", ui.values[0] / 200.0, "Double");
             tinaviz.set("filter.b.edge.weight.max", ui.values[1] / 200.0, "Double");
             if (tinaviz.getView()=="meso") tinaviz.recenter();
@@ -221,7 +221,7 @@ toolbar.init = function() {
         range: true,
         values: [toolbar.values.sliders.nodeFilter.min, toolbar.values.sliders.nodeFilter.max * 200.0],
         animate: true,
-        change: function(event, ui) {
+        slide: function(event, ui) {
             tinaviz.set("filter.b.node.weight.min", ui.values[0] / 200.0, "Double");
             tinaviz.set("filter.b.node.weight.max", ui.values[1] / 200.0, "Double");
             if (tinaviz.getView()=="meso") tinaviz.recenter();
@@ -232,7 +232,7 @@ toolbar.init = function() {
         value: toolbar.values.sliders.magnify * 200.0,
         max: 200.0,// precision/size
         animate: true,
-        change: function(event, ui) {
+        slide: function(event, ui) {
             tinaviz.set("filter.a.node.size", ui.value / 200.0, "Double");
             //if (tinaviz.getView()=="meso") tinaviz.recenter();
         }
@@ -243,7 +243,7 @@ toolbar.init = function() {
         value: toolbar.values.sliders.magnify * 200.0,
         max: 200.0,// precision/size
         animate: true,
-        change: function(event, ui) {
+        slide: function(event, ui) {
             tinaviz.set("filter.b.node.size", ui.value / 200.0, "Double");
             //if (tinaviz.getView()=="meso") tinaviz.recenter();
         }
@@ -391,7 +391,7 @@ toolbar.resetSlidersValues = function() {
         range: true,
         values: [toolbar.values.sliders.edgeFilter.min, toolbar.values.sliders.edgeFilter.max * 200.0],
         animate: true,
-        change: function(event, ui) {
+        slide: function(event, ui) {
             tinaviz.set("filter.a.edge.weight.min", ui.values[0] / 200.0, "Double");
             tinaviz.set("filter.a.edge.weight.max", ui.values[1] / 200.0, "Double");
             if (tinaviz.getView()=="meso") tinaviz.recenter();
@@ -402,7 +402,7 @@ toolbar.resetSlidersValues = function() {
         range: true,
         values: [toolbar.values.sliders.nodeFilter.min, toolbar.values.sliders.nodeFilter.max * 200.0],
         animate: true,
-        change: function(event, ui) {
+        slide: function(event, ui) {
             tinaviz.set("filter.a.node.weight.min", ui.values[0] / 200.0, "Double");
             tinaviz.set("filter.a.node.weight.max", ui.values[1] / 200.0, "Double");
             if (tinaviz.getView()=="meso") tinaviz.recenter();
@@ -414,7 +414,7 @@ toolbar.resetSlidersValues = function() {
         range: true,
         values: [toolbar.values.sliders.edgeFilter.min, toolbar.values.sliders.edgeFilter.max * 200.0],
         animate: true,
-        change: function(event, ui) {
+        slide: function(event, ui) {
             tinaviz.set("filter.b.edge.weight.min", ui.values[0] / 200.0, "Double");
             tinaviz.set("filter.b.edge.weight.max", ui.values[1] / 200.0, "Double");
             if (tinaviz.getView()=="meso") tinaviz.recenter();
@@ -425,7 +425,7 @@ toolbar.resetSlidersValues = function() {
         range: true,
         values: [toolbar.values.sliders.nodeFilter.min, toolbar.values.sliders.nodeFilter.max * 200.0],
         animate: true,
-        change: function(event, ui) {
+        slide: function(event, ui) {
             tinaviz.set("filter.b.node.weight.min", ui.values[0] / 200.0, "Double");
             tinaviz.set("filter.b.node.weight.max", ui.values[1] / 200.0, "Double");
             if (tinaviz.getView()=="meso") tinaviz.recenter();
@@ -436,7 +436,7 @@ toolbar.resetSlidersValues = function() {
         value: toolbar.values.sliders.magnify * 200.0,
         max: 200.0,// precision/size
         animate: true,
-        change: function(event, ui) {
+        slide: function(event, ui) {
             tinaviz.set("filter.a.node.size", ui.value / 200.0, "Double");
             //if (tinaviz.getView()=="meso") tinaviz.recenter();
         }
@@ -447,7 +447,7 @@ toolbar.resetSlidersValues = function() {
         value: toolbar.values.sliders.magnify * 200.0,
         max: 200.0,// precision/size
         animate: true,
-        change: function(event, ui) {
+        slide: function(event, ui) {
             tinaviz.set("filter.b.node.size", ui.value / 200.0, "Double");
             //if (tinaviz.getView()=="meso") tinaviz.recenter();
         }
