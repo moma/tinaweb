@@ -37,8 +37,8 @@ $(document).ready(function(){
 
     tinaviz.ready(function(){
 
-        var size = resize();
-        tinaviz.size(size.w, size.h);
+        //var size = resize();
+        //tinaviz.size(size.w, size.h);
          /*
          $.doTimeout( 2000, function(){
               var size = resize();
