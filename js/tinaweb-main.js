@@ -15,6 +15,9 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+var demo = false;
+var unlockDemo = false;
+
 var tinaviz = {};
 
 $(document).ready(function(){
@@ -37,15 +40,9 @@ $(document).ready(function(){
 
     tinaviz.ready(function(){
 
-        //var size = resize();
-        //tinaviz.size(size.w, size.h);
-         /*
-         $.doTimeout( 2000, function(){
-              var size = resize();
-              tinaviz.size(size.w, size.h);
-              return true;
-         });
-         */
+        var size = resize();
+        tinaviz.size(size.w, size.h);
+
 
         var urlVars = getUrlVars();
         for (x in urlVars) {
@@ -55,18 +52,91 @@ $(document).ready(function(){
         tinaviz.set("filter.a.edge.weight.max", parseFloat(prefs.edge_filter_max), "Double");
         tinaviz.set("filter.a.node.weight.min", parseFloat(prefs.node_filter_min), "Double");
         tinaviz.set("filter.a.node.weight.max", parseFloat(prefs.node_filter_max), "Double");
-        tinaviz.set("filter.a.node.size", parseFloat(prefs.magnify), "Double");
+        tinaviz.set("filter.a.node.size",       parseFloat(prefs.magnify),         "Double");
         tinaviz.set("filter.b.edge.weight.min", parseFloat(prefs.edge_filter_min), "Double");
         tinaviz.set("filter.b.edge.weight.max", parseFloat(prefs.edge_filter_max), "Double");
         tinaviz.set("filter.b.node.weight.min", parseFloat(prefs.node_filter_min), "Double");
         tinaviz.set("filter.b.node.weight.max", parseFloat(prefs.node_filter_max), "Double");
-        tinaviz.set("filter.b.node.size", parseFloat(prefs.magnify), "Double");
+        tinaviz.set("filter.b.node.size",       parseFloat(prefs.magnify),         "Double");
         tinaviz.set("filter.node.category", prefs.category, "String");
         //tinaviz.set("output/nodeSizeMin", 5.0, "Double");
         //tinaviz.set("output/nodeSizeMax", 20.0, "Double");
         tinaviz.set("selectionRadius", parseFloat(prefs.cursor_size), "Double");
         tinaviz.set("layout.algorithm", prefs.layout, "String");
-        tinaviz.set("pause", prefs.pause, "Boolean")
+        tinaviz.set("pause", prefs.pause, "Boolean");
+        if (prefs.demo == "true") {
+           unlockDemo = true;
+        } else {
+           unlockDemo = false;
+        }
+
+        // standby time
+        $.fn.nap.standbyTime = 20;//0;
+        $(document).nap(function() { demo = unlockDemo; }, function() { demo = false; });
+        $.doTimeout( 6000, function(){
+                  if (demo) {
+
+                      tinaviz.centerOnSelection();
+
+
+                     if (Math.floor(Math.random()*30) > 20) {
+
+                          // random view
+                         if (Math.floor(Math.random()*2) == 0) {
+                            //tinaviz.toggleView();
+                            $("#level").click();
+                         }
+                         // random category
+                         else {
+                            //tinaviz.setCategory(tinaviz.getOppositeCategory( tinaviz. ));
+                            $("#toggle-switch").click();
+                         }
+
+                     }  else {
+
+                         //alert("demo!");
+                         var nbNeighbourhoods = tinaviz.infodiv.neighbours.length;
+                             //alert("nbNodest: "+nbNodes);
+                             //nbNodes = 0;
+                         if (nbNeighbourhoods > 0 && Math.floor(Math.random()*16) < 14) {
+                                var randNeighbourhood=Math.floor(Math.random() * nbNeighbourhoods);
+                                neighbourhood = tinaviz.infodiv.neighbours[randNeighbourhood];
+
+                                var nbNeighbours = 0;
+                                if (neighbourhood !== undefined & neighbourhood != null) nbNeighbours = neighbourhood.length;
+                                if (nbNeighbours == 0) {
+                                    $("#level").click();
+                                } else {
+                                    var randNeighbour=Math.floor(Math.random() * nbNeighbours);
+                                    //alert("randNeighbour: "+randNeighbour);
+                                    var node = neighbourhood[randNeighbour];
+                                    if (node !== undefined || node == null) {
+                                        if (tinaviz.getView() == "macro") {
+                                           tinaviz.unselect();
+                                        }
+                                        tinaviz.infodiv.reset();
+                                        tinaviz.select(node);
+                                    }
+                                }
+                        }  else {
+                         // select a random node
+                         var cat = tinaviz.getCategory();
+                         var nb_nodes = tinaviz.infodiv.node_list_cache[cat].length;
+                         // alert("selection zero.. trying to get nb_nodes: "+nb_nodes);
+                          var randomIndex = Math.floor(Math.random()*(nb_nodes));
+                          var randomNode = tinaviz.infodiv.node_list_cache[cat][randomIndex];
+                          if (randomNode !== undefined || node == null) {
+                                       tinaviz.unselect();
+                                       tinaviz.infodiv.reset();
+                                       tinaviz.select(randomNode["id"]);
+                          }
+
+                        }
+                    }
+
+                  }
+                  return true;
+        });
 
         /*
          * Initialization of the Infodiv

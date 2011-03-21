@@ -571,6 +571,7 @@ function Tinaviz(args) {
         $('#tinaviz').css("width",""+(width)+"px");
         wrapper.height = height;
         wrapper.width = width;
+        applet.setSize(width, height);
     }
 
     /**
