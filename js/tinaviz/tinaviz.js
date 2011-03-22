@@ -153,7 +153,7 @@ function Tinaviz(args) {
             url: opts.url,
             type: "GET",
             dataType: "text", // if we use 'text', we need to disable cache
-            cache: "false", //
+            cache: false, //
             error: function(e,f,g) {
                 tinaviz.logNormal("AJAX error = "+e.statusText);
 
@@ -336,14 +336,11 @@ function Tinaviz(args) {
     /**
      * Callback after clicks on nodes
      *
-     * @param view
-     * @param attr
+     * @param selection
      * @param mouse
      * @return
      */
     this._callbackSelectionChanged = function(selection, mouse) {
-        //console.log("_callbackSelectionChanged : "+ attr);
-
         this.callbackSelectionChanged({
             'viewName':'macro',
             'data':$.parseJSON(selection),
@@ -355,20 +352,24 @@ function Tinaviz(args) {
     /**
      * Callback after CHANGING THE VIEW LEVEL
      */
+     /*
     this._callbackViewChanged = function(viewName, selected) {
+        alert("_callbackViewChanged");
         var view = this.constructNewViewObject(viewName);
         this.callbackViewChanged(view);
-    }
-
+    }*/
 
     this.recenter = function() {
-        applet.recenter()
+         this.set("camera.target", "all", "String");
+    }
+    this.centerOnSelection = function() {
+         this.set("camera.target", "selection", "String");
     }
     this.setLayout = function(name) {
         this.set("layout.algorithm", name, "String");
     }
     this.setPause = function(value) {
-        this.set("pause",value, "Boolean");
+        this.set("pause", value, "Boolean");
     }
     this.getPause = function() {
         return this.get("pause");
@@ -382,20 +383,23 @@ function Tinaviz(args) {
         return n;
     }
 
-   /**
-      * Select a node from it's ID (String)
-      */
-
-    this.select = function(uuid) {
-          applet.setAs("select", uuid, "String");
+    /**
+    * Select a node from it's ID (String)
+    * this can be a String or a String array (to select multiple nodes)
+    */
+    this.select = function(toBeSelected) {
+        if ($.isArray(toBeSelected)) {
+          this.set("select", $.toJSON(toBeSelected), "Json");
+        } else {
+          this.set("select", toBeSelected, "String");
+        }
     }
 
     /**
      * Manually unselect all nodes
      */
     this.unselect = function() {
-        applet.setAs("select", "", "String");
-        this.infodiv.reset();
+         this.set("select", "", "String");
     }
 
     /**
@@ -415,7 +419,7 @@ function Tinaviz(args) {
     }
 
     this.setCategory = function(value) {
-        this.set("filter.node.category", value, "String");
+         this.set("filter.node.category", value, "String");
     }
 
     /**
@@ -434,25 +438,67 @@ function Tinaviz(args) {
      *
      */
     this.setView = function(view) {
+
         this.set("filter.view", view, "String");
+         var cat = this.getCategory();
+        this.infodiv.updateNodeList(view, this.getCategory());
+
+        $.doTimeout(400, function(){
+
+           tinaviz.infodiv.display_current_category();
+           tinaviz.infodiv.display_current_view();
+
+            toolbar.resetSlidersValues();
+
+           // MACRO
+           if (view == "macro") {
+                if (cat=="Document") {
+                     // disable
+                     $("#sliderANodeWeight").slider( "enable" );
+                     $("#sliderAEdgeWeight").slider( "enable" );
+                     $("#sliderANodeSize").slider( "enable" );
+                     $("#sliderBNodeWeight").slider( "disable" );
+                     $("#sliderBEdgeWeight").slider( "disable" );
+                     $("#sliderBNodeSize").slider( "disable" );
+                 } else if (cat=="NGram") {
+                     $("#sliderANodeWeight").slider( "disable" );
+                     $("#sliderAEdgeWeight").slider( "disable" );
+                     $("#sliderANodeSize").slider( "disable" );
+                     $("#sliderBNodeWeight").slider( "enable" );
+                     $("#sliderBEdgeWeight").slider( "enable" );
+                     $("#sliderBNodeSize").slider( "enable" );
+                }
+            // MESO
+            } else {
+                 $("#sliderANodeWeight").slider( "enable" );
+                 $("#sliderAEdgeWeight").slider( "enable" );
+                 $("#sliderANodeSize").slider( "enable" );
+                 $("#sliderBNodeWeight").slider( "enable" );
+                 $("#sliderBEdgeWeight").slider( "enable" );
+                 $("#sliderBNodeSize").slider( "enable" );
+                 tinaviz.recenter();
+            }
+            false;
+        });
     }
 
     /**
      * Manual toggle of the current view (Eg. when button is pressed)
      *
      */
+
     this.toggleView = function() {
+        toolbar.resetSlidersValues();
         if (this.getView() == "macro") {
             // check if selection is empty
             if (this.infodiv.selection.length != 0) {
                 this.setView("meso");
-            this.infodiv.updateNodeList("meso", this.getCategory());
+
             } else {
                 alert("You need to select a node before switching to meso view");
             }
         } else if (this.getView() == "meso") {
             this.setView("macro");
-            this.infodiv.updateNodeList("macro", this.getCategory());
         }
     }
 
@@ -463,14 +509,49 @@ function Tinaviz(args) {
      *   - category: String
      */
     this.viewMeso = function(id, category) {
+                       // always enable
+                        $("#sliderANodeWeight").slider( "disable" );
+                        $("#sliderAEdgeWeight").slider( "disable" );
+                        $("#sliderANodeSize").slider( "disable" );
+                        $("#sliderBNodeWeight").slider( "disable" );
+                        $("#sliderBEdgeWeight").slider( "disable" );
+                        $("#sliderBNodeSize").slider( "disable" );
+        //tinaviz.unselect();
         // selects unique node
-        this.unselect();
-        this.select(id);
-        // sets the category of the graph
-        this.setCategory(category);
-        //this.set("macro", "filter.node.category", category);
-        this.setView("meso");
-        //this.infoviz.updateNodeList("meso", category);
+        tinaviz.setView("macro");
+        tinaviz.unselect(); // clean in every..
+        //$.doTimeout( 400, function(){
+            tinaviz.setCategory(category);
+            tinaviz.unselect();  // .. category
+            //alert("setting category to "+category);
+            tinaviz.infodiv.updateNodeList("meso", category);
+
+            //alert("selecting "+id);
+            tinaviz.select(id);
+
+            // sets the category of the graph
+
+            //this.set("macro", "filter.node.category", category);
+            //alert("setting view");
+            $.doTimeout(400, function(){
+                  tinaviz.setView("meso");
+            //alert("recentering");
+
+                    // always enable
+                        $("#sliderANodeWeight").slider( "enable" );
+                        $("#sliderAEdgeWeight").slider( "enable" );
+                        $("#sliderANodeSize").slider( "enable" );
+                        $("#sliderBNodeWeight").slider( "enable" );
+                        $("#sliderBEdgeWeight").slider( "enable" );
+                        $("#sliderBNodeSize").slider( "enable" );
+            //this.infoviz.updateNodeList("meso", category);
+              tinaviz.recenter();
+              false;
+            });
+
+         //   false;
+       // });
+
     }
 
 
@@ -495,6 +576,7 @@ function Tinaviz(args) {
         $('#tinaviz').css("width",""+(width)+"px");
         wrapper.height = height;
         wrapper.width = width;
+        applet.resize(width, height);
     }
 
     /**

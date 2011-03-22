@@ -26,7 +26,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     <!-- CSS LINKS -->
     <!-- JQUERY UI CSS -->
     <link type="text/css" rel="stylesheet" href="css/iscpif/jquery-ui-1.8.10.custom.css"/>
-    <link type="text/css" rel="stylesheet" href="css/iscpif_red/jquery-ui-1.8.10.custom.css"/>
+    <link type="text/css" rel="stylesheet" href="css/iscpif_redstart/jquery-ui-1.8.10.custom.css"/>
+    <link type="text/css" rel="stylesheet" href="css/iscpif_greenstart/jquery-ui-1.8.10.custom.css"/>
     <link type="text/css" rel="stylesheet" href="css/ui.spinner.css"/>
     <link type="text/css" rel="stylesheet" href="css/jquery.qtip.min.css"/>
     <link type="text/css" rel="stylesheet" href="css/ui.notify.css"/>
@@ -38,6 +39,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     <script type="text/javascript" src="js/jquery/jquery.ba-dotimeout.min.js"></script>
     <script type="text/javascript" src="js/jquery/jquery.json-2.2.min.js"></script>
     <script type="text/javascript" src="js/jquery/jquery.qtip.min.js"></script>
+    <script type="text/javascript" src="js/jquery/jquery.nap-1.0.0.js"></script>
 
     <!-- JQUERY UI -->
     <script type="text/javascript" src="js/jquery-ui/jquery-ui-1.8.9.custom.min.js"></script>
@@ -78,40 +80,27 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     <div id="hd" class="ui-widget">
         <div id="hdb">
             <div id="htoolbar" class="toolbardiv fg-toolbar ui-widget-header ui-corner-all ui-helper-clearfix">
-                <!--<div id="title" class="noSelect" style="font-size: 1.2em; height: 23px;">   -->
+                <div id="title" class="noSelect toolbar-left" style="width: 460px;">
+                    <div style="font-size: 1.2em;">Tinaweb</div>
                     <img alt='' src='css/banner.png' style='float: left;' border='0' height='150'><h1>Réseau des Chercheurs Systèmes Complexes - ISC-PIF</h1>
-               <!-- </div>-->
+                    <button id="toggle-paused" class="fg-button toolbar-left">play</button>
+                    <button id="toggle-switch" class="fg-button toolbar-left">switch category</button>
+                    <button id="level" class="fg-button toolbar-left">macro</button>
 
-                <button id="toggle-paused" class="fg-button toolbar-left">play</button>
-                <button id="toggle-switch" class="fg-button toolbar-left">switch category</button>
-                <button id="level" class="fg-button toolbar-left">macro</button>
+                    <div id="sliders_view" class="sliders toolbar-left">
+                        <div class="slider smallslider">
+                            <span class="sliderLabel noSelect">cursor size</span>
 
-                <div id="sliders_view" class="sliders toolbar-left">
-                    <div class="slider smallslider">
-                        <span class="sliderLabel noSelect">cursor size</span>
-
-                        <div id="sliderSelectionZone"></div>
+                            <div id="sliderSelectionZone"></div>
+                        </div>
                     </div>
                 </div>
 
-                <!-- block for Document/NGram label -->
-                <div class="toolbar-left" style="width: 80px;">
-                    <div>&nbsp;</div>
-                    <div style="height: 16px;">
-                        Node Filter:
-                    </div>
-                    <div style="height: 16px;">
-                        Edge Filter:
-                    </div>
-                    <div style="height: 16px;">
-                        Size:
-                    </div>
-                </div>
 
                 <!-- block for Category A Filter -->
-                <div class="toolbar-left" style="width: 130px;">
+                <div class="noSelect toolbar-left" style="width: 130px;">
                     <div>
-                        Documents
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Documents
                     </div>
                     <div style="height: 16px; width: 100px;">
                         <div id="sliderANodeWeight" class="greenstart"></div>
@@ -124,10 +113,24 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                     </div>
                 </div>
 
+                <!-- block for Document/NGram label -->
+                <div class="noSelect toolbar-left" style="width: 75px;">
+                    <div>&nbsp;</div>
+                    <div style="height: 16px;">
+                        Node Filter
+                    </div>
+                    <div style="height: 16px;">
+                        Edge Filter
+                    </div>
+                    <div style="height: 16px;">
+                        Node Size
+                    </div>
+                </div>
+
                  <!-- block for Category B Filter -->
                 <div class="toolbar-left" style="width: 130px;">
                     <div>
-                        NGrams
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;NGrams
                     </div>
                     <div style="height: 16px; width: 100px;">
                         <div id="sliderBNodeWeight" class="redstart"></div>
@@ -140,14 +143,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                     </div>
                 </div>
 
-
-                <button id="export-view" class="fg-button toolbar-right">export</button>
-                <button id="toggle-recenter" class="fg-button toolbar-right">center</button>
-                <form id="search" action="#" class="toolbar-right">
-                    <input id="search_input" type="text" value=""/>
-                    <button id="search_button" class="fg-button">search</button>
-                </form>
-
+                 <div id="title" class="toolbar-right" style="width: 430px;">
+                    <button id="export-view" class="noSelect fg-button toolbar-right">export</button>
+                    <button id="toggle-recenter" class="noSelect fg-button toolbar-right">center</button>
+                    <form id="search" action="#" class="toolbar-right">
+                        <input id="search_input" type="text" value=""/>
+                        <button id="search_button" class="noSelect fg-button">search</button>
+                    </form>
+                </div>
             </div>
             <!-- End of htoolbar -->
         </div>
@@ -168,7 +171,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                     <div id="infodivparent">
                         <div id="infodiv" class="yui-u">
                             <h3><a href="#">Current selection
-                                <button id="toggle-unselect"></button>
+                                <button id="toggle-unselect" class="redstart"></button>
                             </a></h3>
                             <div id="node_details">
                                 <!-- Modif David inversion des accordéon + ajout-->

@@ -59,21 +59,16 @@ $(document).ready(function(){
 
     $("#nodeRadiusSelector").change(function() {
         //alert("SET RADIUS TO "+$("#nodeRadiusSelector").val());
-        tinaviz.set("filter.map.node.radius",$("#nodeRadiusSelector").val(), "Double");
-    });
-
-    $("#nodeWeightSelector").change(function() {
-        //alert("SET WEIGHT TO "+$("#nodeShapeSelector").val());
-        tinaviz.set("filter.map.node.weight",$("#nodeWeightSelector").val(), "Double");
+        tinaviz.set("filter.map.node.radius",$("#nodeRadiusSelector").val(), "String");
     });
 
     $("#nodeShapeSelector").change(function() {
-        tinaviz.set("filter.map.node.shape",$("#nodeShapeSelector").val(), "Double");
+        tinaviz.set("filter.map.node.shape",$("#nodeShapeSelector").val(), "String");
     });
 
     $("#nodeColorSelector").change(function() {
         //alert("SET COLOR TO "+ $("#nodeColorSelector").val(), true);
-        tinaviz.set("filter.map.node.color",$("#nodeColorSelector").val(), "Double");
+        tinaviz.set("filter.map.node.color",$("#nodeColorSelector").val(), "String");
     });
 
 });
@@ -129,6 +124,7 @@ toolbar.init = function() {
         
         var txt = $("#search_input").val();
          tinaviz.unselect();
+         tinaviz.infodiv.reset();
 
         //if (txt=="") {
 
@@ -140,6 +136,7 @@ toolbar.init = function() {
             //    tinaviz.searchNodes(txt,cat2, "current", "containsIgnoreCase", "visualization");
             //} else {
            tinaviz.selectByPattern(txt, "containsIgnoreCase");
+           tinaviz.centerOnSelection();
            // }
         //}
     
@@ -178,69 +175,77 @@ toolbar.init = function() {
         var txt = $("#search_input").val();
         if (txt=="") {
             tinaviz.unselect();
+            tinaviz.infodiv.reset();
         } else {
             tinaviz.selectByPattern(txt, "containsIgnoreCase");
+            tinaviz.centerOnSelection();
         }
     });
 
     // MACRO SLIDERS
     $("#sliderAEdgeWeight").slider({
         range: true,
-        values: [toolbar.values.sliders.edgeFilter.min, toolbar.values.sliders.edgeFilter.max * 100.0],
+        values: [toolbar.values.sliders.edgeFilter.min, toolbar.values.sliders.edgeFilter.max * 200.0],
         animate: true,
-        change: function(event, ui) {
-            tinaviz.set("filter.a.edge.weight.min", ui.values[0] / 100.0, "Double");
-            tinaviz.set("filter.a.edge.weight.max", ui.values[1] / 100.0, "Double");
+        slide: function(event, ui) {
+            tinaviz.set("filter.a.edge.weight.min", ui.values[0] / 200.0, "Double");
+            tinaviz.set("filter.a.edge.weight.max", ui.values[1] / 200.0, "Double");
+            if (tinaviz.getView()=="meso") tinaviz.recenter();
         }
     });
 
     $("#sliderANodeWeight").slider({
         range: true,
-        values: [toolbar.values.sliders.nodeFilter.min, toolbar.values.sliders.nodeFilter.max * 100.0],
+        values: [toolbar.values.sliders.nodeFilter.min, toolbar.values.sliders.nodeFilter.max * 200.0],
         animate: true,
-        change: function(event, ui) {
-            tinaviz.set("filter.a.node.weight.min", ui.values[0] / 100.0, "Double");
-            tinaviz.set("filter.a.node.weight.max", ui.values[1] / 100.0, "Double");
+        slide: function(event, ui) {
+            tinaviz.set("filter.a.node.weight.min", ui.values[0] / 200.0, "Double");
+            tinaviz.set("filter.a.node.weight.max", ui.values[1] / 200.0, "Double");
+            if (tinaviz.getView()=="meso") tinaviz.recenter();
         }
     });
 
     // MACRO SLIDERS
     $("#sliderBEdgeWeight").slider({
         range: true,
-        values: [toolbar.values.sliders.edgeFilter.min, toolbar.values.sliders.edgeFilter.max * 100.0],
+        values: [toolbar.values.sliders.edgeFilter.min, toolbar.values.sliders.edgeFilter.max * 200.0],
         animate: true,
-        change: function(event, ui) {
-            tinaviz.set("filter.b.edge.weight.min", ui.values[0] / 100.0, "Double");
-            tinaviz.set("filter.b.edge.weight.max", ui.values[1] / 100.0, "Double");
+        slide: function(event, ui) {
+            tinaviz.set("filter.b.edge.weight.min", ui.values[0] / 200.0, "Double");
+            tinaviz.set("filter.b.edge.weight.max", ui.values[1] / 200.0, "Double");
+            if (tinaviz.getView()=="meso") tinaviz.recenter();
         }
     });
 
     $("#sliderBNodeWeight").slider({
         range: true,
-        values: [toolbar.values.sliders.nodeFilter.min, toolbar.values.sliders.nodeFilter.max * 100.0],
+        values: [toolbar.values.sliders.nodeFilter.min, toolbar.values.sliders.nodeFilter.max * 200.0],
         animate: true,
-        change: function(event, ui) {
-            tinaviz.set("filter.b.node.weight.min", ui.values[0] / 100.0, "Double");
-            tinaviz.set("filter.b.node.weight.max", ui.values[1] / 100.0, "Double");
+        slide: function(event, ui) {
+            tinaviz.set("filter.b.node.weight.min", ui.values[0] / 200.0, "Double");
+            tinaviz.set("filter.b.node.weight.max", ui.values[1] / 200.0, "Double");
+            if (tinaviz.getView()=="meso") tinaviz.recenter();
         }
     });
 
     $("#sliderANodeSize").slider({
-        value: toolbar.values.sliders.magnify * 100.0,
-        max: 100.0,// precision/size
+        value: toolbar.values.sliders.magnify * 200.0,
+        max: 200.0,// precision/size
         animate: true,
-        change: function(event, ui) {
-            tinaviz.set("filter.a.node.size", ui.value / 100.0, "Double");
+        slide: function(event, ui) {
+            tinaviz.set("filter.a.node.size", ui.value / 200.0, "Double");
+            //if (tinaviz.getView()=="meso") tinaviz.recenter();
         }
     }
     );
 
     $("#sliderBNodeSize").slider({
-        value: toolbar.values.sliders.magnify * 100.0,
-        max: 100.0,// precision/size
+        value: toolbar.values.sliders.magnify * 200.0,
+        max: 200.0,// precision/size
         animate: true,
-        change: function(event, ui) {
-            tinaviz.set("filter.b.node.size", ui.value / 100.0, "Double");
+        slide: function(event, ui) {
+            tinaviz.set("filter.b.node.size", ui.value / 200.0, "Double");
+            //if (tinaviz.getView()=="meso") tinaviz.recenter();
         }
     }
     );
@@ -248,6 +253,7 @@ toolbar.init = function() {
     $("#export-view").button("disable");
     $("#level").button("disable");
     $("#search_button").button("disable");
+    $("#toggle-recenter").button("disable");
     $("#sliderSelectionZone").slider( "disable" );
     $("#sliderANodeWeight").slider( "disable" );
     $("#sliderAEdgeWeight").slider( "disable" );
@@ -311,6 +317,7 @@ toolbar.init = function() {
     }).click(function(event) {
         toolbar.lastsearch = "";
         tinaviz.unselect();
+        tinaviz.infodiv.reset();
     });
 
     $("#toggle-recenter").button({
@@ -329,53 +336,26 @@ toolbar.init = function() {
             primary: 'ui-icon-arrows'
         }
     }).click(function(event) {
-        /**
-         * Manually toggles the category, and do the bipartite work
-         */
-        //var oldPause = tinaviz.getPause();
-        //tinaviz.pause();
         var cat = tinaviz.getCategory();
-        // store the layout state (iteration counter) in a JS-side buffer
-        
-        // DISABLED FOR TINAVIZ 2
-        //view.categories[cat].layout.iter = view.get("layout/iter");
-
         var next_cat = tinaviz.getOppositeCategory( cat );
-        tinaviz.setCategory(next_cat);
-        //view.set("layout/iter", view.categories[next_cat].layout.iter);
-        //tinaviz.autoCentering();
-        tinaviz.recenter();
         var viewName = tinaviz.getView();
-        // update the node list
-        tinaviz.infodiv.updateNodeList(viewName, next_cat);
         if (viewName == "macro") {
             if (next_cat=="Document") {
-                // disable
-            $("#sliderANodeWeight").slider( "enable" );
-            $("#sliderAEdgeWeight").slider( "enable" );
-            $("#sliderANodeSize").slider( "enable" );
-            $("#sliderBNodeWeight").slider( "disable" );
-            $("#sliderBEdgeWeight").slider( "disable" );
-            $("#sliderBNodeSize").slider( "disable" );
+                $("#sliderANodeWeight").slider( "enable" );
+                $("#sliderAEdgeWeight").slider( "enable" );
+                $("#sliderANodeSize").slider( "enable" );
+                $("#sliderBNodeWeight").slider( "disable" );
+                $("#sliderBEdgeWeight").slider( "disable" );
+                $("#sliderBNodeSize").slider( "disable" );
             } else if (next_cat=="NGram") {
-            $("#sliderANodeWeight").slider( "disable" );
-            $("#sliderAEdgeWeight").slider( "disable" );
-            $("#sliderANodeSize").slider( "disable" );
-            $("#sliderBNodeWeight").slider( "enable" );
-            $("#sliderBEdgeWeight").slider( "enable" );
-            $("#sliderBNodeSize").slider( "enable" );
-            }
-
-            // empty the selection, and ask the applet to select opposite nodes
-            var i = 0;
-            tinaviz.infodiv.reset();
-            for (var pos in tinaviz.infodiv.neighbours) {
-                console.log("switch category, selecting node from id "+tinaviz.infodiv.neighbours[pos]);
-                //tinaviz.select(tinaviz.infodiv.neighbours[pos]);
+                $("#sliderANodeWeight").slider( "disable" );
+                $("#sliderAEdgeWeight").slider( "disable" );
+                $("#sliderANodeSize").slider( "disable" );
+                $("#sliderBNodeWeight").slider( "enable" );
+                $("#sliderBEdgeWeight").slider( "enable" );
+                $("#sliderBNodeSize").slider( "enable" );
             }
         } else {
-
-            // always enable
             $("#sliderANodeWeight").slider( "enable" );
             $("#sliderAEdgeWeight").slider( "enable" );
             $("#sliderANodeSize").slider( "enable" );
@@ -383,13 +363,97 @@ toolbar.init = function() {
             $("#sliderBEdgeWeight").slider( "enable" );
             $("#sliderBNodeSize").slider( "enable" );
         }
-        tinaviz.infodiv.display_current_category();
-        //tinaviz.setPause(oldPause);
+
+       var neighbours = tinaviz.infodiv.neighbours;
+       //console.log(neighbours);
+       tinaviz.setCategory(next_cat);
+       tinaviz.infodiv.reset();
+       tinaviz.infodiv.updateNodeList(viewName, next_cat);
+       //console.log(neighbours);
+       tinaviz.infodiv.display_current_category();
+       if (viewName=="macro") {
+           for (var pos in neighbours) {
+                //console.log("switch category, selecting node from id "+tinaviz.infodiv.neighbours[pos]);
+                 //alert("selecting "+neighbours[pos]);
+                 // too fast
+                 tinaviz.select(neighbours[pos]);
+           }
+        }
+
+        tinaviz.centerOnSelection();
 
     });
     toolbar.checkSearchForm();
 };
+toolbar.resetSlidersValues = function() {
+// MACRO SLIDERS
+    $("#sliderAEdgeWeight").slider({
+        range: true,
+        values: [toolbar.values.sliders.edgeFilter.min, toolbar.values.sliders.edgeFilter.max * 200.0],
+        animate: true,
+        slide: function(event, ui) {
+            tinaviz.set("filter.a.edge.weight.min", ui.values[0] / 200.0, "Double");
+            tinaviz.set("filter.a.edge.weight.max", ui.values[1] / 200.0, "Double");
+            if (tinaviz.getView()=="meso") tinaviz.recenter();
+        }
+    });
 
+    $("#sliderANodeWeight").slider({
+        range: true,
+        values: [toolbar.values.sliders.nodeFilter.min, toolbar.values.sliders.nodeFilter.max * 200.0],
+        animate: true,
+        slide: function(event, ui) {
+            tinaviz.set("filter.a.node.weight.min", ui.values[0] / 200.0, "Double");
+            tinaviz.set("filter.a.node.weight.max", ui.values[1] / 200.0, "Double");
+            if (tinaviz.getView()=="meso") tinaviz.recenter();
+        }
+    });
+
+    // MACRO SLIDERS
+    $("#sliderBEdgeWeight").slider({
+        range: true,
+        values: [toolbar.values.sliders.edgeFilter.min, toolbar.values.sliders.edgeFilter.max * 200.0],
+        animate: true,
+        slide: function(event, ui) {
+            tinaviz.set("filter.b.edge.weight.min", ui.values[0] / 200.0, "Double");
+            tinaviz.set("filter.b.edge.weight.max", ui.values[1] / 200.0, "Double");
+            if (tinaviz.getView()=="meso") tinaviz.recenter();
+        }
+    });
+
+    $("#sliderBNodeWeight").slider({
+        range: true,
+        values: [toolbar.values.sliders.nodeFilter.min, toolbar.values.sliders.nodeFilter.max * 200.0],
+        animate: true,
+        slide: function(event, ui) {
+            tinaviz.set("filter.b.node.weight.min", ui.values[0] / 200.0, "Double");
+            tinaviz.set("filter.b.node.weight.max", ui.values[1] / 200.0, "Double");
+            if (tinaviz.getView()=="meso") tinaviz.recenter();
+        }
+    });
+
+    $("#sliderANodeSize").slider({
+        value: toolbar.values.sliders.magnify * 200.0,
+        max: 200.0,// precision/size
+        animate: true,
+        slide: function(event, ui) {
+            tinaviz.set("filter.a.node.size", ui.value / 200.0, "Double");
+            //if (tinaviz.getView()=="meso") tinaviz.recenter();
+        }
+    }
+    );
+
+    $("#sliderBNodeSize").slider({
+        value: toolbar.values.sliders.magnify * 200.0,
+        max: 200.0,// precision/size
+        animate: true,
+        slide: function(event, ui) {
+            tinaviz.set("filter.b.node.size", ui.value / 200.0, "Double");
+            //if (tinaviz.getView()=="meso") tinaviz.recenter();
+        }
+    }
+    );
+}
 toolbar.updateButton = function(button, state) {
 
     toolbar.values.buttons[button] = state;
@@ -401,32 +465,5 @@ toolbar.updateButton = function(button, state) {
  *
  */
 toolbar.update = function(vals) {
-    console.dir(vals);
-
-    for (v in vals) {
-        toolbar.values[v] = vals[v];
-    }
-
-    // simple shortcut
-    var values = toolbar.values;
-
-    for (v in vals) {
-        toolbar.values[v] = vals[v];
-    }
-    $("#search_input").val(values.search);
-
-    console.log(values);
-    // initialize the sliders
-    //alert("gettings values");
-    $("#sliderNodeSize").slider( "option", "value", values.magnify * 100.0 );
-    $("#sliderSelectionZone").slider( "option", "value", values.cursor_size * 100.0 );
-    $("#sliderEdgeWeight").slider( "option", "values", [
-        values.sliders.edgeFilter.min,
-        values.sliders.edgeFilter.max * 100.0
-        ]);
-    $("#sliderNodeWeight").slider( "option", "values", [
-        values.sliders.nodeFilter.min,
-        values.sliders.nodeFilter.max * 100.0
-        ]);
 
 };

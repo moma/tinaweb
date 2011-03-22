@@ -15,6 +15,9 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+var demo = false;
+var unlockDemo = false;
+
 var tinaviz = {};
 
 $(document).ready(function(){
@@ -28,6 +31,7 @@ $(document).ready(function(){
         height: size.h,
         path : $('meta[name=tinaviz]').attr("content")
     });
+
 
     $(window).bind('resize', function() {
         var size = resize();
@@ -47,19 +51,92 @@ $(document).ready(function(){
         tinaviz.set("filter.a.edge.weight.max", parseFloat(prefs.edge_filter_max), "Double");
         tinaviz.set("filter.a.node.weight.min", parseFloat(prefs.node_filter_min), "Double");
         tinaviz.set("filter.a.node.weight.max", parseFloat(prefs.node_filter_max), "Double");
-        tinaviz.set("filter.a.node.size", parseFloat(prefs.magnify), "Double");
+        tinaviz.set("filter.a.node.size",       parseFloat(prefs.magnify),         "Double");
         tinaviz.set("filter.b.edge.weight.min", parseFloat(prefs.edge_filter_min), "Double");
         tinaviz.set("filter.b.edge.weight.max", parseFloat(prefs.edge_filter_max), "Double");
         tinaviz.set("filter.b.node.weight.min", parseFloat(prefs.node_filter_min), "Double");
         tinaviz.set("filter.b.node.weight.max", parseFloat(prefs.node_filter_max), "Double");
-        tinaviz.set("filter.b.node.size", parseFloat(prefs.magnify), "Double");
+        tinaviz.set("filter.b.node.size",       parseFloat(prefs.magnify),         "Double");
         tinaviz.set("filter.node.category", prefs.category, "String");
 
         //tinaviz.set("output/nodeSizeMin", 5.0, "Double");
         //tinaviz.set("output/nodeSizeMax", 20.0, "Double");
         tinaviz.set("selectionRadius", parseFloat(prefs.cursor_size), "Double");
         tinaviz.set("layout.algorithm", prefs.layout, "String");
-        tinaviz.set("pause", prefs.pause, "Boolean")
+        tinaviz.set("pause", prefs.pause, "Boolean");
+        if (prefs.demo == "true") {
+           unlockDemo = true;
+        } else {
+           unlockDemo = false;
+        }
+
+        // standby time
+        $.fn.nap.standbyTime = 20;//0;
+        $(document).nap(function() { demo = unlockDemo; }, function() { demo = false; });
+        $.doTimeout( 6000, function(){
+                  if (demo) {
+
+                      tinaviz.centerOnSelection();
+
+
+                     if (Math.floor(Math.random()*30) > 20) {
+
+                          // random view
+                         if (Math.floor(Math.random()*2) == 0) {
+                            //tinaviz.toggleView();
+                            $("#level").click();
+                         }
+                         // random category
+                         else {
+                            //tinaviz.setCategory(tinaviz.getOppositeCategory( tinaviz. ));
+                            $("#toggle-switch").click();
+                         }
+
+                     }  else {
+
+                         //alert("demo!");
+                         var nbNeighbourhoods = tinaviz.infodiv.neighbours.length;
+                             //alert("nbNodest: "+nbNodes);
+                             //nbNodes = 0;
+                         if (nbNeighbourhoods > 0 && Math.floor(Math.random()*16) < 14) {
+                                var randNeighbourhood=Math.floor(Math.random() * nbNeighbourhoods);
+                                neighbourhood = tinaviz.infodiv.neighbours[randNeighbourhood];
+
+                                var nbNeighbours = 0;
+                                if (neighbourhood !== undefined & neighbourhood != null) nbNeighbours = neighbourhood.length;
+                                if (nbNeighbours == 0) {
+                                    $("#level").click();
+                                } else {
+                                    var randNeighbour=Math.floor(Math.random() * nbNeighbours);
+                                    //alert("randNeighbour: "+randNeighbour);
+                                    var node = neighbourhood[randNeighbour];
+                                    if (node !== undefined || node == null) {
+                                        if (tinaviz.getView() == "macro") {
+                                           tinaviz.unselect();
+                                        }
+                                        tinaviz.infodiv.reset();
+                                        tinaviz.select(node);
+                                    }
+                                }
+                        }  else {
+                         // select a random node
+                         var cat = tinaviz.getCategory();
+                         var nb_nodes = tinaviz.infodiv.node_list_cache[cat].length;
+                         // alert("selection zero.. trying to get nb_nodes: "+nb_nodes);
+                          var randomIndex = Math.floor(Math.random()*(nb_nodes));
+                          var randomNode = tinaviz.infodiv.node_list_cache[cat][randomIndex];
+                          if (randomNode !== undefined || node == null) {
+                                       tinaviz.unselect();
+                                       tinaviz.infodiv.reset();
+                                       tinaviz.select(randomNode["id"]);
+                          }
+
+                        }
+                    }
+
+                  }
+                  return true;
+        });
 
         /*
          * Initialization of the Infodiv
@@ -87,7 +164,7 @@ $(document).ready(function(){
             'Document' : 'Documents'
         };
         tinaviz.infodiv.reset();
-        $("#infodiv").accordion();
+        $("#infodiv").accordion({collapsible: true, fillSpace: true});
         toolbar.init();
 
         tinaviz.open({
@@ -102,8 +179,10 @@ $(document).ready(function(){
                 tinaviz.infodiv.reset();
             },
             success: function() {
-
-                $("#notification").hide();
+                $("#notification").notify("create", {
+                    title: 'Tinasoft Notification',
+                    text: 'You can now explore the graph'
+                });
                 $("#appletInfo").hide();
                 $("#export-view").button("enable");
                 $("#level").button("enable");
@@ -115,6 +194,7 @@ $(document).ready(function(){
                 tinaviz.infodiv.display_current_view();
 
                 // initialize the sliders
+                /*
                 $("#sliderANodeSize").slider( "option", "value",
                     parseInt(tinaviz.get("filter.a.node.size")) *100
                     );
@@ -143,6 +223,7 @@ $(document).ready(function(){
                     parseInt(tinaviz.get("filter.b.node.weight.min") ),
                     parseInt(tinaviz.get("filter.b.node.weight.max")) *100
                 ]);
+                */
 
                 // default settings
                 $("#sliderSelectionZone").slider( "enable" );
@@ -201,63 +282,15 @@ $(document).ready(function(){
                     var macroCategory = tinaviz.get("meso.category");
                     tinaviz.infodiv.updateNodeList("meso", macroCategory);
                 }
+                //console.log("calling: tinaviz.infodiv.update("+selection.viewName+", "+selection.data+")");
+                //console.log(selection.data);
                 tinaviz.infodiv.update(selection.viewName, selection.data);
             },
             /** Callback for get neighbourhood **/
             getNeighbourhood: function(selection_list, neighbour_node_list) {
                 tinaviz.infodiv.updateTagCloud(selection_list, neighbour_node_list);
             },
-            viewChanged: function(view) {
-                $("#sliderAEdgeWeight").slider( "option", "values", [
-                    parseInt( view.get("filter.a.edge.weight.min") ),
-                    parseInt(view.get("filter.a.edge.weight.max")) *100
-                ]);
-                $("#sliderANodeWeight").slider( "option", "values", [
-                    parseInt(view.get("filter.a.node.weight.min") ),
-                    parseInt(view.get("filter.a.node.weight.max")) *100
-                ]);
-                $("#sliderBEdgeWeight").slider( "option", "values", [
-                    parseInt( view.get("filter.b.edge.weight.min") ),
-                    parseInt(view.get("filter.b.edge.weight.max")) *100
-                ]);
-                $("#sliderBNodeWeight").slider( "option", "values", [
-                    parseInt(view.get("filter.b.node.weight.min") ),
-                    parseInt(view.get("filter.b.node.weight.max")) *100
-                ]);
-                tinaviz.infodiv.display_current_category();
-                tinaviz.infodiv.display_current_view();
-                // TODO check selection
-                // if selection has edges with edge of all the same weight, we disable the filter
 
-                 if (viewName == "macro") {
-                            if (next_cat=="Document") {
-                                // disable
-                                $("#sliderANodeWeight").slider( "enable" );
-                                $("#sliderAEdgeWeight").slider( "enable" );
-                                $("#sliderANodeSize").slider( "enable" );
-                                $("#sliderBNodeWeight").slider( "disable" );
-                                $("#sliderBEdgeWeight").slider( "disable" );
-                                $("#sliderBNodeSize").slider( "disable" );
-                            } else if (next_cat=="NGram") {
-                                $("#sliderANodeWeight").slider( "disable" );
-                                $("#sliderAEdgeWeight").slider( "disable" );
-                                $("#sliderANodeSize").slider( "disable" );
-                                $("#sliderBNodeWeight").slider( "enable" );
-                                $("#sliderBEdgeWeight").slider( "enable" );
-                                $("#sliderBNodeSize").slider( "enable" );
-                            }
-                 } else {
-
-                    // always enable
-                    $("#sliderANodeWeight").slider( "enable" );
-                    $("#sliderAEdgeWeight").slider( "enable" );
-                    $("#sliderANodeSize").slider( "enable" );
-                    $("#sliderBNodeWeight").slider( "enable" );
-                    $("#sliderBEdgeWeight").slider( "enable" );
-                    $("#sliderBNodeSize").slider( "enable" );
-                }
-
-            },
             categoryChanged: function() {
 
             }

@@ -13,6 +13,7 @@ var prefs = {
             node_filter_max: "1.0",
             layout: "tinaforce",
             edge_rendering: "curve",
-            pause: "false"
+            pause: "false",
+            demo: "false"
 
 };
