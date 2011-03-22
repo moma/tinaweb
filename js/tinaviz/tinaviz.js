@@ -385,9 +385,14 @@ function Tinaviz(args) {
 
     /**
     * Select a node from it's ID (String)
+    * this can be a String or a String array (to select multiple nodes)
     */
-    this.select = function(uuid) {
-          this.set("select", uuid, "String");
+    this.select = function(toBeSelected) {
+        if ($.isArray(toBeSelected)) {
+          this.set("select", $.toJSON(toBeSelected), "Json");
+        } else {
+          this.set("select", toBeSelected, "String");
+        }
     }
 
     /**
@@ -571,7 +576,7 @@ function Tinaviz(args) {
         $('#tinaviz').css("width",""+(width)+"px");
         wrapper.height = height;
         wrapper.width = width;
-        applet.setSize(width, height);
+        applet.resize(width, height);
     }
 
     /**
