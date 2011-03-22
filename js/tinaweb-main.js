@@ -166,7 +166,7 @@ $(document).ready(function(){
         tinaviz.infodiv.reset();
         $("#infodiv").accordion({
            //collapsible: true,
-           fillSpace: true
+           // fillSpace: true
         });
         toolbar.init();
 
