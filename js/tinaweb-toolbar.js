@@ -148,13 +148,29 @@ toolbar.init = function() {
        toolbar.checkSearchForm();
     });
     
-    $("#export-view").button({
+    $("#export-gexf").button({
        text: true
         //icons: {
         //    primary: 'ui-icon-help'
         //}
     }).click( function(eventObject) {
-        tinaviz.set("export","gexf", "String");
+        tinaviz.set("export","GEXF", "String");
+    });
+    $("#export-png").button({
+       text: true
+        //icons: {
+        //    primary: 'ui-icon-help'
+        //}
+    }).click( function(eventObject) {
+        tinaviz.set("export","PNG", "String");
+    });
+    $("#export-pdf").button({
+       text: true
+        //icons: {
+        //    primary: 'ui-icon-help'
+        //}
+    }).click( function(eventObject) {
+        tinaviz.set("export","PDF", "String");
     });
 
     $("#level").button({
