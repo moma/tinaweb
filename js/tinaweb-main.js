@@ -69,8 +69,8 @@ $(document).ready(function(){
         } else {
            unlockDemo = false;
         }
-        var waitTimeBeforeStartingDemo = 4; // wait time before starting the demo (default: 20);
-        var delayBetweenChanges = 3; // in seconds
+        var waitTimeBeforeStartingDemo = 5; // wait time before starting the demo (default: 20);
+        var delayBetweenChanges = 4; // in seconds
 
         // standby time
         $.fn.nap.standbyTime = waitTimeBeforeStartingDemo;
@@ -83,19 +83,36 @@ $(document).ready(function(){
                 if (tinaviz.getView() == "macro") {
 
                       if (Math.floor(Math.random()*5) > 1) {
-                                     // select a random node
-                                     var cat = tinaviz.getCategory();
-                                     var nb_nodes = tinaviz.infodiv.node_list_cache[cat].length;
-                                     // alert("selection zero.. trying to get nb_nodes: "+nb_nodes);
-                                      var randomIndex = Math.floor(Math.random()*(nb_nodes));
-                                      var randomNode = tinaviz.infodiv.node_list_cache[cat][randomIndex];
-                                      if (randomNode !== undefined || node == null) {
-                                         tinaviz.unselect();
-                                         tinaviz.infodiv.reset();
-                                         tinaviz.select(randomNode["id"]);
-                                      }
 
-                      }  else {
+                        if (Math.floor(Math.random()*5) > 1) {
+
+                             // select a random node
+                             var cat = tinaviz.getCategory();
+                             var nb_nodes = tinaviz.infodiv.node_list_cache[cat].length;
+                             // alert("selection zero.. trying to get nb_nodes: "+nb_nodes);
+                              var randomIndex = Math.floor(Math.random()*(nb_nodes));
+                              var randomNode = tinaviz.infodiv.node_list_cache[cat][randomIndex];
+                              if (randomNode !== undefined || node == null) {
+                                 tinaviz.unselect();
+                                 tinaviz.infodiv.reset();
+                                 tinaviz.select(randomNode["id"]);
+                              }
+
+                        } else {
+                             // select a random node
+                             var cat = tinaviz.getCategory();
+                             var nb_nodes = tinaviz.infodiv.node_list_cache[cat].length;
+                             // alert("selection zero.. trying to get nb_nodes: "+nb_nodes);
+                              var randomIndex = Math.floor(Math.random()*(nb_nodes));
+                              var randomNode = tinaviz.infodiv.node_list_cache[cat][randomIndex];
+                              if (randomNode !== undefined || node == null) {
+                                 //tinaviz.unselect();
+                                 //tinaviz.infodiv.reset();
+                                 tinaviz.viewMeso(randomNode["id"], cat);
+                              }
+                        }
+
+                      } else {
                            $("#toggle-switch").click();
                       }
                 } else {
@@ -126,6 +143,8 @@ $(document).ready(function(){
                                         tinaviz.select(node);
                                     }
                                 }
+                        } else {
+                           $("#toggle-switch").click();
                         }
 
                       }  else {
