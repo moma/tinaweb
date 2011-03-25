@@ -148,13 +148,29 @@ toolbar.init = function() {
        toolbar.checkSearchForm();
     });
     
-    $("#export-view").button({
+    $("#export-gexf").button({
        text: true
         //icons: {
         //    primary: 'ui-icon-help'
         //}
     }).click( function(eventObject) {
-        tinaviz.set("export","gexf", "String");
+        tinaviz.set("export","GEXF", "String");
+    });
+    $("#export-png").button({
+       text: true
+        //icons: {
+        //    primary: 'ui-icon-help'
+        //}
+    }).click( function(eventObject) {
+        tinaviz.set("export","PNG", "String");
+    });
+    $("#export-pdf").button({
+       text: true
+        //icons: {
+        //    primary: 'ui-icon-help'
+        //}
+    }).click( function(eventObject) {
+        tinaviz.set("export","PDF", "String");
     });
 
     $("#level").button({
@@ -372,12 +388,11 @@ toolbar.init = function() {
        //console.log(neighbours);
        tinaviz.infodiv.display_current_category();
        if (viewName=="macro") {
+           var myArray = new Array();
            for (var pos in neighbours) {
-                //console.log("switch category, selecting node from id "+tinaviz.infodiv.neighbours[pos]);
-                 //alert("selecting "+neighbours[pos]);
-                 // too fast
-                 tinaviz.select(neighbours[pos]);
+                 myArray.push(neighbours[pos]);
            }
+           tinaviz.select(myArray);
         }
 
         tinaviz.centerOnSelection();

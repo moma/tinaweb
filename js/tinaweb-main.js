@@ -163,7 +163,10 @@ $(document).ready(function(){
             'Document' : 'Documents'
         };
         tinaviz.infodiv.reset();
-        $("#infodiv").accordion({collapsible: true, fillSpace: true});
+        $("#infodiv").accordion({
+           //collapsible: true,
+           // fillSpace: true
+        });
         toolbar.init();
 
         tinaviz.open({
@@ -183,9 +186,10 @@ $(document).ready(function(){
                     text: 'You can now explore the graph'
                 });
                 $("#appletInfo").hide();
-                $("#export-view").button("enable");
+                $("#export-gexf").button("enable");
                 $("#level").button("enable");
                 $("#search_button").button("enable");
+
 
                 // init the node list with prefs.category
                 tinaviz.infodiv.updateNodeList( "macro", prefs.category );
@@ -292,6 +296,13 @@ $(document).ready(function(){
 
             categoryChanged: function() {
 
+            },
+            viewChanged: function(view) {
+               if (view=="macro") {
+                  // change the button here
+               } else if (view=="meso") {
+
+               }
             }
         });
 
