@@ -448,7 +448,7 @@ function Tinaviz(args) {
            tinaviz.infodiv.display_current_category();
            tinaviz.infodiv.display_current_view();
 
-            toolbar.resetSlidersValues();
+            //toolbar.resetSlidersValues();
 
            // MACRO
            if (view == "macro") {
@@ -488,7 +488,7 @@ function Tinaviz(args) {
      */
 
     this.toggleView = function() {
-        toolbar.resetSlidersValues();
+        //toolbar.resetSlidersValues();
         if (this.getView() == "macro") {
             // check if selection is empty
             if (this.infodiv.selection.length != 0) {
