@@ -69,32 +69,38 @@ $(document).ready(function(){
         } else {
            unlockDemo = false;
         }
+        var waitTimeBeforeStartingDemo = 4; // wait time before starting the demo (default: 20);
+        var delayBetweenChanges = 3; // in seconds
 
         // standby time
-        $.fn.nap.standbyTime = 20;//0;
+        $.fn.nap.standbyTime = waitTimeBeforeStartingDemo;
         $(document).nap(function() { demo = unlockDemo; }, function() { demo = false; });
-        $.doTimeout( 6000, function(){
-                  if (demo) {
+        $.doTimeout( delayBetweenChanges * 1000, function(){
+            if (demo) {
 
-                      tinaviz.centerOnSelection();
+                tinaviz.centerOnSelection();
 
+                if (tinaviz.getView() == "macro") {
 
-                     if (Math.floor(Math.random()*30) > 20) {
+                      if (Math.floor(Math.random()*5) > 1) {
+                                     // select a random node
+                                     var cat = tinaviz.getCategory();
+                                     var nb_nodes = tinaviz.infodiv.node_list_cache[cat].length;
+                                     // alert("selection zero.. trying to get nb_nodes: "+nb_nodes);
+                                      var randomIndex = Math.floor(Math.random()*(nb_nodes));
+                                      var randomNode = tinaviz.infodiv.node_list_cache[cat][randomIndex];
+                                      if (randomNode !== undefined || node == null) {
+                                         tinaviz.unselect();
+                                         tinaviz.infodiv.reset();
+                                         tinaviz.select(randomNode["id"]);
+                                      }
 
-                          // random view
-                         if (Math.floor(Math.random()*2) == 0) {
-                            //tinaviz.toggleView();
-                            $("#level").click();
-                         }
-                         // random category
-                         else {
-                            //tinaviz.setCategory(tinaviz.getOppositeCategory( tinaviz. ));
-                            $("#toggle-switch").click();
-                         }
-
-                     }  else {
-
-                         //alert("demo!");
+                      }  else {
+                           $("#toggle-switch").click();
+                      }
+                } else {
+                      if (Math.floor(Math.random()*5) > 1) {
+                                  //alert("demo!");
                          var nbNeighbourhoods = tinaviz.infodiv.neighbours.length;
                              //alert("nbNodest: "+nbNodes);
                              //nbNodes = 0;
@@ -105,7 +111,9 @@ $(document).ready(function(){
                                 var nbNeighbours = 0;
                                 if (neighbourhood !== undefined & neighbourhood != null) nbNeighbours = neighbourhood.length;
                                 if (nbNeighbours == 0) {
-                                    $("#level").click();
+                                  if (tinaviz.getView() == "meso") {
+                                       $("#level").click();
+                                  }
                                 } else {
                                     var randNeighbour=Math.floor(Math.random() * nbNeighbours);
                                     //alert("randNeighbour: "+randNeighbour);
@@ -118,24 +126,15 @@ $(document).ready(function(){
                                         tinaviz.select(node);
                                     }
                                 }
-                        }  else {
-                         // select a random node
-                         var cat = tinaviz.getCategory();
-                         var nb_nodes = tinaviz.infodiv.node_list_cache[cat].length;
-                         // alert("selection zero.. trying to get nb_nodes: "+nb_nodes);
-                          var randomIndex = Math.floor(Math.random()*(nb_nodes));
-                          var randomNode = tinaviz.infodiv.node_list_cache[cat][randomIndex];
-                          if (randomNode !== undefined || node == null) {
-                                       tinaviz.unselect();
-                                       tinaviz.infodiv.reset();
-                                       tinaviz.select(randomNode["id"]);
-                          }
-
                         }
-                    }
 
-                  }
-                  return true;
+                      }  else {
+                            $("#level").click();
+                      } // enf in back to macro
+                 } // end if macro
+
+            }// end if demo
+            return true;
         });
 
         /*
