@@ -385,9 +385,14 @@ function Tinaviz(args) {
 
     /**
     * Select a node from it's ID (String)
+    * this can be a String or a String array (to select multiple nodes)
     */
-    this.select = function(uuid) {
-          this.set("select", uuid, "String");
+    this.select = function(toBeSelected) {
+        if ($.isArray(toBeSelected)) {
+          this.set("select", $.toJSON(toBeSelected), "Json");
+        } else {
+          this.set("select", toBeSelected, "String");
+        }
     }
 
     /**
@@ -443,6 +448,8 @@ function Tinaviz(args) {
            tinaviz.infodiv.display_current_category();
            tinaviz.infodiv.display_current_view();
 
+            //toolbar.resetSlidersValues();
+
            // MACRO
            if (view == "macro") {
                 if (cat=="Document") {
@@ -481,6 +488,7 @@ function Tinaviz(args) {
      */
 
     this.toggleView = function() {
+        //toolbar.resetSlidersValues();
         if (this.getView() == "macro") {
             // check if selection is empty
             if (this.infodiv.selection.length != 0) {
@@ -508,17 +516,18 @@ function Tinaviz(args) {
                         $("#sliderBNodeWeight").slider( "disable" );
                         $("#sliderBEdgeWeight").slider( "disable" );
                         $("#sliderBNodeSize").slider( "disable" );
-        tinaviz.unselect();
+        //tinaviz.unselect();
         // selects unique node
         tinaviz.setView("macro");
+        tinaviz.unselect(); // clean in every..
         //$.doTimeout( 400, function(){
             tinaviz.setCategory(category);
-            tinaviz.unselect();
+            tinaviz.unselect();  // .. category
             //alert("setting category to "+category);
             tinaviz.infodiv.updateNodeList("meso", category);
 
             //alert("selecting "+id);
-            tinaviz.select(id, "containsIgnoreCase");
+            tinaviz.select(id);
 
             // sets the category of the graph
 
@@ -567,6 +576,7 @@ function Tinaviz(args) {
         $('#tinaviz').css("width",""+(width)+"px");
         wrapper.height = height;
         wrapper.width = width;
+        applet.resize(width, height);
     }
 
     /**
