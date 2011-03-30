@@ -21,22 +21,30 @@
 
 .fg-toolbar { padding: .5em; }
 
-.fg-toolbar .fg-buttonset { margin: 1,5em; padding-left: 1px; }
-.sliders { margin: 1,5em; padding-left: 30px; border: 1px;}
+.fg-toolbar .fg-buttonset { 
+    margin: 1.5em;
+    padding-left: 1px;
+}
+.sliders {
+    margin: 1.5em;
+    padding-left: 30px;
+    border: 1px;
+}
 
 
 body {
-    font-size: .55em;
+    font-size: .65em;
 }
 
 #title {
     margin: 7px;
+    width: 480px;
 }
 
 #toggle-unselect {
     float:right;
     margin: 7px;
-    position:absolute;
+    position: absolute;
     right: 0px;
     top: 0px;
 }
