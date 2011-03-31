@@ -382,11 +382,13 @@ toolbar.init = function() {
 
        var neighbours = tinaviz.infodiv.neighbours;
        //console.log(neighbours);
-       tinaviz.setCategory(next_cat);
+       tinaviz.setCategory(next_cat); // TODO we should use a callback to wait for the category change, here
        tinaviz.infodiv.reset();
        tinaviz.infodiv.updateNodeList(viewName, next_cat);
        //console.log(neighbours);
        tinaviz.infodiv.display_current_category();
+       tinaviz.unselect();
+       tinaviz.centerOnSelection();
        if (viewName=="macro") {
            var myArray = new Array();
            for (var pos in neighbours) {
@@ -395,7 +397,7 @@ toolbar.init = function() {
            tinaviz.select(myArray);
         }
 
-        tinaviz.centerOnSelection();
+
 
     });
     toolbar.checkSearchForm();
