@@ -206,7 +206,7 @@ toolbar.init = function() {
         slide: function(event, ui) {
             tinaviz.set("filter.a.edge.weight.min", ui.values[0] / 200.0, "Double");
             tinaviz.set("filter.a.edge.weight.max", ui.values[1] / 200.0, "Double");
-            if (tinaviz.getView()=="meso") tinaviz.recenter();
+            tinaviz.recenter();
         }
     });
 
@@ -217,7 +217,7 @@ toolbar.init = function() {
         slide: function(event, ui) {
             tinaviz.set("filter.a.node.weight.min", ui.values[0] / 200.0, "Double");
             tinaviz.set("filter.a.node.weight.max", ui.values[1] / 200.0, "Double");
-            if (tinaviz.getView()=="meso") tinaviz.recenter();
+            tinaviz.recenter();
         }
     });
 
@@ -229,7 +229,7 @@ toolbar.init = function() {
         slide: function(event, ui) {
             tinaviz.set("filter.b.edge.weight.min", ui.values[0] / 200.0, "Double");
             tinaviz.set("filter.b.edge.weight.max", ui.values[1] / 200.0, "Double");
-            if (tinaviz.getView()=="meso") tinaviz.recenter();
+            tinaviz.recenter();
         }
     });
 
@@ -240,7 +240,7 @@ toolbar.init = function() {
         slide: function(event, ui) {
             tinaviz.set("filter.b.node.weight.min", ui.values[0] / 200.0, "Double");
             tinaviz.set("filter.b.node.weight.max", ui.values[1] / 200.0, "Double");
-            if (tinaviz.getView()=="meso") tinaviz.recenter();
+            tinaviz.recenter();
         }
     });
 
@@ -250,7 +250,7 @@ toolbar.init = function() {
         animate: true,
         slide: function(event, ui) {
             tinaviz.set("filter.a.node.size", ui.value / 200.0, "Double");
-            //if (tinaviz.getView()=="meso") tinaviz.recenter();
+            tinaviz.recenter();
         }
     }
     );
@@ -261,7 +261,7 @@ toolbar.init = function() {
         animate: true,
         slide: function(event, ui) {
             tinaviz.set("filter.b.node.size", ui.value / 200.0, "Double");
-            //if (tinaviz.getView()=="meso") tinaviz.recenter();
+            tinaviz.recenter();
         }
     }
     );
