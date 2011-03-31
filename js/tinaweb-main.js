@@ -48,22 +48,18 @@ $(document).ready(function(){
         for (x in urlVars) {
             prefs[x] = urlVars[x];
         }
-        tinaviz.set("filter.a.edge.weight.min", parseFloat(prefs.edge_filter_min), "Double");
-        tinaviz.set("filter.a.edge.weight.max", parseFloat(prefs.edge_filter_max), "Double");
-        tinaviz.set("filter.a.node.weight.min", parseFloat(prefs.node_filter_min), "Double");
-        tinaviz.set("filter.a.node.weight.max", parseFloat(prefs.node_filter_max), "Double");
-        tinaviz.set("filter.a.node.size",       parseFloat(prefs.magnify),         "Double");
-        tinaviz.set("filter.b.edge.weight.min", parseFloat(prefs.edge_filter_min), "Double");
-        tinaviz.set("filter.b.edge.weight.max", parseFloat(prefs.edge_filter_max), "Double");
-        tinaviz.set("filter.b.node.weight.min", parseFloat(prefs.node_filter_min), "Double");
-        tinaviz.set("filter.b.node.weight.max", parseFloat(prefs.node_filter_max), "Double");
-        tinaviz.set("filter.b.node.size",       parseFloat(prefs.magnify),         "Double");
-        tinaviz.set("filter.node.category", prefs.category, "String");
+        tinaviz.set("filter.a.edge.weight", [parseFloat(prefs.edge_filter_min), parseFloat(prefs.edge_filter_max)], "Tuple2[Double]");
+        tinaviz.set("filter.a.node.weight", [parseFloat(prefs.node_filter_min), parseFloat(prefs.node_filter_max)], "Tuple2[Double]");
+        tinaviz.set("filter.b.edge.weight", [parseFloat(prefs.edge_filter_min), parseFloat(prefs.edge_filter_max)], "Tuple2[Double]");
+        tinaviz.set("filter.b.node.weight", [parseFloat(prefs.node_filter_min), parseFloat(prefs.node_filter_max)], "Tuple2[Double]");
+        tinaviz.set("filter.a.node.size",   parseFloat(prefs.magnify),         "Double");
+        tinaviz.set("filter.b.node.size",   parseFloat(prefs.magnify),         "Double");
+        tinaviz.set("filter.node.category", prefs.category,                    "String");
         //tinaviz.set("output/nodeSizeMin", 5.0, "Double");
         //tinaviz.set("output/nodeSizeMax", 20.0, "Double");
-        tinaviz.set("selectionRadius", parseFloat(prefs.cursor_size), "Double");
-        tinaviz.set("layout.algorithm", prefs.layout, "String");
-        tinaviz.set("pause", prefs.pause, "Boolean");
+        tinaviz.set("selectionRadius",      parseFloat(prefs.cursor_size),     "Double");
+        tinaviz.set("layout.algorithm",     prefs.layout,                      "String");
+        tinaviz.set("pause",                prefs.pause,                       "Boolean");
         if (prefs.demo == "true") {
            unlockDemo = true;
         } else {

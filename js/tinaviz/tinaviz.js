@@ -100,7 +100,7 @@ function Tinaviz(args) {
     }
     this.setupDefaults=function() {
         // setup defaults
-        this.set("pause",false);
+        //this.set("pause",false, "Boolean");
     }
     this.ready=function(cb) {
         // TODO: if not ready, append to the callbacks
@@ -136,7 +136,7 @@ function Tinaviz(args) {
              // we canced the loading if the URL is empty
 
         if (opts.layout) {
-            this.set("layout.algorithm", opts.layout)
+            this.set("layout.algorithm", opts.layout, "String")
         }
         callbackImported = function(msg){
             if (msg=="success") {
@@ -627,16 +627,26 @@ function Tinaviz(args) {
      */
 
     this.set = function(key, obj, t) {
-         //alert("key:"+key+" obj: "+obj);
+         //alert("key:"+key+" obj: "+obj+" t: "+t);
         if (t === undefined) {
-            this.logNormal("set("+key+","+obj+")");
-            applet.set(key,obj);
+            this.logNormal("Warning, setting unknow ("+key+","+obj+")");
+            applet.send(key, obj, "");
         } else {
-           if (t=="json") {
-           applet.setAs(key,$.toJSON(obj), t);
+           if (t.indexOf("Tuple2") != -1) {
+              if (t.indexOf("[Double]") != -1) {
+                  applet.sendTuple2(key, obj[0], obj[1], "Double");
+              } else if (t.indexOf("[Int]") != -1) {
+                  applet.sendTuple2(key, obj[0], obj[1], "Int");
+              } else if (t.indexOf("[Float]") != -1) {
+                  applet.sendTuple2(key, obj[0], obj[1], "Float");
+              } else {
+                  applet.sendTuple2(key, obj[0], obj[1], "");
+              }
+           } else if (t=="Json") {
+             applet.send(key,$.toJSON(obj), t);
            } else {
-           this.logNormal("setAs("+key+","+obj+","+t+")");
-           applet.setAs(key, obj, t);
+              //this.logNormal("send("+key+","+obj+","+t+")");
+              applet.send(key, obj, t);
            }
         }
     }
