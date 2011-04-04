@@ -383,7 +383,7 @@ toolbar.init = function() {
        tinaviz.infodiv.updateNodeList(viewName, next_cat);
        //console.log(neighbours);
        tinaviz.infodiv.display_current_category();
-       tinaviz.unselect();
+       //tinaviz.unselect();
        tinaviz.centerOnSelection();
        if (viewName=="macro") {
            var myArray = new Array();
