@@ -246,7 +246,6 @@ toolbar.init = function() {
         animate: true,
         slide: function(event, ui) {
             tinaviz.set("filter.a.node.size", ui.value / 200.0, "Double");
-            tinaviz.recenter();
         }
     }
     );
@@ -257,7 +256,6 @@ toolbar.init = function() {
         animate: true,
         slide: function(event, ui) {
             tinaviz.set("filter.b.node.size", ui.value / 200.0, "Double");
-            tinaviz.recenter();
         }
     }
     );
