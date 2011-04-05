@@ -119,7 +119,7 @@ toolbar.init = function() {
 
    //  $("#search").autocomplete({ source: ["aaa","bbb","ccc"] });
     
-    $("search").val(toolbar.values.search);
+    //$("#search").val(toolbar.values.search);
     $("#search").submit(function() {
         
         var txt = $("#search_input").val();
