@@ -350,9 +350,51 @@ function Tinaviz(args) {
 
 
 
-    this._callbackViewChanged = function(viewName) {
-        //alert("_callbackViewChanged");
-        this.callbackViewChanged(viewName);
+    this._callbackViewChanged = function(data) {
+        var viewName = $.parseJSON(data);
+        //alert("_callbackViewChanged to: "+viewName);
+
+            var level = $("#level");
+            level.button('option','label', viewName + " level");
+            var title = $("#infodiv > h3:first");
+
+        if (viewName=="meso") {
+            //alert("View Changed to MESO VIEW");
+            this.infodiv.updateNodeList("meso", this.getCategory());
+
+            $("#sliderANodeWeight" ).slider( "enable" );
+            $("#sliderAEdgeWeight" ).slider( "enable" );
+            $("#sliderANodeSize"   ).slider( "enable" );
+            $("#sliderBNodeWeight" ).slider( "enable" );
+            $("#sliderBEdgeWeight" ).slider( "enable" );
+            $("#sliderBNodeSize"   ).slider( "enable" );
+
+            level.addClass("ui-state-highlight");
+            title.addClass("ui-state-highlight");
+
+            this.recenter();
+        } else {
+             if (cat=="Document") {
+                     // disable
+                     $("#sliderANodeWeight").slider( "enable" );
+                     $("#sliderAEdgeWeight").slider( "enable" );
+                     $("#sliderANodeSize").slider( "enable" );
+                     $("#sliderBNodeWeight").slider( "disable" );
+                     $("#sliderBEdgeWeight").slider( "disable" );
+                     $("#sliderBNodeSize").slider( "disable" );
+                 } else if (cat=="NGram") {
+                     $("#sliderANodeWeight").slider( "disable" );
+                     $("#sliderAEdgeWeight").slider( "disable" );
+                     $("#sliderANodeSize").slider( "disable" );
+                     $("#sliderBNodeWeight").slider( "enable" );
+                     $("#sliderBEdgeWeight").slider( "enable" );
+                     $("#sliderBNodeSize").slider( "enable" );
+              }
+
+              level.removeClass("ui-state-highlight");
+              title.removeClass("ui-state-highlight");
+        }
+
     }
 
     this.recenter = function() {
