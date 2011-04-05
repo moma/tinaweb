@@ -349,15 +349,11 @@ function Tinaviz(args) {
     }
 
 
-    /**
-     * Callback after CHANGING THE VIEW LEVEL
-     */
-     /*
-    this._callbackViewChanged = function(viewName, selected) {
-        alert("_callbackViewChanged");
-        var view = this.constructNewViewObject(viewName);
-        this.callbackViewChanged(view);
-    }*/
+
+    this._callbackViewChanged = function(viewName) {
+        //alert("_callbackViewChanged");
+        this.callbackViewChanged(viewName);
+    }
 
     this.recenter = function() {
          this.set("camera.target", "all", "String");

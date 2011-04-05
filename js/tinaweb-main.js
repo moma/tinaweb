@@ -311,6 +311,7 @@ $(document).ready(function(){
 
             },
             viewChanged: function(view) {
+               alert("view changed");
                if (view=="macro") {
                   // change the button here
                } else if (view=="meso") {
