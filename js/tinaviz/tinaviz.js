@@ -351,30 +351,21 @@ function Tinaviz(args) {
 
 
     this._callbackViewChanged = function(data) {
-        var viewName = $.parseJSON(data);
-        //alert("_callbackViewChanged to: "+viewName);
+        var view = $.parseJSON(data);
+        var cat = this.getCategory();
 
-            var level = $("#level");
-            level.button('option','label', viewName + " level");
-            var title = $("#infodiv > h3:first");
+        this.infodiv.updateNodeList(view, cat);
 
-        if (viewName=="meso") {
-            //alert("View Changed to MESO VIEW");
-            this.infodiv.updateNodeList("meso", this.getCategory());
+        this.infodiv.display_current_category();
+        this.infodiv.display_current_view();
 
-            $("#sliderANodeWeight" ).slider( "enable" );
-            $("#sliderAEdgeWeight" ).slider( "enable" );
-            $("#sliderANodeSize"   ).slider( "enable" );
-            $("#sliderBNodeWeight" ).slider( "enable" );
-            $("#sliderBEdgeWeight" ).slider( "enable" );
-            $("#sliderBNodeSize"   ).slider( "enable" );
+         var level = $("#level");
+         level.button('option','label', view + " level");
+         var title = $("#infodiv > h3:first");
 
-            level.addClass("ui-state-highlight");
-            title.addClass("ui-state-highlight");
-
-            this.recenter();
-        } else {
-             if (cat=="Document") {
+           // MACRO
+           if (view == "macro") {
+                if (cat=="Document") {
                      // disable
                      $("#sliderANodeWeight").slider( "enable" );
                      $("#sliderAEdgeWeight").slider( "enable" );
@@ -389,11 +380,22 @@ function Tinaviz(args) {
                      $("#sliderBNodeWeight").slider( "enable" );
                      $("#sliderBEdgeWeight").slider( "enable" );
                      $("#sliderBNodeSize").slider( "enable" );
-              }
+                }
+                 level.removeClass("ui-state-highlight");
+                 title.removeClass("ui-state-highlight");
+            // MESO
+            } else {
+                 $("#sliderANodeWeight").slider( "enable" );
+                 $("#sliderAEdgeWeight").slider( "enable" );
+                 $("#sliderANodeSize").slider( "enable" );
+                 $("#sliderBNodeWeight").slider( "enable" );
+                 $("#sliderBEdgeWeight").slider( "enable" );
+                 $("#sliderBNodeSize").slider( "enable" );
+                 level.addClass("ui-state-highlight");
+                 title.addClass("ui-state-highlight");
+                 this.recenter();
+            }
 
-              level.removeClass("ui-state-highlight");
-              title.removeClass("ui-state-highlight");
-        }
 
     }
 
@@ -476,48 +478,7 @@ function Tinaviz(args) {
      *
      */
     this.setView = function(view) {
-
         this.set("filter.view", view, "String");
-         var cat = this.getCategory();
-        this.infodiv.updateNodeList(view, this.getCategory());
-
-        $.doTimeout(400, function(){
-
-           tinaviz.infodiv.display_current_category();
-           tinaviz.infodiv.display_current_view();
-
-            //toolbar.resetSlidersValues();
-
-           // MACRO
-           if (view == "macro") {
-                if (cat=="Document") {
-                     // disable
-                     $("#sliderANodeWeight").slider( "enable" );
-                     $("#sliderAEdgeWeight").slider( "enable" );
-                     $("#sliderANodeSize").slider( "enable" );
-                     $("#sliderBNodeWeight").slider( "disable" );
-                     $("#sliderBEdgeWeight").slider( "disable" );
-                     $("#sliderBNodeSize").slider( "disable" );
-                 } else if (cat=="NGram") {
-                     $("#sliderANodeWeight").slider( "disable" );
-                     $("#sliderAEdgeWeight").slider( "disable" );
-                     $("#sliderANodeSize").slider( "disable" );
-                     $("#sliderBNodeWeight").slider( "enable" );
-                     $("#sliderBEdgeWeight").slider( "enable" );
-                     $("#sliderBNodeSize").slider( "enable" );
-                }
-            // MESO
-            } else {
-                 $("#sliderANodeWeight").slider( "enable" );
-                 $("#sliderAEdgeWeight").slider( "enable" );
-                 $("#sliderANodeSize").slider( "enable" );
-                 $("#sliderBNodeWeight").slider( "enable" );
-                 $("#sliderBEdgeWeight").slider( "enable" );
-                 $("#sliderBNodeSize").slider( "enable" );
-                 tinaviz.recenter();
-            }
-            false;
-        });
     }
 
     /**
