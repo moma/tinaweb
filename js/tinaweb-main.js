@@ -200,11 +200,21 @@ $(document).ready(function(){
                     title: 'Tinasoft Notification',
                     text: 'You can now explore the graph'
                 });
-                $("#appletInfo").hide();
-                $("#export-gexf").button("enable");
-                $("#level").button("enable");
-                $("#search_button").button("enable");
+                $("#appletInfo").fadeOut();
 
+               //$("#export-view").fadeIn("slow");
+               $("#search").fadeIn("slow");
+               $("#export-gexf").fadeIn("slow");
+               $("#level").fadeIn("slow");
+               $("#toggle-switch").fadeIn("slow");
+
+               $("#search_button").fadeIn("slow");
+               $("#toggle-recenter").fadeIn("slow");
+               //$("#toggle-unselect").fadeIn("slow");
+               $("#toggle-paused").fadeIn("slow");
+               $("#cursor-size-block").fadeIn("slow");
+                $("#category-A").fadeIn("slow");
+                $("#category-legend").fadeIn("slow");
 
                 // init the node list with prefs.category
                 tinaviz.infodiv.updateNodeList( "macro", prefs.category );
@@ -243,14 +253,6 @@ $(document).ready(function(){
                 ]);
                 */
 
-                // default settings
-                $("#sliderSelectionZone").slider( "enable" );
-                $("#sliderANodeWeight").slider( "enable" );
-                $("#sliderAEdgeWeight").slider( "enable" );
-                $("#sliderANodeSize").slider( "enable" );
-                $("#sliderBNodeWeight").slider( "disable" );
-                $("#sliderBEdgeWeight").slider( "disable" );
-                $("#sliderBNodeSize").slider( "disable" );
 
                 if (prefs.node_id != "") {
                     tinaviz.select(prefs.node_id);

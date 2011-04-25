@@ -115,6 +115,22 @@ toolbar.checkSearchForm = function() {
     setTimeout("toolbar.checkSearchForm()",200);
 };
 
+toolbar.checkSearchFormNoRepeat = function() {
+    var txt = $("#search_input").val();
+    if (txt != toolbar.lastSearch) {
+        // tinaviz.highlightByPattern("", "");
+        toolbar.lastSearch = txt;
+        //if (txt=="") {
+            //tinaviz.highlightByPattern("", "");
+        //}
+        //else {
+            //var cat = tinaviz.views.current.category();
+            tinaviz.highlightByPattern(txt, "containsIgnoreCase");
+        //}
+    }
+};
+
+
 toolbar.init = function() {
 
    //  $("#search").autocomplete({ source: ["aaa","bbb","ccc"] });
@@ -145,9 +161,9 @@ toolbar.init = function() {
 
 
     $("#search").keypress(function() {
-       toolbar.checkSearchForm();
+       toolbar.checkSearchFormNoRepeat();
     });
-    
+
     $("#export-gexf").button({
        text: true
         //icons: {
@@ -156,6 +172,7 @@ toolbar.init = function() {
     }).click( function(eventObject) {
         tinaviz.set("export","GEXF", "String");
     });
+
     $("#export-png").button({
        text: true
         //icons: {
@@ -259,18 +276,6 @@ toolbar.init = function() {
         }
     }
     );
-    // default settings
-    $("#export-view").button("disable");
-    $("#level").button("disable");
-    $("#search_button").button("disable");
-    $("#toggle-recenter").button("disable");
-    $("#sliderSelectionZone").slider( "disable" );
-    $("#sliderANodeWeight").slider( "disable" );
-    $("#sliderAEdgeWeight").slider( "disable" );
-    $("#sliderANodeSize").slider( "disable" );
-    $("#sliderBNodeWeight").slider( "disable" );
-    $("#sliderBEdgeWeight").slider( "disable" );
-    $("#sliderBNodeSize").slider( "disable" );
 
 
     $("#sliderSelectionZone").slider({
@@ -350,29 +355,18 @@ toolbar.init = function() {
         var cat = tinaviz.getCategory();
         var next_cat = tinaviz.getOppositeCategory( cat );
         var viewName = tinaviz.getView();
+        alert("cat: "+cat+" next_cat: "+next_cat+" viewName: "+viewName);
         if (viewName == "macro") {
             if (next_cat=="Document") {
-                $("#sliderANodeWeight").slider( "enable" );
-                $("#sliderAEdgeWeight").slider( "enable" );
-                $("#sliderANodeSize").slider( "enable" );
-                $("#sliderBNodeWeight").slider( "disable" );
-                $("#sliderBEdgeWeight").slider( "disable" );
-                $("#sliderBNodeSize").slider( "disable" );
+                $("#category-A").fadeIn("slow");
+                $("#category-B").fadeOut("slow");
             } else if (next_cat=="NGram") {
-                $("#sliderANodeWeight").slider( "disable" );
-                $("#sliderAEdgeWeight").slider( "disable" );
-                $("#sliderANodeSize").slider( "disable" );
-                $("#sliderBNodeWeight").slider( "enable" );
-                $("#sliderBEdgeWeight").slider( "enable" );
-                $("#sliderBNodeSize").slider( "enable" );
+                $("#category-A").fadeOut("slow");
+                $("#category-B").fadeIn("slow");
             }
         } else {
-            $("#sliderANodeWeight").slider( "enable" );
-            $("#sliderAEdgeWeight").slider( "enable" );
-            $("#sliderANodeSize").slider( "enable" );
-            $("#sliderBNodeWeight").slider( "enable" );
-            $("#sliderBEdgeWeight").slider( "enable" );
-            $("#sliderBNodeSize").slider( "enable" );
+           $("#category-A").fadeIn("slow");
+           $("#category-B").fadeIn("slow");
         }
 
        var neighbours = tinaviz.infodiv.neighbours;
@@ -399,7 +393,25 @@ toolbar.init = function() {
 
 
     });
-    toolbar.checkSearchForm();
+
+       // default settings
+       $("#export-view").hide();
+       $("#search").hide();
+       $("#export-gexf").hide();
+       $("#level").hide();
+       $("#search_button").hide();
+       $("#toggle-recenter").hide();
+       $("#toggle-switch").hide();
+       $("#toggle-unselect").hide();
+       $("#toggle-paused").hide();
+       $("#cursor-size-block").hide();
+       $("#category-A").hide();
+       $("#category-B").hide();
+       $("#category-legend").hide();
+
+
+    // DISABLED toolbar.checkSearchForm();
+
 };
 toolbar.resetSlidersValues = function() {
     $("#sliderAEdgeWeight").slider({
