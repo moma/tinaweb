@@ -355,7 +355,6 @@ toolbar.init = function() {
         var cat = tinaviz.getCategory();
         var next_cat = tinaviz.getOppositeCategory( cat );
         var viewName = tinaviz.getView();
-        alert("cat: "+cat+" next_cat: "+next_cat+" viewName: "+viewName);
         if (viewName == "macro") {
             if (next_cat=="Document") {
                 $("#category-A").fadeIn("slow");
