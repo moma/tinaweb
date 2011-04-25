@@ -518,12 +518,13 @@ function Tinaviz(args) {
         //tinaviz.unselect();
         // selects unique node
         tinaviz.setView("macro");
-        tinaviz.unselect(); // clean in every..
+        tinaviz.unselect(); // unselect nodes in current category
+
         //$.doTimeout( 400, function(){
-            tinaviz.setCategory(category);
-            tinaviz.unselect();  // .. category
-            //alert("setting category to "+category);
-            tinaviz.infodiv.updateNodeList("meso", category);
+        tinaviz.setCategory(category);
+        tinaviz.unselect();  // unselect nodes in the desired category
+
+
 
             //alert("selecting "+id);
             tinaviz.select(id);
@@ -535,18 +536,19 @@ function Tinaviz(args) {
             $.doTimeout(400, function(){
                   tinaviz.setView("meso");
             //alert("recentering");
-
+            //alert("setting category to "+category);
+            tinaviz.infodiv.updateNodeList("meso", category); //
                     // always enable
-                        $("#sliderANodeWeight").slider( "enable" );
-                        $("#sliderAEdgeWeight").slider( "enable" );
-                        $("#sliderANodeSize").slider( "enable" );
-                        $("#sliderBNodeWeight").slider( "enable" );
-                        $("#sliderBEdgeWeight").slider( "enable" );
-                        $("#sliderBNodeSize").slider( "enable" );
+            $("#sliderANodeWeight").slider( "enable" );
+            $("#sliderAEdgeWeight").slider( "enable" );
+            $("#sliderANodeSize").slider( "enable" );
+            $("#sliderBNodeWeight").slider( "enable" );
+            $("#sliderBEdgeWeight").slider( "enable" );
+            $("#sliderBNodeSize").slider( "enable" );
             //this.infoviz.updateNodeList("meso", category);
-              tinaviz.recenter();
-              false;
-            });
+            tinaviz.recenter();
+            false;
+         });
 
          //   false;
        // });
