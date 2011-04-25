@@ -367,30 +367,18 @@ function Tinaviz(args) {
            if (view == "macro") {
                 if (cat=="Document") {
                      // disable
-                     $("#sliderANodeWeight").slider( "enable" );
-                     $("#sliderAEdgeWeight").slider( "enable" );
-                     $("#sliderANodeSize").slider( "enable" );
-                     $("#sliderBNodeWeight").slider( "disable" );
-                     $("#sliderBEdgeWeight").slider( "disable" );
-                     $("#sliderBNodeSize").slider( "disable" );
+       $("#category-A").fadeIn();
+       $("#category-B").fadeOut();
                  } else if (cat=="NGram") {
-                     $("#sliderANodeWeight").slider( "disable" );
-                     $("#sliderAEdgeWeight").slider( "disable" );
-                     $("#sliderANodeSize").slider( "disable" );
-                     $("#sliderBNodeWeight").slider( "enable" );
-                     $("#sliderBEdgeWeight").slider( "enable" );
-                     $("#sliderBNodeSize").slider( "enable" );
+       $("#category-A").fadeOut();
+       $("#category-B").fadeIn();
                 }
                  level.removeClass("ui-state-highlight");
                  title.removeClass("ui-state-highlight");
             // MESO
             } else {
-                 $("#sliderANodeWeight").slider( "enable" );
-                 $("#sliderAEdgeWeight").slider( "enable" );
-                 $("#sliderANodeSize").slider( "enable" );
-                 $("#sliderBNodeWeight").slider( "enable" );
-                 $("#sliderBEdgeWeight").slider( "enable" );
-                 $("#sliderBNodeSize").slider( "enable" );
+                   $("#category-A").fadeIn();
+                   $("#category-B").fadeIn();
                  level.addClass("ui-state-highlight");
                  title.addClass("ui-state-highlight");
                  this.recenter();
@@ -509,21 +497,19 @@ function Tinaviz(args) {
      */
     this.viewMeso = function(id, category) {
                        // always enable
-                        $("#sliderANodeWeight").slider( "disable" );
-                        $("#sliderAEdgeWeight").slider( "disable" );
-                        $("#sliderANodeSize").slider( "disable" );
-                        $("#sliderBNodeWeight").slider( "disable" );
-                        $("#sliderBEdgeWeight").slider( "disable" );
-                        $("#sliderBNodeSize").slider( "disable" );
+       //$("#category-A").fadeIn();
+       // $("#category-B").fadeIn();
+
         //tinaviz.unselect();
         // selects unique node
         tinaviz.setView("macro");
-        tinaviz.unselect(); // clean in every..
+        tinaviz.unselect(); // unselect nodes in current category
+
         //$.doTimeout( 400, function(){
-            tinaviz.setCategory(category);
-            tinaviz.unselect();  // .. category
-            //alert("setting category to "+category);
-            tinaviz.infodiv.updateNodeList("meso", category);
+        tinaviz.setCategory(category);
+        tinaviz.unselect();  // unselect nodes in the desired category
+
+
 
             //alert("selecting "+id);
             tinaviz.select(id);
@@ -535,18 +521,15 @@ function Tinaviz(args) {
             $.doTimeout(400, function(){
                   tinaviz.setView("meso");
             //alert("recentering");
-
+            //alert("setting category to "+category);
+            tinaviz.infodiv.updateNodeList("meso", category); //
                     // always enable
-                        $("#sliderANodeWeight").slider( "enable" );
-                        $("#sliderAEdgeWeight").slider( "enable" );
-                        $("#sliderANodeSize").slider( "enable" );
-                        $("#sliderBNodeWeight").slider( "enable" );
-                        $("#sliderBEdgeWeight").slider( "enable" );
-                        $("#sliderBNodeSize").slider( "enable" );
+           $("#category-A").fadeIn();
+           $("#category-B").fadeIn();
             //this.infoviz.updateNodeList("meso", category);
-              tinaviz.recenter();
-              false;
-            });
+            tinaviz.recenter();
+            false;
+         });
 
          //   false;
        // });
