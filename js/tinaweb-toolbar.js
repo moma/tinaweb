@@ -115,6 +115,22 @@ toolbar.checkSearchForm = function() {
     setTimeout("toolbar.checkSearchForm()",200);
 };
 
+toolbar.checkSearchFormNoRepeat = function() {
+    var txt = $("#search_input").val();
+    if (txt != toolbar.lastSearch) {
+        // tinaviz.highlightByPattern("", "");
+        toolbar.lastSearch = txt;
+        //if (txt=="") {
+            //tinaviz.highlightByPattern("", "");
+        //}
+        //else {
+            //var cat = tinaviz.views.current.category();
+            tinaviz.highlightByPattern(txt, "containsIgnoreCase");
+        //}
+    }
+};
+
+
 toolbar.init = function() {
 
    //  $("#search").autocomplete({ source: ["aaa","bbb","ccc"] });
@@ -145,9 +161,9 @@ toolbar.init = function() {
 
 
     $("#search").keypress(function() {
-       toolbar.checkSearchForm();
+       toolbar.checkSearchFormNoRepeat();
     });
-    
+
     $("#export-gexf").button({
        text: true
         //icons: {
@@ -156,6 +172,7 @@ toolbar.init = function() {
     }).click( function(eventObject) {
         tinaviz.set("export","GEXF", "String");
     });
+
     $("#export-png").button({
        text: true
         //icons: {
@@ -259,18 +276,6 @@ toolbar.init = function() {
         }
     }
     );
-    // default settings
-    $("#export-view").button("disable");
-    $("#level").button("disable");
-    $("#search_button").button("disable");
-    $("#toggle-recenter").button("disable");
-    $("#sliderSelectionZone").slider( "disable" );
-    $("#sliderANodeWeight").slider( "disable" );
-    $("#sliderAEdgeWeight").slider( "disable" );
-    $("#sliderANodeSize").slider( "disable" );
-    $("#sliderBNodeWeight").slider( "disable" );
-    $("#sliderBEdgeWeight").slider( "disable" );
-    $("#sliderBNodeSize").slider( "disable" );
 
 
     $("#sliderSelectionZone").slider({
@@ -340,6 +345,7 @@ toolbar.init = function() {
         tinaviz.recenter();
     });
 
+    // switch category
     $("#toggle-switch").button({
         text: true,
         icons: {
@@ -351,47 +357,60 @@ toolbar.init = function() {
         var viewName = tinaviz.getView();
         if (viewName == "macro") {
             if (next_cat=="Document") {
-                $("#sliderANodeWeight").slider( "enable" );
-                $("#sliderAEdgeWeight").slider( "enable" );
-                $("#sliderANodeSize").slider( "enable" );
-                $("#sliderBNodeWeight").slider( "disable" );
-                $("#sliderBEdgeWeight").slider( "disable" );
-                $("#sliderBNodeSize").slider( "disable" );
+                $("#category-A").fadeIn("slow");
+                $("#category-B").fadeOut("slow");
             } else if (next_cat=="NGram") {
-                $("#sliderANodeWeight").slider( "disable" );
-                $("#sliderAEdgeWeight").slider( "disable" );
-                $("#sliderANodeSize").slider( "disable" );
-                $("#sliderBNodeWeight").slider( "enable" );
-                $("#sliderBEdgeWeight").slider( "enable" );
-                $("#sliderBNodeSize").slider( "enable" );
+                $("#category-A").fadeOut("slow");
+                $("#category-B").fadeIn("slow");
             }
         } else {
-            $("#sliderANodeWeight").slider( "enable" );
-            $("#sliderAEdgeWeight").slider( "enable" );
-            $("#sliderANodeSize").slider( "enable" );
-            $("#sliderBNodeWeight").slider( "enable" );
-            $("#sliderBEdgeWeight").slider( "enable" );
-            $("#sliderBNodeSize").slider( "enable" );
+           $("#category-A").fadeIn("slow");
+           $("#category-B").fadeIn("slow");
         }
 
        var neighbours = tinaviz.infodiv.neighbours;
-       //console.log(neighbours);
-       tinaviz.setCategory(next_cat); // TODO we should use a callback to wait for the category change, here
-       tinaviz.infodiv.reset();
-       tinaviz.infodiv.updateNodeList(viewName, next_cat);
-       //console.log(neighbours);
-       tinaviz.infodiv.display_current_category();
-       //tinaviz.unselect();
-       tinaviz.centerOnSelection();
-       if (viewName=="macro") {
-           var myArray = new Array();
-           for (var pos in neighbours) {
-                 myArray.push(neighbours[pos]);
+        //console.log(neighbours);
+        //tinaviz.infodiv.reset();
+        tinaviz.setCategory(next_cat); // TODO we should use a callback to wait for the category change, here
+
+        $.doTimeout(400, function(){
+
+           tinaviz.infodiv.updateNodeList(viewName, next_cat);
+           //console.log(neighbours);
+           tinaviz.infodiv.display_current_category();
+           //tinaviz.unselect();
+           tinaviz.centerOnSelection();
+           if (viewName=="macro") {
+               var myArray = new Array();
+               for (var pos in neighbours) {
+                     myArray.push(neighbours[pos]);
+               }
+               tinaviz.select(myArray);
            }
-           tinaviz.select(myArray);
-        }
+           false;
+       });
+
+
     });
-    toolbar.checkSearchForm();
+
+       // default settings
+       $("#export-view").hide();
+       $("#search").hide();
+       $("#export-gexf").hide();
+       $("#level").hide();
+       $("#search_button").hide();
+       $("#toggle-recenter").hide();
+       $("#toggle-switch").hide();
+       $("#toggle-unselect").hide();
+       $("#toggle-paused").hide();
+       $("#cursor-size-block").hide();
+       $("#category-A").hide();
+       $("#category-B").hide();
+       $("#category-legend").hide();
+
+
+    // DISABLED toolbar.checkSearchForm();
+
 };
 toolbar.resetSlidersValues = function() {
     $("#sliderAEdgeWeight").slider({
