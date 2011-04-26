@@ -342,7 +342,8 @@ toolbar.init = function() {
         }
     })
     .click(function(event) {
-        tinaviz.recenter();
+        //tinaviz.recenter();
+        tinaviz.centerOnSelection();
     });
 
     // switch category
