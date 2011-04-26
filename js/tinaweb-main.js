@@ -196,22 +196,46 @@ $(document).ready(function(){
                 tinaviz.infodiv.reset();
             },
             success: function() {
-                $("#notification").notify("create", {
+              $("#notification").notify("create", {
                     title: 'Tinasoft Notification',
                     text: 'You can now explore the graph'
-                });
-                $("#appletInfo").hide();
-                $("#export-gexf").button("enable");
-                $("#level").button("enable");
-                $("#search_button").button("enable");
+              });
+              $("#appletInfo").fadeOut();
 
+              // gradually add the buttons
+              $.doTimeout(100, function(){
+                $("#toggle-paused").fadeIn("slow");
+                $.doTimeout(100, function(){
+                    $("#toggle-switch").fadeIn("slow");
+                    $.doTimeout(100, function(){
+                        $("#level").fadeIn("slow");
+                        $.doTimeout(300, function(){
+                           $("#cursor-size-block").fadeIn("slow");
+                           $.doTimeout(300, function(){
+                               $("#category-A").fadeIn("slow");
+                               $("#category-legend").fadeIn("slow");
+                               $.doTimeout(400, function(){
+                                   $("#search").fadeIn("slow");
+                                   $("#search_button").fadeIn("slow");
+                                   $.doTimeout(200, function(){
+                                       $("#toggle-recenter").fadeIn("slow");
+                                       $.doTimeout(200, function(){
+                                        $("#export-gexf").fadeIn("slow");
+                                       });
+                                   });
+                               });
+                           });
+                       });
+                    });
+                 });
+               });
 
-                // init the node list with prefs.category
-                tinaviz.infodiv.updateNodeList( "macro", prefs.category );
-                tinaviz.infodiv.display_current_category();
-                tinaviz.infodiv.display_current_view();
+               // init the node list with prefs.category
+               tinaviz.infodiv.updateNodeList( "macro", prefs.category );
+               tinaviz.infodiv.display_current_category();
+               tinaviz.infodiv.display_current_view();
 
-                // initialize the sliders
+                // initialize the sliders using data from viz applet (** DISABLED, NOT FUNCTIONAL **)
                 /*
                 $("#sliderANodeSize").slider( "option", "value",
                     parseInt(tinaviz.get("filter.a.node.size")) *100
@@ -243,25 +267,21 @@ $(document).ready(function(){
                 ]);
                 */
 
-                // default settings
-                $("#sliderSelectionZone").slider( "enable" );
-                $("#sliderANodeWeight").slider( "enable" );
-                $("#sliderAEdgeWeight").slider( "enable" );
-                $("#sliderANodeSize").slider( "enable" );
-                $("#sliderBNodeWeight").slider( "disable" );
-                $("#sliderBEdgeWeight").slider( "disable" );
-                $("#sliderBNodeSize").slider( "disable" );
 
                 if (prefs.node_id != "") {
+                    $.doTimeout(1000, function(){
                     tinaviz.select(prefs.node_id);
+                    });
                 }
 
                 if (prefs.search != "") {
                     $("#search_input").val(prefs.search);
                     tinaviz.selectByPattern(prefs.search, "containsIgnoreCase");
                 }
-               var size = resize();
-               tinaviz.size(size.w, size.h);
+               $.doTimeout(100, function(){
+                   var size = resize();
+                   tinaviz.size(size.w, size.h);
+               });
             },
             error: function(msg) {
                 $("#notification").notify("create", {
