@@ -504,22 +504,22 @@ function Tinaviz(args) {
      *   - category: String
      */
     this.viewMeso = function(id, category) {
-        $.doTimeout(200, function(){
+            var cat = tinaviz.getCategory();
             tinaviz.setView("macro");
-            $.doTimeout(200, function(){
+            $.doTimeout(100, function(){
                 tinaviz.unselect(); // unselect nodes in current category
-                $.doTimeout(200, function(){
+                $.doTimeout(100, function(){
                     //$.doTimeout( 400, function(){
-                    tinaviz.setCategory(category);
-                    $.doTimeout(200, function(){
+                    if (category != cat) tinaviz.setCategory(category);
+                    $.doTimeout(100, function(){
                         tinaviz.unselect();  // unselect nodes in the desired category
-                        $.doTimeout(200, function(){
+                        $.doTimeout(600, function(){
                             tinaviz.select(id);
-                            $.doTimeout(200, function(){
+                            $.doTimeout(1300, function(){
                                 tinaviz.setView("meso");
                                 //alert("recentering");
                                 //alert("setting category to "+category);
-                                tinaviz.infodiv.updateNodeList("meso", category); //
+                                if (category != cat) tinaviz.infodiv.updateNodeList("meso", category);
                                 // always enable
                                 $("#category-A").fadeIn();
                                 $("#category-B").fadeIn();
@@ -535,8 +535,6 @@ function Tinaviz(args) {
                 });
                 false;
             });
-            false;
-        });
     }
 
 
