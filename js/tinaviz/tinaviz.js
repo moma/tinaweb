@@ -504,46 +504,40 @@ function Tinaviz(args) {
      *   - category: String
      */
     this.viewMeso = function(id, category) {
-                       // always enable
-       //$("#category-A").fadeIn();
-       // $("#category-B").fadeIn();
-        alert("viewMeso");
-        //tinaviz.unselect();
-        // selects unique node
-        tinaviz.setView("macro");
-        tinaviz.unselect(); // unselect nodes in current category
-
-        //$.doTimeout( 400, function(){
-        tinaviz.setCategory(category);
-        tinaviz.unselect();  // unselect nodes in the desired category
-
-
-
-            //alert("selecting "+id);
-            tinaviz.select(id);
-
-            // sets the category of the graph
-
-            //this.set("macro", "filter.node.category", category);
-            //alert("setting view");
-            $.doTimeout(400, function(){
-                  tinaviz.setView("meso");
-            //alert("recentering");
-            //alert("setting category to "+category);
-            tinaviz.infodiv.updateNodeList("meso", category); //
-                    // always enable
-           $("#category-A").fadeIn();
-           $("#category-B").fadeIn();
-            //this.infoviz.updateNodeList("meso", category);
-            tinaviz.recenter();
+        $.doTimeout(200, function(){
+            tinaviz.setView("macro");
+            $.doTimeout(200, function(){
+                tinaviz.unselect(); // unselect nodes in current category
+                $.doTimeout(200, function(){
+                    //$.doTimeout( 400, function(){
+                    tinaviz.setCategory(category);
+                    $.doTimeout(200, function(){
+                        tinaviz.unselect();  // unselect nodes in the desired category
+                        $.doTimeout(200, function(){
+                            tinaviz.select(id);
+                            $.doTimeout(200, function(){
+                                tinaviz.setView("meso");
+                                //alert("recentering");
+                                //alert("setting category to "+category);
+                                tinaviz.infodiv.updateNodeList("meso", category); //
+                                // always enable
+                                $("#category-A").fadeIn();
+                                $("#category-B").fadeIn();
+                                //this.infoviz.updateNodeList("meso", category);
+                                tinaviz.recenter();
+                                false;
+                            });
+                            false;
+                        });
+                        false;
+                    });
+                    false;
+                });
+                false;
+            });
             false;
-         });
-
-         //   false;
-       // });
-
+        });
     }
-
 
 
     /**
