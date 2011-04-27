@@ -219,12 +219,19 @@ $(document).ready(function(){
                                        $.doTimeout(200, function(){
                                         $("#export-gexf").fadeIn("slow");
                                        });
+                                       false;
                                    });
+                                   false;
                                });
+                               false;
                            });
+                           false;
                        });
+                       false;
                     });
+                    false;
                  });
+                 false;
                });
 
                // init the node list with prefs.category
@@ -278,6 +285,7 @@ $(document).ready(function(){
                $.doTimeout(100, function(){
                    var size = resize();
                    tinaviz.size(size.w, size.h);
+                   false;
                });
             },
             error: function(msg) {
