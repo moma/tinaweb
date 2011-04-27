@@ -271,7 +271,6 @@ function Tinaviz(args) {
      */
     this.selectByPattern = function(pattern, patternMode) {
         if (pattern.length > 0 && pattern.length < 3) return;
-        alert("selectByPattern");
         applet.selectByPattern(pattern, patternMode);
     }
 
@@ -280,7 +279,6 @@ function Tinaviz(args) {
      */
     this.selectByNeighbourPattern = function(pattern, patternMode, category) {
         if (pattern.length > 0 && pattern.length < 3) return;
-        alert("selectByNeighbourPattern");
         applet.selectByNeighbourPattern(pattern, patternMode, category);
     }
 
