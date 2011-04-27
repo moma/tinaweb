@@ -130,6 +130,24 @@ toolbar.checkSearchFormNoRepeat = function() {
     }
 };
 
+toolbar.runSearchFormNoRepeat = function() {
+
+          var txt = $("#search_input").val();
+         //if (txt=="") {
+         tinaviz.unselect();
+         tinaviz.infodiv.reset();
+         //}
+
+           var cat = tinaviz.getCategory();
+           if (cat == "Document") {
+              tinaviz.selectByNeighbourPattern(txt, "containsIgnoreCase", tinaviz.getOppositeCategory(cat));
+           } else {
+              tinaviz.selectByPattern(txt, "containsIgnoreCase");
+           }
+           tinaviz.centerOnSelection();
+
+
+};
 
 toolbar.init = function() {
 
@@ -138,23 +156,7 @@ toolbar.init = function() {
     //$("#search").val(toolbar.values.search);
     $("#search").submit(function() {
         
-        var txt = $("#search_input").val();
-         tinaviz.unselect();
-         tinaviz.infodiv.reset();
-
-        //if (txt=="") {
-
-        //} else {
-            // earchNodes= function(matchLabel, matchCategory, matchView, matchType, targetView)
-           // var cat = tinaviz.getCategory();
-            //if (cat=="Document") {
-            //    var cat2 = tinaviz.getOppositeCategory(cat);
-            //    tinaviz.searchNodes(txt,cat2, "current", "containsIgnoreCase", "visualization");
-            //} else {
-           tinaviz.selectByPattern(txt, "containsIgnoreCase");
-           tinaviz.centerOnSelection();
-           // }
-        //}
+      toolbar.runSearchFormNoRepeat();
     
      return false;
     });
@@ -205,14 +207,7 @@ toolbar.init = function() {
             primary: 'ui-icon-search'
         }
     }).click( function(eventObject) {
-        var txt = $("#search_input").val();
-        if (txt=="") {
-            tinaviz.unselect();
-            tinaviz.infodiv.reset();
-        } else {
-            tinaviz.selectByPattern(txt, "containsIgnoreCase");
-            tinaviz.centerOnSelection();
-        }
+
     });
 
     // MACRO SLIDERS
