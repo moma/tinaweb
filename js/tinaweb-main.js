@@ -273,7 +273,7 @@ $(document).ready(function(){
 
                 if (prefs.search != "") {
                     $("#search_input").val(prefs.search);
-                    tinaviz.selectByPattern(prefs.search, "containsIgnoreCase");
+                      tinaviz.selectByPattern(prefs.search, "containsIgnoreCase");
                 }
                $.doTimeout(100, function(){
                    var size = resize();
