@@ -425,7 +425,7 @@ function Tinaviz(args) {
     */
     this.select = function(toBeSelected) {
         if ($.isArray(toBeSelected)) {
-          this.set("select", $.toJSON(toBeSelected), "Json");
+          this.set("select", toBeSelected, "Json");
         } else {
           this.set("select", toBeSelected, "String");
         }
@@ -506,12 +506,12 @@ function Tinaviz(args) {
     this.viewMeso = function(id, category) {
             var cat = tinaviz.getCategory();
             tinaviz.setView("macro");
-            $.doTimeout(100, function(){
+            $.doTimeout(150, function(){
                 tinaviz.unselect(); // unselect nodes in current category
-                $.doTimeout(100, function(){
+                $.doTimeout(150, function(){
                     //$.doTimeout( 400, function(){
-                    if (category != cat) tinaviz.setCategory(category);
-                    $.doTimeout(100, function(){
+                    tinaviz.setCategory(category);
+                    $.doTimeout(150, function(){
                         tinaviz.unselect();  // unselect nodes in the desired category
                         $.doTimeout(600, function(){
                             tinaviz.select(id);
@@ -609,7 +609,7 @@ function Tinaviz(args) {
      */
 
     this.set = function(key, obj, t) {
-         //alert("key:"+key+" obj: "+obj+" t: "+t);
+         //if (t=="Json") alert("key:"+key+" obj: "+obj+" t: "+t);
         if (t === undefined) {
             this.logNormal("Warning, setting unknow ("+key+","+obj+")");
             applet.send(key, obj, "");
