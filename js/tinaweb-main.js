@@ -222,12 +222,19 @@ $(document).ready(function(){
                                        $.doTimeout(200, function(){
                                         $("#export-gexf").fadeIn("slow");
                                        });
+                                       false;
                                    });
+                                   false;
                                });
+                               false;
                            });
+                           false;
                        });
+                       false;
                     });
+                    false;
                  });
+                 false;
                });
 
                // init the node list with prefs.category
@@ -276,11 +283,12 @@ $(document).ready(function(){
 
                 if (prefs.search != "") {
                     $("#search_input").val(prefs.search);
-                    tinaviz.selectByPattern(prefs.search, "containsIgnoreCase");
+                      tinaviz.selectByPattern(prefs.search, "containsIgnoreCase");
                 }
                $.doTimeout(100, function(){
                    var size = resize();
                    tinaviz.size(size.w, size.h);
+                   false;
                });
             },
             error: function(msg) {

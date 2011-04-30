@@ -273,7 +273,15 @@ function Tinaviz(args) {
         if (pattern.length > 0 && pattern.length < 3) return;
         applet.selectByPattern(pattern, patternMode);
     }
-    
+
+    /*
+     * Search and select nodes
+     */
+    this.selectByNeighbourPattern = function(pattern, patternMode, category) {
+        if (pattern.length > 0 && pattern.length < 3) return;
+        applet.selectByNeighbourPattern(pattern, patternMode, category);
+    }
+
     /*
      * Search and highlight nodes
      */
@@ -417,7 +425,7 @@ function Tinaviz(args) {
     */
     this.select = function(toBeSelected) {
         if ($.isArray(toBeSelected)) {
-          this.set("select", $.toJSON(toBeSelected), "Json");
+          this.set("select", toBeSelected, "Json");
         } else {
           this.set("select", toBeSelected, "String");
         }
@@ -496,46 +504,38 @@ function Tinaviz(args) {
      *   - category: String
      */
     this.viewMeso = function(id, category) {
-                       // always enable
-       //$("#category-A").fadeIn();
-       // $("#category-B").fadeIn();
-
-        //tinaviz.unselect();
-        // selects unique node
-        tinaviz.setView("macro");
-        tinaviz.unselect(); // unselect nodes in current category
-
-        //$.doTimeout( 400, function(){
-        tinaviz.setCategory(category);
-        tinaviz.unselect();  // unselect nodes in the desired category
-
-
-
-            //alert("selecting "+id);
-            tinaviz.select(id);
-
-            // sets the category of the graph
-
-            //this.set("macro", "filter.node.category", category);
-            //alert("setting view");
-            $.doTimeout(400, function(){
-                  tinaviz.setView("meso");
-            //alert("recentering");
-            //alert("setting category to "+category);
-            tinaviz.infodiv.updateNodeList("meso", category); //
-                    // always enable
-           $("#category-A").fadeIn();
-           $("#category-B").fadeIn();
-            //this.infoviz.updateNodeList("meso", category);
-            tinaviz.recenter();
-            false;
-         });
-
-         //   false;
-       // });
-
+            var cat = tinaviz.getCategory();
+            tinaviz.setView("macro");
+            $.doTimeout(150, function(){
+                tinaviz.unselect(); // unselect nodes in current category
+                $.doTimeout(150, function(){
+                    //$.doTimeout( 400, function(){
+                    tinaviz.setCategory(category);
+                    $.doTimeout(150, function(){
+                        tinaviz.unselect();  // unselect nodes in the desired category
+                        $.doTimeout(600, function(){
+                            tinaviz.select(id);
+                            $.doTimeout(1300, function(){
+                                tinaviz.setView("meso");
+                                //alert("recentering");
+                                //alert("setting category to "+category);
+                                if (category != cat) tinaviz.infodiv.updateNodeList("meso", category);
+                                // always enable
+                                $("#category-A").fadeIn();
+                                $("#category-B").fadeIn();
+                                //this.infoviz.updateNodeList("meso", category);
+                                tinaviz.recenter();
+                                false;
+                            });
+                            false;
+                        });
+                        false;
+                    });
+                    false;
+                });
+                false;
+            });
     }
-
 
 
     /**
@@ -609,7 +609,7 @@ function Tinaviz(args) {
      */
 
     this.set = function(key, obj, t) {
-         //alert("key:"+key+" obj: "+obj+" t: "+t);
+         //if (t=="Json") alert("key:"+key+" obj: "+obj+" t: "+t);
         if (t === undefined) {
             this.logNormal("Warning, setting unknow ("+key+","+obj+")");
             applet.send(key, obj, "");
