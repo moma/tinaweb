@@ -78,6 +78,9 @@ $(document).ready(function(){
 
                 if (tinaviz.getView() == "macro") {
 
+                        if (Math.floor(Math.random()*8) < 2) {
+                         tinaviz.unselect();
+                       }
                       if (Math.floor(Math.random()*5) > 1) {
 
                         if (Math.floor(Math.random()*5) > 1) {
