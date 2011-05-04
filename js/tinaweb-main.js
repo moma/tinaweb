@@ -65,8 +65,8 @@ $(document).ready(function(){
         } else {
            unlockDemo = false;
         }
-        var waitTimeBeforeStartingDemo = 5; // wait time before starting the demo (default: 20);
-        var delayBetweenChanges = 4; // in seconds
+        var waitTimeBeforeStartingDemo = 6; // wait time before starting the demo (default: 20);
+        var delayBetweenChanges = 10; // in seconds
 
         // standby time
         $.fn.nap.standbyTime = waitTimeBeforeStartingDemo;
@@ -78,6 +78,9 @@ $(document).ready(function(){
 
                 if (tinaviz.getView() == "macro") {
 
+                        if (Math.floor(Math.random()*8) < 2) {
+                         tinaviz.unselect();
+                       }
                       if (Math.floor(Math.random()*5) > 1) {
 
                         if (Math.floor(Math.random()*5) > 1) {
