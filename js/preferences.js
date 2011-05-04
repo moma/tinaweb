@@ -11,7 +11,7 @@ var prefs = {
             edge_filter_max: "1.0",
             node_filter_min: "0.0",
             node_filter_max: "1.0",
-            layout: "tinaforce",
+            layout: "phyloforce",
             edge_rendering: "curve",
             pause: "false",
             demo: "false"
