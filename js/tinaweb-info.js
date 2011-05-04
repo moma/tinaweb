@@ -57,8 +57,8 @@ var InfoDiv = {
      * Default
      */
     categories: {
-        'NGram' : 'Keyphrases',
-        'Document' : 'Documents'
+        'NGram' : 'Keywords',
+        'Document' : 'Scholars'
     },
 
     /*
