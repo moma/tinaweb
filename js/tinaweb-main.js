@@ -171,8 +171,8 @@ $(document).ready(function(){
         tinaviz.infodiv.unselect_button= $( "#toggle-unselect" );
         tinaviz.infodiv.node_table = $( "#node_table > tbody" );
         tinaviz.infodiv.categories = {
-            'NGram' : 'Keyphrases',
-            'Document' : 'Documents'
+            'NGram' : 'Keywords',
+            'Document' : 'Scholars'
         };
         tinaviz.infodiv.reset();
         $("#infodiv").accordion({
