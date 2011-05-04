@@ -1,6 +1,6 @@
 // defaults
 var prefs = {
-            gexf: "phyloX.gexf", // "FET60bipartite_graph_cooccurrences_.gexf"
+            gexf: "scholarsMarch11.gexf", // "FET60bipartite_graph_cooccurrences_.gexf"
             view: "macro",
             category: "Document",
             node_id: "",
