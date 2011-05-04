@@ -1,6 +1,6 @@
 // defaults
 var prefs = {
-            gexf: "default.gexf.gz", // "FET60bipartite_graph_cooccurrences_.gexf"
+            gexf: "phyloTh10.gexf.gz", // "FET60bipartite_graph_cooccurrences_.gexf"
             view: "macro",
             category: "Document",
             node_id: "",
