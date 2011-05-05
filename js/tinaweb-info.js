@@ -414,7 +414,6 @@ var InfoDiv = {
     getSearchQueries: function(label, cat) {
         var SearchQuery = label.replace(/ /gi ,"+");
         //var WikiQuery=label.replace("+","_");
-<
        if (cat ==  "NGram") {
             return $("<p></p>").html(
                 '<a href="http://www.google.com/#hl=en&source=hp&q=%20'
