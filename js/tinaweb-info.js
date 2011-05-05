@@ -416,9 +416,7 @@ var InfoDiv = {
         //var WikiQuery=label.replace("+","_");
         if (CurrentCategRealName == "Document"){
             return $("<p></p>").html(
-                '<a href="'
-                + tinaviz.getPath()
-                +'http://www.google.com/#hl=en&source=hp&q=%20'
+                '<a href="http://www.google.com/#hl=en&source=hp&q=%20'
                 + SearchQuery.replace(",","OR")
                 + '%20" align=middle target=blank height=15 width=15> <img src="'
                 + tinaviz.getPath()
