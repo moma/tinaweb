@@ -274,7 +274,7 @@ var InfoDiv = {
                 ));
                 contentinnerdiv.append( $("<p></p>").html( this.getNodeContent(node) ) );
                 contentinnerdiv.append( $("<p></p>").html(
-                    this.getSearchQueries( htmlDecode(label), this.categories[current_cat])
+                    this.getSearchQueries( htmlDecode(label), current_cat)
                 ));
             }
             //contentinnerdiv.append("<br/>");
@@ -411,30 +411,10 @@ var InfoDiv = {
     /*
     * displays node related search queries
     */
-    getSearchQueries: function(label, CurrentCategRealName) {
+    getSearchQueries: function(label, cat) {
         var SearchQuery = label.replace(/ /gi ,"+");
         //var WikiQuery=label.replace("+","_");
-        if (CurrentCategRealName == "projects"){
-            return $("<p></p>").html(
-                '<a href="'
-                + tinaviz.getPath()
-                +'http://www.google.com/#hl=en&source=hp&q=%20'
-                + SearchQuery.replace(",","OR")
-                + '%20" align=middle target=blank height=15 width=15> <img src="'
-                + tinaviz.getPath()
-                +'css/branding/google.png" height=15 width=15> </a><a href="http://en.wikipedia.org/wiki/'
-                + label.replace(/ /gi ,"_")
-                + '" align=middle target=blank height=15 width=15> <img src="'
-                + tinaviz.getPath()
-                +'css/branding/wikipedia.png" height=15 width=15> </a><a href="http://www.flickr.com/search/?w=all&q='
-                + SearchQuery
-                + '" align=middle target=blank height=15 width=15> <img src="'
-                + tinaviz.getPath()
-                +'css/branding/flickr.png" height=15 width=15> </a>'
-                )
-
-        }
-        else if ((CurrentCategRealName == "NGrams")|(CurrentCategRealName == "NGram")|(CurrentCategRealName == "keywords")|(CurrentCategRealName == "Keywords")|(CurrentCategRealName == "Terms")|(CurrentCategRealName == "Communities")|(CurrentCategRealName == "Documents")) {
+       if (cat ==  "NGram") {
             return $("<p></p>").html(
                 '<a href="http://www.google.com/#hl=en&source=hp&q=%20'
                 + SearchQuery.replace(",","OR")
@@ -451,7 +431,7 @@ var InfoDiv = {
                 +'css/branding/flickr.png" height=15 width=15> </a>'
                 )
         }
-        else if ((CurrentCategRealName == "Scholars")|(CurrentCategRealName == "People")|(CurrentCategRealName == "scholars")){
+        else if (cat == "Document"){
             return $("<p></p>").html(
                 '<a href="http://www.google.com/#hl=en&source=hp&q=%20'
                 + SearchQuery
