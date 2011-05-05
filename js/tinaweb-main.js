@@ -48,7 +48,6 @@ $(document).ready(function(){
         for (x in urlVars) {
             prefs[x] = urlVars[x];
         }
-        alert("value:("+parseFloat(prefs.a_node_filter_min)+")")
         tinaviz.set("filter.a.edge.weight", [parseFloat(prefs.a_edge_filter_min), parseFloat(prefs.a_edge_filter_max)], "Tuple2[Double]");
         tinaviz.set("filter.a.node.weight", [parseFloat(prefs.a_node_filter_min), parseFloat(prefs.a_node_filter_max)], "Tuple2[Double]");
         tinaviz.set("filter.b.edge.weight", [parseFloat(prefs.b_edge_filter_min), parseFloat(prefs.b_edge_filter_max)], "Tuple2[Double]");
