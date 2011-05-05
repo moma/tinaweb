@@ -414,6 +414,7 @@ var InfoDiv = {
     getSearchQueries: function(label, cat) {
         var SearchQuery = label.replace(/ /gi ,"+");
         //var WikiQuery=label.replace("+","_");
+<
        if (cat ==  "NGram") {
             return $("<p></p>").html(
                 '<a href="http://www.google.com/#hl=en&source=hp&q=%20'
@@ -430,6 +431,7 @@ var InfoDiv = {
                 + tinaviz.getPath()
                 +'css/branding/flickr.png" height=15 width=15> </a>'
                 )
+
         }
         else if (cat == "Document"){
             return $("<p></p>").html(

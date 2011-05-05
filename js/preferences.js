@@ -1,6 +1,8 @@
         // defaults
 var prefs = {
-            gexf: "whoswho.gexf.gz", // "FET60bipartite_graph_cooccurrences_.gexf"
+
+            gexf: "whoswho.gexf.gz",
+
             view: "macro",
             category: "Document",
             node_id: "",
