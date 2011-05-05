@@ -274,7 +274,7 @@ var InfoDiv = {
                 ));
                 contentinnerdiv.append( $("<p></p>").html( this.getNodeContent(node) ) );
                 contentinnerdiv.append( $("<p></p>").html(
-                    this.getSearchQueries( htmlDecode(label), this.categories[current_cat])
+                    this.getSearchQueries( htmlDecode(label), current_cat)
                 ));
             }
             //contentinnerdiv.append("<br/>");
@@ -411,10 +411,10 @@ var InfoDiv = {
     /*
     * displays node related search queries
     */
-    getSearchQueries: function(label, CurrentCategRealName) {
+    getSearchQueries: function(label, cat) {
         var SearchQuery = label.replace(/ /gi ,"+");
         //var WikiQuery=label.replace("+","_");
-        if (CurrentCategRealName == "projects"){
+        if (CurrentCategRealName == "Document"){
             return $("<p></p>").html(
                 '<a href="'
                 + tinaviz.getPath()
@@ -434,7 +434,7 @@ var InfoDiv = {
                 )
 
         }
-        else if ((CurrentCategRealName == "NGrams")|(CurrentCategRealName == "NGram")|(CurrentCategRealName == "keywords")|(CurrentCategRealName == "Keywords")|(CurrentCategRealName == "Terms")|(CurrentCategRealName == "Communities")|(CurrentCategRealName == "Documents")) {
+        else if (cat == "NGram") {
             return $("<p></p>").html(
                 '<a href="http://www.google.com/#hl=en&source=hp&q=%20'
                 + SearchQuery.replace(",","OR")
@@ -449,19 +449,6 @@ var InfoDiv = {
                 + '" align=middle target=blank height=15 width=15> <img src="'
                 + tinaviz.getPath()
                 +'css/branding/flickr.png" height=15 width=15> </a>'
-                )
-        }
-        else if ((CurrentCategRealName == "Scholars")|(CurrentCategRealName == "People")|(CurrentCategRealName == "scholars")){
-            return $("<p></p>").html(
-                '<a href="http://www.google.com/#hl=en&source=hp&q=%20'
-                + SearchQuery
-                + '%20" align=middle target=blank height=15 width=15> <img src="'
-                + tinaviz.getPath()+'css/branding/google.png" height=15 width=15> </a>'
-                +'<a href="http://scholar.google.com/scholar?q=%20'
-                + SearchQuery
-                + '%20" align=middle target=blank height=15 width=15> <img src="'
-                + tinaviz.getPath()
-                +'css/branding/googleScholars.png" height=15 width=15> </a>'
                 )
         }
         else {
