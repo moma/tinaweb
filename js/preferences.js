@@ -1,6 +1,6 @@
         // defaults
 var prefs = {
-            gexf: "phyloTh10.gexf.gz",
+            gexf: "PhyloFETShort.gexf",
             view: "macro",
             category: "Document",
             node_id: "",
