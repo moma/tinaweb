@@ -1,6 +1,6 @@
         // defaults
 var prefs = {
-            gexf: "default.gexf.gz", // "FET60bipartite_graph_cooccurrences_.gexf"
+            gexf: "phyloTh10.gexf.gz",
             view: "macro",
             category: "Document",
             node_id: "",
@@ -22,7 +22,7 @@ var prefs = {
             b_node_filter_min: "0.0",
             b_node_filter_max: "1.0",
 
-            layout: "tinaforce",
+            layout: "phyloforce",
             pause: "false",
             demo: "false"
 
