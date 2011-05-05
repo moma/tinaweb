@@ -47,15 +47,15 @@ $(document).ready(function(){
         for (x in urlVars) {
             prefs[x] = urlVars[x];
         }
-        tinaviz.set("filter.a.edge.weight", [parseFloat(prefs.edge_filter_min), parseFloat(prefs.edge_filter_max)], "Tuple2[Double]");
-        tinaviz.set("filter.a.node.weight", [parseFloat(prefs.node_filter_min), parseFloat(prefs.node_filter_max)], "Tuple2[Double]");
-        tinaviz.set("filter.b.edge.weight", [parseFloat(prefs.edge_filter_min), parseFloat(prefs.edge_filter_max)], "Tuple2[Double]");
-        tinaviz.set("filter.b.node.weight", [parseFloat(prefs.node_filter_min), parseFloat(prefs.node_filter_max)], "Tuple2[Double]");
-        tinaviz.set("filter.a.node.size",   parseFloat(prefs.magnify),         "Double");
-        tinaviz.set("filter.b.node.size",   parseFloat(prefs.magnify),         "Double");
+        tinaviz.set("filter.a.edge.weight", [parseFloat(prefs.a_edge_filter_min), parseFloat(prefs.a_edge_filter_max)], "Tuple2[Double]");
+        tinaviz.set("filter.a.node.weight", [parseFloat(prefs.a_node_filter_min), parseFloat(prefs.a_node_filter_max)], "Tuple2[Double]");
+        tinaviz.set("filter.b.edge.weight", [parseFloat(prefs.b_edge_filter_min), parseFloat(prefs.b_edge_filter_max)], "Tuple2[Double]");
+        tinaviz.set("filter.b.node.weight", [parseFloat(prefs.b_node_filter_min), parseFloat(prefs.b_node_filter_max)], "Tuple2[Double]");
+        tinaviz.set("filter.a.node.size",   parseFloat(prefs.a_node_size),         "Double");
+        tinaviz.set("filter.b.node.size",   parseFloat(prefs.b_node_size),         "Double");
         tinaviz.set("filter.node.category", prefs.category,                    "String");
         tinaviz.set("selectionRadius",      parseFloat(prefs.cursor_size),     "Double");
-        tinaviz.set("layout.algorithm",     prefs.layout,                      "String");
+        tinaviz.set("layout",               prefs.layout,                      "String");
         tinaviz.set("pause",                prefs.pause,                       "Boolean");
         if (prefs.demo == "true") {
            unlockDemo = true;
@@ -174,8 +174,8 @@ $(document).ready(function(){
         tinaviz.infodiv.unselect_button= $( "#toggle-unselect" );
         tinaviz.infodiv.node_table = $( "#node_table > tbody" );
         tinaviz.infodiv.categories = {
-            'NGram' : 'Keyphrases',
-            'Document' : 'Documents'
+            'NGram' : 'Keywords',
+            'Document' : 'Projects'
         };
         tinaviz.infodiv.reset();
         $("#infodiv").accordion({
