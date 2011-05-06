@@ -26,6 +26,6 @@ var prefs = {
 
             layout: "tinaforce",
             pause: "false",
-            demo: "true"
+            demo: "false"
 
 };
