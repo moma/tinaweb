@@ -24,6 +24,6 @@ var prefs = {
 
             layout: "phyloforce",
             pause: "false",
-            demo: "false"
+            demo: "true"
 
 };
