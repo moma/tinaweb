@@ -1,6 +1,6 @@
         // defaults
 var prefs = {
-            gexf: "PhyloFETShort.gexf",
+            gexf: "FETPhyloFinal.gexf",
             view: "macro",
             category: "Document",
             node_id: "",
