@@ -414,7 +414,7 @@ var InfoDiv = {
     getSearchQueries: function(label, cat) {
         var SearchQuery = label.replace(/ /gi ,"+");
         //var WikiQuery=label.replace("+","_");
-        if (CurrentCategRealName == "Document"){
+        if (cat == "Document"){
             return $("<p></p>").html(
                 '<a href="http://www.google.com/#hl=en&source=hp&q=%20'
                 + SearchQuery.replace(",","OR")
