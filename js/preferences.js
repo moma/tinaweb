@@ -1,6 +1,6 @@
         // defaults
 var prefs = {
-            gexf: "FETProjects.gexf.gz", // "FET60bipartite_graph_cooccurrences_.gexf"
+            gexf: "iscpif.gexf",
             view: "macro",
             category: "Document",
             node_id: "",
@@ -27,3 +27,4 @@ var prefs = {
             demo: "false"
 
 };
+

@@ -43,7 +43,6 @@ $(document).ready(function(){
         var size = resize();
         tinaviz.size(size.w, size.h);
 
-
         var urlVars = getUrlVars();
         for (x in urlVars) {
             prefs[x] = urlVars[x];
@@ -55,8 +54,6 @@ $(document).ready(function(){
         tinaviz.set("filter.a.node.size",   parseFloat(prefs.a_node_size),         "Double");
         tinaviz.set("filter.b.node.size",   parseFloat(prefs.b_node_size),         "Double");
         tinaviz.set("filter.node.category", prefs.category,                    "String");
-        //tinaviz.set("output/nodeSizeMin", 5.0, "Double");
-        //tinaviz.set("output/nodeSizeMax", 20.0, "Double");
         tinaviz.set("selectionRadius",      parseFloat(prefs.cursor_size),     "Double");
         tinaviz.set("layout",               prefs.layout,                      "String");
         tinaviz.set("pause",                prefs.pause,                       "Boolean");
@@ -178,7 +175,7 @@ $(document).ready(function(){
         tinaviz.infodiv.node_table = $( "#node_table > tbody" );
         tinaviz.infodiv.categories = {
             'NGram' : 'Keywords',
-            'Document' : 'Projects'
+            'Document' : 'Scholars'
         };
         tinaviz.infodiv.reset();
         $("#infodiv").accordion({

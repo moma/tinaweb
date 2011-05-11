@@ -68,10 +68,11 @@ body {
     text-align: left;
 }
 
+
 /* each sliders positioned relatively to their parent */
 .slider {
     float: left;
-    width: 100px;
+    width: 80px;
     padding: 0px 20px 0px 0px;
     margin-top: -5px;
 }
@@ -81,7 +82,7 @@ body {
 }
 
 .sliderLabel {
-    font-size: 11px;
+    font-size: 10px;
 }
 
 .toolbar-left {
