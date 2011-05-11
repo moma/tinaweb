@@ -8,8 +8,8 @@ var prefs = {
             node_id: "",
             search: "",
 
-            a_node_size: "0.10",
-            b_node_size: "0.10",
+            a_node_size: "0.50",
+            b_node_size: "0.50",
 
             cursor_size: "0.01",
 
