@@ -11,4 +11,7 @@ git push origin fetopen
 git checkout phylofet
 git pull origin master
 git push origin phylofet
+git checkout iscpif
+git pull origin scholars
+git push origin iscpif
 git checkout master
