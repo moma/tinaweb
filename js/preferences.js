@@ -1,6 +1,6 @@
         // defaults
 var prefs = {
-            gexf: "iscpif.gexf",
+            gexf: "iscpif.gexf.gz",
             view: "macro",
             category: "Document",
             node_id: "",
