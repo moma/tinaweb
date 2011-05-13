@@ -1,13 +1,18 @@
         // defaults
 var prefs = {
-            gexf: "scholars.gexf.gz", // "FET60bipartite_graph_cooccurrences_.gexf"
+            gexf: "iscpif.gexf.gz",
             view: "macro",
             category: "Document",
             node_id: "",
             search: "",
 
+<<<<<<< HEAD
             a_node_size: "0.10",
             b_node_size: "0.10",
+=======
+            a_node_size: "0.50",
+            b_node_size: "0.50",
+>>>>>>> 35d6ebc266798e288bbfa50b5430f8235debcbd0
 
             cursor_size: "0.01",
 
