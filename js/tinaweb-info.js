@@ -274,7 +274,7 @@ var InfoDiv = {
                 ));
                 contentinnerdiv.append( $("<p></p>").html( this.getNodeContent(node) ) );
                 contentinnerdiv.append( $("<p></p>").html(
-                    this.getSearchQueries( htmlDecode(label), this.categories[current_cat])
+                    this.getSearchQueries( htmlDecode(label), current_cat)
                 ));
             }
             //contentinnerdiv.append("<br/>");
@@ -323,8 +323,8 @@ var InfoDiv = {
         }
 
         this.unselect_button.hide();
-        this.label.empty().append($("<h2></h2>").html(
-"<center><iframe src='http://player.vimeo.com/video/21919900?title=0&amp;byline=0&amp;portrait=0' width='250' height='150' frameborder='0'></center></iframe>"));
+        this.label.empty().append($("<h2></h2>").html("<center><iframe src='http://player.vimeo.com/video/13203336' width='300' height='210' frameborder='0'></iframe><\center>"));
+
         this.contents.empty().append($("<h4></h4>").html("click on a node to begin exploration"));
         this.contents.empty().append($("<div><div>").html(
             "<b>Navigation tips</b>"+"<p align='left'>"
@@ -411,14 +411,12 @@ var InfoDiv = {
     /*
     * displays node related search queries
     */
-    getSearchQueries: function(label, CurrentCategRealName) {
+    getSearchQueries: function(label, cat) {
         var SearchQuery = label.replace(/ /gi ,"+");
         //var WikiQuery=label.replace("+","_");
-        if (CurrentCategRealName == "projects"){
+        if (cat == "Document"){
             return $("<p></p>").html(
-                '<a href="'
-                + tinaviz.getPath()
-                +'http://www.google.com/#hl=en&source=hp&q=%20'
+                '<a href="http://www.google.com/#hl=en&source=hp&q=%20'
                 + SearchQuery.replace(",","OR")
                 + '%20" align=middle target=blank height=15 width=15> <img src="'
                 + tinaviz.getPath()
@@ -434,7 +432,7 @@ var InfoDiv = {
                 )
 
         }
-        else if ((CurrentCategRealName == "NGrams")|(CurrentCategRealName == "NGram")|(CurrentCategRealName == "keywords")|(CurrentCategRealName == "Keywords")|(CurrentCategRealName == "Terms")|(CurrentCategRealName == "Communities")|(CurrentCategRealName == "Documents")) {
+        else if (cat == "NGram") {
             return $("<p></p>").html(
                 '<a href="http://www.google.com/#hl=en&source=hp&q=%20'
                 + SearchQuery.replace(",","OR")
@@ -449,19 +447,6 @@ var InfoDiv = {
                 + '" align=middle target=blank height=15 width=15> <img src="'
                 + tinaviz.getPath()
                 +'css/branding/flickr.png" height=15 width=15> </a>'
-                )
-        }
-        else if ((CurrentCategRealName == "Scholars")|(CurrentCategRealName == "People")|(CurrentCategRealName == "scholars")){
-            return $("<p></p>").html(
-                '<a href="http://www.google.com/#hl=en&source=hp&q=%20'
-                + SearchQuery
-                + '%20" align=middle target=blank height=15 width=15> <img src="'
-                + tinaviz.getPath()+'css/branding/google.png" height=15 width=15> </a>'
-                +'<a href="http://scholar.google.com/scholar?q=%20'
-                + SearchQuery
-                + '%20" align=middle target=blank height=15 width=15> <img src="'
-                + tinaviz.getPath()
-                +'css/branding/googleScholars.png" height=15 width=15> </a>'
                 )
         }
         else {
