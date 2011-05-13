@@ -414,7 +414,7 @@ var InfoDiv = {
     getSearchQueries: function(label, cat) {
         var SearchQuery = label.replace(/ /gi ,"+");
         //var WikiQuery=label.replace("+","_");
-        if (cat == "Document"){
+       if (cat ==  "NGram") {
             return $("<p></p>").html(
                 '<a href="http://www.google.com/#hl=en&source=hp&q=%20'
                 + SearchQuery.replace(",","OR")
@@ -432,21 +432,17 @@ var InfoDiv = {
                 )
 
         }
-        else if (cat == "NGram") {
+        else if (cat == "Document"){
             return $("<p></p>").html(
                 '<a href="http://www.google.com/#hl=en&source=hp&q=%20'
-                + SearchQuery.replace(",","OR")
+                + SearchQuery
+                + '%20" align=middle target=blank height=15 width=15> <img src="'
+                + tinaviz.getPath()+'css/branding/google.png" height=15 width=15> </a>'
+                +'<a href="http://scholar.google.com/scholar?q=%20'
+                + SearchQuery
                 + '%20" align=middle target=blank height=15 width=15> <img src="'
                 + tinaviz.getPath()
-                +'css/branding/google.png" height=15 width=15> </a><a href="http://en.wikipedia.org/wiki/'
-                + label.replace(/ /gi ,"_")
-                + '" align=middle target=blank height=15 width=15> <img src="'
-                + tinaviz.getPath()
-                +'css/branding/wikipedia.png" height=15 width=15> </a><a href="http://www.flickr.com/search/?w=all&q='
-                + SearchQuery
-                + '" align=middle target=blank height=15 width=15> <img src="'
-                + tinaviz.getPath()
-                +'css/branding/flickr.png" height=15 width=15> </a>'
+                +'css/branding/googleScholars.png" height=15 width=15> </a>'
                 )
         }
         else {
