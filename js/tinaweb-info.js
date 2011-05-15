@@ -57,8 +57,8 @@ var InfoDiv = {
      * Default
      */
     categories: {
-        'NGram' : 'Keyphrases',
-        'Document' : 'Documents'
+        'NGram' : 'Keywords',
+        'Document' : 'Scholars'
     },
 
     /*
@@ -324,11 +324,12 @@ var InfoDiv = {
 
         this.unselect_button.hide();
         this.label.empty().append($("<h2></h2>").html("<center><iframe src='http://player.vimeo.com/video/13203336' width='300' height='210' frameborder='0'></iframe><\center>"));
+
         this.contents.empty().append($("<h4></h4>").html("click on a node to begin exploration"));
-        this.contents.empty().append($("<h4></h4>").html(
-            "<h2>Navigation tips</h2>"+"<p align='left'>"
+        this.contents.empty().append($("<div><div>").html(
+            "<b>Navigation tips</b>"+"<p align='left'>"
             +"<br/>"
-            +"<i>Basic interactions</i><br/><br/>"
+            +"<i>Basic interactions</i><br/>"
             +"Click on a node to select/unselect and get its information.  In case of multiple selection, the button <img src='"
             + tinaviz.getPath()
             +"css/branding/unselect.png' alt='unselect' align='top' height=20/>  clears all selections.<br/><br/>The switch button <img src='"
@@ -336,7 +337,6 @@ var InfoDiv = {
             +"<br/><br/>"
             +"<i>Graph manipulation</i><br/><br/>"
             +"Link and node sizes indicate their strength.<br/><br/> To fold/unfold the graph (keep only strong links or weak links), use the 'edges filter' sliders.<br/><br/> To select a more of less specific area of the graph, use the 'nodes filter' slider.</b><br/><br/>"
-            +"<i>Micro/Macro view</i><br/><br/>To explore the neighborhood of a selection, either double click on the selected nodes, either click on the macro/meso level button. Zoom out in meso view return to macro view.<br/><br/>  "+"Click on the 'all nodes' tab below to view the full clickable list of nodes.<br/><br/>Find additional tips with mouse over the question marks."
             +"</p>"
             )
         );

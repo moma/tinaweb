@@ -175,7 +175,7 @@ $(document).ready(function(){
         tinaviz.infodiv.node_table = $( "#node_table > tbody" );
         tinaviz.infodiv.categories = {
             'NGram' : 'Keywords',
-            'Document' : 'Person'
+            'Document' : 'Scholars'
         };
         tinaviz.infodiv.reset();
         $("#infodiv").accordion({

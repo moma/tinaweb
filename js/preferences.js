@@ -1,13 +1,10 @@
         // defaults
 var prefs = {
-
-            gexf: "whoswho.gexf.gz",
-
+            gexf: "scholars.gexf.gz",
             view: "macro",
             category: "Document",
             node_id: "",
             search: "",
-
             a_node_size: "0.50",
             b_node_size: "0.50",
 
@@ -29,3 +26,4 @@ var prefs = {
             demo: "false"
 
 };
+
