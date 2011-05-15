@@ -221,7 +221,7 @@ toolbar.init = function() {
         animate: true,
         slide: function(event, ui) {
             tinaviz.set("filter.a.edge.weight", [ui.values[0] / 200.0, ui.values[1] / 200.0], "Tuple2[Double]");
-            tinaviz.recenter();
+            // tinaviz.recenter();
         }
     });
 
@@ -231,7 +231,7 @@ toolbar.init = function() {
         animate: true,
         slide: function(event, ui) {
             tinaviz.set("filter.a.node.weight", [ui.values[0] / 200.0, ui.values[1] / 200.0], "Tuple2[Double]");
-            tinaviz.recenter();
+            //tinaviz.recenter();
         }
     });
 
@@ -242,7 +242,7 @@ toolbar.init = function() {
         animate: true,
         slide: function(event, ui) {
             tinaviz.set("filter.b.edge.weight", [ui.values[0] / 200.0, ui.values[1] / 200.0], "Tuple2[Double]");
-            tinaviz.recenter();
+            //tinaviz.recenter();
         }
     });
 
@@ -252,7 +252,7 @@ toolbar.init = function() {
         animate: true,
         slide: function(event, ui) {
             tinaviz.set("filter.b.node.weight", [ui.values[0] / 200.0, ui.values[1] / 200.0], "Tuple2[Double]");
-            tinaviz.recenter();
+            //tinaviz.recenter();
         }
     });
 
@@ -422,7 +422,7 @@ toolbar.resetSlidersValues = function() {
         animate: true,
         slide: function(event, ui) {
             tinaviz.set("filter.a.edge.weight", [ui.values[0] / 200.0, ui.values[1] / 200.0], "Tuple2[Double]");
-            tinaviz.recenter();
+            //tinaviz.recenter();
         }
     });
 
@@ -432,7 +432,7 @@ toolbar.resetSlidersValues = function() {
         animate: true,
         slide: function(event, ui) {
             tinaviz.set("filter.a.node.weight", [ui.values[0] / 200.0, ui.values[1] / 200.0], "Tuple2[Double]");
-            tinaviz.recenter();
+            //tinaviz.recenter();
         }
     });
 
@@ -443,7 +443,7 @@ toolbar.resetSlidersValues = function() {
         animate: true,
         slide: function(event, ui) {
             tinaviz.set("filter.b.edge.weight", [ui.values[0] / 200.0, ui.values[1] / 200.0], "Tuple2[Double]");
-            tinaviz.recenter();
+            //tinaviz.recenter();
         }
     });
 
@@ -453,7 +453,7 @@ toolbar.resetSlidersValues = function() {
         animate: true,
         slide: function(event, ui) {
             tinaviz.set("filter.b.node.weight", [ui.values[0] / 200.0, ui.values[1] / 200.0], "Tuple2[Double]");
-            tinaviz.recenter();
+            //tinaviz.recenter();
         }
     });
 
