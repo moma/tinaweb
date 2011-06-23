@@ -625,6 +625,8 @@ function Tinaviz(args) {
 
     this.set = function(key, obj, t) {
          //if (t=="Json") alert("key:"+key+" obj: "+obj+" t: "+t);
+        console.log("applet.send key: "+key+" , obj: "+obj+", t:"+t);
+
         if (t === undefined) {
             this.logNormal("Warning, setting unknow ("+key+","+obj+")");
             applet.send(key, obj, "");

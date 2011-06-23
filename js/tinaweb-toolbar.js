@@ -278,7 +278,7 @@ toolbar.init = function() {
     });
 
     $("#sliderANodeSize").slider({
-        value: prefs.a_node_size * 100.0,
+        value: parseFloat(prefs.a_node_size) * 100.0,
         max: 100.0,// precision/size
         animate: true,
         slide: function(event, ui) {
@@ -288,7 +288,7 @@ toolbar.init = function() {
     );
 
     $("#sliderBNodeSize").slider({
-        value: prefs.b_node_size * 100.0,
+        value: parseFloat(prefs.b_node_size) * 100.0,
         max: 100.0,// precision/size
         animate: true,
         slide: function(event, ui) {
@@ -299,7 +299,7 @@ toolbar.init = function() {
 
 
     $("#sliderSelectionZone").slider({
-        value: toolbar.values.sliders.cursor_size,
+        value: parseFloat(prefs.cursor_size) * 100.0,
         max: 100.0, // max disk radius, in pixel
         animate: true,
         change: function(event, ui) {
@@ -433,71 +433,7 @@ toolbar.init = function() {
     // DISABLED toolbar.checkSearchForm();
 
 };
-toolbar.resetSlidersValues = function() {
 
-
-    // MACRO SLIDERS
-    $("#sliderAEdgeWeight").slider({
-        range: true,
-        values: [parseFloat(prefs.a_edge_filter_min) * 100.0, parseFloat(prefs.a_edge_filter_max) * 100.0],
-        animate: true,
-        slide: function(event, ui) {
-           callSlider("#sliderAEdgeWeight", "filter.a.edge.weight");
-            //tinaviz.recenter();
-        }
-    });
-
-    $("#sliderANodeWeight").slider({
-        range: true,
-        values: [parseFloat(prefs.a_node_filter_min) * 100.0, parseFloat(prefs.a_node_filter_max) * 100.0],
-        animate: true,
-        slide: function(event, ui) {
-           callSlider("#sliderANodeWeight", "filter.a.node.weight");
-            //tinaviz.recenter();
-        }
-    });
-
-    // MACRO SLIDERS
-    $("#sliderBEdgeWeight").slider({
-        range: true,
-        values: [parseFloat(prefs.b_edge_filter_min) * 100.0, parseFloat(prefs.b_edge_filter_max) * 100.0],
-        animate: true,
-        slide: function(event, ui) {
-            callSlider("#sliderBEdgeWeight", "filter.b.edge.weight");
-            //tinaviz.recenter();
-        }
-    });
-
-    $("#sliderBNodeWeight").slider({
-        range: true,
-        values: [parseFloat(prefs.b_node_filter_min) * 100.0, parseFloat(prefs.b_node_filter_max) * 100.0],
-        animate: true,
-        slide: function(event, ui) {
-            callSlider("#sliderBNodeWeight", "filter.b.node.weight");
-            //tinaviz.recenter();
-        }
-    });
-
-    $("#sliderANodeSize").slider({
-        value: prefs.a_node_size * 100.0,
-        max: 100.0,// precision/size
-        animate: true,
-        slide: function(event, ui) {
-            callSlider("#sliderANodeSize", "filter.a.node.size");
-        }
-    }
-    );
-
-    $("#sliderBNodeSize").slider({
-        value: prefs.b_node_size * 100.0,
-        max: 100.0,// precision/size
-        animate: true,
-        slide: function(event, ui) {
-            callSlider("#sliderBNodeSize","filter.b.node.size");
-        }
-    }
-    );
-}
 toolbar.updateButton = function(button, state) {
 
     toolbar.values.buttons[button] = state;
