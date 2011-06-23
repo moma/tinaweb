@@ -149,13 +149,13 @@ toolbar.runSearchFormNoRepeat = function() {
 
 };
     var sliderData = {
-       "filter.a.node.weight": {scheduled: false, delay: 1000, size: 100, type: "Tuple2[Double]"},
-       "filter.a.edge.weight": {scheduled: false, delay: 1000, size: 100, type: "Tuple2[Double]"},
-       "filter.b.node.weight": {scheduled: false, delay: 1000, size: 100, type: "Tuple2[Double]"},
-       "filter.b.edge.weight": {scheduled: false, delay: 1000, size: 100, type: "Tuple2[Double]"},
-       "filter.a.node.size":   {scheduled: false, delay: 1000, size: 100, type: "Double"},
-       "filter.b.node.size":   {scheduled: false, delay: 1000, size: 100, type: "Double"},
-       "selectionRadius":      {scheduled: false, delay: 1000, size: 100, type: "Double"}
+       "filter.a.node.weight": {scheduled: false, delay: 250, size: 100, type: "Tuple2[Double]"},
+       "filter.a.edge.weight": {scheduled: false, delay: 250, size: 100, type: "Tuple2[Double]"},
+       "filter.b.node.weight": {scheduled: false, delay: 250, size: 100, type: "Tuple2[Double]"},
+       "filter.b.edge.weight": {scheduled: false, delay: 250, size: 100, type: "Tuple2[Double]"},
+       "filter.a.node.size":   {scheduled: false, delay: 100, size: 100, type: "Double"},
+       "filter.b.node.size":   {scheduled: false, delay: 100, size: 100, type: "Double"},
+       "selectionRadius":      {scheduled: false, delay: 50, size: 1 /* hack, so we send the size in pixel to the viz */, type: "Double"}
     };
 
     function callSlider(sliderobj, slider) {
@@ -299,8 +299,8 @@ toolbar.init = function() {
 
 
     $("#sliderSelectionZone").slider({
-        value: parseFloat(prefs.cursor_size) * 100.0,
-        max: 100.0, // max disk radius, in pixel
+        value: parseFloat(prefs.cursor_size) * 300.0,
+        max: 300.0, // max disk radius, in pixel
         animate: true,
         change: function(event, ui) {
             callSlider("#sliderSelectionZone", "selectionRadius");
