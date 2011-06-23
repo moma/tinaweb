@@ -296,7 +296,22 @@ function Tinaviz(args) {
     //        this.select(decodeJSON( matchlist[i]['id'] ) );
     //    }
     //}
+    
+    /*
+     * Search and highlight nodes by their neighborhood
+     */
+    this.highlightByNeighbourPattern = function(pattern, patternMode) {
+        //if (pattern.length < 3) return;
+        applet.highlightByNeighbourPattern(pattern, patternMode);
+    }
 
+    //this.highlightNodes= function(label, type) {
+    //    var matchlist = this.getNodesByLabel(label, type);
+    //    for (var i = 0; i < matchlist.length; i++ ) {
+    //        this.select(decodeJSON( matchlist[i]['id'] ) );
+    //    }
+    //}
+    
     /*
      *  Gets attributes o a given node
      */
@@ -610,6 +625,8 @@ function Tinaviz(args) {
 
     this.set = function(key, obj, t) {
          //if (t=="Json") alert("key:"+key+" obj: "+obj+" t: "+t);
+        console.log("applet.send key: "+key+" , obj: "+obj+", t:"+t);
+
         if (t === undefined) {
             this.logNormal("Warning, setting unknow ("+key+","+obj+")");
             applet.send(key, obj, "");
