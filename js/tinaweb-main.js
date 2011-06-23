@@ -44,11 +44,6 @@ $(document).ready(function(){
         var size = resize();
         tinaviz.size(size.w, size.h);
 
-        $("p").keydown( function(e) {
-            if (e.keyCode == 80) tinaviz.ser
-
-         });
-
         var urlVars = getUrlVars();
         for (x in urlVars) {
             prefs[x] = urlVars[x];
