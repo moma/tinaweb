@@ -144,7 +144,12 @@ toolbar.runSearchFormNoRepeat = function() {
            } else {
               tinaviz.selectByPattern(txt, "containsIgnoreCase");
            }
-           tinaviz.centerOnSelection();
+
+           if (txt!=="") {
+             tinaviz.centerOnSelection();
+           } else {
+              tinaviz.recenter();
+           }
 
 
 };
@@ -362,8 +367,8 @@ toolbar.init = function() {
         }
     })
     .click(function(event) {
-        //tinaviz.recenter();
-        tinaviz.centerOnSelection();
+        tinaviz.recenter();
+        //tinaviz.centerOnSelection();
     });
 
     // switch category

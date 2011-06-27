@@ -353,6 +353,8 @@ $(document).ready(function(){
 
         var size = resize();
         tinaviz.size(size.w, size.h);
+
+        tinaviz.centerOnSelection();
     });
 
 });
