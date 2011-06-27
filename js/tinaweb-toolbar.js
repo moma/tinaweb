@@ -145,7 +145,11 @@ toolbar.runSearchFormNoRepeat = function() {
               tinaviz.selectByPattern(txt, "containsIgnoreCase");
            }
 
-           if (txt!=="") tinaviz.centerOnSelection() else tinaviz.recenter();
+           if (txt!=="") {
+             tinaviz.centerOnSelection();
+           } else {
+              tinaviz.recenter();
+           }
 
 
 };
