@@ -65,7 +65,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     <!-- TINASOFT UTILITIES -->
     <script type="text/javascript" src="js/cache.js"></script>
 
-
+        <!-- ENABLE DEBUG -->
+        <script type="text/javascript" src="tinaweb/js/firebug-lite/firebug-lite.js"></script>
 </head>
 <body>
 <div id="notification">
@@ -141,8 +142,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                     </div>
                 </div>
 
-                 <div id="title" class="toolbar-right" style="width: 430px;">
-                    <!--<center><iframe src='http://player.vimeo.com/video/21919900?title=0&amp;byline=0&amp;portrait=0' width='250' height='150' frameborder='0'></center></iframe>
+                 <div class="toolbar-right" style="width: 430px;">
+                    <!--
                     <button id="export-png" class="noSelect fg-button toolbar-right">PNG</button>
                     <button id="export-pdf" class="noSelect fg-button toolbar-right">PDF</button>
                     -->
@@ -151,6 +152,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                     <form id="search" action="#" class="toolbar-right">
                         <input id="search_input" type="text" value=""/>
                         <button id="search_button" class="noSelect fg-button">search</button>
+                        <!--
+                        <button id="searchCurrent_button" class="noSelect fg-button">search current</button>
+                        <button id="searchOpposite_button" class="noSelect fg-button">search opposite</button>
+                        -->
                     </form>
                 </div>
             </div>

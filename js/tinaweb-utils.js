@@ -125,6 +125,7 @@ function htmlEncode(value){
  * From html entities to normal text
  */
 function htmlDecode(value){
+    //alert("decoding "+value);
     return $('<div/>').html(value).text();
 }
 
