@@ -140,7 +140,7 @@ toolbar.runSearchFormNoRepeat = function() {
 
            var cat = tinaviz.getCategory();
            if (cat == "Document") {
-              tinaviz.selectByNeighbourPattern(txt, "containsIgnoreCase", tinaviz.getOppositeCategory(cat));
+              tinaviz.selectByNeighbourPattern(txt, "containsIgnoreCase", cat);
            } else {
               tinaviz.selectByPattern(txt, "containsIgnoreCase");
            }
