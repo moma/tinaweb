@@ -29,7 +29,8 @@ $(document).ready(function(){
         tag: $("#vizdiv"),
         width: size.w,
         height: size.h,
-        path : $('meta[name=tinaviz]').attr("content")
+        path : $('meta[name=tinaviz]').attr("content"),
+        logo: "css/logo.png"
     });
 
 
@@ -350,6 +351,8 @@ $(document).ready(function(){
 
         var size = resize();
         tinaviz.size(size.w, size.h);
+
+        tinaviz.centerOnSelection();
     });
 
 });
