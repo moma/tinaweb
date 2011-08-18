@@ -154,6 +154,12 @@ toolbar.runSearchFormNoRepeat = function() {
 
 
 };
+
+    /*
+     * We use a structure to store the state of each slider
+     * Sliders are updated with the viz in the background
+     *
+     */
     var sliderData = {
        "filter.a.node.weight": {scheduled: false, delay: 250, size: 100, type: "Tuple2[Double]"},
        "filter.a.edge.weight": {scheduled: false, delay: 250, size: 100, type: "Tuple2[Double]"},

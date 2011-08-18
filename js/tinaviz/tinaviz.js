@@ -50,6 +50,9 @@ function Tinaviz(args) {
     var applet = null;
     var cbsAwait = {};
     var cbsRun = {};
+
+
+    // PUBLIC MEMBERS
     this.toBeSelected = new Array();
 
     this.callbackReady = function () {};
@@ -58,7 +61,6 @@ function Tinaviz(args) {
     this.callbackViewChanged = function(view) {};
     this.callbackSelectionChanged = function(view) {};
 
-    // PUBLIC MEMBERS
     this.isReady = 0;
     this.infodiv = {};
 
@@ -74,12 +76,16 @@ function Tinaviz(args) {
     this.branding = opts.branding;
     this.iframeFileName = "iframe.html";
 
+    /**
+     * Called by the applet when it's ready
+     *
+     */
     this._initCallback = function() {
         if (this.xulrunner == true) {
             wrapper = $('#vizframe').contents().find("#tinaviz")[0];
         } else {
             wrapper = $("#tinaviz")[0];
-        }
+
         if (wrapper == null) {
             alert("Error: couldn't get the applet!");
             return;
@@ -259,7 +265,7 @@ function Tinaviz(args) {
     }
 
     /*
-     * Search nodes
+     * Search nodes by label
      */
     this.getNodesByLabel = function(label, type) {
         if (label.length < 3) return {};
@@ -267,7 +273,7 @@ function Tinaviz(args) {
     }
 
     /*
-     * Search and select nodes
+     * Search and select nodes by a pattern
      */
     this.selectByPattern = function(pattern, patternMode) {
         if (pattern.length > 0 && pattern.length < 3) return;
@@ -373,6 +379,9 @@ function Tinaviz(args) {
 
 
 
+/**
+ * Todo put this outside of the Tinaviz object
+ */
     this._callbackViewChanged = function(data) {
         var view = $.parseJSON(data);
         var cat = this.getCategory();
@@ -419,6 +428,8 @@ function Tinaviz(args) {
     this.setLayout = function(name) {
         this.set("layout.algorithm", name, "String");
     }
+
+    // setters/getters/enablers/togglers for pausing (the layout animation)
     this.setPause = function(value) {
         this.set("pause", value, "Boolean");
     }
@@ -465,62 +476,35 @@ function Tinaviz(args) {
     }
 
 
-    this.getCategory = function() {
-        return this.get("filter.node.category");
-    }
+    // get/set the current visualized category  (Document, NGram..)
+    this.getCategory = function() { return this.get("filter.node.category"); }
+    this.setCategory = function(value) { this.set("filter.node.category", value, "String"); }
 
-    this.setCategory = function(value) {
-         this.set("filter.node.category", value, "String");
-    }
+    // get/set the current view (macro, meso)
+    this.getView = function() { return this.get("filter.view"); }
+    this.setView = function(view) { this.set("filter.view", view, "String"); }
 
-    /**
-     * Get the current view: eg. "macro", "meso"..
-     *
-     */
-    this.getView = function() {
-        return this.get("filter.view");
-    }
-
-    /**
-     * Set the current view. Will force the applet
-     * to show the new corresponding graph
-     * argument:
-     *  - view: String. eg. "macro", "meso"..
-     *
-     */
-    this.setView = function(view) {
-        this.set("filter.view", view, "String");
-    }
-
-    /**
-     * Manual toggle of the current view (Eg. when button is pressed)
-     *
-     */
-
+    // toggle the current view (switch from macro to meso, or meso to macro)
     this.toggleView = function() {
         //toolbar.resetSlidersValues();
         if (this.getView() == "macro") {
-            // check if selection is empty
-            if (this.infodiv.selection.length != 0) {
+            if (this.infodiv.selection.length != 0) {  // check if selection is empty
                 this.setView("meso");
-
             } else {
-                alert("You need to select a node before switching to meso view");
+                this.logError("You need to select a node before switching to meso view");
             }
         } else if (this.getView() == "meso") {
             this.setView("macro");
         }
     }
 
-    /**
-     * Switch to meso view of a particular node
-     * arguments:
-     *   - id: String
-     *   - category: String
-     */
+    // switch to the meso view of a particular node
+    // you must specify the node's ID ans which kind of neighbourhood (Document, NGram) should be shown
     this.viewMeso = function(id, category) {
             var cat = tinaviz.getCategory();
             tinaviz.setView("macro");
+            // we create by and an animation by specifying some delay between actions
+            // not that pretty (we need some easing, eg. with Tween.js?) but it is functional (pun intended)
             $.doTimeout(150, function(){
                 tinaviz.unselect(); // unselect nodes in current category
                 $.doTimeout(150, function(){
@@ -532,8 +516,6 @@ function Tinaviz(args) {
                             tinaviz.select(id);
                             $.doTimeout(1300, function(){
                                 tinaviz.setView("meso");
-                                //alert("recentering");
-                                //alert("setting category to "+category);
                                 if (category != cat) tinaviz.infodiv.updateNodeList("meso", category);
                                 // always enable
                                 $("#category-A").fadeIn();
@@ -553,20 +535,10 @@ function Tinaviz(args) {
     }
 
 
-    /**
-     *  Retrieves list of all nodes
-     *
-     *  Usage:
-     *  nodes = tinaviz.getNodes("macro", "NGram")
-     */
-    this.getNodes = function(view, category) {
-        var nodes = applet.getNodes(view, category);
-        return $.parseJSON( nodes );
-    }
+    // Retrieves the list of all nodes.  Usage: var nodes = tinaviz.getNodes("macro", "NGram")
+    this.getNodes = function(view, category) { return $.parseJSON( applet.getNodes(view, category) );  }
 
-    /**
-     * Dynamic div width
-     */
+    // resize the applet
     this.size = function(width, height) {
         if (wrapper == null || applet == null) return;
         $('#tinaviz').css("height",""+(height)+"px");
@@ -576,29 +548,25 @@ function Tinaviz(args) {
         applet.resize(width, height);
     }
 
-    /**
-     * Callback changing button states
-     */
+    // TODO CHECK IF OBSOLETE?
+    // Callback to update a button's state
     this._buttonStateCallback = function(button, enabled) {
         toolbar.updateButton(button, enabled);
     }
 
-    /**
-     * Callback changing utton states
+
+    // Called by the applet when a graph is imported. Then we call the USER-defined graph imported callback
+    this._graphImportedCallback = function(msg) { callbackImported($.parseJSON(msg)); }
+
+    // Call a callback using its callback_id, and pass on some result data
+    this.callCb = function(id,data) { $.doTimeout(500, function() { callbacks[id]($.parseJSON(data)); }); }
+
+    /*
+     * Create a new callback, and store it in "callbacks" table
+     * the callback will have some unique id, which is returned
+     *
+     * example:  tinaviz.makeCb("getCoolStuffFromTheApplet", function(data) {})
      */
-    this._graphImportedCallback = function(msg) {
-        callbackImported($.parseJSON(msg));
-    }
-
-
-    this.callCb = function(id,data) {
-        $.doTimeout( 1000, function() {
-            callbacks[id]($.parseJSON(data))
-        });
-
-    }
-
-    // call with:  makeCb("test.tina", function(data) {})
     this.makeCb = function(key,cb) {
         ++cbCounter;
         var id = "" + cbCounter;
@@ -606,29 +574,24 @@ function Tinaviz(args) {
         applet.getWithCb(id, key);
     }
 
-        /**
-     * Core method communicating with the applet
-     */
-    this.get = function(key) {
-        return applet.get(key);
-    }
+    // Synchronously get a value from the applet. The applet acts as a key-value store
+    this.get = function(key) { return applet.get(key); }
 
     /**
-     * Set a value to all views
-     * Argument "t" is optional. But if given, must be a string with one of these values:
-     * "String"
-     * "Int"
-     * "Double"
-     * "Float"
-     * "Boolean" : 1, 0, true, false
+     * Asynchronously set a value to all views
+     *
+     * The type "t" (latest parameter) of the value is optional, but can be specified
+     * with one of these values:
+     * "String" (eg. "hello")
+     * "Int" (eg. 0)
+     * "Double" (eg. 1.0)
+     * "Float" (eg. 1.0f)
+     * "Boolean" (eg. 1, 0, true, false)
      */
-
     this.set = function(key, obj, t) {
-         //if (t=="Json") alert("key:"+key+" obj: "+obj+" t: "+t);
-        console.log("applet.send key: "+key+" , obj: "+obj+", t:"+t);
-
+        this.logDebug("tinaviz.set: "+key+" -> "+obj+" ("+t+")");
         if (t === undefined) {
-            this.logNormal("Warning, setting unknow ("+key+","+obj+")");
+            this.logDebug("tinaviz.set: Warning, setting a value ("+key+","+obj+") without type!");
             applet.send(key, obj, "");
         } else {
            if (t.indexOf("Tuple2") != -1) {
@@ -644,57 +607,24 @@ function Tinaviz(args) {
            } else if (t=="Json") {
              applet.send(key,$.toJSON(obj), t);
            } else {
-              //this.logNormal("send("+key+","+obj+","+t+")");
+              this.logDebug("tinaviz.set: Warning, setting a value ("+key+","+obj+") with unknown type!");
               applet.send(key, obj, t);
            }
         }
     }
 
+    // Log an information message to the console
+    this.logNormal = function(msg) { try { console.log(msg); } catch (e){ return; } };
+
+    // Log a debug message to the console
+    this.logDebug = function(msg) { try { console.log(msg); } catch (e){ return; } };
+
+    // Log an error message to the screen
+    this.logError = function(msg) { try { console.error(msg); } catch (e){ alert(msg); return; } };
+
     /**
-     * Set a value, to be converted to a Scala type
-
-
-    //this.set = function(key, json) {
-    //    applet.msgNoCb(key,$.toJSON(json));
-    //}
-
-    /**
-     * Called by the applet
+     * Generate the HTML tag to embed the applet in the webpage
      */
-    this.logNormal = function(msg) {
-        try {
-            console.log(msg);
-        }
-        catch (e){
-            return;
-        }
-    };
-
-    /**
-     * Called by the applet
-     */
-    this.logDebug = function(msg) {
-        try {
-            console.log(msg);
-        }
-        catch (e){
-            return;
-        }
-    };
-
-    /**
-     * Called by the applet
-     */
-    this.logError = function(msg) {
-        try {
-            console.error(msg);
-        }
-        catch (e){
-            alert(msg);
-            return;
-        }
-    };
-
     this.getHTML = function() {
         var path = this.libPath;
         var context = this.context;
@@ -705,34 +635,49 @@ function Tinaviz(args) {
         var brand = "true";
         if (this.branding == false) brand = "false";
 
-
+        // WARNING - TRAP HERE
+        // deployJava.js writes the HTML somewhere on the current page (sigh).
+        // since that's not what we want (we want to manipulate the HTLM and put it at a specific place) we hack the DOM
+        // to temporary store any call to document.write( .. ) in a buffer, then we return the buffer and restore the
+        // old write function
         var buff = '';
         var func = document.write;
         document.write = function(arg){
             buff += arg;
         }
-        var res = deployJava.writeAppletTag({
-            id: "tinaviz",
-            code: 'eu.tinasoft.tinaviz.Main.class',
-            archive: path+'tinaviz-2.0-SNAPSHOT.jar',
-            width: w,
-            height: h,
-            image: 'css/branding/appletLoading.gif',
-            standby: "Loading Tinaviz..."
-        }, {
-            engine: engine,
-            js_context: context,
-            root_prefix: path,
-            branding_icon: brand,
-            progressbar: false,
-            boxbgcolor: "#FFFFFF",
-            boxmessage: "Loading Tinaviz...",
-            image: "css/branding/appletLoading.gif",
-            mayscript: true,
-            scriptable: true
-        });
-        document.write = func;
-        return buff;
+
+        // we use the Java Applet Tag generator script (deployJava.js) provided by (RIP) Sun Microsystems
+        var res = deployJava.writeAppletTag(
+        // deployJava.js parameters
+        {
+            id: "tinaviz",                            // HTML tag ID
+            code: 'eu.tinasoft.tinaviz.Main.class',   // the Java class
+            archive: path+'tinaviz-2.0-SNAPSHOT.jar', // the JAR archive (better as absolute URL, it seems)
+            width: w,                                 // applet width
+            height: h,                                // applet height
+            image: 'css/branding/appletLoading.gif',  // waiting page, actually just a picture, while Java is loading
+            standby: "Loading Tinaviz..."             // waiting message
+        },
+        // tinaviz applet parameters
+        {
+            engine: engine,                           // 2D/3D engine to use (can cause issues, I disabled it)
+            js_context: context,                      // Javascript context path (DOM hierarchy). very, *very* important
+            root_prefix: path,                        // path to the webpage (eg. http://www.mysite.com/page/)
+            branding_icon: brand,                     // do we brand it or not?
+            progressbar: false,                       // do we show the built-in Java loading bar?
+            boxbgcolor: "#FFFFFF",                    // background color of the waiting panel
+            boxmessage: "Loading Tinaviz...",         // message of the waiting panel (wtf, there are two..?)
+            image: "css/branding/appletLoading.gif",  // image of the waiting panel (wtf, need to be set twice..?)
+            mayscript: true,                          // can the applet interact with JS? OF COURSE you will set to True
+            scriptable: true                          // like mayscript. maybe there are two params to indicate which
+        });                                           // side (page or applet) is allowed to control the other?
+        document.write = func; // we remove the DOM hack, to restore the original write function
+        return buff; // we return the "catched" HTML content. we're done.
     }
+
+    /**
+     * Basically, calling Tinaviz() will create a new applet instance by injecting the HTML tag in the page
+     *
+     */
     this.tag.html( this.getHTML() );
 }
