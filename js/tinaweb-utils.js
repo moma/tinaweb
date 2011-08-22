@@ -186,11 +186,13 @@ function getScreenHeight() {
 }
 
 function resize() {
-    var infoDivWidth = 390;
+    var infoDivHeightMargin = 70;
+    var infoDivWidthMargin = 32;
+    var infoDivWidth = 300;
 
     var size = {
-        w: getScreenWidth() - infoDivWidth - 55,
-        h: getScreenHeight() - $("#hd").height() - $("#ft").height() - 60
+        w: getScreenWidth() - infoDivWidth - infoDivWidthMargin,
+        h: getScreenHeight() - $("#hd").height() - $("#ft").height() - infoDivHeightMargin
     };
 
     $("#appletdiv").css('width', size.w);

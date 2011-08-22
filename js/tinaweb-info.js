@@ -329,7 +329,7 @@ var InfoDiv = {
         }
 
         this.unselect_button.hide();
-        this.label.empty().append($("<h2></h2>").html("<center><iframe src='http://player.vimeo.com/video/13203336' width='300' height='210' frameborder='0'></iframe><\center>"));
+        this.label.empty().append($("<h2></h2>").html("<center><iframe src='http://player.vimeo.com/video/13203336' width='295' height='210' frameborder='0'></iframe><\center>"));
         this.contents.empty().append($("<h4></h4>").html("click on a node to begin exploration"));
         this.contents.empty().append($("<h4></h4>").html(
             "<h2>Navigation tips</h2>"+"<p align='left'>"
