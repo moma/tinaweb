@@ -85,7 +85,7 @@ function Tinaviz(args) {
             wrapper = $('#vizframe').contents().find("#tinaviz")[0];
         } else {
             wrapper = $("#tinaviz")[0];
-
+        }
         if (wrapper == null) {
             alert("Error: couldn't get the applet!");
             return;
@@ -104,6 +104,7 @@ function Tinaviz(args) {
         callbackReady(this);
         this.isReady = 1;
     }
+
     this.setupDefaults=function() {
         // setup defaults
         //this.set("pause",false, "Boolean");
@@ -268,7 +269,7 @@ function Tinaviz(args) {
      * Search nodes by label
      */
     this.getNodesByLabel = function(label, type) {
-        if (label.length < 3) return {};
+        if (label.length <3) return {};
         return $.parseJSON( applet.getNodesByLabel(label, type));
     }
 
@@ -276,7 +277,7 @@ function Tinaviz(args) {
      * Search and select nodes by a pattern
      */
     this.selectByPattern = function(pattern, patternMode) {
-        if (pattern.length > 0 && pattern.length < 3) return;
+        if (pattern.length > 0 && pattern.length <3) return;
         applet.selectByPattern(pattern, patternMode);
     }
 
@@ -284,7 +285,7 @@ function Tinaviz(args) {
      * Search and select nodes
      */
     this.selectByNeighbourPattern = function(pattern, patternMode, category) {
-        if (pattern.length > 0 && pattern.length < 3) return;
+        if (pattern.length > 0 && pattern.length <3) return;
         applet.selectByNeighbourPattern(pattern, patternMode, category);
     }
 
@@ -323,9 +324,7 @@ function Tinaviz(args) {
      */
     this.getNodeAttributes = function(view,id) {
         if (applet == null) return {};
-        return $.parseJSON(
-            applet.getNodeAttributes(view,id)
-            );
+        return $.parseJSON(applet.getNodeAttributes(view,id));
     }
 
     // called by the applet
@@ -374,7 +373,7 @@ function Tinaviz(args) {
             'viewName':'macro',
             'data':$.parseJSON(selection),
             'mouseMode':mouse
-        })
+        });
     }
 
 
