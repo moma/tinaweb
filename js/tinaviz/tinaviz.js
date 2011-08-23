@@ -74,7 +74,6 @@ function Tinaviz(args) {
     this.engine = opts.engine;
     this.context = opts.context;
     this.branding = opts.branding;
-    this.iframeFileName = "iframe.html";
 
     /**
      * Called by the applet when it's ready

@@ -169,19 +169,19 @@ $(document).ready(function(){
         }
 
         tinaviz.infodiv.id = 'infodiv';
-        tinaviz.infodiv.label = $( "#node_label" );
-        tinaviz.infodiv.contents = $( "#node_contents" );
-        tinaviz.infodiv.cloud = $( "#node_neighbourhood" );
-        tinaviz.infodiv.cloudSearch = $("#node_neighbourhoodForSearch");
-        tinaviz.infodiv.cloudSearchCopy = $( "#node_neighbourhoodCopy" );
-        tinaviz.infodiv.unselect_button= $( "#toggle-unselect" );
-        tinaviz.infodiv.node_table = $( "#node_table > tbody" );
+        tinaviz.infodiv.label = $('#overframe').contents().find( "#node_label" );
+        tinaviz.infodiv.contents = $('#overframe').contents().find( "#node_contents" );
+        tinaviz.infodiv.cloud = $('#overframe').contents().find( "#node_neighbourhood" );
+        tinaviz.infodiv.cloudSearch = $('#overframe').contents().find("#node_neighbourhoodForSearch");
+        tinaviz.infodiv.cloudSearchCopy = $('#overframe').contents().find( "#node_neighbourhoodCopy" );
+        tinaviz.infodiv.unselect_button= $('#overframe').contents().find( "#toggle-unselect" );
+        tinaviz.infodiv.node_table = $('#overframe').contents().find( "#node_table > tbody" );
         tinaviz.infodiv.categories = {
             'NGram' : 'Keywords',
             'Document' : 'Projects'
         };
         tinaviz.infodiv.reset();
-        $("#infodiv").accordion({
+        $('#overframe').contents().find("#infodiv").accordion({
            collapsible: true,
             fillSpace: true
         });

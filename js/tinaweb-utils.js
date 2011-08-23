@@ -186,18 +186,18 @@ function getScreenHeight() {
 }
 
 function resize() {
-    var infoDivHeightMargin = 70;
+    var infoDivHeightMargin = 0;
     var infoDivWidthMargin = 32;
     var infoDivWidth = 300;
 
     var size = {
-        w: getScreenWidth() - infoDivWidth - infoDivWidthMargin,
-        h: getScreenHeight() - $("#hd").height() - $("#ft").height() - infoDivHeightMargin
+        w: getScreenWidth() - 10,
+        h: getScreenHeight() - $("#hd").height() - $("#ft").height()
     };
 
     $("#appletdiv").css('width', size.w);
-    $("#infodiv").css('width', infoDivWidth);
-    $("#infodivparent").css('height', size.h);
+    //$("#infodiv").css('width', infoDivWidth);
+    //$("#infodivparent").css('height', size.h);
     return size;
 }
 
