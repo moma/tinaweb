@@ -34,6 +34,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     <!--<link href='js/rating/jquery.ratings.16.css' type="text/css" rel="stylesheet"/>-->
     <!--TINASOFT CSS -->
     <link type="text/css" rel="stylesheet" href="css/tinaweb.css"/>
+
+    <!-- ENABLE DEBUG -->
+    <script type="text/javascript" src="js/firebug-lite/firebug-lite.js"></script>
+
     <!-- JQUERY -->
     <script type="text/javascript" src="js/jquery/jquery-1.4.4.min.js"></script>
     <script type="text/javascript" src="js/jquery/jquery.ba-dotimeout.min.js"></script>
@@ -64,8 +68,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     <!-- TINASOFT UTILITIES -->
     <script type="text/javascript" src="js/cache.js"></script>
 
-        <!-- ENABLE DEBUG -->
-        <script type="text/javascript" src="tinaweb/js/firebug-lite/firebug-lite.js"></script>
 </head>
 <body>
 <div id="notification">
@@ -99,10 +101,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                         &nbsp;&nbsp;&nbsp;&nbsp;Documents
                     </div>
                     <div style="height: 16px; width: 100px;">
-                        <div id="sliderANodeWeight" class="greenstart"></div>
+                        <div id="nodeAFilterMinValue"></div><div id="sliderANodeWeight" class="greenstart"></div><div id="nodeAFilterMaxValue"></div>
                     </div>
                     <div style="height: 16px; width: 100px;">
-                        <div id="sliderAEdgeWeight" class="greenstart"></div>
+                        <div id="edgeAFilterMinValue"></div><div id="sliderAEdgeWeight" class="greenstart"></div><div id="edgeAFilterMaxValue"></div>
                     </div>
                      <div style="height: 16px; width: 100px;">
                         <div id="sliderANodeSize" class="greenstart"></div>
@@ -129,10 +131,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;NGrams
                     </div>
                     <div style="height: 16px; width: 100px;">
-                        <div id="sliderBNodeWeight" class="redstart"></div>
+                        <div id="nodeBFilterMinValue"></div><div id="sliderBNodeWeight" class="redstart"></div><div id="nodeBFilterMaxValue"></div>
                     </div>
                     <div style="height: 16px; width: 100px;">
-                        <div id="sliderBEdgeWeight" class="redstart"></div>
+                        <div id="edgeBFilterMinValue"></div><div id="sliderBEdgeWeight" class="redstart"></div><div id="edgeBFilterMaxValue"></div>
                     </div>
                      <div style="height: 16px; width: 100px;">
                         <div id="sliderBNodeSize" class="redstart"></div>

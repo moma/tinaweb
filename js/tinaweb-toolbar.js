@@ -132,13 +132,15 @@ toolbar.checkSearchFormNoRepeat = function() {
 
 toolbar.runSearchFormNoRepeat = function() {
 
-          var txt = $("#search_input").val();
+         var txt = $("#search_input").val();
+         console.log("runSearchFormNoRepeat:"+txt);
          //if (txt=="") {
          tinaviz.unselect();
          tinaviz.infodiv.reset();
          //}
 
            var cat = tinaviz.getCategory();
+
            if (cat == "Document") {
               //tinaviz.selectByNeighbourPattern(txt, "containsIgnoreCase", cat);
               tinaviz.selectByPattern(txt, "containsIgnoreCase");
@@ -146,12 +148,13 @@ toolbar.runSearchFormNoRepeat = function() {
               tinaviz.selectByPattern(txt, "containsIgnoreCase");
            }
 
+
            if (txt!=="") {
              tinaviz.centerOnSelection();
            } else {
               tinaviz.recenter();
            }
-
+         return false;
 
 };
     var sliderData = {
@@ -249,6 +252,9 @@ toolbar.init = function() {
         animate: true,
         slide: function(event, ui) {
           callSlider("#sliderAEdgeWeight", "filter.a.edge.weight");
+          var range = tinaviz.getJson("edgeAWeightRange");
+          $("edgeAFilterMinValue").html(range._1);
+          $("edgeAFilterMaxValue").html(range._2);
         }
     });
 
@@ -259,6 +265,9 @@ toolbar.init = function() {
         slide: function(event, ui) {
             callSlider("#sliderANodeWeight", "filter.a.node.weight");
             //tinaviz.recenter();
+          var range = tinaviz.getJson("nodeAWeightRange");
+          $("nodeAFilterMinValue").html(range._1);
+          $("nodeAFilterMaxValue").html(range._2);
         }
     });
 
@@ -268,8 +277,11 @@ toolbar.init = function() {
         values: [parseFloat(prefs.b_edge_filter_min) * 100.0, parseFloat(prefs.b_edge_filter_max) * 100.0],
         animate: true,
         slide: function(event, ui) {
-            callSlider("#sliderBEdgeWeight", "filter.b.edge.weight");
+           callSlider("#sliderBEdgeWeight", "filter.b.edge.weight");
             //tinaviz.recenter();
+          var range = tinaviz.getJson("edgeBWeightRange");
+          $("edgeBFilterMinValue").html(range._1);
+          $("edgeBFilterMaxValue").html(range._2);
         }
     });
 
@@ -280,6 +292,9 @@ toolbar.init = function() {
         slide: function(event, ui) {
             callSlider("#sliderBNodeWeight", "filter.b.node.weight");
             //tinaviz.recenter();
+          var range = tinaviz.getJson("nodeBWeightRange");
+          $("nodeBFilterMinValue").html(range._1);
+          $("nodeBFilterMaxValue").html(range._2);
         }
     });
 

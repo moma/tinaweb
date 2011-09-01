@@ -36,7 +36,7 @@ function Tinaviz(args) {
         context: "",
         path: "",
         engine: 'software',
-        branding: true,
+        brandingIcon: "",
         pause: false,
         width: 800,
         height: 600
@@ -71,8 +71,7 @@ function Tinaviz(args) {
     this.libPath = this.path + "js/tinaviz/";
     this.engine = opts.engine;
     this.context = opts.context;
-    this.branding = opts.branding;
-    this.iframeFileName = "iframe.html";
+    this.brandingIcon = this.libPath + "tina_icon.png";
 
     this._initCallback = function() {
         if (this.xulrunner == true) {
@@ -606,11 +605,17 @@ function Tinaviz(args) {
         applet.getWithCb(id, key);
     }
 
-        /**
+    /**
      * Core method communicating with the applet
      */
     this.get = function(key) {
         return applet.get(key);
+    }
+    /**
+     * Core method communicating with the applet
+     */
+    this.getJson = function(key) {
+        return $.parseJSON(applet.get(key));
     }
 
     /**
@@ -702,10 +707,6 @@ function Tinaviz(args) {
         var w = this.width;
         var h = this.height;
 
-        var brand = "true";
-        if (this.branding == false) brand = "false";
-
-
         var buff = '';
         var func = document.write;
         document.write = function(arg){
@@ -723,7 +724,7 @@ function Tinaviz(args) {
             engine: engine,
             js_context: context,
             root_prefix: path,
-            branding_icon: brand,
+            brandingIcon: this.brandingIcon,
             progressbar: false,
             boxbgcolor: "#FFFFFF",
             boxmessage: "Loading Tinaviz...",
