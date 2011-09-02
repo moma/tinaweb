@@ -252,9 +252,9 @@ toolbar.init = function() {
         animate: true,
         slide: function(event, ui) {
           callSlider("#sliderAEdgeWeight", "filter.a.edge.weight");
-          var range = tinaviz.getJson("edgeAWeightRange");
-          $("edgeAFilterMinValue").html(range._1);
-          $("edgeAFilterMaxValue").html(range._2);
+         // var range = tinaviz.getAs("edgeAWeightRange","(Double,Double)");
+          //$("edgeAFilterMinValue").html(range._1);
+          //$("edgeAFilterMaxValue").html(range._2);
         }
     });
 
@@ -265,9 +265,9 @@ toolbar.init = function() {
         slide: function(event, ui) {
             callSlider("#sliderANodeWeight", "filter.a.node.weight");
             //tinaviz.recenter();
-          var range = tinaviz.getJson("nodeAWeightRange");
-          $("nodeAFilterMinValue").html(range._1);
-          $("nodeAFilterMaxValue").html(range._2);
+          //var range = tinaviz.getAs("nodeAWeightRange","(Double,Double)");
+          //$("nodeAFilterMinValue").html(range._1);
+          //$("nodeAFilterMaxValue").html(range._2);
         }
     });
 
@@ -279,9 +279,9 @@ toolbar.init = function() {
         slide: function(event, ui) {
            callSlider("#sliderBEdgeWeight", "filter.b.edge.weight");
             //tinaviz.recenter();
-          var range = tinaviz.getJson("edgeBWeightRange");
-          $("edgeBFilterMinValue").html(range._1);
-          $("edgeBFilterMaxValue").html(range._2);
+          //var range = tinaviz.getAs("edgeBWeightRange","(Double,Double)");
+          //$("edgeBFilterMinValue").html(range._1);
+          //$("edgeBFilterMaxValue").html(range._2);
         }
     });
 
@@ -292,9 +292,9 @@ toolbar.init = function() {
         slide: function(event, ui) {
             callSlider("#sliderBNodeWeight", "filter.b.node.weight");
             //tinaviz.recenter();
-          var range = tinaviz.getJson("nodeBWeightRange");
-          $("nodeBFilterMinValue").html(range._1);
-          $("nodeBFilterMaxValue").html(range._2);
+          //var range = tinaviz.getAs("nodeBWeightRange","(Double,Double)");
+          //$("nodeBFilterMinValue").html(range._1);
+          //$("nodeBFilterMaxValue").html(range._2);
         }
     });
 

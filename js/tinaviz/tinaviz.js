@@ -148,48 +148,23 @@ function Tinaviz(args) {
         callbackBeforeImport = opts.before;
         callbackBeforeImport();
 
-        $.ajax({
-            url: opts.url,
-            type: "GET",
-            dataType: "text", // if we use 'text', we need to disable cache
-            cache: false, //
-            error: function(e,f,g) {
-                tinaviz.logNormal("AJAX error = "+e.statusText);
 
-            /*
-                try {
-                    if (opts.url.search("://") != -1) {
-                        tinaviz.logNormal("applet.openURI("+opts.url+", "+opts.clear+");");
-                        applet.getView().openURI(opts.url, opts.clear);
-                    } else {
-                        var sPath = document.location.href;
-                        tinaviz.logNormal("applet.openURI("+(sPath.substring(0, sPath.lastIndexOf('/') + 1) + opts.url)+", "+opts.clear+");");
-                        applet.getView().openURI(sPath.substring(0, sPath.lastIndexOf('/') + 1) + opts.url, opts.clear);
-                    }
-                } catch (e) {
-                    alert("Couldn't import graph: "+e);
-                    opts.error(e);
-                }
-                 */
-            },
-            success: function(gexf) {
 
-                // alert("success, calling updateFromString");
-                   try {
-                        if (opts.url.search("://") != -1) {
+        try {
+           if (opts.url.search("://") != -1) {
                             tinaviz.logNormal("applet.openURI("+opts.url+");");
                             applet.openURI(opts.url);
-                        } else {
+           } else {
                             var sPath = document.location.href;
                             tinaviz.logNormal("applet.openURI("+(sPath.substring(0, sPath.lastIndexOf('/') + 1) + opts.url)+");");
                             applet.openURI(sPath.substring(0, sPath.lastIndexOf('/') + 1) + opts.url);
-                        }
-                    } catch (e) {
+           }
+        } catch (e) {
                         tinaviz.logError("Couldn't import graph: "+e);
                         opts.error(e);
-                    }
-            }
-        });
+        }
+
+
          }
        }
     }
@@ -614,8 +589,8 @@ function Tinaviz(args) {
     /**
      * Core method communicating with the applet
      */
-    this.getJson = function(key) {
-        return $.parseJSON(applet.get(key));
+    this.getAs = function(key,type) {
+        return $.parseJSON(applet.getAs(key, type));
     }
 
     /**
