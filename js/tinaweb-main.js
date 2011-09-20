@@ -182,7 +182,7 @@ $(document).ready(function(){
         };
         tinaviz.infodiv.reset();
         $("#infodiv").accordion({
-           collapsible: true,
+           // collapsible: true,
            fillSpace: true
         });
         toolbar.init();
@@ -318,18 +318,45 @@ $(document).ready(function(){
         tinaviz.event({
             /*
              * selection.viewName  : string = 'macro'|'meso'
-             * selection.mouseMode : strong = 'left'|'doubleLeft'|'right'|'doubleRight'
+             * selection.mouseMode : strong = 'left'|'doubleLeft'|'right'
              * selection.data      : strong = { ... }
              *
              **/
             selectionChanged: function(selection) {
-                if ( selection.mouseMode == "left" ) {
+                //console.log("-- selectionChanged:");
+                //console.log(selection);
+                var active = $( "#infodiv" ).accordion( "option", "active" );
+                console.log("active: "+active);
+                var selectionIsEmpty = (Object.size( selection.data ) == 0);
+                console.log("selectionIsEmpty: "+selectionIsEmpty);
+                //if (Object.size ( selection.data ) == 0) {
+                //$("#infodiv").accordion("activate", 1 );
+
+                //} else {
+                 if (!selectionIsEmpty && active != 0) {
+                   console.log("selection is not empty, and active tab is not 0");
+                   $("#infodiv").accordion("activate", 0);
+                   }
+                  else if (selectionIsEmpty && active != "false") {
+                    console.log("selection is empty and active is not false");
+                    $("infodiv").accordion("activate", 0);
+                  }
+                //}
+                if ( selection.mouseMode == '"left"' ) {
                 // nothing to do
-                } else if ( selection.mouseMode == "right" ) {
+                } else if ( selection.mouseMode == '"right"' ) {
                 // nothing to do
-                } else if (selection.mouseMode == "doubleLeft") {
-                    var macroCategory = tinaviz.get("meso.category");
-                    tinaviz.infodiv.updateNodeList("meso", macroCategory);
+                } else if (selection.mouseMode == '"doubleLeft"') {
+                    if (tinaviz.getView == "macro") {
+                       tinaviz.setView("meso");
+                    }
+                    var nextCategory = tinaviz.getCategory();
+                    //var nextCategory = tinaviz.getOppositeCategory();
+                    console.log("switching to "+nextCategory);
+                    tinaviz.setCategory(nextCategory);
+                    tinaviz.centerOnSelection();
+                    tinaviz.infodiv.updateNodeList("meso", nextCategory);
+                    tinaviz.infodiv.display_current_category();
                 }
                 tinaviz.infodiv.update(selection.viewName, selection.data);
             },
@@ -342,12 +369,40 @@ $(document).ready(function(){
 
             },
             viewChanged: function(view) {
-               alert("view changed");
-               if (view=="macro") {
-                  // change the button here
-               } else if (view=="meso") {
+                    var category = tinaviz.getCategory();
+                    console.log("viewChanged:");
+                    console.log(view);
+                    console.log("category:");
+                    console.log(category);
+                    tinaviz.infodiv.updateNodeList(view, category);
 
-               }
+                    tinaviz.infodiv.display_current_category();
+                    tinaviz.infodiv.display_current_view();
+
+                     var level = $("#level");
+                     level.button('option','label', view + " level");
+                     var title = $("#infodiv > h3:first");
+
+                       // MACRO
+                       if (view == "macro") {
+                            if (cat=="Document") {
+                                 // disable
+                   $("#category-A").fadeIn();
+                   $("#category-B").fadeOut();
+                             } else if (cat=="NGram") {
+                   $("#category-A").fadeOut();
+                   $("#category-B").fadeIn();
+                            }
+                             level.removeClass("ui-state-highlight");
+                             title.removeClass("ui-state-highlight");
+                        // MESO
+                        } else {
+                               $("#category-A").fadeIn();
+                               $("#category-B").fadeIn();
+                             level.addClass("ui-state-highlight");
+                             title.addClass("ui-state-highlight");
+                             tinaviz.recenter();
+                        }
             }
         });
 

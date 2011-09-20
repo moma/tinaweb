@@ -342,46 +342,17 @@ function Tinaviz(args) {
             'viewName':'macro',
             'data':$.parseJSON(selection),
             'mouseMode':mouse
-        })
+        });
     }
 
 
 
     this._callbackViewChanged = function(data) {
         var view = $.parseJSON(data);
-        var cat = this.getCategory();
-
-        this.infodiv.updateNodeList(view, cat);
-
-        this.infodiv.display_current_category();
-        this.infodiv.display_current_view();
-
-         var level = $("#level");
-         level.button('option','label', view + " level");
-         var title = $("#infodiv > h3:first");
-
-           // MACRO
-           if (view == "macro") {
-                if (cat=="Document") {
-                     // disable
-       $("#category-A").fadeIn();
-       $("#category-B").fadeOut();
-                 } else if (cat=="NGram") {
-       $("#category-A").fadeOut();
-       $("#category-B").fadeIn();
-                }
-                 level.removeClass("ui-state-highlight");
-                 title.removeClass("ui-state-highlight");
-            // MESO
-            } else {
-                   $("#category-A").fadeIn();
-                   $("#category-B").fadeIn();
-                 level.addClass("ui-state-highlight");
-                 title.addClass("ui-state-highlight");
-                 this.recenter();
-            }
-
-
+        console.log("_callbackViewChanged data: "+data);
+        console.log("   view: ");
+        console.log(view);
+        this.callbackViewChanged(view);
     }
 
     this.recenter = function() {
@@ -447,6 +418,8 @@ function Tinaviz(args) {
          this.set("filter.node.category", value, "String");
     }
 
+
+
     /**
      * Get the current view: eg. "macro", "meso"..
      *
@@ -487,7 +460,7 @@ function Tinaviz(args) {
     }
 
     /**
-     * Switch to meso view of a particular node
+     * Switch to meso view of a particular node (BUG won't work with multiple selection)
      * arguments:
      *   - id: String
      *   - category: String
@@ -495,16 +468,16 @@ function Tinaviz(args) {
     this.viewMeso = function(id, category) {
             var cat = tinaviz.getCategory();
             tinaviz.setView("macro");
-            $.doTimeout(150, function(){
+            $.doTimeout(100, function(){
                 tinaviz.unselect(); // unselect nodes in current category
-                $.doTimeout(150, function(){
+                $.doTimeout(100, function(){
                     //$.doTimeout( 400, function(){
                     tinaviz.setCategory(category);
-                    $.doTimeout(150, function(){
+                    $.doTimeout(100, function(){
                         tinaviz.unselect();  // unselect nodes in the desired category
-                        $.doTimeout(600, function(){
+                        $.doTimeout(100, function(){
                             tinaviz.select(id);
-                            $.doTimeout(1300, function(){
+                            $.doTimeout(1500, function(){
                                 tinaviz.setView("meso");
                                 //alert("recentering");
                                 //alert("setting category to "+category);
