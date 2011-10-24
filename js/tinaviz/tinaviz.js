@@ -538,33 +538,51 @@ function Tinaviz(args) {
     }
 
 
-    this.callCb = function(id,data) {
-        $.doTimeout( 1000, function() {
-            callbacks[id]($.parseJSON(data))
+    /*
+     called by the applet. work only with json args
+    */
+    this.callCallback = function(cb_id, cb_args) {
+        $.doTimeout(500, function() {
+            delete callbacks[cb_id];
+            callbacks[cb_id]($.parseJSON(cb_args));
         });
 
     }
 
-    // call with:  makeCb("test.tina", function(data) {})
-    this.makeCb = function(key,cb) {
+    this.makeCallback = function(cb) {
+        if (cb === undefined) return undefined;
         ++cbCounter;
         var id = "" + cbCounter;
         callbacks[id] = cb;
-        applet.getWithCb(id, key);
+        return id;
     }
 
     /**
      * Core method communicating with the applet
      */
     this.get = function(key) {
-        return applet.get(key);
+
+            return applet.get(key);
+
     }
+
     /**
      * Core method communicating with the applet
      */
-    this.getAs = function(key,type) {
-        return $.parseJSON(applet.getAs(key, type));
+    this.cbGet = function(key,cb) {
+        applet.cbGet(tinaviz.makeCallback(cb),key);
+        return undefined;
     }
+
+
+    /**
+     * Core method communicating with the applet
+     */
+    this.get = function(key,type,cb) {
+        applet.cbGetAs(tinaviz.makeCallback(cb),key,type);
+        return undefined;
+    }
+
 
     /**
      * Set a value to all views
@@ -576,29 +594,29 @@ function Tinaviz(args) {
      * "Boolean" : 1, 0, true, false
      */
 
-    this.set = function(key, obj, t) {
+    this.update = function(key, obj, t, cb) {
          //if (t=="Json") alert("key:"+key+" obj: "+obj+" t: "+t);
         console.log("applet.send key: "+key+" , obj: "+obj+", t:"+t);
-
+        var cbId = makeCallback(cb);
         if (t === undefined) {
             this.logNormal("Warning, setting unknow ("+key+","+obj+")");
-            applet.send(key, obj, "");
+            applet.send(cbId, key, obj, "");
         } else {
            if (t.indexOf("Tuple2") != -1) {
               if (t.indexOf("[Double]") != -1) {
-                  applet.sendTuple2(key, obj[0], obj[1], "Double");
+                  applet.sendTuple2(cbId, key, obj[0], obj[1], "Double");
               } else if (t.indexOf("[Int]") != -1) {
-                  applet.sendTuple2(key, obj[0], obj[1], "Int");
+                  applet.sendTuple2(cbId, key, obj[0], obj[1], "Int");
               } else if (t.indexOf("[Float]") != -1) {
-                  applet.sendTuple2(key, obj[0], obj[1], "Float");
+                  applet.sendTuple2(cbId, key, obj[0], obj[1], "Float");
               } else {
-                  applet.sendTuple2(key, obj[0], obj[1], "");
+                  applet.sendTuple2(cbId, key, obj[0], obj[1], "");
               }
            } else if (t=="Json") {
-             applet.send(key,$.toJSON(obj), t);
+             applet.send(cbId, key,$.toJSON(obj), t);
            } else {
               //this.logNormal("send("+key+","+obj+","+t+")");
-              applet.send(key, obj, t);
+              applet.send(cbId, key, obj, t);
            }
         }
     }
