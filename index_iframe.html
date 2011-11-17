@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Who's Who</title>
+    <meta name="description" content="">
+    <meta name="author" content="Julian Bilcke">
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <!-- Le styles -->
+    <link href="css/bootstrap.css" rel="stylesheet">
+    <style type="text/css">
+      /* Override some defaults */
+      html, body {
+        background-color: #eee;
+      }
+      body {
+        padding-top: 40px; /* 40px to make the container go all the way to the bottom of the topbar */
+      }
+      .container > footer p {
+        text-align: center; /* center align it with the container */
+      }
+      .container {
+        /*width: 820px;*/ /* downsize our container to make the content feel a bit tighter and more cohesive. NOTE: this removes two full columns from the grid, meaning you only go to 14 columns and not 16. */
+      }
+
+      /* The white background content wrapper */
+      .container > .content {
+        background-color: #fff;
+        padding: 20px;
+        margin: 0 -20px; /* negative indent the amount of the padding to maintain the grid system */
+        -webkit-border-radius: 0 0 4px 4px;
+           -moz-border-radius: 0 0 4px 4px;
+                border-radius: 0 0 4px 4px;
+        -webkit-box-shadow: 0 1px 3px rgba(0,0,0,.15);
+           -moz-box-shadow: 0 1px 3px rgba(0,0,0,.15);
+                box-shadow: 0 1px 3px rgba(0,0,0,.15);
+      }
+
+      /* Page header tweaks */
+      .page-header {
+        padding: 20px 20px 10px;
+        margin: -20px -20px 20px;
+      }
+
+      /* Styles you shouldn't keep as they are for displaying this base example only */
+      .content .span12,
+      .content .sidebar {
+        min-height: 500px;
+      }
+      /* Give a quick and non-cross-browser friendly divider */
+      .content .sidebar {
+        margin-left: 0;
+        padding-left: 19px;
+        border-left: 1px solid #eee;
+      }
+
+      .topbar .btn {
+        border: 0;
+        opacity: 0.85;
+      }
+
+    </style>
+    <style>
+/*!
+ * Bootstrap v1.2.0
+ *
+ * Copyright 2011 Twitter, Inc
+ * Licensed under the Apache License v2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Designed and built with all the love in the world @twitter by @mdo and @fat.
+ * Date: Fri Sep  9 20:48:32 PDT 2011
+ */
+/* Reset.less
+ * Props to Eric Meyer (meyerweb.com) for his CSS reset file. We're using an adapted version here   that cuts out some of the reset HTML elements we will never need here (i.e., dfn, samp, etc).
+ * ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- */
+.bottombar {
+  height: 40px;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 10000;
+  overflow: visible;
+}
+.bottombar .fill {
+  background: #222;
+  background-color: #222222;
+  background-repeat: repeat-x;
+  background-image: -khtml-gradient(linear, left top, left bottom, from(#333333), to(#222222));
+  background-image: -moz-linear-gradient(top, #333333, #222222);
+  background-image: -ms-linear-gradient(top, #333333, #222222);
+  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #333333), color-stop(100%, #222222));
+  background-image: -webkit-linear-gradient(top, #333333, #222222);
+  background-image: -o-linear-gradient(top, #333333, #222222);
+  background-image: linear-gradient(top, #333333, #222222);
+  -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25), inset 0 -1px 0 rgba(0, 0, 0, 0.1);
+  -moz-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25), inset 0 -1px 0 rgba(0, 0, 0, 0.1);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25), inset 0 -1px 0 rgba(0, 0, 0, 0.1);
+}
+.bottombar a {
+  color: #bfbfbf;
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+}
+.bottombar a:hover, .bottombar ul li.active a {
+  background-color: #333;
+  background-color: rgba(255, 255, 255, 0.05);
+  color: #ffffff;
+  text-decoration: none;
+}
+.bottombar h3 {
+  position: relative;
+}
+.bottombar h3 a {
+  float: left;
+  display: block;
+  padding: 8px 20px 12px;
+  margin-left: -20px;
+  color: #ffffff;
+  font-size: 20px;
+  font-weight: 200;
+  line-height: 1;
+}
+.bottombar form {
+  float: left;
+  margin: 5px 0 0 0;
+  position: relative;
+  filter: alpha(opacity=100);
+  -khtml-opacity: 1;
+  -moz-opacity: 1;
+  opacity: 1;
+}
+.bottombar form input {
+  background-color: #444;
+  background-color: rgba(255, 255, 255, 0.3);
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: normal;
+  font-weight: 13px;
+  line-height: 1;
+  width: 220px;
+  padding: 4px 9px;
+  color: #fff;
+  color: rgba(255, 255, 255, 0.75);
+  border: 1px solid #111;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+  -webkit-box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1), 0 1px 0px rgba(255, 255, 255, 0.25);
+  -moz-box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1), 0 1px 0px rgba(255, 255, 255, 0.25);
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1), 0 1px 0px rgba(255, 255, 255, 0.25);
+  -webkit-transition: none;
+  -moz-transition: none;
+  transition: none;
+}
+.bottombar form input:-moz-placeholder {
+  color: #e6e6e6;
+}
+.bottombar form input::-webkit-input-placeholder {
+  color: #e6e6e6;
+}
+.bottombar form input:hover {
+  background-color: #bfbfbf;
+  background-color: rgba(255, 255, 255, 0.5);
+  color: #fff;
+}
+.bottombar form input:focus, .bottombar form input.focused {
+  outline: none;
+  background-color: #fff;
+  color: #404040;
+  text-shadow: 0 1px 0 #fff;
+  border: 0;
+  padding: 5px 10px;
+  -webkit-box-shadow: 0 0 3px rgba(0, 0, 0, 0.15);
+  -moz-box-shadow: 0 0 3px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 0 3px rgba(0, 0, 0, 0.15);
+}
+.bottombar ul {
+  display: block;
+  float: left;
+  margin: 0 10px 0 0;
+  position: relative;
+}
+.bottombar ul.secondary-nav {
+  float: right;
+  margin-left: 10px;
+  margin-right: 0;
+}
+.bottombar ul li {
+  display: block;
+  float: left;
+  font-size: 13px;
+}
+.bottombar ul li a {
+  display: block;
+  float: none;
+  padding: 10px 10px 11px;
+  line-height: 19px;
+  text-decoration: none;
+}
+.bottombar ul li a:hover {
+  color: #fff;
+  text-decoration: none;
+}
+.bottombar ul li.active a {
+  background-color: #222;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+.bottombar ul.primary-nav li ul {
+  left: 0;
+}
+.bottombar ul.secondary-nav li ul {
+  right: 0;
+}
+.bottombar ul li.menu {
+  position: relative;
+}
+.bottombar ul li.menu a.menu:after {
+  width: 0px;
+  height: 0px;
+  display: inline-block;
+  content: "&uarr;";
+  text-indent: -99999px;
+  vertical-align: top;
+  margin-top: 8px;
+  margin-left: 4px;
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent;
+  border-top: 4px solid #fff;
+  filter: alpha(opacity=50);
+  -khtml-opacity: 0.5;
+  -moz-opacity: 0.5;
+  opacity: 0.5;
+}
+.bottombar ul li.menu.open a.menu, .bottombar ul li.menu.open a:hover {
+  background-color: #444;
+  background-color: rgba(255, 255, 255, 0.1);
+  *background-color: #444;
+  /* IE6-7 */
+ 
+  color: #fff;
+}
+.bottombar ul li.menu.open ul {
+  display: block;
+}
+.bottombar ul li.menu.open ul li a {
+  background-color: transparent;
+  font-weight: normal;
+}
+.bottombar ul li.menu.open ul li a:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  *background-color: #444;
+  /* IE6-7 */
+ 
+  color: #fff;
+}
+.bottombar ul li.menu.open ul li.active a {
+  background-color: rgba(255, 255, 255, 0.1);
+  font-weight: bold;
+}
+.bottombar ul li ul {
+  background-color: #333;
+  float: left;
+  display: none;
+  position: absolute;
+  bottom: 40px;
+  min-width: 160px;
+  max-width: 220px;
+  _width: 160px;
+  margin-left: 0;
+  margin-right: 0;
+  padding: 0;
+  text-align: left;
+  border: 0;
+  zoom: 1;
+  -webkit-border-radius: 5px 5px 0 0;
+  -moz-border-radius: 5px 5px 0 0;
+  border-radius: 5px 5px 0 0;
+ 
+  -webkit-box-shadow: 0 -1px 2px rgba(0, 0, 0, 0.6);
+  -moz-box-shadow: 0 -1px 2px rgba(0, 0, 0, 0.6);
+  box-shadow: 0 -1px 2px rgba(0, 0, 0, 0.6);
+}
+.bottombar ul li ul li {
+  float: none;
+  clear: both;
+  display: block;
+  background: none;
+  font-size: 12px;
+}
+.bottombar ul li ul li a {
+  display: block;
+  padding: 6px 15px;
+  clear: both;
+  font-weight: normal;
+  line-height: 19px;
+  color: #bbb;
+}
+.bottombar ul li ul li a:hover {
+  background-color: #333;
+  background-color: rgba(255, 255, 255, 0.25);
+  color: #fff;
+}
+.bottombar ul li ul li.divider {
+  height: 1px;
+  overflow: hidden;
+  background: #222;
+  background: rgba(0, 0, 0, 0.2);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  margin: 5px 0;
+}
+.bottombar ul li ul li span {
+  clear: both;
+  display: block;
+  background: rgba(0, 0, 0, 0.2);
+  padding: 6px 15px;
+  cursor: default;
+  color: #808080;
+  border-top: 1px solid rgba(0, 0, 0, 0.2);
+}
+
+.bottombar {
+  text-align: center;
+}
+    </style>
+
+    <!-- Le fav and touch icons -->
+    <link rel="shortcut icon" href="css/branding/cs_icon.png" type="image/x-icon"/>
+    <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png">
+    
+    <script src="http://code.jquery.com/jquery-latest.js"></script>
+    
+    <!--TINAWEB APPLET LOADER -->
+    <script type="text/javascript" src="js/tinaviz/deployJava.js"></script>
+    <!-- PREFERENCES -->
+    <script type="text/javascript" src="js/preferences.js"></script>
+    <!-- TINAVIZ -->
+    <script type="text/javascript" src="js/tinaviz/tinaviz.js"></script>
+    <!-- WE USE TINAWEB UTILS-->
+    <script type="text/javascript" src="js/tinaweb-utils.js"></script>
+    
+  </head>
+
+  <body>
+    <script>
+    /*
+    $("").css (
+{
+backgroundColor: "#FFFFFF",
+opacity: (intStep * 5 / 100),
+});*/
+
+    </script>
+    <div class="topbar">
+      <div class="fill">
+        <div class="container">
+          <a class="brand" href="#">Who's Who CSS</a>
+          <ul class="nav">
+                      <!--
+            <li id="searchtoggle1" class="active"><a href="#">Basic search</a></li>
+            <li id="searchtoggle2" class="active"><a href="#">Advanced search</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#contact">Contact</a></li>
+            -->
+          </ul>
+          <form id="show" action="">
+            <span style="color: #fff; font-weight:600;">See </span>
+            <select class="small" style="background: rgb(220,255,220);" name="a" id="a">
+                <option selected="true">Members</option>
+                <option>Keywords</option>
+                <option>Labs</option>
+            </select>
+            <span style="color: #fff; font-weight:600;">, </span>
+            <select class="small" style="background: rgb(255,220,220);" name="b" id="b">
+                <option>Members</option>
+                <option selected="true">Keywords</option>
+                <option>Labs</option>
+                <option>
+            </select>
+            <span style="color: #fff; font-weight:600;"> in </span>
+            <select class="small" style="background: rgb(220,220,220);" name="in" id="in">
+                <option selected="true">The world</option>
+                <option>Europe</option>
+                <option>France</option>
+                <option>UK</option>
+                <option>Germany</option>
+                <option>Italy</option>
+                <option>Spain</option>
+                <option>Portugal</option>
+            </select>
+            <span style="color: #fff; font-weight:600;"> on </span>
+            <input id="keywords" name="keywords" class="input-medium" type="text" placeholder="Keyword1, Keyword2">
+
+            <button class="btn" type="submit">Show</button>
+          </form>
+          <form id="search" action="" class="pull-right">
+            <input id="search" class="input-small" type="text" placeholder="Search">
+            <!--<input type="text" id="search" name="search" placeholder="Scholars">-->
+            <button class="btn" type="submit"></button>
+          </form>
+        </div>
+      </div>
+    </div>
+    
+    <!--
+        <div class="page-header">
+          <h2>French Scholars <small>Keywords</small> | <small>Documents</small></h2>
+        </div>-->
+        
+    <div class="container-fluid">
+
+           <div id="appletdiv" class="content">
+              <div id="appletInfo" class="appletInfo">Please wait while loading..</div>
+              <div id="vizdiv"></div>
+           </div>
+           <div class="sidebar">
+              <h3>David Chavalarias <small>(CREA/CNRS)</small></h3>
+              <p>Keyword 1, Keyword 2, Keyword 3, Keyword 4, Keyword 5</p>
+          </div>
+    </div>
+          
+
+    <div class="bottombar">
+
+      &copy; <a href="http://moma.csregistry.org" target="_BLANK">MOMA</a> - <a href="http://www.crea.polytechnique.fr/LeCREA/" target="_BLANK">CREA</a> - <a href="http://www.cnrs.fr/fr/recherche/index.htm" target="_BLANK">CNRS</a> - 2009-2012
+
+    </div>
+    
+  </body>
+</html>
