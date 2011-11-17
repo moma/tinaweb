@@ -1,56 +1,80 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<!--
-Copyright (C) 2009-2011 CREA Lab, CNRS/Ecole Polytechnique UMR 7656 (Fr)
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Who's Who</title>
+    <meta name="description" content="">
+    <meta name="author" content="Julian Bilcke">
 
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
+    <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
 
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
+    <!-- Le styles -->
+    <link href="css/bootstrap.css" rel="stylesheet">
+    <style type="text/css">
+      /* Override some defaults */
+      html, body {
+        background-color: #eee;
+      }
+      body {
+        padding-top: 40px; /* 40px to make the container go all the way to the bottom of the topbar */
+      }
+      .container > footer p {
+        text-align: center; /* center align it with the container */
+      }
+      .container {
+        /*width: 820px;*/ /* downsize our container to make the content feel a bit tighter and more cohesive. NOTE: this removes two full columns from the grid, meaning you only go to 14 columns and not 16. */
+      }
 
-You should have received a copy of the GNU General Public License
-along with this program.  If not, see <http://www.gnu.org/licenses/>.
--->
-<html xml:lang="en-GB" xmlns="http://www.w3.org/1999/xhtml">
-<head>
-    <title>Tinaweb</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <meta name="description" content="TinaViz"/>
-    <meta name="keywords" content="TinaViz"/>
-    <meta name="tinaviz" content=""/>
-    <link rel="shortcut icon" href="css/branding/favicon.ico" type="image/x-icon"/>
-    <!-- CSS LINKS -->
-    <!-- JQUERY UI CSS -->
-    <link type="text/css" rel="stylesheet" href="css/start/jquery-ui-1.8.9.custom.css"/>
-    <link type="text/css" rel="stylesheet" href="css/start_redstart/jquery-ui-1.8.10.custom.css"/>
-    <link type="text/css" rel="stylesheet" href="css/start_greenstart/jquery-ui-1.8.10.custom.css"/>
-    <link type="text/css" rel="stylesheet" href="css/ui.spinner.css"/>
-    <link type="text/css" rel="stylesheet" href="css/jquery.qtip.min.css"/>
-    <link type="text/css" rel="stylesheet" href="css/ui.notify.css"/>
-    <!--<link href='js/rating/jquery.ratings.16.css' type="text/css" rel="stylesheet"/>-->
-    <!--TINASOFT CSS -->
-    <link type="text/css" rel="stylesheet" href="css/tinaweb.css"/>
+      /* The white background content wrapper */
+      .container > .content {
+        background-color: #fff;
+        padding: 20px;
+        margin: 0 -20px; /* negative indent the amount of the padding to maintain the grid system */
+        -webkit-border-radius: 0 0 6px 6px;
+           -moz-border-radius: 0 0 6px 6px;
+                border-radius: 0 0 6px 6px;
+        -webkit-box-shadow: 0 1px 2px rgba(0,0,0,.15);
+           -moz-box-shadow: 0 1px 2px rgba(0,0,0,.15);
+                box-shadow: 0 1px 2px rgba(0,0,0,.15);
+      }
 
-    <!-- ENABLE DEBUG -->
-    <!--<script type="text/javascript" src="js/firebug-lite/firebug-lite.js"></script> -->
+      /* Page header tweaks */
+      .page-header {
+        background-color: #f9f9f9;
+        padding: 20px 20px 10px;
+        margin: -20px -20px 20px;
+      }
 
-    <!-- JQUERY -->
-    <script type="text/javascript" src="js/jquery/jquery-1.4.4.min.js"></script>
-    <script type="text/javascript" src="js/jquery/jquery.ba-dotimeout.min.js"></script>
-    <script type="text/javascript" src="js/jquery/jquery.json-2.2.min.js"></script>
-    <script type="text/javascript" src="js/jquery/jquery.qtip.min.js"></script>
-    <script type="text/javascript" src="js/jquery/jquery.nap-1.0.0.js"></script>
+      /* Styles you shouldn't keep as they are for displaying this base example only */
+      .content .span10,
+      .content .span4 {
+        min-height: 500px;
+      }
+      /* Give a quick and non-cross-browser friendly divider */
+      .content .span4 {
+        margin-left: 0;
+        padding-left: 19px;
+        border-left: 1px solid #eee;
+      }
 
-    <!-- JQUERY UI -->
-    <script type="text/javascript" src="js/jquery-ui/jquery-ui-1.8.9.custom.min.js"></script>
-    <script type="text/javascript" src="js/jquery/jquery.notify.min.js"></script>
-    <script type="text/javascript" src="js/jquery-ui/ui.spinner.min.js"></script>
-    <!--<script type="text/javascript" src='js/rating/jquery.ratings.js' ></script>-->
+      .topbar .btn {
+        border: 0;
+        opacity: 0.85;
+      }
 
+    </style>
+
+    <!-- Le fav and touch icons -->
+    <link rel="shortcut icon" href="css/branding/cs_icon.png" type="image/x-icon"/>
+    <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png">
+    
+    <script src="http://code.jquery.com/jquery-latest.js"></script>
+    
     <!--TINAWEB APPLET LOADER -->
     <script type="text/javascript" src="js/tinaviz/deployJava.js"></script>
     <!-- PREFERENCES -->
@@ -59,191 +83,88 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     <script type="text/javascript" src="js/tinaviz/tinaviz.js"></script>
     <!-- WE USE TINAWEB UTILS-->
     <script type="text/javascript" src="js/tinaweb-utils.js"></script>
-    <!-- WE USE TINAWEB INFO PANEL -->
-    <script type="text/javascript" src="js/tinaweb-info.js"></script>
-    <!-- WE USE TINAWEB INFO PANEL -->
-    <script type="text/javascript" src="js/tinaweb-toolbar.js"></script>
-    <!-- TINAWEB MAIN -->
-    <script type="text/javascript" src="js/tinaweb-main.js"></script>
-    <!-- TINASOFT UTILITIES -->
-    <script type="text/javascript" src="js/cache.js"></script>
+    
+  </head>
 
-</head>
-<body>
-<div id="notification">
-    <div id="basic-template">
-        <a class="ui-notify-cross ui-notify-close" href="#">x</a>
+  <body>
+    <script>
+    /*
+    $("").css (
+{
+backgroundColor: "#FFFFFF",
+opacity: (intStep * 5 / 100),
+});*/
 
-        <h1>#{title}</h1>
+    </script>
+    <div class="topbar">
+      <div class="fill">
+        <div class="container">
+          <a class="brand" href="#">Who's Who CSS</a>
+          <ul class="nav">
+                      <!--
+            <li id="searchtoggle1" class="active"><a href="#">Basic search</a></li>
+            <li id="searchtoggle2" class="active"><a href="#">Advanced search</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#contact">Contact</a></li>
+            -->
+          </ul>
+          <form id="show" action="">
+            <span style="color: #fff; font-weight:600;">See </span>
+            <select class="small" style="background: rgb(220,255,220);" name="a" id="a">
+                <option selected="true">Members</option>
+                <option>Keywords</option>
+                <option>Labs</option>
+            </select>
+            <span style="color: #fff; font-weight:600;">, </span>
+            <select class="small" style="background: rgb(255,220,220);" name="b" id="b">
+                <option>Members</option>
+                <option selected="true">Keywords</option>
+                <option>Labs</option>
+                <option>
+            </select>
+            <span style="color: #fff; font-weight:600;"> in </span>
+            <select class="small" style="background: rgb(220,220,220);" name="in" id="in">
+                <option selected="true">Country..</option>
+                <option>France</option>
+                <option>UK</option>
+                <option>Germany</option>
+            </select>
+            <span style="color: #fff; font-weight:600;"> on </span>
+            <input id="keywords" name="keywords" class="input-medium" type="text" placeholder="Keyword1, Keyword2">
 
-        <p>#{text}</p>
-    </div>
-</div>
-<div id="doc3" class="yui-t5 ui-widget">
-    <div id="hd" class="ui-widget">
-        <div id="hdb">
-            <div id="htoolbar" class="toolbardiv fg-toolbar ui-widget-header ui-corner-all ui-helper-clearfix">
-                <div id="title" class="noSelect toolbar-left" style="width: 550px;">
-                    <button id="toggle-paused" class="fg-button toolbar-left">play</button>
-                    <button id="toggle-switch" class="fg-button toolbar-left">switch category</button>
-                    <button id="level" class="fg-button toolbar-left">macro</button>
-
-                    <div id="cursor-size-block" class="toolbar-left" style="width: 100px; margin-left: 30px;">
-                            <span class="sliderLabel"> &nbsp;&nbsp;&nbsp;&nbsp;cursor size</span>
-                            <div id="sliderSelectionZone"></div>
-                    </div>
-                </div>
-
-
-                <!-- block for Category A Filter -->
-                <div id="category-A" class="noSelect toolbar-left" style="width: 130px;">
-                    <div>
-                        &nbsp;&nbsp;&nbsp;&nbsp;Documents
-                    </div>
-                    <div style="height: 16px; width: 100px;">
-                        <div id="nodeAFilterMinValue"></div><div id="sliderANodeWeight" class="greenstart"></div><div id="nodeAFilterMaxValue"></div>
-                    </div>
-                    <div style="height: 16px; width: 100px;">
-                        <div id="edgeAFilterMinValue"></div><div id="sliderAEdgeWeight" class="greenstart"></div><div id="edgeAFilterMaxValue"></div>
-                    </div>
-                     <div style="height: 16px; width: 100px;">
-                        <div id="sliderANodeSize" class="greenstart"></div>
-                    </div>
-                </div>
-
-                <!-- block for Document/NGram label -->
-                <div  id="category-legend" class="noSelect toolbar-left" style="width: 90px;">
-                    <div>&nbsp;</div>
-                    <div style="height: 16px;">
-                        Node Filter
-                    </div>
-                    <div style="height: 16px;">
-                        Edge Filter
-                    </div>
-                    <div style="height: 16px;">
-                        Node Size
-                    </div>
-                </div>
-
-                 <!-- block for Category B Filter -->
-                <div id="category-B" class="noSelect toolbar-left" style="width: 130px;">
-                    <div>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;NGrams
-                    </div>
-                    <div style="height: 16px; width: 100px;">
-                        <div id="nodeBFilterMinValue"></div><div id="sliderBNodeWeight" class="redstart"></div><div id="nodeBFilterMaxValue"></div>
-                    </div>
-                    <div style="height: 16px; width: 100px;">
-                        <div id="edgeBFilterMinValue"></div><div id="sliderBEdgeWeight" class="redstart"></div><div id="edgeBFilterMaxValue"></div>
-                    </div>
-                     <div style="height: 16px; width: 100px;">
-                        <div id="sliderBNodeSize" class="redstart"></div>
-                    </div>
-                </div>
-
-                 <div class="toolbar-right" style="width: 430px;">
-                    <!--
-                    <button id="export-png" class="noSelect fg-button toolbar-right">PNG</button>
-                    <button id="export-pdf" class="noSelect fg-button toolbar-right">PDF</button>
-                    -->
-                    <button id="export-gexf" class="noSelect fg-button toolbar-right">GEXF</button>
-                    <button id="toggle-recenter" class="noSelect fg-button toolbar-right">center</button>
-                    <form id="search" action="#" class="toolbar-right">
-                        <input id="search_input" type="text" value=""/>
-                        <button id="search_button" class="noSelect fg-button">search</button>
-                        <!--
-                        <button id="searchCurrent_button" class="noSelect fg-button">search current</button>
-                        <button id="searchOpposite_button" class="noSelect fg-button">search opposite</button>
-                        -->
-                    </form>
-                </div>
-            </div>
-            <!-- End of htoolbar -->
+            <button class="btn" type="submit">Show</button>
+          </form>
+          <form id="search" action="" class="pull-right">
+            <input id="search" class="input-small" type="text" placeholder="Search">
+            <!--<input type="text" id="search" name="search" placeholder="Scholars">-->
+            <button class="btn" type="submit"></button>
+          </form>
         </div>
-        <!-- End of hdb -->
+      </div>
     </div>
-    <!-- End of hd -->
 
-    <div id="bd">
-        <div id="yui-main">
-            <div class="yui-b">
-                <div class="yui-gc">
-                    <!-- LEFT MAIN COLUMN-->
-                    <div id="appletdiv" class="yui-u first">
-                        <div id="appletInfo" class="appletInfo">Please wait while loading..</div>
-                        <div id="vizdiv"></div>
-                    </div>
-                    <!-- RIGHT MAIN COLUMN-->
-                    <div id="infodivparent">
-                        <div id="infodiv" class="yui-u">
-                            <h3><a href="#">Current selection
-                                <button id="toggle-unselect" class="redstart"></button>
-                            </a></h3>
-                            <div id="node_details">
-                                <!-- Modif David inversion des accordéon + ajout-->
-                                <div id="node_label" class="ui-widget-header ui-corner-all"></div>
-                                <div id="node_neighbourhood" class="ui-widget-content ui-corner-all"></div>
-                                <div id="node_contents" class="ui-widget-content ui-corner-all"></div>
-                            </div>
-                            <!-- /accordion 1 -->
-                            <h3><a href="#">Global Web Searches</a></h3>
+    <div class="container">
 
-                            <div>
-                                <div id="node_neighbourhoodForSearch" class="ui-widget-content ui-corner-all">
-                                </div>
-                                <div id="node_neighbourhoodCopy" class="ui-widget-content ui-corner-all">
-                                </div>
-
-                            </div>
-                            <!-- /accordion 2 -->
-                            <h3><a href="#">All nodes</a></h3>
-
-                            <div>
-                                <div id="node_list">
-
-                                    <table id="node_table">
-                                        <thead>
-                                        <tr>
-                                            <th>List of all nodes of the current category<span
-                                                    class="ui-icon ui-icon-help icon-right"
-                                                    title="click on a label to switch to its meso view"></span></th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        </tbody>
-                                    </table>
-                                </div><img alt='' src='css/branding/whereRU.gif' style='float: left;' border='0' height='100'>&nbsp; &nbsp;
-                            </div>
-                            <!-- accordion 3 -->
-                        </div>
-                        <!-- /infodiv  -->
-
-                    </div>
-                    <!-- / INFODIVPARENT -->
-                </div>
-                <!-- end of yui-gc -->
-            </div>
-            <!-- end of yui-b -->
+      <div class="content">
+        <div class="page-header">
+          <h1>Scholars <small>All</small></h1>
         </div>
-        <!-- end of yui-main -->
-    </div>
-    <!-- end of bd -->
-    <div style="clear: both;"></div>
-    <div id="ft" class="ui-widget ui-widget-header ui-corner-all">
-        <p class="ui-corner-all" style="margin: 0;">Copyright MOMA, CREA, CNRS - 2009, 2010, 2011.</p>
+        <div class="row">
+          <div id="appletdiv" class="span10">
+            <div id="appletInfo" class="appletInfo">Please wait while loading..</div>
+            <div id="vizdiv"></div>
+          </div>
+          <div class="span4">
+            <h3>Node details</h3>
+          </div>
+        </div>
+      </div>
 
-        <p class="ui-widget-content ui-corner-all" style="margin: 0;">
-            Tinaweb is developed by <a href="http://moma.csregistry.org" target="_BLANK"><img
-                src="css/branding/moma-crea.png" height="15px"/></a> under the <a
-                href="http://www.gnu.org/licenses/gpl.html" target="_BLANK">GNU GPL license</a> with the support of <a
-                href="http://cordis.europa.eu/fp7/ict/programme/fet_en.html" target="_BLANK">EU FP7 ICT - Future and
-            emerging technologies</a><br/>
-            Our partners : <img src="css/branding/partners_small.jpg" height=15px/>
-            Our softwares : <a href="http://tinasoft.eu/"><img src="css/branding/get-tinasoft.png" height=15px/></a>
-        </p>
-    </div>
-    <!-- end of ft -->
-</div>
-<!-- end of doc3 -->
-</body>
+      <footer>
+        <p>&copy; <a href="http://moma.csregistry.org" target="_BLANK">MOMA</a> - <a href="http://www.crea.polytechnique.fr/LeCREA/" target="_BLANK">CREA</a> - <a href="http://www.cnrs.fr/fr/recherche/index.htm" target="_BLANK">CNRS</a> - 2009-2012</p>
+      </footer>
+
+    </div> <!-- /container -->
+
+  </body>
 </html>
