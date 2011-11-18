@@ -20,9 +20,12 @@
     <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
     <link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png">
     <link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png">
-    
-    <script src="http://code.jquery.com/jquery-latest.js"></script>
 
+    <link type="text/css" href="css/brownian-motion/jquery-ui-1.8.16.custom.css">
+    
+    <script type="text/javascript" src="js/jquery-1.6.2.min.js"></script>
+        
+    <script type="text/javascript" src="js/jquery-ui-1.8.16.custom.min.js"></script>
     
     <!--TINAWEB APPLET LOADER -->
     <script type="text/javascript" src="js/tinaviz/deployJava.js"></script>
@@ -32,7 +35,9 @@
     <script type="text/javascript" src="js/tinaviz/tinaviz.js"></script>
     <!-- WE USE TINAWEB UTILS-->
     <script type="text/javascript" src="js/tinaweb-utils.js"></script>
-    
+    <!-- WE USE TINAWEB UTILS-->
+    <!--<script type="text/javascript" src="js/tinaweb-main.js"></script>-->
+        
         <style type="text/css">
       /* Override some defaults */
       html, body {
@@ -68,12 +73,12 @@
       }
 
       /* Styles you shouldn't keep as they are for displaying this base example only */
-      .content .span16,
-      .content .span4 {
-        min-height: 550px;
+      .content .visualization,
+      .content .infopanel {
+        min-height: 500px;
       }
       /* Give a quick and non-cross-browser friendly divider */
-      .content .span4 {
+      .content .infopanel {
         margin-left: 0;
         padding-left: 19px;
         border-left: 1px solid #eee;
@@ -162,11 +167,11 @@ $('.topbar').hover(function() {
           <h2>French Scholars <small>Keywords</small> | <small>Documents</small></h2>
         </div>
         <div class="row">
-          <div id="appletdiv" class="span16">
+          <div id="appletdiv" class="span16 visualization">
             <div id="appletInfo" class="appletInfo">Please wait while loading..</div>
-            <div id="vizdiv"></div>
+            <!--<div id="vizdiv"></div>-->
           </div>
-          <div class="span4">
+          <div class="span4 infopanel">
             <h3>David Chavalarias <small>(CREA/CNRS)</small></h3>
             <p>Keyword 1, Keyword 2, Keyword 3, Keyword 4, Keyword 5</p>
           </div>
