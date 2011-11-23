@@ -22,7 +22,7 @@ var tinaviz = {};
 
 $(document).ready(function(){
 
-    $("#notification").notify();
+    //$("#notification").notify();
 
     var size = resize();
     tinaviz = new Tinaviz({
@@ -189,20 +189,21 @@ $(document).ready(function(){
 
         tinaviz.open({
             before: function() {
-                $("#notification").notify("create", {
-                    title: 'Tinasoft Notification',
-                    text: 'Please wait while loading the network'
-                });
-                /*$('#appletInfo').show();
-                $('#appletInfo').text("Please wait while loading the graph");
-                $('#appletInfo').effect('pulsate', {}, 'fast');*/
+            	/*
+            	$(".loading-msg").alert();
+            	 $.doTimeout(2000, function(){
+            	   $(".loading-msg").alert('close'); 	
+            	 };
+            	 */
                 tinaviz.infodiv.reset();
             },
             success: function() {
-              $("#notification").notify("create", {
-                    title: 'Tinasoft Notification',
-                    text: 'You can now explore the graph'
-              });
+            	/*
+              $(".loaded-msg").alert();
+              $.doTimeout(2000, function(){
+            	   $(".loaded-msg").alert('close'); 	
+            	 };
+            	 */
               $("#appletInfo").fadeOut();
 
               // gradually add the buttons

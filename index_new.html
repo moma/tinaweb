@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Who's Who Complex Systems Society</title>
+		<meta name="description" content="">
+		<meta name="author" content="">
+		<!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
+		<!--[if lt IE 9]>
+		<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+		<![endif]-->
+		<!-- Le styles -->
+		<link href="css/bootstrap.css" rel="stylesheet">
+		<link type="text/css" href="css/brownian-motion/jquery-ui-1.8.16.custom.css">
+		<!--    <link rel="stylesheet/less" type="text/css" href="less/bootstrap.less">
+		<script src="js/less-1.1.5.min.js" type="text/javascript"></script>
+		-->
+		<link href='http://fonts.googleapis.com/css?family=Ubuntu' rel='stylesheet' type='text/css'>
+		<script type="text/javascript" src="js/jquery-1.7.min.js"></script>
+		<script type="text/javascript" src="js/jquery-ui-1.8.16.custom.min.js"></script>
+		<script type="text/javascript" src="js/bootstrap-dropdown-fade.js"></script>
+		<style type="text/css">
+			body {
+				padding-top: 60px;
+				font-family: 'Ubuntu', sans-serif;
+			}
+			.topbar {
+				opacity: 0.93;
+				-webkit-box-shadow: 0 1px 4px rgba(0,0,0,.15);
+				-moz-box-shadow: 0 1px 4px rgba(0,0,0,.15);
+				box-shadow: 0 1px 4px rgba(0,0,0,.15);
+			}
+			#search-form #search-query {
+				border: 1px solid black;
+				-moz-border-radius: 4px;
+				-webkit-border-radius: 4px;
+				font: 13px Arial, sans-serif;
+				width: 180px;
+				padding: 6px 25px 4px 6px;
+				color: #ccc;
+				background: #666;
+				-webkit-box-shadow: 0 1px 0 #444;
+				-moz-box-shadow: 0 1px 0 #444;
+				box-shadow: 0 1px 0 #444;
+			}
+			#search-form #search-query:hover {
+				background: #777;
+				color: #fff;
+			}
+			#search-form span.glass {
+				display: block;
+				position: absolute;
+				cursor: pointer;
+				display: block;
+				right: 0;
+				padding: 7px 8px 5px 8px;
+			}
+			#search-form span.glass i {
+				background-image: url(css/sprite-icons.png);
+				background-position: -224px -96px;
+				width: 14px;
+				height: 14px;
+				display: block;
+				font-size: 0;
+			}
+			#search-form #search-query:focus, #search-form #search-query.focused {
+				outline: none;
+				background: #eee;
+				color: #333;
+				text-shadow: 0 1px 0 #fff;
+				border: 1px solid #eee;
+				-webkit-box-shadow: 0 0 3px #000;
+				-moz-box-shadow: 0 0 3px #000;
+				box-shadow: 0 0 3px #000;
+			}
+			.filterbox {
+				background: rgba(220,220,220, 0.70);
+				border-color: rgba(0,0,0,0.2);
+				color: rgba(0,0,0,0.8);
+				height: 40px;
+			}
+		</style>
+		<!-- Le fav and touch icons -->
+		<link rel="shortcut icon" href="images/favicon.ico">
+		<link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+		<link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png">
+		<link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png">
+	</head>
+	<body>
+		<script type="text/javascript">
+			var ids = 0;
+			$(document).ready(function() {
+				/*
+				 $.ajax({
+				 type: "GET",
+				 url: "../community/getmenu.php",
+				 data: "{}",
+				 contentType: "application/json; charset=utf-8",
+				 dataType: "json",
+				 success: function(msg) {
+				 $("#ddlGender").get(0).options.length = 0;
+				 $("#ddlGender").get(0).options[0] = new Option("Select gender", "-1");
+
+				 $.each(msg.d, function(index, item) {
+				 $("#ddlGender").get(0).options[$("#ddlGender").get(0).options.length] = new Option(item.Display, item.Value);
+				 });
+				 },
+				 error: function() {
+				 alert("Failed to load genders");
+				 }
+				 });
+				 
+				 */
+				$('#search-form').hide();
+				
+				$('.topbar').hover(function() {
+					$(this).stop().animate({
+						"opacity" : 0.98
+					}, "fast");
+				}, function() {
+					$(this).stop().animate({
+						"opacity" : 0.93
+					}, "fast");
+				});
+
+				$('#addfiltercountry').click(function() {
+
+					var id = "filter" + ids++;
+
+					$('<li id="' + id + 
+					' style="position:relative; top:50%; margin-top:20px;"> &nbsp; in' + 
+					' <select class="small filterbox" name="in" id="in">' + 
+					'  <option value="*" selected="true">The world</option>' + 
+					'  <option value="Europe">Europe</option>' + 
+					' <option value="France">France</option>' + 
+					'<option value="UK">UK</option>' + 
+					' <option value="Germany">Germany</option>' + 
+					'  <option value="Italy">Italy</option>' + 
+					'   <option value="Spain">Spain</option>' + 
+					'    <option value="Portugal">Portugal</option>' + 
+					'</select></li>').insertBefore('#addfilter');
+
+					$('#' + id + '').hide();
+					$('#' + id + '').fadeIn('slow');
+					return false;
+				});
+				$('#addfilterlaboratory').click(function() {
+
+					var id = "filter" + ids++;
+
+					$('<li id="' + id + 
+					' style="position:relative; top:50%; margin-top:20px;"> &nbsp; in' + 
+					' <select class="small filterbox" name="in" id="in">' + 
+					'  <option value="*" selected="true">The world</option>' + 
+					'  <option value="Europe">Europe</option>' + 
+					' <option value="France">France</option>' + 
+					'<option value="UK">UK</option>' + 
+					' <option value="Germany">Germany</option>' + 
+					'  <option value="Italy">Italy</option>' + 
+					'   <option value="Spain">Spain</option>' + 
+					'    <option value="Portugal">Portugal</option>' + 
+					'</select></li>').insertBefore('#addfilter');
+
+					$('#' + id + '').hide();
+					$('#' + id + '').fadeIn('slow');
+					return false;
+				});
+				$('#addfilterkeyword').click(function() {
+
+					var id = "filter" + ids++;
+
+					$('<li id="' + id + 
+					' style="position:relative; top:50%; margin-top:20px;"> &nbsp; in' + 
+					' <select class="small filterbox" name="in" id="in">' + 
+					'  <option value="*" selected="true">The world</option>' + 
+					'  <option value="Europe">Europe</option>' + 
+					' <option value="France">France</option>' + 
+					'<option value="UK">UK</option>' + 
+					' <option value="Germany">Germany</option>' + 
+					'  <option value="Italy">Italy</option>' + 
+					'   <option value="Spain">Spain</option>' + 
+					'    <option value="Portugal">Portugal</option>' + 
+					'</select></li>').insertBefore('#addfilter');
+
+					$('#' + id + '').hide();
+					$('#' + id + '').fadeIn('slow');
+					return false;
+				});
+				$('#addfilterhashtag').click(function() {
+
+					var id = "filter" + ids++;
+
+					$('<li id="' + id + 
+					' style="position:relative; top:50%; margin-top:20px;"> &nbsp; in' + 
+					' <select class="small filterbox" name="in" id="in">' + 
+					'  <option value="*" selected="true">The world</option>' + 
+					'  <option value="Europe">Europe</option>' + 
+					' <option value="France">France</option>' + 
+					'<option value="UK">UK</option>' + 
+					' <option value="Germany">Germany</option>' + 
+					'  <option value="Italy">Italy</option>' + 
+					'   <option value="Spain">Spain</option>' + 
+					'    <option value="Portugal">Portugal</option>' + 
+					'</select></li>').insertBefore('#addfilter');
+
+					$('#' + id + '').hide();
+					$('#' + id + '').fadeIn('slow');
+					return false;
+				});
+				// Handler for .ready() called.
+			});
+
+		</script>
+		<div class="topbar" data-dropdown="dropdown">
+			<div class="topbar-inner">
+				<div class="container-fluid">
+					<a class="brand" href="#">Who's Who</a>
+           
+					<ul class="nav">
+						<li style="position:relative; top:50%; margin-top:00px;">
+								
+            <span style="color: #fff;">Map </span>
+            <select class="small" style="background: rgb(220,255,220, 0.8);" name="a" id="a">
+                <option>Scholars</option>
+                <option>Labs</option>
+                <option selected="true">Keywords</option>
+                <option>Organizations</option>
+                <option>Countries</option>
+            </select>
+            <span style="color: #fff;"> and </span>
+            <select class="small" style="background: rgb(255,220,220, 0.8);" name="b" id="b">
+                <option selected="true">Scholars</option>
+                <option>Labs</option>
+                <option>Organizations</option>
+                <option>Countries</option>
+            </select>
+						</li>
+						<li class="dropdown">
+							<a class="dropdown-toggle"><strong>working on</strong> Optics, Econometrics</a>
+							<ul class="dropdown-menu">
+								<li>
+									<a href="#">Change filter</a>
+								</li>
+								<li>
+									<a href="#">Delete filter</a>
+								</li>
+							</ul>
+						</li>
+						<li id="refine" class="dropdown">
+							<a class="dropdown-toggle">refine</a>
+							<ul class="dropdown-menu">
+								<li>
+									<a id="addfiltercountry" href="#">Filter by country</a>
+								</li>
+								<li>
+									<a id="addfilterlaboratory" href="#">Filter by laboratory</a>
+								</li>
+								<li>
+									<a id="addfilterkeyword" href="#">Filter by keywords</a>
+								</li>
+								<li>
+									<a id="addfilterorganization" href="#">Filter by organization</a>
+								</li>
+								<li>
+									<a id="addfilterhashtag" href="#">Filter by #hashtag</a>
+								</li>
+								<li>
+									<a id="addcolor" href="#">Color by</a>
+								</li>
+							</ul>
+						</li>
+						<li style="">
+							<a href="#generate"> GO!</a>
+						</li>
+					</ul>
+					
+					<form id="search-form" class="js-search-form pull-right">
+						<span class="glass js-search-action"><i></i></span>
+						<input id="search" class="input-small" type="text" name="q" placeholder="Search">
+						<!--<input type="text" id="search" name="search" placeholder="Scholars">-->
+						<!--
+						<li class="ui-state-default ui-corner-all" title=".ui-icon-search"><span class="ui-icon ui-icon-search"></span></li>
+
+						<button class="btn" type="submit"></button>
+						-->
+					</form>
+				</div>
+			</div>
+		</div>
+		<div class="container-fluid">
+			<div class="sidebar">
+				<div class="well">
+					<h5>David Chavalarias</h5>
+					<ul>
+						<li>
+							<a href="#">Link</a>
+						</li>
+						<li>
+							<a href="#">Link</a>
+						</li>
+						<li>
+							<a href="#">Link</a>
+						</li>
+						<li>
+							<a href="#">Link</a>
+						</li>
+					</ul>
+					<h5>Something</h5>
+					<ul>
+						<li>
+							<a href="#">Link</a>
+						</li>
+						<li>
+							<a href="#">Link</a>
+						</li>
+						<li>
+							<a href="#">Link</a>
+						</li>
+						<li>
+							<a href="#">Link</a>
+						</li>
+						<li>
+							<a href="#">Link</a>
+						</li>
+						<li>
+							<a href="#">Link</a>
+						</li>
+					</ul>
+					<h5>Something Else</h5>
+					<ul>
+						<li>
+							<a href="#">Link</a>
+						</li>
+						<li>
+							<a href="#">Link</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+			<div class="content">
+				<!-- Main hero unit for a primary marketing message or call to action -->
+				<div class="hero-unit">
+					<h2>Welcome to the Who's Who, the network of CSS Members</h2>.
+					<p>
+						To start browsing use the <strong>new interactive menu</strong> on the top of the webpage!
+					</p>
+					If you cannot find yourself in the net or want to update your data,
+					please go to the <a href="http://main.csregistry.org/Whoswhodata">registration page</a>.
+					<br/>
+					If you attented ECC11 you are a CSS member
+					although there could be some delay untill you are registered as such. <a href="http://main.csregistry.org/my+account">Check your CSS membership statute</a>
+					</p>
+					<p>
+						<a class="btn primary large">See the Scholars &raquo;</a>
+					</p>
+				</div>
+				<footer>
+					<p>
+						<a href="http://iscpif.fr"><img src="css/branding/logo-iscpif_medium.png" alt="iscpif.fr" style="border: none; padding-bottom : 15px;" title="isc-pif" /></a>- &copy; <a href="http://moma.csregistry.org" target="_BLANK">MOMA</a> - <a href="http://www.crea.polytechnique.fr/LeCREA/" target="_BLANK">CREA</a> - <a href="http://www.cnrs.fr/fr/recherche/index.htm" target="_BLANK">CNRS</a> - 2009-2012
+					</p>
+				</footer>
+			</div>
+		</div>
+	</body>
+</html>
