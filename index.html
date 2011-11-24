@@ -96,7 +96,7 @@ background: white url('css/ui-anim_basic_16x16.gif') right center no-repeat;
 font-weight: bold;
 padding: .2em .4em;
 margin: .8em 0 .2em;
-line-height: 1.5;
+line-height: 1.2;
 }
 
 .ui-autocomplete {
@@ -109,12 +109,13 @@ position: absolute;
 top: 40px;
 */
 z-index: 900;
-min-width: 120px;
-max-width: 230px;
+min-width: 180px;
+max-width: 300px;
 
+margin: 0 auto; /*
 margin-left: 0;
-margin-right: 0;
-padding: 6px 0;
+margin-right: 0;*/
+padding: 5px 0;
 
 border-color: #999;
 border-color: rgba(0, 0, 0, 0.2);
@@ -226,10 +227,10 @@ font-weight: bold;
 					var id1 = "filter" + id;
 					var id2 = "combo" + id;
 		
-					var header = '<li id="' + id1 + '" class="filter">';
+					var header = '<li id="' + id1 + '" class="filter" style="padding-top: 5px;">';
 					var labelization = '<span style="color: #fff;">&nbsp; ' + label + ' </span>';
-					var selection = '<select id="' + id2 + '" class="small filterselect filter' + type + '">' + options + '</select>';
-					var input = '<input type="text" id="' + id2 + '" placeholder="' + type + '" />';
+					//var selection = '<select id="' + id2 + '" class="small filterselect filter' + type + '">' + options + '</select>';
+					var input = '<input type="text" id="' + id2 + '" class="medium" placeholder="' + type + '" />';
 					var footer = '</li>;'
 					$(header + labelization + input
 					// +     selection
