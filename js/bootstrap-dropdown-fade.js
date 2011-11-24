@@ -31,7 +31,7 @@
         var li = $(this).parent('li')
           , isActive = li.hasClass('open')
 
-       // clearMenus()
+       //clearMenus()
         
         if (!isActive) { 
             li.toggleClass('open').children("ul").toggle();

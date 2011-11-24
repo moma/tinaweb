@@ -26,10 +26,11 @@ font-family: 'Ubuntu', sans-serif;
 }
 .topbar {
 opacity: 0.93;
--webkit-box-shadow: 0 1px 4px rgba(0,0,0,.15);
--moz-box-shadow: 0 1px 4px rgba(0,0,0,.15);
-box-shadow: 0 1px 4px rgba(0,0,0,.15);
+-webkit-box-shadow: 0 0px 10px rgba(0,0,0,.70);
+-moz-box-shadow: 0 0px 10px rgba(0,0,0,.70);
+box-shadow: 0 0px 10px rgba(0,0,0,.70);
 }
+
 #search-form #search-query {
 border: 1px solid black;
 -moz-border-radius: 4px;
@@ -129,77 +130,62 @@ height: 40px;
 						"opacity" : 0.93
 					}, "fast");
 				});
+				function popfilter(label, type, options) {
+					var id = "filter" + ids++;
+					var content = '<span style="color: #fff;">&nbsp; ' + label + ' </span><select class="small filterselect filter' + type + '">' + options + '</select>';
+					$('<li id="' + id + '" class="filter">' + content + '</li>').insertBefore('#refine');
+					$('#' + id + '').hide();
+					$('#' + id + '').toggle('drop', 500);
+					return false;
+				};
+
 
 				$('#addfiltercountry').click(function() {
-
-					var id = "filter" + ids++;
-
-					$('<li id="' + id + '" class="filter"> &nbsp; in ' + ' <select class="small filterselect filtercountries">' + '  <option value="*" selected="true">The world</option>' + '  <option value="Europe">Europe</option>' + ' <option value="France">France</option>' + '<option value="UK">UK</option>' + ' <option value="Germany">Germany</option>' + '  <option value="Italy">Italy</option>' + '   <option value="Spain">Spain</option>' + '    <option value="Portugal">Portugal</option>' + '</select></li>').insertBefore('#refine');
-
-					$('#' + id + '').hide();
-					$('#' + id + '').fadeIn('slow');
-					return false;
+					return popfilter('in', 'countries', []);
 				});
 				$('#addfilterorganization').click(function() {
 
-					var id = "filter" + ids++;
-
-					$('<li id="' + id + '" class="filter"> &nbsp; from ' + ' <select class="small filterselect filterorganizations">' + '  <option value="semantic" selected="true">CNRS</option>' + '  <option value="Europe">INRIA</option>' + '</select></li>').insertBefore('#refine');
-
-					$('#' + id + '').hide();
-					$('#' + id + '').fadeIn('slow');
-					return false;
+					return popfilter('from', 'organizations', []);
 				});
 				$('#addfilterlaboratory').click(function() {
+					var prefix = "working";
+					if($(".filterkeywords") || $(".filterlaboratories")) {
+						//prefix = "";
+					}
+					return popfilter(prefix + ' at', 'laboratories', []);
 
-					var id = "filter" + ids++;
-
-					$('<li id="' + id + '" class="filter"> &nbsp; working at ' + ' <select class="small filterselect filterlaboratories">' + '  <option value="semantic" selected="true">CREA</option>' + '  <option value="Europe">LIP6</option>' + '</select></li>').insertBefore('#refine');
-
-					$('#' + id + '').hide();
-					$('#' + id + '').fadeIn('slow');
-					return false;
 				});
+
 				$('#addfilterkeyword').click(function() {
-
-					var id = "filter" + ids++;
-
-					$('<li id="' + id + '" class="filter"> &nbsp; working on ' + ' <select class="small filterselect filterkeywords">' + '  <option value="semantic" selected="true">semantic</option>' + '  <option value="Europe">optics</option>' + '</select></li>').insertBefore('#refine');
-					/*
-					 $.ajax({
-					 url : "../community/getmenu.php",
-					 dataType : "json",
-					 success : function(msg) {
-
-					 console.log(msg);
-					 var cata = $("#categorya").get(0);
-					 cata.options.length = 0;
-					 cata.options[0] = new Option("Select gender", "-1");
-
-					 $.each(msg.d, function(index, item) {
-					 cata.options[cata.options.length] = new Option(item.Display, item.Value);
-					 });
-					 },
-					 error : function() {
-					 alert("Failed to load genders");
-					 }
-					 });
-					 */
-
-					$('#' + id + '').hide();
-					$('#' + id + '').fadeIn('slow');
-					return false;
+					var prefix = "working";
+					if($(".filterkeywords") || $(".filterlaboratories")) {
+						//prefix = "";
+					}
+					return popfilter(prefix + ' on', 'keywords', []);
 				});
-				$('#addfilterhashtag').click(function() {
-
-					var id = "filter" + ids++;
-
-					$('<li id="' + id + '" class="filter"> &nbsp; tagged ' + ' <select class="small filterselect filtertags">' + '  <option value="#*" selected="true">#*</option>' + '</select></li>').insertBefore('#refine');
-
-					$('#' + id + '').hide();
-					$('#' + id + '').fadeIn('slow');
-					return false;
+				$('#addfiltertag').click(function() {
+					return popfilter('tagged', 'tags', []);
 				});
+				/*
+				 $.ajax({
+				 url : "../community/getmenu.php",
+				 dataType : "json",
+				 success : function(msg) {
+
+				 console.log(msg);
+				 var cata = $("#categorya").get(0);
+				 cata.options.length = 0;
+				 cata.options[0] = new Option("Select gender", "-1");
+
+				 $.each(msg.d, function(index, item) {
+				 cata.options[cata.options.length] = new Option(item.Display, item.Value);
+				 });
+				 },
+				 error : function() {
+				 alert("Failed to load genders");
+				 }
+				 });
+				 */
 
 				$('#loading').hide();
 				$('#example').click(function() {
@@ -210,15 +196,17 @@ height: 40px;
 				$('#generate').click(function() {
 					$('#welcome').fadeOut('fasy', function() {
 						$('#loading').fadeIn('slow', function() {
-						   var collect = function(k) {
+							var collect = function(k) {
 								var t = [];
-								$('.filter'+k+' :selected').each(function(i, e) {
-									console.log("selected "+i+" = "+e);
+								$('.filter' + k + ' :selected').each(function(i, e) {
+									console.log("selected " + i + " = " + e);
 									t.push($(e).text());
 								});
 								return t;
 							}
 							var query = {
+								categorya : $('#categorya :selected').text(),
+								categoryb : $('#categoryb :selected').text(),
 								keywords : collect('keywords'),
 								countries : collect('countries'),
 								laboratories : collect('laboratories'),
@@ -226,24 +214,15 @@ height: 40px;
 								tags : collect('tags'),
 								organizations : collect('organizations')
 							};
-							/*
-							var foo = [];
-							$(‘#multiple :selected’).each(function(i, selected){
-							foo[i] = $(selected).text();
-							});
-							*/
-							// $(‘#selectList :selected’).text();
-							//$('#selectList').val();
-		
-							console.log("query");
+
 							console.log(query);
 							/*
-							$.post("../community/gexf.php", query, function(data) {
-								$('#loading').hide('slow', function() {
-									// display the TINAVIZ PANEL
-								});
-							});
-							*/
+							 $.post("../community/gexf.php", query, function(data) {
+							 $('#loading').hide('slow', function() {
+							 // display the TINAVIZ PANEL
+							 });
+							 });
+							 */
 						});
 					});
 					return false;
@@ -256,17 +235,17 @@ height: 40px;
 				<div class="container-fluid">
 					<a class="brand" href="#">Who's Who</a>
 					<ul class="nav">
-						<li style="position:relative; top:50%; margin-top:00px;">
+						<li style="margin-top:5px;">
 							<span style="color: #fff;">Map </span>
-							<select id="categorya" class="small" style="background: rgb(220,255,220, 0.8);" name="a" id="a">
+							<select id="categorya" class="small" style="background: rgb(220,255,220, 0.8);">
 								<option>Scholars</option>
 								<option>Labs</option>
 								<option selected="true">Keywords</option>
 								<option>Organizations</option>
 								<option>Countries</option>
 							</select>
-							<span id="categoryb" style="color: #fff;"> and </span>
-							<select class="small" style="background: rgb(255,220,220, 0.8);" name="b" id="b">
+							<span style="color: #fff;"> and </span>
+							<select id="categoryb" class="small" style="background: rgb(255,220,220, 0.8);">
 								<option selected="true">Scholars</option>
 								<option>Labs</option>
 								<option>Organizations</option>
@@ -302,7 +281,7 @@ height: 40px;
 									<a id="addfilterkeyword" href="#">Filter by keyword</a>
 								</li>
 								<li>
-									<a id="addfilterhashtag" href="#">Filter by #tag</a>
+									<a id="addfiltertag" href="#">Filter by #tag</a>
 								</li>
 								<li>
 									<a id="addcolor" href="#">Color by</a>
@@ -379,8 +358,8 @@ height: 40px;
 			<div class="content">
 				<!-- Main hero unit for a primary marketing message or call to action -->
 				<div class="hero-unit">
-					<div id="loading">
-						<img src="css/loading.gif" style="border: 0px; opacity: 0.10; " />
+					<div id="loading" style="padding-left=-175px; margin-left: 27%;">
+						<img src="css/loading.gif" style="border: 0px; opacity: 0.05; " />
 					</div>
 					<div id="welcome">
 						<h2>Welcome to the Who's Who, the network of CSS Members</h2>.
@@ -399,9 +378,7 @@ height: 40px;
 					</div>
 				</div>
 				<footer>
-					<p>
-						<a href="http://iscpif.fr"><img src="css/branding/logo-iscpif_medium.png" alt="iscpif.fr" style="border: none; padding-bottom : 15px;" title="isc-pif" /></a>- &copy; <a href="http://moma.csregistry.org" target="_BLANK">MOMA</a> - <a href="http://www.crea.polytechnique.fr/LeCREA/" target="_BLANK">CREA</a> - <a href="http://www.cnrs.fr/fr/recherche/index.htm" target="_BLANK">CNRS</a> - 2009-2012
-					</p>
+					<a href="http://iscpif.fr"><img src="css/branding/logo-iscpif_medium.png" alt="iscpif.fr" style="border: none; margin-bottom : -6px;" title="isc-pif" /></a>- &copy; <a href="http://moma.csregistry.org" target="_BLANK">MOMA</a> - <a href="http://www.crea.polytechnique.fr/LeCREA/" target="_BLANK">CREA</a> - <a href="http://www.cnrs.fr/fr/recherche/index.htm" target="_BLANK">CNRS</a> - 2009-2012
 				</footer>
 			</div>
 		</div>
