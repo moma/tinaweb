@@ -80,18 +80,30 @@ foreach ($base->query($req) as $row) {
    }
 }
 
+$nbresults = sizeof($results);
+$results = array_slice($results,0,20);
+$nbresults2 = sizeof($results);
+$completion = array(
+   "results" => array()
+);
 
-$completion = array();
+
 foreach($results as $key => $value) {
-     array_push($completion, array(
+     array_push($completion["results"], array(
         'id' => $key,
         'label' => $key,
        // 'value' => $value,
        'score' => $value,
-       'category' => $cat
+       
+	   // F*** it, I'll put the meta data here...
+       'category' => $cat,
+          "term" => $term,
+   "size" => $nbresults2,
+   "total" => $nbresults,
+   "remaining" => ($nbresults - $nbresults2)
       ));
 }
 $i = 0;
 
-echo json_encode(array_slice($completion,0,$limit));
+echo json_encode($completion);
 ?>
