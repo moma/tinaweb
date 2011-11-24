@@ -19,6 +19,7 @@
 		<script type="text/javascript" src="js/jquery-1.7.min.js"></script>
 		<script type="text/javascript" src="js/jquery-ui-1.8.16.custom.min.js"></script>
 		<script type="text/javascript" src="js/bootstrap-dropdown-fade.js"></script>
+		<script type="text/javascript" src="js/underscore.min.js"></script>
 		<style type="text/css">
 body {
 padding-top: 60px;
@@ -87,6 +88,17 @@ color: rgba(0,0,0,0.8);
 height: 40px;
 }
 
+.ui-autocomplete-loading { 
+  background: white url('css/ui-anim_basic_16x16.gif') right center no-repeat; 
+}
+.ui-autocomplete-category {
+		font-weight: bold;
+		padding: .2em .4em;
+		margin: .8em 0 .2em;
+		line-height: 1.5;
+}
+	
+
 		</style>
 		<!-- Le fav and touch icons -->
 		<link rel="shortcut icon" href="images/favicon.ico">
@@ -98,7 +110,9 @@ height: 40px;
 		<script type="text/javascript">
 			var ids = 0;
 
-			var cache = $(document).ready(function() {
+			var cache = {};
+
+			$(document).ready(function() {
 				/*
 				 $.ajax({
 				 url : "../community/getmenu.php",
@@ -131,14 +145,60 @@ height: 40px;
 					}, "fast");
 				});
 				function popfilter(label, type, options) {
-					var id = "filter" + ids++;
-					var content = '<span style="color: #fff;">&nbsp; ' + label + ' </span><select class="small filterselect filter' + type + '">' + options + '</select>';
-					$('<li id="' + id + '" class="filter">' + content + '</li>').insertBefore('#refine');
-					$('#' + id + '').hide();
-					$('#' + id + '').toggle('drop', 500);
+					var id = ids++;
+					var id1 = "filter" + id;
+					var id2 = "combo" + id;
+					cache[id] = {};
+					xhrs[id] = {};
+					var header = '<li id="' + id1 + '" class="filter">';
+					var labelization = '<span style="color: #fff;">&nbsp; ' + label + ' </span>';
+					var selection = '<select id="'+id2+'" class="small filterselect filter' + type + '">' + options + '</select>';
+					var input = '<input type="text" id="'+id2+'" placeholder="'+type+'" />';
+					var footer = '</li>;'
+					$(header + labelization + input
+					// +    selection
+					+ footer).insertBefore('#refine');
+					
+					$("#"+id2).catcomplete({
+						minLength : 2,
+						source : function(request, response) {
+							var term = request.term;
+							if( term in cache[id]) {
+								response(cache[id][term]);
+								return;
+							}
+							xhrs[id] = $.getJSON("../community/autocomplete.php", {category: type, term: request.term}, function(data, status, xhr) {
+								cache[id][term] = data;
+								if(xhr === xhrs[id]) {
+									response(data);
+								}
+							});
+						}
+					});
+
+					$('#' + id1 + '').hide();
+					$('#' + id1 + '').fadeIn(500);
 					return false;
 				};
 
+
+				$.widget("custom.catcomplete", $.ui.autocomplete, {
+					_renderMenu : function(ul, items) {
+						var self = this, categories = _.groupBy(items, function(o) {
+							return o.category;
+						});
+
+						_.each(categories, function(results, category) {
+							ul.append("<li class='ui-autocomplete-category'>" + category + "</li>");
+							_.each(results, function(item) {
+								self._renderItem(ul, item);
+							});
+						});
+					}
+				});
+
+				var cache = {};
+				var xhrs = {};
 
 				$('#addfiltercountry').click(function() {
 					return popfilter('in', 'countries', []);
