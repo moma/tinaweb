@@ -20,6 +20,7 @@
 		<script type="text/javascript" src="js/jquery-ui-1.8.16.custom.min.js"></script>
 		<script type="text/javascript" src="js/bootstrap-dropdown-fade.js"></script>
 		<script type="text/javascript" src="js/underscore.min.js"></script>
+		<script type="text/javascript" src="js/jquery.highlight-3.js"></script>
 		<style type="text/css">
 body {
 padding-top: 60px;
@@ -98,6 +99,9 @@ height: 40px;
 		line-height: 1.5;
 }
 	
+.highlight { 
+	font-weight: bold;
+ }
 
 		</style>
 		<!-- Le fav and touch icons -->
@@ -193,6 +197,7 @@ height: 40px;
 							_.each(results, function(item) {
 								self._renderItem(ul, item);
 							});
+							//ul.highlight(results);
 						});
 					}
 				});
