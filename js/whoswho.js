@@ -207,7 +207,7 @@ $(document).ready(function() {
 				// we send this to tinaviz to do the job
 				
 				
-				 $.post("../community/getgraph.php", query, function(data) {
+				 $.post("getgraph.php", query, function(data) {
 				 	
 				 	/*
 					 $('#loading').hide('slow', function() {
