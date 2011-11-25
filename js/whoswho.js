@@ -187,7 +187,7 @@ $(document).ready(function() {
 					var t = [];
 					console.log("collecting "+'.filter' + k + '');
 					$('.filter' + k + '').each(function(i, e) {
-						t.push($(e).text());
+						t.push($(e).val());
 					});
 					return t;
 				}
@@ -205,7 +205,7 @@ $(document).ready(function() {
 
 				console.log(query);
 				// we send this to tinaviz to do the job
-
+				console.log("STRINGY: "+JSON.stringify(query));
 				var url = "getgraph.php?query=" + encodeURIComponent(JSON.stringify(query));
 				console.log(url);
 				
