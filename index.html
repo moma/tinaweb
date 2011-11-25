@@ -241,7 +241,7 @@ font-weight: bold;
 						source : function(request, response) {
 							var term = request.term;
 
-							$.getJSON("../community/autocomplete.php", {
+							$.getJSON("autocomplete.php", {
 								category : type,
 								term : request.term
 							}, function(data, status, xhr) {
