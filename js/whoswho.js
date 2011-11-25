@@ -52,7 +52,8 @@ $(document).ready(function() {
 	 });
 	 */
 	$('#search-form').hide();
-
+	$('#frame').hide();
+	
 	$('.topbar').hover(function() {
 		$(this).stop().animate({
 			"opacity" : 0.98
@@ -70,7 +71,7 @@ $(document).ready(function() {
 		var header = '<li id="' + id1 + '" class="filter" style="padding-top: 5px;">';
 		var labelization = '<span style="color: #fff;">&nbsp; ' + label + ' </span>';
 		//var selection = '<select id="' + id2 + '" class="small filterselect filter' + type + '">' + options + '</select>';
-		var input = '<input type="text" id="' + id2 + '" class="medium" placeholder="' + type + '" />';
+		var input = '<input type="text" id="' + id2 + '" class="medium filter'+type+'" placeholder="' + type + '" />';
 		var footer = '</li>;'
 		$(header + labelization + input
 		// +       selection
@@ -92,7 +93,6 @@ $(document).ready(function() {
 
 		$('#' + id1 + '').hide();
 		$('#' + id1 + '').fadeIn(500);
-		jQuery('#' + id1).disableTextSelection();
 		return false;
 	};
 
@@ -180,14 +180,18 @@ $(document).ready(function() {
 	$('#generate').click(function() {
 		$('#welcome').fadeOut('fasy', function() {
 			$('#loading').fadeIn('slow', function() {
+			});
+			
+			console.log("loading");
 				var collect = function(k) {
 					var t = [];
-					$('.filter' + k + ' :selected').each(function(i, e) {
-						console.log("selected " + i + " = " + e);
+					console.log("collecting "+'.filter' + k + '');
+					$('.filter' + k + '').each(function(i, e) {
 						t.push($(e).text());
 					});
 					return t;
 				}
+				console.log("collecting..");
 				var query = {
 					categorya : $('#categorya :selected').text(),
 					categoryb : $('#categoryb :selected').text(),
@@ -200,14 +204,17 @@ $(document).ready(function() {
 				};
 
 				console.log(query);
-				/*
-				 $.post("../community/gexf.php", query, function(data) {
-				 $('#loading').hide('slow', function() {
-				 // display the TINAVIZ PANEL
+				// we send this to tinaviz to do the job
+				
+				
+				 $.post("../community/getgraph.php", query, function(data) {
+				 	
+				 	/*
+					 $('#loading').hide('slow', function() {
+					 // display the TINAVIZ PANEL
+					 });*/
 				 });
-				 });
-				 */
-			});
+				 
 		});
 		return false;
 	});

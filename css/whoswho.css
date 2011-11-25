@@ -36,7 +36,7 @@ right: 0;
 padding: 7px 8px 5px 8px;
 }
 #search-form span.glass i {
-background-image: url(css/sprite-icons.png);
+background-image: url(sprite-icons.png);
 background-position: -224px -96px;
 width: 14px;
 height: 14px;
@@ -67,7 +67,7 @@ height: 40px;
 }
 
 .ui-autocomplete-loading {
-background: white url('css/ui-anim_basic_16x16.gif') right center no-repeat;
+background: white url('ui-anim_basic_16x16.gif') right center no-repeat;
 }
 .ui-autocomplete-category {
 font-weight: bold;
