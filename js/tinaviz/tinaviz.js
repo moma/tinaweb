@@ -75,9 +75,9 @@ function Tinaviz(args) {
 
     this._initCallback = function() {
         if (this.xulrunner == true) {
-            wrapper = $('#vizframe').contents().find("#tinaviz")[0];
+            wrapper = $('#vizframe').contents().find("#tinapplet")[0];
         } else {
-            wrapper = $("#tinaviz")[0];
+            wrapper = $("#tinapplet")[0];
         }
         if (wrapper == null) {
             alert("Error: couldn't get the applet!");
@@ -661,7 +661,7 @@ function Tinaviz(args) {
             buff += arg;
         }
         var res = deployJava.writeAppletTag({
-            id: "tinaviz",
+            id: "tinapplet",
             code: 'eu.tinasoft.tinaviz.Main.class',
             archive: path+'tinaviz-2.0-SNAPSHOT.jar',
             width: w,

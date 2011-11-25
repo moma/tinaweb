@@ -49,7 +49,7 @@ $organizations = $data["organizations"];
 $f = "";
 if ($keywords) {
 	if (sizeof($keywords) > 0) {
-		$f .= ' AND ';
+		$f .= ' AND (';
 	}
 
 	foreach ($keywords as $kw) {
@@ -57,42 +57,48 @@ if ($keywords) {
 		$i = 0;
 		foreach ($words as $word) {
 			$word = sanitize_input(trim(strtolower($word)));
+			if ($word == "") continue;
 			if ($i > 0)
 				$f .= " OR ";
 			$f .= 'keywords LIKE "%' . $word . '%"';
 			$i++;
 		}
 	}
+	$f .= ")";
 }
 if ($countries) {
 
 	if (sizeof($countries) > 0) {
-		$f .= ' AND ';
+		$f .= ' AND (';
 	}
 
 	$i = 0;
 	foreach ($countries as $country) {
 		$country = sanitize_input(trim(strtolower($country)));
+		if ($country == "") continue;
 		if ($i > 0)
 			$f .= " OR ";
 		$f .= 'country LIKE "%' . $country . '%"';
 		$i++;
 	}
+	$f .= ") ";
 }
 if ($laboratories) {
 
 	if (sizeof($laboratories) > 0) {
-		$f .= ' AND ';
+		$f .= ' AND (';
 	}
 
 	$i = 0;
 	foreach ($laboratories as $lab) {
 		$lab = sanitize_input(trim(strtolower($lab)));
+		if ($lab == "") continue;
 		if ($i > 0)
 			$f .= " OR ";
 		$f .= 'lab LIKE "%' . $lab . '%"';
 		$i++;
 	}
+	$f .= ") ";
 }
 
 $base = new PDO("sqlite:" . $dbname);
@@ -221,9 +227,19 @@ foreach ($terms_array as $term) {
 			for ($l = 0; $l < count($term_scholars); $l++) {
 				if (array_key_exists($term_scholars[$l], $scholars)) {
 					if ($scholarsMatrix[$term_scholars[$k]]['cooc'][$term_scholars[$l]] != null) {
-						$scholarsMatrix[$term_scholars[$k]]['cooc'][$term_scholars[$l]] += 1 / (log($term['occurrences']) * log($scholars[$term_scholars[$k]]['nb_keywords']) / $scholars[$term_scholars[$k]]['nb_keywords']);
+						$a = log($term['occurrences']) * log($scholars[$term_scholars[$k]]['nb_keywords']);
+						$b = $scholars[$term_scholars[$k]]['nb_keywords'];
+						if ($a > 0 && $b > 0) {
+							$scholarsMatrix[$term_scholars[$k]]['cooc'][$term_scholars[$l]] += 1  / ($a / $b);
+						}
 					} else {
-						$scholarsMatrix[$term_scholars[$k]]['cooc'][$term_scholars[$l]] = 1 / (log($term['occurrences']) * log($scholars[$term_scholars[$k]]['nb_keywords']) / $scholars[$term_scholars[$k]]['nb_keywords']);
+						$a = $scholars[$term_scholars[$k]]['nb_keywords'];
+						if ($a > 0) {
+							$b = log($term['occurrences']) * log($scholars[$term_scholars[$k]]['nb_keywords']) / $a;
+							if ($b > 0) {
+								$scholarsMatrix[$term_scholars[$k]]['cooc'][$term_scholars[$l]] = 1 / $b;
+							}
+						}
 					}
 				}
 			}

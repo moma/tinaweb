@@ -187,7 +187,12 @@ $(document).ready(function() {
 					var t = [];
 					console.log("collecting "+'.filter' + k + '');
 					$('.filter' + k + '').each(function(i, e) {
-						t.push($(e).val());
+						var value = $(e).val();
+						if (value === undefined) return;
+						value = value.replace(/^\s+/g,'').replace(/\s+$/g,'');
+						if (value == "" || value == " ") {
+							t.push(value);	
+						}
 					});
 					return t;
 				}
@@ -205,19 +210,27 @@ $(document).ready(function() {
 
 				console.log(query);
 				// we send this to tinaviz to do the job
-				console.log("STRINGY: "+JSON.stringify(query));
+				//console.log("STRINGY: "+JSON.stringify(query));
 				var url = "getgraph.php?query=" + encodeURIComponent(JSON.stringify(query));
 				console.log(url);
-				
-				return;
+				var f = $("#frame");
+	            var fd = f[0].document || f[0].contentWindow.document;
+	            fd.tinaviz.open({
+		                view: "macro",
+		                url: url,
+		                layout: "tinaforce"
+		        });
+	            
 				 //$.post("getgraph.php", query, function(data) {
 				 	
 				 	 // create the iframe, wait 2 seconds, and then call
+				 	 /*
 				 	 tinaviz.open({
 		                view: "macro",
 		                url: url,
 		                layout: "tinaforce"
 		            });
+		            */
 				 	/*
 					 $('#loading').hide('slow', function() {
 					 // display the TINAVIZ PANEL
