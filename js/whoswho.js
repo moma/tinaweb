@@ -205,15 +205,24 @@ $(document).ready(function() {
 
 				console.log(query);
 				// we send this to tinaviz to do the job
+
+				var url = "getgraph.php?query=" + encodeURIComponent(JSON.stringify(query));
+				console.log(url);
 				
-				
-				 $.post("getgraph.php", query, function(data) {
+				return;
+				 //$.post("getgraph.php", query, function(data) {
 				 	
+				 	 // create the iframe, wait 2 seconds, and then call
+				 	 tinaviz.open({
+		                view: "macro",
+		                url: url,
+		                layout: "tinaforce"
+		            });
 				 	/*
 					 $('#loading').hide('slow', function() {
 					 // display the TINAVIZ PANEL
 					 });*/
-				 });
+				// });
 				 
 		});
 		return false;

@@ -32,12 +32,14 @@ function is_utf8($string) { // v1.01
  
 $gexf = '<?xml version="1.0" encoding="UTF-8"?>';
 
-$categorya = $_POST["categorya"];
-$categoryb = $_POST["categoryb"];
-$countries = $_POST["countries"];
-$keywords  = $_POST["keywords"];
-$laboratories = $_POST["laboratories"];
-$organizations = $_POST["organizations"];
+$data = json_decode($_GET['query'], true);
+
+$categorya = $data["categorya"];
+$categoryb = $data["categoryb"];
+$countries = $data["countries"];
+$keywords  = $data["keywords"];
+$laboratories = $data["laboratories"];
+$organizations = $data["organizations"];
 
 $f = "";
 if ($keywords) {
