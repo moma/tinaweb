@@ -1,4 +1,5 @@
 <?php
+header ("Content-Type:text/xml");  
 
 /*
  * Génère le gexf des scholars à partir de la base sqlite
@@ -104,8 +105,8 @@ $scholarsIncluded = 0;
 // Ecriture de l'entête du gexf
 
 $gexf .= '<gexf xmlns="http://www.gexf.net/1.1draft" xmlns:viz="http://www.gephi.org/gexf/viz" version="1.1"> ';
-$gexf .= ' <meta lastmodifieddate="20011-11-11"> "\n"';
-$gexf .= ' </meta> "\n"';
+$gexf .= '<meta lastmodifieddate="20011-11-11">'."\n";
+$gexf .= ' </meta>'."\n";
 $gexf .= '<graph type="static">' . "\n";
 $gexf .= '<attributes class="node" type="static">' . "\n";
 $gexf .= ' <attribute id="0" title="category" type="string">  </attribute>' . "\n";
@@ -123,8 +124,8 @@ $gexf .= "<nodes>" . "\n";
 // liste des chercheurs
 $sql = "SELECT * FROM scholars " . $scholar_filter . " " . $f;
 $scholars = array();
-echo $sql . " <br/>";
-print_r($data);
+//echo $sql . " <br/>";
+//print_r($data);
 foreach ($base->query($sql) as $row) {
 	$info = array();
 	$info['unique_id'] = $row['unique_id'];
@@ -146,7 +147,7 @@ foreach ($base->query($sql) as $row) {
 	$info['homepage'] = $row['homepage'];
 	$info['title'] = $row['title'];
 	$info['position'] = $row['position'];
-	print_r($row);
+	//print_r($row);
 	$scholars[$row['unique_id']] = $info;
 }
 
@@ -191,7 +192,7 @@ foreach ($base->query($sql) as $row) {
 		continue;
 	}
 	if ($termsMatrix[$id] != null) {// on prend que les termes sont mentionnés par les chercheurs filtrés
-		echo "OK";
+		//echo "OK";
 		$info = array();
 		$info['id'] = $id;
 		$info['occurrences'] = $row['occurrences'];
@@ -203,7 +204,7 @@ foreach ($base->query($sql) as $row) {
 $count = 1;
 
 foreach ($terms_array as $term) {
-	echo "TERM";
+	//echo "TERM";
 	$count += 1;
 	// on en profite pour charger le profil scholar du term
 	$query = "SELECT scholar FROM scholars2terms where term_id='" . $term['id'] . "'";
