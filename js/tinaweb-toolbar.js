@@ -29,8 +29,31 @@ $(document).ready(function(){
         orientation: "horizontal"
     });
 
-    //No text selection on elements with a class of 'noSelect'
-
+			/**
+			 * Prevents click-based selectiion of text in all matched elements.
+			 */
+			jQuery.fn.disableTextSelect = function() {
+				return this.each(function() {
+					if( typeof this.onselectstart != "undefined")// IE
+					{
+						this.onselectstart = function() {
+							return false;
+						};
+					} else if( typeof this.style.MozUserSelect != "undefined")// Firefox
+					{
+						this.style.MozUserSelect = "none";
+					} else// All others
+					{
+						this.onmousedown = function() {
+							return false;
+						};
+						this.style.cursor = "default";
+					}
+				});
+			};
+			
+    //No text selection on elements with a class of 'unselectable'
+/*
     $(function(){
         $.extend($.fn.disableTextSelect = function() {
             return this.each(function() {
@@ -47,10 +70,10 @@ $(document).ready(function(){
                 }
             });
         });
-    });
+    });*/
 
-    $('.noSelect').disableTextSelect();
-    $('.noSelect').hover(function() {
+    jQuery('.unselectable').disableTextSelect();
+    $('.unselectable').hover(function() {
         $(this).css('cursor','default');
     }, function() {
         $(this).css('cursor','auto');
