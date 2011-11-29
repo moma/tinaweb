@@ -60,6 +60,15 @@ $(document).ready(function(){
         tinaviz.set("selectionRadius",      parseFloat(prefs.cursor_size),     "Double");
         tinaviz.set("layout",               prefs.layout,                      "String");
         tinaviz.set("pause",                prefs.pause,                       "Boolean");
+        
+        if (prefs.embed == "true" && !(prefs.getGraph === undefined)) {
+        	tinaviz.open({
+			                view: "macro",
+			                url: prefs.getGraph(),
+			                layout: "tinaforce"
+		    });
+        }
+        
         if (prefs.demo == "true") {
            unlockDemo = true;
         } else {

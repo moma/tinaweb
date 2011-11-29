@@ -22,6 +22,10 @@ jQuery.fn.disableTextSelect = function() {
 };
 var ids = 0;
 var completion = {};
+var graphUrl = "";
+var getGraph = function () {
+	return graphUrl;
+}
 
 $(document).ready(function() {
 
@@ -52,7 +56,7 @@ $(document).ready(function() {
 	 });
 	 */
 	$('#search-form').hide();
-	$('#frame').hide();
+
 	
 	$('.topbar').hover(function() {
 		$(this).stop().animate({
@@ -213,13 +217,13 @@ $(document).ready(function() {
 				//console.log("STRINGY: "+JSON.stringify(query));
 				var url = "getgraph.php?query=" + encodeURIComponent(JSON.stringify(query));
 				console.log(url);
-				var f = $("#frame");
-	            var fd = f[0].document || f[0].contentWindow.document;
-	            fd.tinaviz.open({
-		                view: "macro",
-		                url: url,
-		                layout: "tinaforce"
-		        });
+				
+				graphUrl = url;
+				$("#visualization").html(
+			'<iframe src="tinaframe.html" class="frame" border="0" frameborder="0" scrolling="no" id="frame" name="frame"></iframe>'
+				);
+				
+
 	            
 				 //$.post("getgraph.php", query, function(data) {
 				 	

@@ -63,13 +63,20 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     <script type="text/javascript" src="js/tinaweb-info.js"></script>
     <!-- WE USE TINAWEB INFO PANEL -->
     <script type="text/javascript" src="js/tinaweb-toolbar.js"></script>
-    <!-- TINAWEB MAIN -->
+	    <!-- TINAWEB MAIN -->
     <script type="text/javascript" src="js/tinaweb-main.js"></script>
     <!-- TINASOFT UTILITIES -->
     <script type="text/javascript" src="js/cache.js"></script>
 
 </head>
 <body>
+<script type="text/javascript">
+	/* small extension to Tinaviz, to allow callbacking between iframes */
+	prefs.embed = "true";
+	prefs.getGraph = function() {
+		return window.parent.getGraph();
+	};
+</script>
 <div id="doc3" class="yui-t5 ui-widget">
     <div id="hd" class="ui-widget">
         <div id="hdb">

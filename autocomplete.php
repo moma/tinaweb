@@ -44,7 +44,7 @@ $req = "SELECT ".$cat." AS key, count(".$cat.") AS value FROM scholars WHERE ".$
 $results = array();
 $i = 0;
 foreach ($base->query($req) as $row) {
-
+	$nb = $row['value'];
   if ($cat == "keywords") {
   	//echo "in keywords\n";
   	 $words = explode(",", $row["key"]);
@@ -58,9 +58,9 @@ foreach ($base->query($req) as $row) {
         //	echo "(".$value." contains ".$term." ?)";
         if (filter_word($word)) {
 	        if (array_key_exists($word, $results)) {
-	            $results[ $word ] += intval($value);
+	            $results[ $word ] += intval($nb);
 	        } else {
-	            $results[ $word ] = intval($value);
+	            $results[ $word ] = intval($nb);
 	        }
         }
     }
@@ -72,9 +72,9 @@ foreach ($base->query($req) as $row) {
 
     if (filter_word($word)) {
         if (array_key_exists($word, $results)) {
-            $results[ $word ] += intval($value);
+            $results[ $word ] += intval($nb);
         } else {
-            $results[ $word ] = intval($value);
+            $results[ $word ] = intval($nb);
         }
     }
    }
