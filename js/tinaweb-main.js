@@ -336,7 +336,7 @@ $(document).ready(function(){
                 //console.log("-- selectionChanged:");
                 //console.log(selection);
                 var active = $( "#infodiv" ).accordion( "option", "active" );
-                console.log("active: "+active);
+                //console.log("active: "+active);
                 var selectionIsEmpty = (Object.size( selection.data ) == 0);
                 console.log("selectionIsEmpty: "+selectionIsEmpty);
                 //if (Object.size ( selection.data ) == 0) {
@@ -354,19 +354,23 @@ $(document).ready(function(){
                 //}
                 if ( selection.mouseMode == '"left"' ) {
                 // nothing to do
+
                 } else if ( selection.mouseMode == '"right"' ) {
                 // nothing to do
                 } else if (selection.mouseMode == '"doubleLeft"') {
-                    if (tinaviz.getView == "macro") {
-                       tinaviz.setView("meso");
-                    }
-                    var nextCategory = tinaviz.getCategory();
-                    //var nextCategory = tinaviz.getOppositeCategory();
-                    console.log("switching to "+nextCategory);
-                    tinaviz.setCategory(nextCategory);
-                    tinaviz.centerOnSelection();
-                    tinaviz.infodiv.updateNodeList("meso", nextCategory);
-                    tinaviz.infodiv.display_current_category();
+                    console.log("double click on left mouse:");
+
+                    tinaviz.setView("meso", function() {
+                        var nextCategory = tinaviz.getCategory(); // getOppositeCategory();
+                        console.log("switching to "+nextCategory);
+                        tinaviz.setCategory(nextCategory, function() {
+                            tinaviz.centerOnSelection(function() {
+                            tinaviz.infodiv.updateNodeList("meso", nextCategory);
+                            tinaviz.infodiv.display_current_category();
+                            });
+
+                        });
+                    });
                 }
                 tinaviz.infodiv.update(selection.viewName, selection.data);
             },
