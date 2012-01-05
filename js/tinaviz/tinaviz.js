@@ -198,6 +198,11 @@ function Tinaviz(args) {
 
     }
     this.askForNeighbours = function(dataset, id, category) {
+    	if (TinaService === undefined) {
+    		console.log("askForNeighbours disabled: TinaService.getDocument unavailable");
+    		return;
+    	}
+    	
         switch (category) {
             case 'Document':
                 TinaService.getDocument(dataset, id, {
@@ -355,28 +360,28 @@ function Tinaviz(args) {
         this.callbackViewChanged(view);
     }
 
-    this.recenter = function() {
-         this.set("camera.target", "all", "String");
+    this.recenter = function(cb) {
+         this.set("camera.target", "all", "String", cb);
     }
-    this.centerOnSelection = function() {
-         this.set("camera.target", "selection", "String");
+    this.centerOnSelection = function(cb) {
+         this.set("camera.target", "selection", "String", cb);
     }
-    this.setLayout = function(name) {
-        this.set("layout.algorithm", name, "String");
+    this.setLayout = function(name, cb) {
+        this.set("layout.algorithm", name, "String", cb);
     }
-    this.setPause = function(value) {
-        this.set("pause", value, "Boolean");
+    this.setPause = function(value, cb) {
+        this.set("pause", value, "Boolean", cb);
     }
-    this.getPause = function() {
-        return this.get("pause");
+    this.getPause = function(cb) {
+        this.get("pause", cb);
     }
     this.pause = function() {
         this.setPause(true);
     }
-    this.togglePause = function() {
-        var n = !this.getPause();
-        this.setPause(n);
-        return n;
+    this.togglePause = function(cb) {
+        this.getPause(function(value) {
+            tinaviz.setPause(!value, cb);
+        });
     }
 
     /**
@@ -550,27 +555,19 @@ function Tinaviz(args) {
     }
 
     this.makeCallback = function(cb) {
-        if (cb === undefined) return undefined;
+        if (cb === undefined) cb = function() {};
         ++cbCounter;
         var id = "" + cbCounter;
         callbacks[id] = cb;
         return id;
     }
 
-    /**
-     * Core method communicating with the applet
-     */
-    this.get = function(key) {
-
-            return applet.get(key);
-
-    }
 
     /**
      * Core method communicating with the applet
      */
-    this.cbGet = function(key,cb) {
-        applet.cbGet(tinaviz.makeCallback(cb),key);
+    this.getAs = function(key,type,cb) {
+        applet.sendGet(tinaviz.makeCallback(cb), key, type);
         return undefined;
     }
 
@@ -578,8 +575,8 @@ function Tinaviz(args) {
     /**
      * Core method communicating with the applet
      */
-    this.get = function(key,type,cb) {
-        applet.cbGetAs(tinaviz.makeCallback(cb),key,type);
+    this.get = function(key,cb) {
+        applet.sendGet(tinaviz.makeCallback(cb), key, "Any");
         return undefined;
     }
 
@@ -594,29 +591,29 @@ function Tinaviz(args) {
      * "Boolean" : 1, 0, true, false
      */
 
-    this.update = function(key, obj, t, cb) {
+    this.set = function(key, obj, t, cb) {
          //if (t=="Json") alert("key:"+key+" obj: "+obj+" t: "+t);
         console.log("applet.send key: "+key+" , obj: "+obj+", t:"+t);
         var cbId = makeCallback(cb);
         if (t === undefined) {
             this.logNormal("Warning, setting unknow ("+key+","+obj+")");
-            applet.send(cbId, key, obj, "");
+            applet.sendSet(cbId, key, obj, "");
         } else {
            if (t.indexOf("Tuple2") != -1) {
               if (t.indexOf("[Double]") != -1) {
-                  applet.sendTuple2(cbId, key, obj[0], obj[1], "Double");
+                  applet.sendSetTuple2(cbId, key, obj[0], obj[1], "Double");
               } else if (t.indexOf("[Int]") != -1) {
-                  applet.sendTuple2(cbId, key, obj[0], obj[1], "Int");
+                  applet.sendSetTuple2(cbId, key, obj[0], obj[1], "Int");
               } else if (t.indexOf("[Float]") != -1) {
-                  applet.sendTuple2(cbId, key, obj[0], obj[1], "Float");
+                  applet.sendSetTuple2(cbId, key, obj[0], obj[1], "Float");
               } else {
-                  applet.sendTuple2(cbId, key, obj[0], obj[1], "");
+                  applet.sendSetTuple2(cbId, key, obj[0], obj[1], "");
               }
            } else if (t=="Json") {
-             applet.send(cbId, key,$.toJSON(obj), t);
+             applet.sendSet(cbId, key, $.toJSON(obj), t);
            } else {
               //this.logNormal("send("+key+","+obj+","+t+")");
-              applet.send(cbId, key, obj, t);
+              applet.sendSet(cbId, key, obj, t);
            }
         }
     }

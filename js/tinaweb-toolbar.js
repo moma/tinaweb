@@ -17,7 +17,7 @@
 /* useful for fullscreen mode */
 var tinaviz = {};
 
-$(document).ready(function(){
+$(document).ready(function () {
 
     // SLIDERS INIT
     $.extend($.ui.slider.defaults, {
@@ -29,29 +29,29 @@ $(document).ready(function(){
         orientation: "horizontal"
     });
 
-			/**
-			 * Prevents click-based selectiion of text in all matched elements.
-			 */
-			jQuery.fn.disableTextSelect = function() {
-				return this.each(function() {
-					if( typeof this.onselectstart != "undefined")// IE
-					{
-						this.onselectstart = function() {
-							return false;
-						};
-					} else if( typeof this.style.MozUserSelect != "undefined")// Firefox
-					{
-						this.style.MozUserSelect = "none";
-					} else// All others
-					{
-						this.onmousedown = function() {
-							return false;
-						};
-						this.style.cursor = "default";
-					}
-				});
-			};
-			
+    /**
+     * Prevents click-based selectiion of text in all matched elements.
+     */
+    jQuery.fn.disableTextSelect = function () {
+        return this.each(function () {
+            if (typeof this.onselectstart != "undefined") // IE
+            {
+                this.onselectstart = function () {
+                    return false;
+                };
+            } else if (typeof this.style.MozUserSelect != "undefined") // Firefox
+            {
+                this.style.MozUserSelect = "none";
+            } else // All others
+            {
+                this.onmousedown = function () {
+                    return false;
+                };
+                this.style.cursor = "default";
+            }
+        });
+    };
+
     //No text selection on elements with a class of 'unselectable'
 /*
     $(function(){
@@ -73,25 +73,25 @@ $(document).ready(function(){
     });*/
 
     jQuery('.unselectable').disableTextSelect();
-    $('.unselectable').hover(function() {
-        $(this).css('cursor','default');
-    }, function() {
-        $(this).css('cursor','auto');
+    $('.unselectable').hover(function () {
+        $(this).css('cursor', 'default');
+    }, function () {
+        $(this).css('cursor', 'auto');
     });
 
 
-    $("#nodeRadiusSelector").change(function() {
+    $("#nodeRadiusSelector").change(function () {
         //alert("SET RADIUS TO "+$("#nodeRadiusSelector").val());
-        tinaviz.set("filter.map.node.radius",$("#nodeRadiusSelector").val(), "String");
+        tinaviz.set("filter.map.node.radius", $("#nodeRadiusSelector").val(), "String");
     });
 
-    $("#nodeShapeSelector").change(function() {
-        tinaviz.set("filter.map.node.shape",$("#nodeShapeSelector").val(), "String");
+    $("#nodeShapeSelector").change(function () {
+        tinaviz.set("filter.map.node.shape", $("#nodeShapeSelector").val(), "String");
     });
 
-    $("#nodeColorSelector").change(function() {
+    $("#nodeColorSelector").change(function () {
         //alert("SET COLOR TO "+ $("#nodeColorSelector").val(), true);
-        tinaviz.set("filter.map.node.color",$("#nodeColorSelector").val(), "String");
+        tinaviz.set("filter.map.node.color", $("#nodeColorSelector").val(), "String");
     });
 
 });
@@ -122,132 +122,169 @@ var toolbar = {
 
 
 toolbar.lastSearch = "";
-toolbar.checkSearchForm = function() {
+toolbar.checkSearchForm = function () {
     var txt = $("#search_input").val();
     if (txt != toolbar.lastSearch) {
         // tinaviz.highlightByPattern("", "");
         toolbar.lastSearch = txt;
         //if (txt=="") {
-            //tinaviz.highlightByPattern("", "");
-        //} 
+        //tinaviz.highlightByPattern("", "");
+        //}
         //else {
-            //var cat = tinaviz.views.current.category();
-            tinaviz.highlightByPattern(txt, "containsIgnoreCase");
+        //var cat = tinaviz.views.current.category();
+        tinaviz.highlightByPattern(txt, "containsIgnoreCase");
         //}
     }
-    setTimeout("toolbar.checkSearchForm()",200);
+    setTimeout("toolbar.checkSearchForm()", 200);
 };
 
-toolbar.checkSearchFormNoRepeat = function() {
+toolbar.checkSearchFormNoRepeat = function () {
     var txt = $("#search_input").val();
     if (txt != toolbar.lastSearch) {
         // tinaviz.highlightByPattern("", "");
         toolbar.lastSearch = txt;
         //if (txt=="") {
-            //tinaviz.highlightByPattern("", "");
+        //tinaviz.highlightByPattern("", "");
         //}
         //else {
-            //var cat = tinaviz.views.current.category();
-            tinaviz.highlightByPattern(txt, "containsIgnoreCase");
+        //var cat = tinaviz.views.current.category();
+        tinaviz.highlightByPattern(txt, "containsIgnoreCase");
         //}
     }
 };
 
-toolbar.runSearchFormNoRepeat = function() {
+toolbar.runSearchFormNoRepeat = function () {
 
-         var txt = $("#search_input").val();
-         console.log("runSearchFormNoRepeat:"+txt);
-         //if (txt=="") {
-         tinaviz.unselect();
-         tinaviz.infodiv.reset();
-         //}
+    var txt = $("#search_input").val();
+    console.log("runSearchFormNoRepeat:" + txt);
+    //if (txt=="") {
+    tinaviz.unselect(function () {
+        tinaviz.infodiv.reset();
+        //}
+        var cat = tinaviz.getCategory();
+        var whenDone = function () {
 
-           var cat = tinaviz.getCategory();
-
-           if (cat == "Document") {
-              //tinaviz.selectByNeighbourPattern(txt, "containsIgnoreCase", cat);
-              tinaviz.selectByPattern(txt, "containsIgnoreCase");
-           } else {
-              tinaviz.selectByPattern(txt, "containsIgnoreCase");
-           }
-
-
-           if (txt!=="") {
-             tinaviz.centerOnSelection();
-           } else {
-              tinaviz.recenter();
-           }
-         return false;
-
-};
-    var sliderData = {
-       "filter.a.node.weight": {scheduled: false, delay: 250, size: 100, type: "Tuple2[Double]"},
-       "filter.a.edge.weight": {scheduled: false, delay: 250, size: 100, type: "Tuple2[Double]"},
-       "filter.b.node.weight": {scheduled: false, delay: 250, size: 100, type: "Tuple2[Double]"},
-       "filter.b.edge.weight": {scheduled: false, delay: 250, size: 100, type: "Tuple2[Double]"},
-       "filter.a.node.size":   {scheduled: false, delay: 100, size: 100, type: "Double"},
-       "filter.b.node.size":   {scheduled: false, delay: 100, size: 100, type: "Double"},
-       "selectionRadius":      {scheduled: false, delay: 50, size: 1 /* hack, so we send the size in pixel to the viz */, type: "Double"}
-    };
-
-    function callSlider(sliderobj, slider) {
-        if ( sliderData[slider].scheduled != true ) {
-            sliderData[slider].scheduled = true;
-            $.doTimeout( sliderData[slider].delay, function() {
-               //alert("slider value:" + $(sliderobj).slider("values"));
-               if (sliderData[slider].type=="Tuple2[Double]") {
-                 var vals = $(sliderobj).slider("values");
-                 tinaviz.set(slider, [vals[0] / sliderData[slider].size, vals[1] / sliderData[slider].size], sliderData[slider].type );
-               }else if (sliderData[slider].type=="Double") {
-                 tinaviz.set(slider, $(sliderobj).slider("value") / sliderData[slider].size, sliderData[slider].type );
-               }
-               sliderData[slider].scheduled = false;
-            });
+                if (txt !== "") {
+                    tinaviz.centerOnSelection();
+                } else {
+                    tinaviz.recenter();
+                }
+            };
+        if (cat == "Document") {
+            //tinaviz.selectByNeighbourPattern(txt, "containsIgnoreCase", cat);
+            tinaviz.selectByPattern(txt, "containsIgnoreCase", whenDone);
+        } else {
+            tinaviz.selectByPattern(txt, "containsIgnoreCase", whenDone);
         }
-    }
-
-
-toolbar.init = function() {
-
-   //  $("#search").autocomplete({ source: ["aaa","bbb","ccc"] });
-    
-    //$("#search").val(toolbar.values.search);
-    $("#search").submit(function() {
-        
-      toolbar.runSearchFormNoRepeat();
-    
-     return false;
     });
 
 
-    $("#search").keypress(function() {
-       toolbar.checkSearchFormNoRepeat();
+    return false;
+
+};
+var sliderData = {
+    "filter.a.node.weight": {
+        scheduled: false,
+        delay: 250,
+        size: 100,
+        type: "Tuple2[Double]"
+    },
+    "filter.a.edge.weight": {
+        scheduled: false,
+        delay: 250,
+        size: 100,
+        type: "Tuple2[Double]"
+    },
+    "filter.b.node.weight": {
+        scheduled: false,
+        delay: 250,
+        size: 100,
+        type: "Tuple2[Double]"
+    },
+    "filter.b.edge.weight": {
+        scheduled: false,
+        delay: 250,
+        size: 100,
+        type: "Tuple2[Double]"
+    },
+    "filter.a.node.size": {
+        scheduled: false,
+        delay: 100,
+        size: 100,
+        type: "Double"
+    },
+    "filter.b.node.size": {
+        scheduled: false,
+        delay: 100,
+        size: 100,
+        type: "Double"
+    },
+    "selectionRadius": {
+        scheduled: false,
+        delay: 50,
+        size: 1 /* hack, so we send the size in pixel to the viz */
+        ,
+        type: "Double"
+    }
+};
+
+function callSlider(sliderobj, slider) {
+    if (sliderData[slider].scheduled != true) {
+        sliderData[slider].scheduled = true;
+        $.doTimeout(sliderData[slider].delay, function () {
+            //alert("slider value:" + $(sliderobj).slider("values"));
+            if (sliderData[slider].type == "Tuple2[Double]") {
+                var vals = $(sliderobj).slider("values");
+                tinaviz.set(slider, [vals[0] / sliderData[slider].size, vals[1] / sliderData[slider].size], sliderData[slider].type);
+            } else if (sliderData[slider].type == "Double") {
+                tinaviz.set(slider, $(sliderobj).slider("value") / sliderData[slider].size, sliderData[slider].type);
+            }
+            sliderData[slider].scheduled = false;
+        });
+    }
+}
+
+
+toolbar.init = function () {
+
+    //  $("#search").autocomplete({ source: ["aaa","bbb","ccc"] });
+    //$("#search").val(toolbar.values.search);
+    $("#search").submit(function () {
+
+        toolbar.runSearchFormNoRepeat();
+
+        return false;
+    });
+
+
+    $("#search").keypress(function () {
+        toolbar.checkSearchFormNoRepeat();
     });
 
     $("#export-gexf").button({
-       text: true
+        text: true
         //icons: {
         //    primary: 'ui-icon-help'
         //}
-    }).click( function(eventObject) {
-        tinaviz.set("export","GEXF", "String");
+    }).click(function (eventObject) {
+        tinaviz.set("export", "GEXF", "String");
     });
 
     $("#export-png").button({
-       text: true
+        text: true
         //icons: {
         //    primary: 'ui-icon-help'
         //}
-    }).click( function(eventObject) {
-        tinaviz.set("export","PNG", "String");
+    }).click(function (eventObject) {
+        tinaviz.set("export", "PNG", "String");
     });
     $("#export-pdf").button({
-       text: true
+        text: true
         //icons: {
         //    primary: 'ui-icon-help'
         //}
-    }).click( function(eventObject) {
-        tinaviz.set("export","PDF", "String");
+    }).click(function (eventObject) {
+        tinaviz.set("export", "PDF", "String");
     });
 
     $("#level").button({
@@ -255,16 +292,16 @@ toolbar.init = function() {
         icons: {
             primary: 'ui-icon-help'
         }
-    }).click( function(eventObject) {
+    }).click(function (eventObject) {
         tinaviz.toggleView();
     });
-    $("#level").attr("title","click to switch the level");
+    $("#level").attr("title", "click to switch the level");
     $("#search_button").button({
         text: false,
         icons: {
             primary: 'ui-icon-search'
         }
-    }).click( function(eventObject) {
+    }).click(function (eventObject) {
 
     });
 
@@ -273,11 +310,11 @@ toolbar.init = function() {
         range: true,
         values: [parseFloat(prefs.a_edge_filter_min) * 100.0, parseFloat(prefs.a_edge_filter_max) * 100.0],
         animate: true,
-        slide: function(event, ui) {
-          callSlider("#sliderAEdgeWeight", "filter.a.edge.weight");
-         // var range = tinaviz.getAs("edgeAWeightRange","(Double,Double)");
-          //$("edgeAFilterMinValue").html(range._1);
-          //$("edgeAFilterMaxValue").html(range._2);
+        slide: function (event, ui) {
+            callSlider("#sliderAEdgeWeight", "filter.a.edge.weight");
+            // var range = tinaviz.getAs("edgeAWeightRange","(Double,Double)");
+            //$("edgeAFilterMinValue").html(range._1);
+            //$("edgeAFilterMaxValue").html(range._2);
         }
     });
 
@@ -285,12 +322,12 @@ toolbar.init = function() {
         range: true,
         values: [parseFloat(prefs.a_node_filter_min) * 100.0, parseFloat(prefs.a_node_filter_max) * 100.0],
         animate: true,
-        slide: function(event, ui) {
+        slide: function (event, ui) {
             callSlider("#sliderANodeWeight", "filter.a.node.weight");
             //tinaviz.recenter();
-          //var range = tinaviz.getAs("nodeAWeightRange","(Double,Double)");
-          //$("nodeAFilterMinValue").html(range._1);
-          //$("nodeAFilterMaxValue").html(range._2);
+            //var range = tinaviz.getAs("nodeAWeightRange","(Double,Double)");
+            //$("nodeAFilterMinValue").html(range._1);
+            //$("nodeAFilterMaxValue").html(range._2);
         }
     });
 
@@ -299,12 +336,12 @@ toolbar.init = function() {
         range: true,
         values: [parseFloat(prefs.b_edge_filter_min) * 100.0, parseFloat(prefs.b_edge_filter_max) * 100.0],
         animate: true,
-        slide: function(event, ui) {
-           callSlider("#sliderBEdgeWeight", "filter.b.edge.weight");
+        slide: function (event, ui) {
+            callSlider("#sliderBEdgeWeight", "filter.b.edge.weight");
             //tinaviz.recenter();
-          //var range = tinaviz.getAs("edgeBWeightRange","(Double,Double)");
-          //$("edgeBFilterMinValue").html(range._1);
-          //$("edgeBFilterMaxValue").html(range._2);
+            //var range = tinaviz.getAs("edgeBWeightRange","(Double,Double)");
+            //$("edgeBFilterMinValue").html(range._1);
+            //$("edgeBFilterMaxValue").html(range._2);
         }
     });
 
@@ -312,46 +349,47 @@ toolbar.init = function() {
         range: true,
         values: [parseFloat(prefs.b_node_filter_min) * 100.0, parseFloat(prefs.b_node_filter_max) * 100.0],
         animate: true,
-        slide: function(event, ui) {
+        slide: function (event, ui) {
             callSlider("#sliderBNodeWeight", "filter.b.node.weight");
             //tinaviz.recenter();
-          //var range = tinaviz.getAs("nodeBWeightRange","(Double,Double)");
-          //$("nodeBFilterMinValue").html(range._1);
-          //$("nodeBFilterMaxValue").html(range._2);
+            //var range = tinaviz.getAs("nodeBWeightRange","(Double,Double)");
+            //$("nodeBFilterMinValue").html(range._1);
+            //$("nodeBFilterMaxValue").html(range._2);
         }
     });
 
     $("#sliderANodeSize").slider({
         value: parseFloat(prefs.a_node_size) * 100.0,
-        max: 100.0,// precision/size
+        max: 100.0,
+        // precision/size
         animate: true,
-        slide: function(event, ui) {
+        slide: function (event, ui) {
             callSlider("#sliderANodeSize", "filter.a.node.size");
         }
-    }
-    );
+    });
 
     $("#sliderBNodeSize").slider({
         value: parseFloat(prefs.b_node_size) * 100.0,
-        max: 100.0,// precision/size
+        max: 100.0,
+        // precision/size
         animate: true,
-        slide: function(event, ui) {
+        slide: function (event, ui) {
             callSlider("#sliderBNodeSize", "filter.b.node.size");
         }
-    }
-    );
+    });
 
 
     $("#sliderSelectionZone").slider({
         value: parseFloat(prefs.cursor_size) * 300.0,
-        max: 300.0, // max disk radius, in pixel
+        max: 300.0,
+        // max disk radius, in pixel
         animate: true,
-        change: function(event, ui) {
+        change: function (event, ui) {
             callSlider("#sliderSelectionZone", "selectionRadius");
         }
     });
 
-    /** DISABLED **
+/** DISABLED **
     $("#toggle-showLabels").click(function(event) {
         tinaviz.toggleLabels();
     });
@@ -368,35 +406,36 @@ toolbar.init = function() {
 
     $("#toggle-paused").button({
         icons: {
-            primary:'ui-icon-pause'
+            primary: 'ui-icon-pause'
         },
         text: true,
         label: "pause"
-    })
-    .click(function(event) {
+    }).click(function (event) {
         tinaviz.togglePause();
         var p = $("#toggle-paused");
-        if( p.button('option','icons')['primary'] == 'ui-icon-pause'  ) {
-            p.button('option','icons',{
-                'primary':'ui-icon-play'
+        if (p.button('option', 'icons')['primary'] == 'ui-icon-pause') {
+            p.button('option', 'icons', {
+                'primary': 'ui-icon-play'
             });
-            p.button('option','label',"play");
+            p.button('option', 'label', "play");
         } else {
-            p.button('option','icons',{
-                'primary':'ui-icon-pause'
+            p.button('option', 'icons', {
+                'primary': 'ui-icon-pause'
             });
-            p.button('option','label',"pause");
+            p.button('option', 'label', "pause");
         }
     });
 
     $("#toggle-unselect").button({
         icons: {
-            primary:'ui-icon-close'
+            primary: 'ui-icon-close'
         }
-    }).click(function(event) {
+    }).click(function (event) {
         toolbar.lastsearch = "";
-        tinaviz.unselect();
-        tinaviz.infodiv.reset();
+        tinaviz.unselect(function () {
+            tinaviz.infodiv.reset();
+        });
+
     });
 
     $("#toggle-recenter").button({
@@ -404,8 +443,7 @@ toolbar.init = function() {
         icons: {
             primary: 'ui-icon-home'
         }
-    })
-    .click(function(event) {
+    }).click(function (event) {
         tinaviz.recenter();
         //tinaviz.centerOnSelection();
     });
@@ -416,78 +454,76 @@ toolbar.init = function() {
         icons: {
             primary: 'ui-icon-arrows'
         }
-    }).click(function(event) {
+    }).click(function (event) {
         var cat = tinaviz.getCategory();
-        var next_cat = tinaviz.getOppositeCategory( cat );
+        var next_cat = tinaviz.getOppositeCategory(cat);
         var viewName = tinaviz.getView();
         if (viewName == "macro") {
-            if (next_cat=="Document") {
+            if (next_cat == "Document") {
                 $("#category-A").fadeIn("slow");
                 $("#category-B").fadeOut("slow");
-            } else if (next_cat=="NGram") {
+            } else if (next_cat == "NGram") {
                 $("#category-A").fadeOut("slow");
                 $("#category-B").fadeIn("slow");
             }
         } else {
-           $("#category-A").fadeIn("slow");
-           $("#category-B").fadeIn("slow");
+            $("#category-A").fadeIn("slow");
+            $("#category-B").fadeIn("slow");
         }
 
-       var neighbours = tinaviz.infodiv.neighbours;
+        var neighbours = tinaviz.infodiv.neighbours;
         //console.log(neighbours);
         //tinaviz.infodiv.reset();
         tinaviz.setCategory(next_cat); // TODO we should use a callback to wait for the category change, here
         tinaviz.centerOnSelection();
-        $.doTimeout(800, function(){
-           if (viewName=="macro") {
-               var myArray = new Array();
-               for (var pos in neighbours) {
-                     myArray.push(neighbours[pos]);
-               }
-               tinaviz.select(myArray);
-           }
+        $.doTimeout(800, function () {
+            if (viewName == "macro") {
+                var myArray = new Array();
+                for (var pos in neighbours) {
+                    myArray.push(neighbours[pos]);
+                }
+                tinaviz.select(myArray);
+            }
 
             tinaviz.infodiv.updateNodeList(viewName, next_cat);
-                   //console.log(neighbours);
-           tinaviz.infodiv.display_current_category();
-                  //tinaviz.unselect();
+            //console.log(neighbours);
+            tinaviz.infodiv.display_current_category();
+            //tinaviz.unselect();
 
-
-           false;
-       });
+            false;
+        });
 
     });
 
-       // default settings
-       $("#export-view").hide();
-       $("#search").hide();
-       $("#export-gexf").hide();
-       $("#level").hide();
-       $("#search_button").hide();
-       $("#toggle-recenter").hide();
-       $("#toggle-switch").hide();
-       $("#toggle-unselect").hide();
-       $("#toggle-paused").hide();
-       $("#cursor-size-block").hide();
-       $("#category-A").hide();
-       $("#category-B").hide();
-       $("#category-legend").hide();
+    // default settings
+    $("#export-view").hide();
+    $("#search").hide();
+    $("#export-gexf").hide();
+    $("#level").hide();
+    $("#search_button").hide();
+    $("#toggle-recenter").hide();
+    $("#toggle-switch").hide();
+    $("#toggle-unselect").hide();
+    $("#toggle-paused").hide();
+    $("#cursor-size-block").hide();
+    $("#category-A").hide();
+    $("#category-B").hide();
+    $("#category-legend").hide();
 
 
     // DISABLED toolbar.checkSearchForm();
-
 };
 
-toolbar.updateButton = function(button, state) {
+toolbar.updateButton = function (button, state) {
 
     toolbar.values.buttons[button] = state;
-    $("#toggle-"+button).toggleClass("ui-state-active", state);
+    $("#toggle-" + button).toggleClass("ui-state-active", state);
 };
 
 /**
  * Update function, ot be used later
  *
  */
-toolbar.update = function(vals) {
+toolbar.update = function (vals) {
 
 };

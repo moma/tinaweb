@@ -6,6 +6,7 @@ list de parametres.
 
 $dbname='/home/jbilcke/databases/scholar_test_data.db';
 $dbname='../community/scholar_test_data.db';
+$dbname='scholar_test_data.db';
 
 //$scholars_db ="raw_scholars";
 $fichier = "CSSscholars20Oct2011.csv";
