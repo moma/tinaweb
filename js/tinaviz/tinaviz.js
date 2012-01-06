@@ -52,6 +52,8 @@ function Tinaviz(args) {
     var cbsRun = {};
     this.toBeSelected = new Array();
 
+    this.cblatency = 1000;
+
     this.callbackReady = function () {};
     this.callbackBeforeImport = function() {};
     this.callbackImported = function(success) {};
@@ -100,6 +102,17 @@ function Tinaviz(args) {
     this.setupDefaults=function() {
         // setup defaults
         //this.set("pause",false, "Boolean");
+
+
+        this.makeCallback(function(success) {
+            console.log("graph imported");
+        });
+
+        // click
+        this.makeCallback(function() {
+            console.log("graph clicked");
+        });
+
     }
     this.ready=function(cb) {
         // TODO: if not ready, append to the callbacks
@@ -547,17 +560,22 @@ function Tinaviz(args) {
      called by the applet. work only with json args
     */
     this.callCallback = function(cb_id, cb_args) {
-        $.doTimeout(500, function() {
-            delete callbacks[cb_id];
-            callbacks[cb_id]($.parseJSON(cb_args));
+        var cb = callbacks[cb_id];
+        console.log("scheduling callback "+cb_id+" with delay "+tinaviz.cblatency);
+        $.doTimeout(tinaviz.cblatency, function() {
+            console.log("  calling cb with:");
+            console.log($.parseJSON(cb_args));
+            cb($.parseJSON(cb_args));  // TODO unpack args
         });
+        //console.log("deleting callback "+cb_id);
+        //delete callbacks[cb_id];
 
     }
 
     this.makeCallback = function(cb) {
         if (cb === undefined) cb = function() {};
-        ++cbCounter;
-        var id = "" + cbCounter;
+        var id = cbCounter++;
+        console.log("made callback "+id);
         callbacks[id] = cb;
         return id;
     }
