@@ -112,6 +112,37 @@ $(document).ready(function () {
             for (x in urlVars) {
                 prefs[x] = urlVars[x];
             }
+
+                  /*
+                         * Initialization of the Infodiv
+                         */
+                        // DEBUGGING
+                        var layout_name = prefs.layout;
+                        // use of different Infodiv-s following the type of graph
+                        if (layout_name == "phyloforce") {
+                            tinaviz.infodiv = PhyloInfoDiv;
+                        } else {
+                            tinaviz.infodiv = InfoDiv;
+                        }
+                        tinaviz.infodiv.id = 'infodiv';
+                        tinaviz.infodiv.label = $("#node_label");
+                        tinaviz.infodiv.contents = $("#node_contents");
+                        tinaviz.infodiv.cloud = $("#node_neighbourhood");
+                        tinaviz.infodiv.cloudSearch = $("#node_neighbourhoodForSearch");
+                        tinaviz.infodiv.cloudSearchCopy = $("#node_neighbourhoodCopy");
+                        tinaviz.infodiv.unselect_button = $("#toggle-unselect");
+                        tinaviz.infodiv.node_table = $("#node_table > tbody");
+                        tinaviz.infodiv.categories = {
+                            'NGram': 'Keywords',
+                            'Document': 'Projects'
+                        };
+                        $("#infodiv").accordion({
+                            // collapsible: true,
+                            fillSpace: true
+                        });
+                        tinaviz.infodiv.reset();
+                        toolbar.init();
+
             tinaviz.set("filter.a.edge.weight", [parseFloat(prefs.a_edge_filter_min), parseFloat(prefs.a_edge_filter_max)], "Tuple2[Double]");
             tinaviz.set("filter.a.node.weight", [parseFloat(prefs.a_node_filter_min), parseFloat(prefs.a_node_filter_max)], "Tuple2[Double]");
             tinaviz.set("filter.b.edge.weight", [parseFloat(prefs.b_edge_filter_min), parseFloat(prefs.b_edge_filter_max)], "Tuple2[Double]");
@@ -151,107 +182,93 @@ $(document).ready(function () {
                 checkDemoMode();
                 return true;
             });
-            /*
-             * Initialization of the Infodiv
-             */
-            // DEBUGGING
-            var layout_name = prefs.layout;
-            // use of different Infodiv-s following the type of graph
-            if (layout_name == "phyloforce") {
-                tinaviz.infodiv = PhyloInfoDiv;
-            } else {
-                tinaviz.infodiv = InfoDiv;
-            }
-            tinaviz.infodiv.id = 'infodiv';
-            tinaviz.infodiv.label = $("#node_label");
-            tinaviz.infodiv.contents = $("#node_contents");
-            tinaviz.infodiv.cloud = $("#node_neighbourhood");
-            tinaviz.infodiv.cloudSearch = $("#node_neighbourhoodForSearch");
-            tinaviz.infodiv.cloudSearchCopy = $("#node_neighbourhoodCopy");
-            tinaviz.infodiv.unselect_button = $("#toggle-unselect");
-            tinaviz.infodiv.node_table = $("#node_table > tbody");
-            tinaviz.infodiv.categories = {
-                'NGram': 'Keywords',
-                'Document': 'Projects'
-            };
-            $("#infodiv").accordion({
-                // collapsible: true,
-                fillSpace: true
-            });
-            tinaviz.infodiv.reset();
-            toolbar.init();
+
             var firstTimeOpen = function (data) {
-                    if (!data.success && data.error !== undefined) {
-                        $("#notification").notify("create", {
-                            title: 'Tinasoft Notification',
-                            text: 'Error loading the network, please consult logs'
-                        });
-                        return;
-                    }
-                    $("#appletInfo").fadeOut();
-                    // gradually add the buttons
-                    $.doTimeout(100, function () {
-                        $("#toggle-paused").fadeIn("slow");
-                        $.doTimeout(100, function () {
-                            $("#toggle-switch").fadeIn("slow");
-                            $.doTimeout(100, function () {
-                                $("#level").fadeIn("slow");
-                                $.doTimeout(300, function () {
-                                    $("#cursor-size-block").fadeIn("slow");
-                                    $.doTimeout(300, function () {
-                                        $("#category-A").fadeIn("slow");
-                                        $("#category-legend").fadeIn("slow");
-                                        $.doTimeout(400, function () {
-                                            $("#search").fadeIn("slow");
-                                            $("#search_button").fadeIn("slow");
-                                            $.doTimeout(200, function () {
-                                                $("#toggle-recenter").fadeIn("slow");
-                                                $.doTimeout(200, function () {
-                                                    $("#export-gexf").fadeIn("slow");
+                var status = data.status;
+                if (status == "downloading") {
+                     console.log("graph downloading");
+                } else if (status == "downloaded") {
+                     console.log("graph downloaded");
+                } else if (status == "updated") {
+                     console.log("graph updated");
+
+                                      $.doTimeout(100, function(){
+                                               var size = resize();
+                                               tinaviz.size(size.w, size.h);
+                                               false;
+                                      });
+
+                                               // init the node list with prefs.category
+                                                                 tinaviz.infodiv.updateNodeList( "macro", prefs.category );
+                                                                 tinaviz.infodiv.display_current_category();
+                                                                 tinaviz.infodiv.display_current_view();
+
+                  // gradually add the buttons
+                                          $.doTimeout(100, function(){
+                                            $("#toggle-paused").fadeIn("slow");
+                                            $.doTimeout(100, function(){
+                                                $("#toggle-switch").fadeIn("slow");
+                                                $.doTimeout(100, function(){
+                                                    $("#level").fadeIn("slow");
+                                                    $.doTimeout(300, function(){
+                                                       $("#cursor-size-block").fadeIn("slow");
+                                                       $.doTimeout(300, function(){
+                                                           $("#category-A").fadeIn("slow");
+                                                           $("#category-legend").fadeIn("slow");
+                                                           $.doTimeout(400, function(){
+                                                               $("#search").fadeIn("slow");
+                                                               $("#search_button").fadeIn("slow");
+                                                               $.doTimeout(200, function(){
+                                                                   $("#toggle-recenter").fadeIn("slow");
+                                                                   $.doTimeout(200, function(){
+                                                                    $("#export-gexf").fadeIn("slow");
+                                                                   });
+                                                                   false;
+                                                               });
+                                                               false;
+                                                           });
+                                                           false;
+                                                       });
+                                                       false;
+                                                   });
+                                                   false;
                                                 });
                                                 false;
-                                            });
-                                            false;
-                                        });
-                                        false;
-                                    });
-                                    false;
-                                });
-                                false;
-                            });
-                            false;
-                        });
-                        false;
-                    });
-                    // init the node list with prefs.category
-                    tinaviz.infodiv.updateNodeList("macro", prefs.category);
-                    tinaviz.infodiv.display_current_category();
-                    tinaviz.infodiv.display_current_view();
-                    if (prefs.node_id != "") {
-                        $.doTimeout(1000, function () {
-                            tinaviz.select(prefs.node_id, function() {
-                                tinaviz.centerOnSelection();
-                            });
-                        });
-                    }
-                    $.doTimeout(100, function () {
-                        var size = resize();
-                        tinaviz.size(size.w, size.h);
-                        if (prefs.search != "") {
-                            $("#search_input").val(prefs.search);
-                            tinaviz.selectByPattern(prefs.search, "containsIgnoreCase", function () {
-                                tinaviz.centerOnSelection();
-                            });
-                        }
-                        false;
-                    });
+                                             });
+                                             false;
+                                           });
 
-                }; // end of first time open
+                } else if (status == "loaded") {
+                     console.log("graph loaded");
+
+                      if (prefs.node_id != "") {
+                           $.doTimeout(1000, function(){
+                             tinaviz.select(prefs.node_id);
+                           });
+                      }
+
+                      if (prefs.search != "") {
+                           $("#search_input").val(prefs.search);
+                            tinaviz.selectByPattern(prefs.search, "containsIgnoreCase");
+                      }
+
+                } else if (status == "error") {
+                   $("#notification").notify("create", {
+                                            title: 'Tinasoft Notification',
+                                            text: 'Error loading the network, please consult logs'
+                   });
+                } else {
+                    console.log ("unknow status "+status);
+                }
+
+            }; // end of first time open
             /*
              * opens a gexf only if preferences specify one
              */
+            console.log("prefs.gexf: "+prefs.gexf);
             if (prefs.gexf !== undefined) {
-                tinaviz.open(""+prefs.url, firstTimeOpen);
+                console.log("main: opening gexf");
+                tinaviz.open(""+prefs.gexf, firstTimeOpen);
             }
            // var size = resize();
             //tinaviz.size(size.w, size.h);
@@ -264,7 +281,7 @@ $(document).ready(function () {
          *
          **/
         selectionChanged: function (data) {
-            //console.log("-- selectionChanged:");
+            console.log("-- selectionChanged: "+data.selection);
             //console.log(selection);
             var active = $("#infodiv").accordion("option", "active");
             //console.log("active: "+active);
@@ -307,9 +324,10 @@ $(document).ready(function () {
             tinaviz.infodiv.updateTagCloud(data.selection, data.neighbours);
         },
         categoryChanged: function (data) {
-            console.log("categoryChanged");
+            console.log("categoryChanged: "+data.category);
         },
         viewChanged: function (data) {
+            console.log("main: view changed! "+data.view);
             var view = data.view;
             tinaviz.getCategory(function (data) {
                 var category = data.category;

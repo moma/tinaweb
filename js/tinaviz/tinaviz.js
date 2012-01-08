@@ -15,15 +15,14 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-var cblatency = 1000;
+var cblatency = 100;
 var cbCounter = 0;
 var callbacks = {};
 
 var callCallback = function(cb_id, cb_args) {
         var cb = callbacks[cb_id];
-        console.log("scheduling callback "+cb_id+" with delay "+cblatency);
+        console.log("calling callback "+cb_id+" with delay "+cblatency);
         $.doTimeout(cblatency, function() {
-            console.log("  CALLBACK ->");
             var args = $.parseJSON(cb_args);
             console.log(args);
             cb(args);
@@ -79,9 +78,10 @@ function Tinaviz(args) {
         return this.path;
     }
 
-    this.open=function(url) {
+    this.open=function(url, cb) {
+        console.log("url : "+url);
         if (url.search("://") == -1)
-            url = sPath.substring(0, sPath.lastIndexOf('/') + 1) + url;
+            url = document.location.href.substring(0, document.location.href.lastIndexOf('/') + 1) + url;
 
         tinaviz.logNormal("applet.openURI("+url+");");
         try {
@@ -331,26 +331,28 @@ function Tinaviz(args) {
      */
     this.viewMeso = function(id, category) {
             var cat = tinaviz.getCategory();
-            tinaviz.setView("macro");
-            $.doTimeout(100, function(){
-                tinaviz.unselect(); // unselect nodes in current category
+            tinaviz.setView("macro", function() {
                 $.doTimeout(100, function(){
-                    //$.doTimeout( 400, function(){
-                    tinaviz.setCategory(category);
+                    tinaviz.unselect(); // unselect nodes in current category
                     $.doTimeout(100, function(){
-                        tinaviz.unselect();  // unselect nodes in the desired category
+                        //$.doTimeout( 400, function(){
+                        tinaviz.setCategory(category);
                         $.doTimeout(100, function(){
-                            tinaviz.select(id);
-                            $.doTimeout(1500, function(){
-                                tinaviz.setView("meso");
-                                //alert("recentering");
-                                //alert("setting category to "+category);
-                                if (category != cat) tinaviz.infodiv.updateNodeList("meso", category);
-                                // always enable
-                                $("#category-A").fadeIn();
-                                $("#category-B").fadeIn();
-                                //this.infoviz.updateNodeList("meso", category);
-                                tinaviz.recenter();
+                            tinaviz.unselect();  // unselect nodes in the desired category
+                            $.doTimeout(100, function(){
+                                tinaviz.select(id);
+                                $.doTimeout(1500, function(){
+                                    tinaviz.setView("meso");
+                                    //alert("recentering");
+                                    //alert("setting category to "+category);
+                                    if (category != cat) tinaviz.infodiv.updateNodeList("meso", category);
+                                    // always enable
+                                    $("#category-A").fadeIn();
+                                    $("#category-B").fadeIn();
+                                    //this.infoviz.updateNodeList("meso", category);
+                                    tinaviz.recenter();
+                                    false;
+                                });
                                 false;
                             });
                             false;
@@ -359,7 +361,6 @@ function Tinaviz(args) {
                     });
                     false;
                 });
-                false;
             });
     }
 
