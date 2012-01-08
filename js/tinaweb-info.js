@@ -60,13 +60,17 @@ var InfoDiv = {
      * dispatch current category displayed
      */
     display_current_category: function () {
-        var current_view = tinaviz.getView();
-        var current_cat = tinaviz.getCategory();
-        if (current_cat !== undefined) var opposite = this.categories[tinaviz.getOppositeCategory(current_cat)];
-        //$("#title_acc_1").text("current selection of "+ this.categories[current_cat]);
-        if (opposite !== undefined) if (current_view == "macro") $("#toggle-switch").button("option", "label", this.categories[current_cat]);
-        else $("#toggle-switch").button("option", "label", this.categories[current_cat] + " neighbours");
-        else $("#toggle-switch").button("option", "label", "switch category");
+        tinaviz.getView(function(data) {
+            tinaviz.getCategory(function(data) {
+            var current_cat = data.category;
+              if (current_cat !== undefined) var opposite = this.categories[tinaviz.getOppositeCategory(current_cat)];
+              //$("#title_acc_1").text("current selection of "+ this.categories[current_cat]);
+               if (opposite !== undefined) if (data.view == "macro") $("#toggle-switch").button("option", "label", this.categories[current_cat]);
+               else $("#toggle-switch").button("option", "label", this.categories[current_cat] + " neighbours");
+               else $("#toggle-switch").button("option", "label", "switch category");
+
+            });
+        });
     },
 
     /*
@@ -181,7 +185,9 @@ var InfoDiv = {
                         tagspan.click(function () {
                             //switch to meso view
                             //console.log("calling tinaviz.viewMeso("+attached_id+", "+attached_cat+")");
-                            tinaviz.viewMeso(attached_id, attached_cat);
+                            tinaviz.viewMeso(attached_id, attached_cat, function() {
+
+                            });
                         });
                     })();
                     // alert("weight: "+tag['weight']+"  inDegree: "+tag['inDegree']+"  outDegree: "+tag['outDegree']);
@@ -286,7 +292,10 @@ var InfoDiv = {
         }
         this.selection = [];
         this.updateInfo(lastselection);
-        tinaviz.getNeighbourhood("macro", this.selection); // this is an asynchronous call - nothing is returned
+        tinaviz.getNeighbourhood("macro", this.selection, function(data) {
+
+            console.log("received neighbourhood");
+        });
     },
 
     /*

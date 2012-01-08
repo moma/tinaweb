@@ -15,22 +15,31 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+var cblatency = 1000;
+var cbCounter = 0;
+var callbacks = {};
+
+var callCallback = function(cb_id, cb_args) {
+        var cb = callbacks[cb_id];
+        console.log("scheduling callback "+cb_id+" with delay "+cblatency);
+        $.doTimeout(cblatency, function() {
+            console.log("  CALLBACK ->");
+            var args = $.parseJSON(cb_args);
+            console.log(args);
+            cb(args);
+        });
+        //delete callbacks[cb_id];
+    }
+
+var makeCallback = function(cb) {
+        if (cb === undefined) cb = function() {};
+        var id = cbCounter++;
+        console.log("made callback "+id);
+        callbacks[id] = cb;
+        return ""+id;// applet will convert it anyway
+}
 
 function Tinaviz(args) {
-
-    var openDefaults = {
-        success: function(){},
-        error: function(msg){},
-        before: function(){},
-        after: function(){},
-        clear: true,
-        view: "macro",
-        url: "",
-        layout: "tinaforce"
-    };
-
-    var cbCounter = 0;
-    var callbacks = {};
 
     var opts = {
         context: "",
@@ -48,17 +57,8 @@ function Tinaviz(args) {
     // PRIVATE MEMBERS
     var wrapper = null;
     var applet = null;
-    var cbsAwait = {};
-    var cbsRun = {};
+
     this.toBeSelected = new Array();
-
-    this.cblatency = 1000;
-
-    this.callbackReady = function () {};
-    this.callbackBeforeImport = function() {};
-    this.callbackImported = function(success) {};
-    this.callbackViewChanged = function(view) {};
-    this.callbackSelectionChanged = function(view) {};
 
     // PUBLIC MEMBERS
     this.isReady = 0;
@@ -75,129 +75,22 @@ function Tinaviz(args) {
     this.context = opts.context;
     this.brandingIcon = this.libPath + "tina_icon.png";
 
-    this._initCallback = function() {
-        if (this.xulrunner == true) {
-            wrapper = $('#vizframe').contents().find("#tinapplet")[0];
-        } else {
-            wrapper = $("#tinapplet")[0];
-        }
-        if (wrapper == null) {
-            alert("Error: couldn't get the applet!");
-            return;
-        }
-
-        applet = wrapper;
-
-        if (applet == null) {
-            alert("Error: couldn't get the applet!");
-            return;
-        }
-        this.applet = applet;
-
-        this.setupDefaults();
-
-        callbackReady(this);
-        this.isReady = 1;
-    }
-    this.setupDefaults=function() {
-        // setup defaults
-        //this.set("pause",false, "Boolean");
-
-
-        this.makeCallback(function(success) {
-            console.log("graph imported");
-        });
-
-        // click
-        this.makeCallback(function() {
-            console.log("graph clicked");
-        });
-
-    }
-    this.ready=function(cb) {
-        // TODO: if not ready, append to the callbacks
-        // if ready, execute asynchronously
-
-        callbackReady = cb;
-    }
     this.getPath=function() {
         return this.path;
     }
 
-    this.open=function(args) {
+    this.open=function(url) {
+        if (url.search("://") == -1)
+            url = sPath.substring(0, sPath.lastIndexOf('/') + 1) + url;
 
-        var opts = {};
-
-        // initialize using default values
-        for (x in openDefaults) {
-            opts[x] = openDefaults[x];
-        }
-
-        // overload using parameters values
-        for (x in args) {
-            opts[x] = args[x];
-        }
-
-        if (args["url"] === undefined) {
-            for (x in opts) {
-                openDefaults[x] = opts[x];
-            }
-        } else {
-
-         if (args["url"] != "") {
-             // we canced the loading if the URL is empty
-
-        if (opts.layout) {
-            this.set("layout.algorithm", opts.layout, "String")
-        }
-        callbackImported = function(msg){
-            if (msg=="success") {
-                opts.success();
-            } else {
-                opts.error(msg);
-            }
-        };
-
-        callbackBeforeImport = opts.before;
-        callbackBeforeImport();
-
-
-
+        tinaviz.logNormal("applet.openURI("+url+");");
         try {
-           if (opts.url.search("://") != -1) {
-                            tinaviz.logNormal("applet.openURI("+opts.url+");");
-                            applet.openURI(opts.url);
-           } else {
-                            var sPath = document.location.href;
-                            tinaviz.logNormal("applet.openURI("+(sPath.substring(0, sPath.lastIndexOf('/') + 1) + opts.url)+");");
-                            applet.openURI(sPath.substring(0, sPath.lastIndexOf('/') + 1) + opts.url);
-           }
+           applet.openURI(makeCallback(cb), url);
         } catch (e) {
-                        tinaviz.logError("Couldn't import graph: "+e);
-                        opts.error(e);
+           tinaviz.logError("Couldn't import graph: "+e);
+           cb({"success":false,"error":e});
         }
-
-
-         }
-       }
-    }
-
-
-    this.event=function(args) {
-        var opts = {
-            viewChanged: function(view){},
-            categoryChanged: function(view){},
-            selectionChanged: function(selection){},
-            getNeighbourhood: function(node_list, neighbours){}
-        };
-        for (x in args) {
-            opts[x]=args[x]
-        }
-        this.callbackViewChanged = opts.viewChanged;
-        this.callbackCategoryChanged = opts.categoryChanged;
-        this.callbackSelectionChanged = opts.selectionChanged;
-        this.callbackGetNeighbourhood = opts.getNeighbourhood;
-    }
+     }
 
     this._setNeighbourhood = function(id,rawNeighbourhood) {
         //alert("got" +data.edges);
@@ -253,84 +146,58 @@ function Tinaviz(args) {
     /*
      * Search nodes
      */
-    this.getNodesByLabel = function(label, type) {
-        if (label.length < 3) return {};
-        return $.parseJSON( applet.getNodesByLabel(label, type));
+    this.getNodesByLabel = function(label, type, cb) {
+        if (label.length < 3) cb({});
+        applet.getNodesByLabel(makeCallback(cb), label, type);
     }
 
     /*
      * Search and select nodes
      */
-    this.selectByPattern = function(pattern, patternMode) {
+    this.selectByPattern = function(pattern, patternMode, cb) {
         if (pattern.length > 0 && pattern.length < 3) return;
-        applet.selectByPattern(pattern, patternMode);
+        applet.selectByPattern(makeCallback(cb), pattern, patternMode);
     }
 
     /*
      * Search and select nodes
      */
-    this.selectByNeighbourPattern = function(pattern, patternMode, category) {
+    this.selectByNeighbourPattern = function(pattern, patternMode, category, cb) {
         if (pattern.length > 0 && pattern.length < 3) return;
-        applet.selectByNeighbourPattern(pattern, patternMode, category);
+        applet.selectByNeighbourPattern(makeCallback(cb), pattern, patternMode, category);
     }
 
     /*
      * Search and highlight nodes
      */
-    this.highlightByPattern = function(pattern, patternMode) {
+    this.highlightByPattern = function(pattern, patternMode, cb) {
         //if (pattern.length < 3) return;
-        applet.highlightByPattern(pattern, patternMode);
+        applet.highlightByPattern(makeCallback(cb), pattern, patternMode);
     }
 
-    //this.highlightNodes= function(label, type) {
-    //    var matchlist = this.getNodesByLabel(label, type);
-    //    for (var i = 0; i < matchlist.length; i++ ) {
-    //        this.select(decodeJSON( matchlist[i]['id'] ) );
-    //    }
-    //}
-    
+
     /*
      * Search and highlight nodes by their neighborhood
      */
-    this.highlightByNeighbourPattern = function(pattern, patternMode) {
+    this.highlightByNeighbourPattern = function(pattern, patternMode, cb) {
         //if (pattern.length < 3) return;
-        applet.highlightByNeighbourPattern(pattern, patternMode);
+        applet.highlightByNeighbourPattern(makeCallback(cb), pattern, patternMode);
     }
 
-    //this.highlightNodes= function(label, type) {
-    //    var matchlist = this.getNodesByLabel(label, type);
-    //    for (var i = 0; i < matchlist.length; i++ ) {
-    //        this.select(decodeJSON( matchlist[i]['id'] ) );
-    //    }
-    //}
     
     /*
      *  Gets attributes o a given node
      */
-    this.getNodeAttributes = function(view,id) {
-        if (applet == null) return {};
-        return $.parseJSON(
-            applet.getNodeAttributes(view,id)
-            );
-    }
-
-    // called by the applet
-    this._callbackGetNeighbourhood = function(selection_list_str,neighbour_node_list_str) {
-        // do some magic before calling the callback
-        //alert("var selection_list = $.parseJSON("+selection_list_str+");");
-        var selection_list = $.parseJSON(selection_list_str);
-        //alert("var neighbour_node_list = $.parseJSON("+neighbour_node_list_str+");");
-        var neighbour_node_list = $.parseJSON(neighbour_node_list_str);
-        //alert("this.callbackGetNeighbourhood(selection_list, neighbour_node_list);");
-        this.callbackGetNeighbourhood(selection_list, neighbour_node_list);
+    this.getNodeAttributes = function(view, id, cb) {
+        applet.getNodeAttributes(makeCallback(cb), view, id);
     }
 
     /*
      * Calls for the list of neighbours for a given node list
      * its callback is defined in this.event, called from main.js
      */
-    this.getNeighbourhood = function(view, node_list) {
-        applet.getNeighbourhood(view, $.toJSON( node_list ));
+    this.getNeighbourhood = function(view, node_list, cb) {
+        applet.getNeighbourhood(makeCallback(cb), view, $.toJSON( node_list ));
         // do not return.. this is a callback call
     }
 
@@ -348,31 +215,6 @@ function Tinaviz(args) {
          );
     }
 
-    /**
-     * Callback after clicks on nodes
-     *
-     * @param selection
-     * @param mouse
-     * @return
-     */
-    this._callbackSelectionChanged = function(selection, mouse) {
-        this.callbackSelectionChanged({
-            'viewName':'macro',
-            'data':$.parseJSON(selection),
-            'mouseMode':mouse
-        });
-    }
-
-
-
-    this._callbackViewChanged = function(data) {
-        var view = $.parseJSON(data);
-        console.log("_callbackViewChanged data: "+data);
-        console.log("   view: ");
-        console.log(view);
-        this.callbackViewChanged(view);
-    }
-
     this.recenter = function(cb) {
          this.set("camera.target", "all", "String", cb);
     }
@@ -388,8 +230,8 @@ function Tinaviz(args) {
     this.getPause = function(cb) {
         this.get("pause", cb);
     }
-    this.pause = function() {
-        this.setPause(true);
+    this.pause = function(cb) {
+        this.setPause(true, cb);
     }
     this.togglePause = function(cb) {
         this.getPause(function(value) {
@@ -401,19 +243,19 @@ function Tinaviz(args) {
     * Select a node from it's ID (String)
     * this can be a String or a String array (to select multiple nodes)
     */
-    this.select = function(toBeSelected) {
+    this.select = function(toBeSelected, cb) {
         if ($.isArray(toBeSelected)) {
-          this.set("select", toBeSelected, "Json");
+          this.set("select", toBeSelected, "Json", cb);
         } else {
-          this.set("select", toBeSelected, "String");
+          this.set("select", toBeSelected, "String", cb);
         }
     }
 
     /**
      * Manually unselect all nodes
      */
-    this.unselect = function() {
-         this.set("select", "", "String");
+    this.unselect = function(cb) {
+         this.set("select", "", "String", cb);
     }
 
     /**
@@ -428,12 +270,12 @@ function Tinaviz(args) {
     }
 
 
-    this.getCategory = function() {
-        return this.get("filter.node.category");
+    this.getCategory = function(cb) {
+        this.get("filter.node.category", cb);
     }
 
-    this.setCategory = function(value) {
-         this.set("filter.node.category", value, "String");
+    this.setCategory = function(value, cb) {
+         this.set("filter.node.category", value, "String", cb);
     }
 
 
@@ -442,8 +284,8 @@ function Tinaviz(args) {
      * Get the current view: eg. "macro", "meso"..
      *
      */
-    this.getView = function() {
-        return this.get("filter.view");
+    this.getView = function(cb) {
+        this.get("filter.view",cb);
     }
 
     /**
@@ -453,8 +295,11 @@ function Tinaviz(args) {
      *  - view: String. eg. "macro", "meso"..
      *
      */
-    this.setView = function(view) {
-        this.set("filter.view", view, "String");
+    this.setView = function(view, cb) {
+        // we hide the complexity..
+        this.set("filter.view", view, "String", function(data) {
+            cb({ view: data["filter.view"] });
+        });
     }
 
     /**
@@ -462,19 +307,20 @@ function Tinaviz(args) {
      *
      */
 
-    this.toggleView = function() {
+    this.toggleView = function(cb) {
         //toolbar.resetSlidersValues();
-        if (this.getView() == "macro") {
-            // check if selection is empty
-            if (this.infodiv.selection.length != 0) {
-                this.setView("meso");
-
-            } else {
-                alert("You need to select a node before switching to meso view");
-            }
-        } else if (this.getView() == "meso") {
-            this.setView("macro");
-        }
+        this.getView(function(data) {
+           if (data.view == "macro" ) {
+                if (this.infodiv.selection.length != 0) {
+                    this.setView("meso", cb);
+                } else {
+                    alert("You need to select a node before switching to meso view");
+                    cb();
+                }
+           } else if (data.view == "meso") {
+                 this.setView("macro", cb);
+           }
+        });
     }
 
     /**
@@ -524,9 +370,8 @@ function Tinaviz(args) {
      *  Usage:
      *  nodes = tinaviz.getNodes("macro", "NGram")
      */
-    this.getNodes = function(view, category) {
-        var nodes = applet.getNodes(view, category);
-        return $.parseJSON( nodes );
+    this.getNodes = function(view, category, cb) {
+        applet.getNodes(makeCallback(cb), view, category);
     }
 
     /**
@@ -556,36 +401,12 @@ function Tinaviz(args) {
     }
 
 
-    /*
-     called by the applet. work only with json args
-    */
-    this.callCallback = function(cb_id, cb_args) {
-        var cb = callbacks[cb_id];
-        console.log("scheduling callback "+cb_id+" with delay "+tinaviz.cblatency);
-        $.doTimeout(tinaviz.cblatency, function() {
-            console.log("  calling cb with:");
-            console.log($.parseJSON(cb_args));
-            cb($.parseJSON(cb_args));  // TODO unpack args
-        });
-        //console.log("deleting callback "+cb_id);
-        //delete callbacks[cb_id];
-
-    }
-
-    this.makeCallback = function(cb) {
-        if (cb === undefined) cb = function() {};
-        var id = cbCounter++;
-        console.log("made callback "+id);
-        callbacks[id] = cb;
-        return id;
-    }
-
 
     /**
      * Core method communicating with the applet
      */
     this.getAs = function(key,type,cb) {
-        applet.sendGet(tinaviz.makeCallback(cb), key, type);
+        applet.sendGet(makeCallback(cb), key, type);
         return undefined;
     }
 
@@ -594,7 +415,7 @@ function Tinaviz(args) {
      * Core method communicating with the applet
      */
     this.get = function(key,cb) {
-        applet.sendGet(tinaviz.makeCallback(cb), key, "Any");
+        applet.sendGet(makeCallback(cb), key, "Any");
         return undefined;
     }
 
@@ -716,5 +537,47 @@ function Tinaviz(args) {
         document.write = func;
         return buff;
     }
+
+    // callback 0
+    makeCallback(function(data) {
+       console.log("applet said it is initialized");
+
+        if (this.xulrunner == true) {
+            wrapper = $('#vizframe').contents().find("#tinapplet")[0];
+        } else {
+            wrapper = $("#tinapplet")[0];
+        }
+        if (wrapper == null) {
+            alert("Error: couldn't get the applet!");
+            return;
+        }
+
+        applet = wrapper;
+
+        if (applet == null) {
+            alert("Error: couldn't get the applet!");
+            return;
+        }
+        this.applet = applet;
+
+        // install some default callback
+        makeCallback(function(data) {
+            console.log("graph imported");
+        });
+
+        // click
+        makeCallback(function(data) {
+            console.log("graph clicked. mouse: "+data.mouse);
+        });
+
+        // view changed
+        makeCallback(function(data) {
+            console.log("view changed: "+data.view);
+        })
+
+
+        console.log("calling user-provided init callback");
+        opts.init();
+    });
     this.tag.html( this.getHTML() );
 }
