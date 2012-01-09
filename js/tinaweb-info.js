@@ -328,38 +328,56 @@ var InfoDiv = {
      * Displays the list of all nodes in the current view/category received from applet
      */
     updateNodeList: function (view, category) {
-
-        if (category == this.last_category) return;
         this.display_current_category();
 
-        if (this.node_list_cache === undefined) {
-            this.node_list_cache = {};
-        }
+             if (category == this.last_category) return;
 
-        if (this.node_list_cache[category] === undefined || this.node_list_cache[category].length == 0) {
-            this.node_list_cache[category] = alphabeticListSort(tinaviz.getNodes(view, category), 'label')
-        }
-        this.node_table.empty();
-        this.last_category = category;
-        var node_list = this.node_list_cache[category]
+                if (tinaviz.node_list_cache === undefined) {
+                    tinaviz.node_list_cache = {};
+                }
 
-        // alert("node list: "+node_list)
-        if (node_list != null) {
-            for (var i = 0; i < node_list.length; i++) {
+        var _this = this;
 
-                (function () {
-                    var rowLabel = htmlDecode(decodeJSON(node_list[i]['label']));
-                    // alert("label: "+node_list[i]['label']+"  cleanedLabel: "+rowLabel)
-                    var rowId = decodeJSON(node_list[i]['id']);
-                    var rowCat = category;
-                    // asynchronously displays the node list
-                    setTimeout("displayNodeRow(\"" + rowLabel + "\",\"" + rowId + "\",\"" + rowCat + "\")", 0);
-                })();
-            }
-        }
+        var whenReceivingNodeList = function(data) {
+            console.log("receiving and updating node.list: "+(data.nodes.length)+" nodes");
+
+             if (category == _this.last_category) return;
+
+             if (_this.node_list_cache === undefined) {
+                _this.node_list_cache = {};
+             }
+
+
+             _this.node_list_cache[category] = alphabeticListSort(data.nodes, 'label');
+             _this.node_table.empty();
+                    _this.last_category = category;
+                    var node_list = _this.node_list_cache[category];
+
+                    // alert("node list: "+node_list)
+                    if (node_list != null) {
+                        for (var i = 0; i < node_list.length; i++) {
+                             // in coffeescript, this would be so much easier..
+                            (function () {
+                                var rowLabel = htmlDecode(decodeJSON(node_list[i]['label']));
+                                // alert("label: "+node_list[i]['label']+"  cleanedLabel: "+rowLabel)
+                                var rowId = decodeJSON(node_list[i]['id']);
+                                var rowCat = category;
+                                // asynchronously displays the node list
+                                setTimeout("displayNodeRow(\"" + rowLabel + "\",\"" + rowId + "\",\"" + rowCat + "\")", 0);
+                            })();
+                        }
+                    }
+        };
+
+       // if (_this.node_list_cache[category] === undefined || this.node_list_cache[category].length == 0) {
+        tinaviz.getNodes(view, category, whenReceivingNodeList);
+        //}
+
     },
 
     getNodeLabel: function (node) {
+        console.log("getNodeLabel("+node+") will be json (?) and html (??) decoded");
+
         return htmlDecode(decodeJSON(node.label));
     },
 
