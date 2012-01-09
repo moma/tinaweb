@@ -175,16 +175,17 @@ $(document).ready(function() {
 	 });
 	 */
 
-	$('#loading').hide();
+	$('#loading').fadeOut();
 	$('#example').click(function() {
-		$('#welcome').toggle('slow', function() {
-			$('#loading').toggle('slow');
+	    $(".hero-unit").fadeOut('slow');
+		$('#welcome').fadeOut('slow', function() {
+			$('#loading').fadeIn('fast');
 		});
 	});
 	$('#generate').click(function() {
-		$('#welcome').fadeOut('fasy', function() {
-			$('#loading').fadeIn('slow', function() {
-			});
+	    $(".hero-unit").fadeOut('slow');
+		$('#welcome').fadeOut('slow', function() {
+			$('#loading').fadeIn('fast');
 			
 			console.log("loading");
 				var collect = function(k) {
