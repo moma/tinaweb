@@ -42,10 +42,13 @@ $(window).blur(function() {
 
 var callCallback = function(cb_id, cb_args) {
         var cb = callbacks[cb_id];
-        console.log("calling callback "+cb_id+" with delay "+cblatency);
+        //console.log("calling callback "+cb_id+" with delay "+cblatency);
         $.doTimeout(cblatency, function() {
             var args = $.parseJSON(cb_args);
-            console.log(args);
+
+            // show the content of the cb
+            //console.log(args);
+
             cb(args);
         });
         //delete callbacks[cb_id];
@@ -54,7 +57,7 @@ var callCallback = function(cb_id, cb_args) {
 var makeCallback = function(cb) {
         if (cb === undefined) cb = function() {};
         var id = cbCounter++;
-        console.log("made callback "+id);
+        //console.log("made callback "+id);
         callbacks[id] = cb;
         return ""+id;// applet will convert it anyway
 }
@@ -113,6 +116,7 @@ function Tinaviz(args) {
         }
      }
 
+/*
     this._setNeighbourhood = function(id,rawNeighbourhood) {
         //alert("got" +data.edges);
         console.log("_setNeighbourhood("+id+"): applet.setNeighbourhood("+id+", "+$.toJSON(rawNeighbourhood)+");")
@@ -124,6 +128,8 @@ function Tinaviz(args) {
         applet.setNeighbourhood(id, jsonNeighbourhood);
 
     }
+    */
+    /*
     this.askForNeighbours = function(dataset, id, category) {
     	if (TinaService === undefined) {
     		console.log("askForNeighbours disabled: TinaService.getDocument unavailable");
@@ -163,6 +169,7 @@ function Tinaviz(args) {
                 break;
         }
     }
+     */
 
     /*
      * Search nodes
@@ -300,13 +307,11 @@ function Tinaviz(args) {
     }
 
     this.freeze = function() {
-        console.log("freeze");
-        applet.freeze();
+        if (applet !== undefined && applet != null) applet.freeze();
     }
 
     this.unfreeze = function() {
-        console.log("unfreeze");
-        applet.unfreeze();
+        if (applet !== undefined && applet != null) applet.unfreeze();
     }
 
 
@@ -416,22 +421,6 @@ function Tinaviz(args) {
         wrapper.width = width;
         applet.resize(width, height);
     }
-
-    /**
-     * Callback changing button states
-     */
-    this._buttonStateCallback = function(button, enabled) {
-        toolbar.updateButton(button, enabled);
-    }
-
-    /**
-     * Callback changing utton states
-     */
-    this._graphImportedCallback = function(msg) {
-        callbackImported($.parseJSON(msg));
-    }
-
-
 
     /**
      * Core method communicating with the applet
@@ -571,7 +560,7 @@ function Tinaviz(args) {
 
     // callback 0
     makeCallback(function(data) {
-       console.log("applet said it is initialized");
+        //console.log("applet said it is initialized");
 
         if (this.xulrunner == true) {
             wrapper = $('#vizframe').contents().find("#tinapplet")[0];

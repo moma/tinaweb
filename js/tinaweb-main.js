@@ -97,7 +97,7 @@ var checkDemoMode = function () {
 var tinaviz = {};
 var status = 'none';
 $(document).ready(function () {
-    //$("#notification").notify();
+
     var size = resize();
     tinaviz = new Tinaviz({
         tag: $("#vizdiv"),
@@ -107,8 +107,7 @@ $(document).ready(function () {
         logo: "css/logo.png",
         init: function () {
             console.log("tinaviz main: init()");
-            //var size = resize();
-            //tinaviz.size(size.w, size.h);
+
             var urlVars = getUrlVars();
             for (x in urlVars) {
                 prefs[x] = urlVars[x];
@@ -151,10 +150,8 @@ $(document).ready(function () {
             //tinaviz.set("output/nodeSizeMax", 20.0, "Double");
             tinaviz.set("selectionRadius", parseFloat(prefs.cursor_size), "Double");
             tinaviz.set("layout", prefs.layout, "String");
+            tinaviz.set("layoutSpeed", prefs.layout_speed, "Int");
             tinaviz.set("pause", prefs.pause, "Boolean");
-
-            //console.log("starting animation");
-           // tinaviz.animate();
 
             if (prefs.demo == "true") unlockDemo = true;
 
@@ -175,17 +172,17 @@ $(document).ready(function () {
                 $.doTimeout('demo_loop');
             });
 
-            var checkDownloadStatus = function() {
-               if (status == "downloading") {
-
-                    $('#appletInfo').text($('#appletInfo').text()+".");
-                    $('#appletInfo').effect('pulsate', 'slow', function () {
+            var checkLoadingStatus = function() {
+                   if (status != "loaded") {
+                        console.log("increasing dots..");
+                        $('#appletInfo').text($('#appletInfo').text()+".");
+                        $('#appletInfo').effect('pulsate', 'fast', function () {
+                        });
                         $.doTimeout(1000, function(){
-                            checkDownloadStatus();
+                            checkLoadingStatus();
                             return false;
                         });
-                    });
-               };
+                   };
             };
             var firstTimeOpen = function (data) {
                 status = data.status;
@@ -193,11 +190,12 @@ $(document).ready(function () {
                      console.log("graph downloading");
                      $('#appletInfo').text("Downloading data..");
                      $('#appletInfo').fadeIn();
+                     checkLoadingStatus();
                 } else if (status == "downloaded") {
                      console.log("graph downloaded");
+                     $('#appletInfo').text("Generating graph..");
                 } else if (status == "updated") {
                      console.log("graph updated");
-                     $('#appletInfo').text("Generating visualization..");
                 $.doTimeout(100, function(){
                     var size = resize();
                     tinaviz.size(size.w, size.h);
@@ -279,24 +277,13 @@ $(document).ready(function () {
                 }
 
             }; // end of first time open
-            /*
-             * opens a gexf only if preferences specify one
-             */
-            console.log("prefs.gexf: "+prefs.gexf);
+
             if (prefs.gexf !== undefined) {
-                console.log("main: opening gexf");
-                //tinaviz.open(""+prefs.gexf, firstTimeOpen);
+                tinaviz.open(""+prefs.gexf, firstTimeOpen);
             }
-           // var size = resize();
-            //tinaviz.size(size.w, size.h);
 
         },
-        /*
-         * selection.viewName  : string = 'macro'|'meso'
-         * selection.mouseMode : strong = 'left'|'doubleLeft'|'right'
-         * selection.data      : strong = { ... }
-         *
-         **/
+
         selectionChanged: function (data) {
             console.log("-- selectionChanged: "+data.selection);
             //console.log(selection);
