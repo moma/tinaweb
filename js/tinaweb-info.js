@@ -224,56 +224,61 @@ var InfoDiv = {
      * updates the label and content DOM divs
      */
     updateInfo: function (lastselection) {
-        var current_cat = tinaviz.getCategory();
-        var labelinnerdiv = $("<div></div>");
-        var contentinnerdiv = $("<div></div>");
-        var number_of_label = 0;
-        for (var id in lastselection) {
+        tinaviz.getCategory(function(data){
+           var current_cat = data.category;
+                  var labelinnerdiv = $("<div></div>");
+                  var contentinnerdiv = $("<div></div>");
+                  var number_of_label = 0;
+                  for (var id in lastselection) {
 
-            var node = lastselection[id];
-            // ERROR : MISSING CATEGORY in the node list returned from Tinaviz !!!!
-            if (node.category == current_cat) {
-                var label = this.getNodeLabel(node);
+                      var node = lastselection[id];
+                      if (node.category == current_cat) {
 
-                // limiting number of displayed labels
-                number_of_label++;
-                // prepares label and content to be displayed
-                if (number_of_label < 5) {
-                    labelinnerdiv.append($("<b></b>").text(label));
-                } else {
-                    if (number_of_label == 5) {
-                        labelinnerdiv.append($("<b></b>").text("[...]"));
-                    }
-                }
-                // add node to selection cache
-                //alert("pushing node "+node["id"]+" to selection cache");
-                this.selection.push(node["id"]);
-/* fix by julian, replaced id: (was 0, 1, 2..)
-                                                   by node["id"]: ("Document:443", "NGram::a1f4b56e5463...") */
+                          var label = this.getNodeLabel(node);
 
-                // displays contents only if it's a document
-                contentinnerdiv.append($("<b></b>").text(
-                this.getNodeContentLabel(label, node)));
-                contentinnerdiv.append(
-                $("<p></p>").html(
-                htmlDecode(
-                this.getNodeContent(node))));
-                contentinnerdiv.append($("<p></p>").html(
-                this.getSearchQueries(htmlDecode(label), current_cat)));
-            }
-            //contentinnerdiv.append("<br/>");
-        }
+                          // limiting number of displayed labels
+                          number_of_label++;
+                          // prepares label and content to be displayed
+                          if (number_of_label < 5) {
+                              labelinnerdiv.append($("<b></b>").text(label));
+                          } else {
+                              if (number_of_label == 5) {
+                                  labelinnerdiv.append($("<b></b>").text("[...]"));
+                              }
+                          }
+                          // add node to selection cache
+                          //alert("pushing node "+node["id"]+" to selection cache");
+                          this.selection.push(node.id);
+          /* fix by julian, replaced id: (was 0, 1, 2..)
+                                                             by node["id"]: ("Document:443", "NGram::a1f4b56e5463...") */
 
-        if (this.selection.length != 0) {
-            this.label.empty();
-            this.unselect_button.show();
-            this.contents.empty();
-            this.label.append(alphabeticJquerySort(labelinnerdiv, "b", ", &nbsp;"));
-            this.contents.append(contentinnerdiv);
-        } else {
-            this.reset();
-        }
+                          // displays contents only if it's a document
+                          console.log("label: "+label);
+                          contentinnerdiv.append(
+                            $("<b></b>").text(label)
+                          );
+                          var htmlContent = htmlDecode(decodeJSON(node.content));
+                          console.log("  htmlContent: "+htmlContent);
+                          contentinnerdiv.append(
+                            $("<p></p>").html( htmlContent )
+                          );
+                          contentinnerdiv.append($("<p></p>").html (
+                            this.getSearchQueries(label, current_cat)
+                          ));
+                      }
+                      //contentinnerdiv.append("<br/>");
+                  }
 
+                  if (this.selection.length != 0) {
+                      this.label.empty();
+                      this.unselect_button.show();
+                      this.contents.empty();
+                      this.label.append(alphabeticJquerySort(labelinnerdiv, "b", ", &nbsp;"));
+                      this.contents.append(contentinnerdiv);
+                  } else {
+                      this.reset();
+                  }
+        });
     },
 
     /*
@@ -375,29 +380,7 @@ var InfoDiv = {
 
     },
 
-    getNodeLabel: function (node) {
-        console.log("getNodeLabel("+node+") will be json (?) and html (??) decoded");
 
-        return htmlDecode(decodeJSON(node.label));
-    },
-
-    /*
-     * returns node's contents
-     */
-    getNodeContent: function (node) {
-        if (node.content === undefined) {
-            return "";
-        } else {
-            return htmlDecode(decodeJSON(node.content));
-        }
-    },
-
-    /*
-     * returns node's content's label
-     */
-    getNodeContentLabel: function (label, node) {
-        return htmlDecode(label);
-    },
 
     /*
      * displays node related search queries
@@ -415,105 +398,3 @@ var InfoDiv = {
         }
     }
 };
-
-/*
- * PhyloInfoDiv subclasses Infodiv
- */
-var PhyloInfoDiv = {
-    getNodeLabel: function (node) {
-        var label = htmlDecode(decodeJSON(node.label));
-        var labelsArray = new Array();
-        var yearsArray = new Array();
-        var nodeId = decodeJSON(node.id);
-        var hashes = nodeId.split('::'); // obsolet and new terms
-        if (hashes[1] !== undefined) {
-            var hash = hashes[1].split('_');
-            var years = hash[0].split('-');
-            var year = years[1];
-            if (year !== undefined) {
-                f = find(label, labelsArray);
-                if (f != null) {
-                    year_list = yearsArray[f[0]];
-                    year_list.push(year);
-                    yearsArray[f[0]] = year_list;
-                } else {
-                    year_list = new Array();
-                    year_list.push(year);
-                    yearsArray.push(year_list);
-                    labelsArray.push(label);
-                };
-                //label=label + " - " + year;
-            } else { // if no period indication just fill the label array
-                f = find(label, labelsArray);
-                if (f == null) {
-                    labelsArray.push(label);
-                }
-            }
-        }
-        if (yearsArray[0] != undefined) {
-            var numEltMax = 3; // highest number of labels display in phylo mode
-            num_labels = labelsArray.length;
-            if (num_labels > numEltMax) { // display of max 5 labels
-                num_labels = numEltMax;
-            }
-            var labels = $("<b></b>");
-            for (i = 0; i < num_labels; i = i + 1) {
-                currentLabel = labelsArray[i];
-                years = yearsArray[i].sort(sortNumber);
-                if (years.length == 1) {
-                    labels.append(currentLabel + " (" + years[0] + ")");
-                } else if (years.length == 2) {
-                    labels.append(currentLabel + " (" + years[0] + "," + years[1] + ")");
-                } else {
-                    labels.append(currentLabel + " (" + years[0] + ", ... " + years[years.length - 1] + ")");
-                }
-            }
-            if (labelsArray.length > numEltMax) { // display of max 5 labels
-                labels.append("[...]");
-            }
-        }
-        return labels;
-    },
-
-    /*
-     * returns node's contents
-     */
-    getNodeContent: function (node) {
-        // get node's year
-        var nodeId = decodeJSON(node.id);
-        var hashes = nodeId.split('::'); // obsolet and new terms
-        var hash = hashes[1].split('_');
-        var year = hash[0];
-        var content = htmlDecode(htmlDecode(decodeJSON(node.content)));
-        var vars = [],
-            htmlstring, hash;
-        var titles = [];
-        titles[0] = '<b>Lost: </b>';
-        titles[1] = '<b>New: </b>';
-        var htmlstring = "";
-        var hashes = content.split('_'); // obsolet and new terms
-        for (var i = 0; i < hashes.length; i++) {
-            if (hashes[i] == '.') continue;
-            htmlstring += titles[i];
-            hash = hashes[i].split('-'); // list of terms
-            for (var j = 0; j < hash.length; j++) {
-                var node = tinaviz.getNodeAttributes("macro", 'N::' + hash[j]);
-                htmlstring += htmlDecode(decodeJSON(node.label)) + ", ";
-            }
-            htmlstring += "<br/>";
-        }
-        return htmlstring;
-    },
-
-    /*
-     * returns node's content's label
-     */
-    getNodeContentLabel: function (label, node) {
-        var nodeId = decodeJSON(node.id);
-        var hashes = nodeId.split('::'); // obsolete and new terms
-        var hash = hashes[1].split('_');
-        var period = " - " + hash[0];
-        return htmlDecode(label + period);
-    }
-};
-PhyloInfoDiv = $.extend(true, {}, InfoDiv, PhyloInfoDiv);

@@ -19,6 +19,27 @@ var cblatency = 100;
 var cbCounter = 0;
 var callbacks = {};
 
+// requestAnim shim layer by Paul Irish
+window.requestAnimFrame = (function(){
+      return  window.requestAnimationFrame       ||
+              window.webkitRequestAnimationFrame ||
+              window.mozRequestAnimationFrame    ||
+              window.oRequestAnimationFrame      ||
+              window.msRequestAnimationFrame     ||
+              function(callback){
+                window.setTimeout(callback, 1000 / 24);
+              };
+})();
+
+
+$(window).focus(function() {
+    tinaviz.unfreeze();
+});
+
+$(window).blur(function() {
+    tinaviz.freeze();
+});
+
 var callCallback = function(cb_id, cb_args) {
         var cb = callbacks[cb_id];
         console.log("calling callback "+cb_id+" with delay "+cblatency);
@@ -278,6 +299,15 @@ function Tinaviz(args) {
          this.set("filter.node.category", value, "String", cb);
     }
 
+    this.freeze = function() {
+        console.log("freeze");
+        applet.freeze();
+    }
+
+    this.unfreeze = function() {
+        console.log("unfreeze");
+        applet.unfreeze();
+    }
 
 
     /**
@@ -579,6 +609,7 @@ function Tinaviz(args) {
 
         console.log("calling user-provided init callback");
         opts.init();
+
     });
     this.tag.html( this.getHTML() );
 }

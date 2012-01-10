@@ -14,7 +14,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 var demo = false;
 var unlockDemo = false;
 var checkDemoMode = function () {
-        if (!demo) return;
+
         tinaviz.centerOnSelection();
         tinaviz.getView(function (data) {
             var view = data.view;
@@ -33,7 +33,7 @@ var checkDemoMode = function () {
                             if (randomNode !== undefined || node == null) {
                                 tinaviz.unselect();
                                 tinaviz.infodiv.reset();
-                                tinaviz.select(randomNode["id"]);
+                                tinaviz.select(randomNode.id);
                             }
                         });
                     } else {
@@ -45,7 +45,7 @@ var checkDemoMode = function () {
                             if (randomNode !== undefined || node == null) {
                                 //tinaviz.unselect();
                                 //tinaviz.infodiv.reset();
-                                tinaviz.viewMeso(randomNode["id"], cat);
+                                tinaviz.viewMeso(randomNode.id, cat);
                             }
                         });
                     }
@@ -114,35 +114,31 @@ $(document).ready(function () {
                 prefs[x] = urlVars[x];
             }
 
-                  /*
-                         * Initialization of the Infodiv
-                         */
-                        // DEBUGGING
-                        var layout_name = prefs.layout;
-                        // use of different Infodiv-s following the type of graph
-                        if (layout_name == "phyloforce") {
-                            tinaviz.infodiv = PhyloInfoDiv;
-                        } else {
-                            tinaviz.infodiv = InfoDiv;
-                        }
-                        tinaviz.infodiv.id = 'infodiv';
-                        tinaviz.infodiv.label = $("#node_label");
-                        tinaviz.infodiv.contents = $("#node_contents");
-                        tinaviz.infodiv.cloud = $("#node_neighbourhood");
-                        tinaviz.infodiv.cloudSearch = $("#node_neighbourhoodForSearch");
-                        tinaviz.infodiv.cloudSearchCopy = $("#node_neighbourhoodCopy");
-                        tinaviz.infodiv.unselect_button = $("#toggle-unselect");
-                        tinaviz.infodiv.node_table = $("#node_table > tbody");
-                        tinaviz.infodiv.categories = {
-                            'NGram': 'Keywords',
-                            'Document': 'Projects'
-                        };
-                        $("#infodiv").accordion({
-                            // collapsible: true,
-                            fillSpace: true
-                        });
-                        tinaviz.infodiv.reset();
-                        toolbar.init();
+            var layout_name = prefs.layout;
+            // use of different Infodiv-s following the type of graph
+            if (layout_name == "phyloforce") {
+                tinaviz.infodiv = PhyloInfoDiv;
+            } else {
+                tinaviz.infodiv = InfoDiv;
+            }
+            tinaviz.infodiv.id = 'infodiv';
+            tinaviz.infodiv.label = $("#node_label");
+            tinaviz.infodiv.contents = $("#node_contents");
+            tinaviz.infodiv.cloud = $("#node_neighbourhood");
+            tinaviz.infodiv.cloudSearch = $("#node_neighbourhoodForSearch");
+            tinaviz.infodiv.cloudSearchCopy = $("#node_neighbourhoodCopy");
+            tinaviz.infodiv.unselect_button = $("#toggle-unselect");
+            tinaviz.infodiv.node_table = $("#node_table > tbody");
+            tinaviz.infodiv.categories = {
+                'NGram': 'Keywords',
+                'Document': 'Projects'
+            };
+            $("#infodiv").accordion({
+                // collapsible: true,
+                fillSpace: true
+            });
+            tinaviz.infodiv.reset();
+            toolbar.init();
 
             tinaviz.set("filter.a.edge.weight", [parseFloat(prefs.a_edge_filter_min), parseFloat(prefs.a_edge_filter_max)], "Tuple2[Double]");
             tinaviz.set("filter.a.node.weight", [parseFloat(prefs.a_node_filter_min), parseFloat(prefs.a_node_filter_max)], "Tuple2[Double]");
@@ -156,33 +152,29 @@ $(document).ready(function () {
             tinaviz.set("selectionRadius", parseFloat(prefs.cursor_size), "Double");
             tinaviz.set("layout", prefs.layout, "String");
             tinaviz.set("pause", prefs.pause, "Boolean");
-            /*
-            if (prefs.embed == "true" && !(prefs.getGraph === undefined)) {
-                tinaviz.open({
-                    view: "macro",
-                    url: prefs.getGraph(),
-                    layout: "tinaforce"
-                });
-            }  */
 
-            if (prefs.demo == "true") {
-                unlockDemo = true;
-            } else {
-                unlockDemo = false;
-            }
+            //console.log("starting animation");
+           // tinaviz.animate();
+
+            if (prefs.demo == "true") unlockDemo = true;
+
             var waitTimeBeforeStartingDemo = 6; // wait time before starting the demo (default: 20);
             var delayBetweenChanges = 10; // in seconds
             // standby time
             $.fn.nap.standbyTime = waitTimeBeforeStartingDemo;
             $(document).nap(function () {
-                demo = unlockDemo;
+              $.doTimeout('demo_loop', delayBetweenChanges * 1000, function () {
+                  if (!demo) {
+                    return false;
+                  }else {
+                    runDemo();
+                    return true;
+                  }
+               });
             }, function () {
-                demo = false;
+                $.doTimeout('demo_loop');
             });
-            $.doTimeout(delayBetweenChanges * 1000, function () {
-                checkDemoMode();
-                return true;
-            });
+
             var checkDownloadStatus = function() {
                if (status == "downloading") {
 
@@ -190,6 +182,7 @@ $(document).ready(function () {
                     $('#appletInfo').effect('pulsate', 'slow', function () {
                         $.doTimeout(1000, function(){
                             checkDownloadStatus();
+                            return false;
                         });
                     });
                };
@@ -249,12 +242,15 @@ $(document).ready(function () {
                  console.log("update the node list (may fail)");
                 // init the node list with prefs.category
                 tinaviz.infodiv.updateNodeList( "macro", prefs.category );
+                console.log("displaying current category");
                 tinaviz.infodiv.display_current_category();
+                console.log("displaying current view");
                 tinaviz.infodiv.display_current_view();
 
 
                 } else if (status == "loaded") {
                      console.log("graph loaded");
+
                        $('#appletInfo').text("Generating visualization..done");
                        $('#appletInfo').effect('pulsate', 'fast', function() {
                          $.doTimeout(3000, function () {
@@ -289,7 +285,7 @@ $(document).ready(function () {
             console.log("prefs.gexf: "+prefs.gexf);
             if (prefs.gexf !== undefined) {
                 console.log("main: opening gexf");
-                tinaviz.open(""+prefs.gexf, firstTimeOpen);
+                //tinaviz.open(""+prefs.gexf, firstTimeOpen);
             }
            // var size = resize();
             //tinaviz.size(size.w, size.h);
