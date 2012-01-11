@@ -297,13 +297,29 @@ function Tinaviz(args) {
         return "Document";
     }
 
+       this.makeWrap = function(alias,real,cb) {
+              var _cb = function(data) {};
+              if (cb !== undefined) {
+                   _cb = function(input){
+                      var output = {};
+                      output[alias] = input[real];
+                      cb(output);
+                   };
+              }
+              return _cb;
+       }
 
     this.getCategory = function(cb) {
-        this.get("filter.node.category", cb);
+        var alias = "category";
+        var real = "filter.node.category";
+        this.get(real, this.makeWrap(alias,real,cb));
     }
 
+
     this.setCategory = function(value, cb) {
-         this.set("filter.node.category", value, "String", cb);
+        var alias = "category";
+        var real = "filter.node.category";
+        this.set(real, value, "String", this.makeWrap(alias,real,cb));
     }
 
     this.freeze = function() {
@@ -320,7 +336,9 @@ function Tinaviz(args) {
      *
      */
     this.getView = function(cb) {
-        this.get("filter.view",cb);
+        var alias = "view";
+        var real = "filter.view";
+        this.get(real, this.makeWrap(alias,real,cb));
     }
 
     /**
@@ -331,31 +349,9 @@ function Tinaviz(args) {
      *
      */
     this.setView = function(view, cb) {
-        // we hide the complexity..
-        this.set("filter.view", view, "String", function(data) {
-            cb({ view: data["filter.view"] });
-        });
-    }
-
-    /**
-     * Manual toggle of the current view (Eg. when button is pressed)
-     *
-     */
-
-    this.toggleView = function(cb) {
-        //toolbar.resetSlidersValues();
-        this.getView(function(data) {
-           if (data.view == "macro" ) {
-                if (this.infodiv.selection.length != 0) {
-                    this.setView("meso", cb);
-                } else {
-                    alert("You need to select a node before switching to meso view");
-                    cb();
-                }
-           } else if (data.view == "meso") {
-                 this.setView("macro", cb);
-           }
-        });
+        var alias = "view";
+        var real = "filter.view";
+        this.set(real, value, "String", this.makeWrap(alias,real,cb));
     }
 
     /**
@@ -365,38 +361,24 @@ function Tinaviz(args) {
      *   - category: String
      */
     this.viewMeso = function(id, category) {
-            var cat = tinaviz.getCategory();
-            tinaviz.setView("macro", function() {
-                $.doTimeout(100, function(){
-                    tinaviz.unselect(); // unselect nodes in current category
-                    $.doTimeout(100, function(){
-                        //$.doTimeout( 400, function(){
-                        tinaviz.setCategory(category);
-                        $.doTimeout(100, function(){
-                            tinaviz.unselect();  // unselect nodes in the desired category
-                            $.doTimeout(100, function(){
-                                tinaviz.select(id);
-                                $.doTimeout(1500, function(){
-                                    tinaviz.setView("meso");
-                                    //alert("recentering");
-                                    //alert("setting category to "+category);
-                                    if (category != cat) tinaviz.infodiv.updateNodeList("meso", category);
-                                    // always enable
-                                    $("#category-A").fadeIn();
-                                    $("#category-B").fadeIn();
-                                    //this.infoviz.updateNodeList("meso", category);
-                                    tinaviz.recenter();
-                                    false;
-                                });
-                                false;
-                            });
-                            false;
-                        });
-                        false;
-                    });
-                    false;
-                });
-            });
+            tinaviz.getCategory(function(data) {
+                var cat = data.category;
+                tinaviz.setView("macro", function() {
+                     tinaviz.unselect(function() {
+                           tinaviz.setCategory(category, function() {
+                               tinaviz.select(id, function() {
+                                      tinaviz.setView("meso", function() {
+                                           if (category != cat) tinaviz.infodiv.updateNodeList("meso", category);
+                                           $("#category-A").fadeIn();
+                                           $("#category-B").fadeIn();
+                                           //this.infoviz.updateNodeList("meso", category);
+                                            tinaviz.recenter();
+                                      }); // end of srt view
+                               }); // end of select
+                           }); // end of set category
+                     }); // end of unselect
+                 }); // end of set view
+            });// end of getCategory
     }
 
 
@@ -475,6 +457,7 @@ function Tinaviz(args) {
               applet.sendSet(cbId, key, obj, t);
            }
         }
+        return undefined;
     }
 
     /**

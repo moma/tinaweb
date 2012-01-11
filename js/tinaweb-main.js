@@ -64,8 +64,8 @@ var checkDemoMode = function () {
                         var nbNeighbours = 0;
                         if (neighbourhood !== undefined & neighbourhood != null) nbNeighbours = neighbourhood.length;
                         if (nbNeighbours == 0) {
-                            tinaviz.getView(function (view) {
-                                if (view == "meso") $("#level").click();
+                            tinaviz.getView(function (data) {
+                                if (data.view == "meso") $("#level").click();
                             });
                         } else {
                             var randNeighbour = Math.floor(Math.random() * nbNeighbours);
@@ -73,7 +73,7 @@ var checkDemoMode = function () {
                             var node = neighbourhood[randNeighbour];
                             if (node !== undefined || node == null) {
                                 tinaviz.getView(function (view) {
-                                    if (view == "meso") {
+                                    if (data.view == "meso") {
                                         tinaviz.unselect(function () {
                                             tinaviz.infodiv.reset();
                                             tinaviz.select(node);
@@ -174,11 +174,9 @@ $(document).ready(function () {
 
             var checkLoadingStatus = function() {
                    if (status != "loaded") {
-                        console.log("increasing dots..");
+                        //console.log("increasing dots..");
                         $('#appletInfo').text($('#appletInfo').text()+".");
-                        $('#appletInfo').effect('pulsate', 'fast', function () {
-                        });
-                        $.doTimeout(1000, function(){
+                        $.doTimeout(400, function(){
                             checkLoadingStatus();
                             return false;
                         });
@@ -187,77 +185,81 @@ $(document).ready(function () {
             var firstTimeOpen = function (data) {
                 status = data.status;
                 if (status == "downloading") {
-                     console.log("graph downloading");
+                     //console.log("graph downloading");
+                     $('#appletInfo').effect('pulsate', 'fast');
                      $('#appletInfo').text("Downloading data..");
                      $('#appletInfo').fadeIn();
                      checkLoadingStatus();
                 } else if (status == "downloaded") {
-                     console.log("graph downloaded");
+                     //console.log("graph downloaded");
+                     $('#appletInfo').effect('pulsate', 'fast');
                      $('#appletInfo').text("Generating graph..");
                 } else if (status == "updated") {
-                     console.log("graph updated");
-                $.doTimeout(100, function(){
-                    var size = resize();
-                    tinaviz.size(size.w, size.h);
-                    return false;
-                });
-                 // gradually add the buttons
-                 console.log("showing the tool bar");
-                 $.doTimeout(100, function(){
-                     $("#toggle-paused").fadeIn("slow");
-                     $.doTimeout(100, function(){
-                         $("#toggle-switch").fadeIn("slow");
-                             $.doTimeout(100, function(){
-                                 $("#level").fadeIn("slow");
-                                 $.doTimeout(300, function(){
-                                    $("#cursor-size-block").fadeIn("slow");
-                                    $.doTimeout(300, function(){
-                                        $("#category-A").fadeIn("slow");
-                                        $("#category-legend").fadeIn("slow");
-                                        $.doTimeout(400, function(){
-                                            $("#search").fadeIn("slow");
-                                            $("#search_button").fadeIn("slow");
-                                            $.doTimeout(200, function(){
-                                                $("#toggle-recenter").fadeIn("slow");
-                                                $.doTimeout(200, function(){
-                                                    $("#export-gexf").fadeIn("slow");
-                                                });
-                                                false;
-                                            });
-                                            false;
-                                        });
-                                        false;
-                                    });
-                                    false;
-                                });
-                                false;
-                             });
-                             false;
-                          });
-                          false;
-                        });
+                     //console.log("graph updated");
 
-                 console.log("update the node list (may fail)");
-                // init the node list with prefs.category
-                tinaviz.infodiv.updateNodeList( "macro", prefs.category );
-                console.log("displaying current category");
-                tinaviz.infodiv.display_current_category();
-                console.log("displaying current view");
-                tinaviz.infodiv.display_current_view();
-
+                    $.doTimeout(100, function(){
+                        var size = resize();
+                        tinaviz.size(size.w, size.h);
+                        return false;
+                    });
 
                 } else if (status == "loaded") {
                      console.log("graph loaded");
 
-                       $('#appletInfo').text("Generating visualization..done");
-                       $('#appletInfo').effect('pulsate', 'fast', function() {
-                         $.doTimeout(3000, function () {
-                           $("#appletInfo").fadeOut('slow');
+                       $('#appletInfo').text("Visualization ready");
+                                      // gradually add the buttons
+                                       // console.log("showing the tool bar");
+                                        $.doTimeout(100, function(){
+                                            $("#toggle-paused").fadeIn("slow");
+                                            $.doTimeout(100, function(){
+                                                $("#toggle-switch").fadeIn("slow");
+                                                    $.doTimeout(100, function(){
+                                                        $("#level").fadeIn("slow");
+                                                        $.doTimeout(300, function(){
+                                                           $("#cursor-size-block").fadeIn("slow");
+                                                           $.doTimeout(300, function(){
+                                                               $("#category-A").fadeIn("slow");
+                                                               $("#category-legend").fadeIn("slow");
+                                                               $.doTimeout(400, function(){
+                                                                   $("#search").fadeIn("slow");
+                                                                   $("#search_button").fadeIn("slow");
+                                                                   $.doTimeout(200, function(){
+                                                                       $("#toggle-recenter").fadeIn("slow");
+                                                                       $.doTimeout(200, function(){
+                                                                           $("#export-gexf").fadeIn("slow");
+                                                                       });
+                                                                       false;
+                                                                   });
+                                                                   false;
+                                                               });
+                                                               false;
+                                                           });
+                                                           false;
+                                                       });
+                                                       false;
+                                                    });
+                                                    false;
+                                                 });
+                                                 false;
+                                               });
+
+                                        console.log("update the node list (may fail)");
+                                       // init the node list with prefs.category
+                                       tinaviz.infodiv.updateNodeList( "macro", prefs.category );
+                                       console.log("displaying current category");
+                                       tinaviz.infodiv.display_current_category();
+                                       console.log("displaying current view");
+                                       tinaviz.infodiv.display_current_view();
+
+
+                      // $('#appletInfo').effect('pulsate', 'fast', function() {
+                         $.doTimeout(1000, function () {
+                           $("#appletInfo").animate({ opacity: 'toggle', height: 'toggle' }, "slow", function(){});
                          });
-                       });
+                       //});
 
                       if (prefs.node_id != "") {
-                           $.doTimeout(1000, function(){
+                           $.doTimeout(200, function(){
                              tinaviz.select(prefs.node_id);
                            });
                       }

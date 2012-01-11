@@ -24,7 +24,7 @@ var prefs = {
             b_node_filter_max: "1.0",
 
             layout: "tinaforce",
-            layout_speed: "24",
+            layout_speed: "30",
             pause: "false",
             demo: "false"
 

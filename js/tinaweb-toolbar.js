@@ -293,7 +293,17 @@ toolbar.init = function () {
             primary: 'ui-icon-help'
         }
     }).click(function (eventObject) {
-        tinaviz.toggleView();
+        tinaviz.getView(function(data) {
+             if (data.view == "macro" ) {
+                if (tinaviz === undefined || tinaviz.infodiv.selection.length == 0) {
+                    alert("You need to select a node before switching to meso view");
+                } else {
+                    tinaviz.setView("meso");
+                }
+             } else if (data.view == "meso") {
+                 tinaviz.setView("macro");
+             }
+        });
     });
     $("#level").attr("title", "click to switch the level");
     $("#search_button").button({
@@ -389,21 +399,6 @@ toolbar.init = function () {
         }
     });
 
-/** DISABLED **
-    $("#toggle-showLabels").click(function(event) {
-        tinaviz.toggleLabels();
-    });
-
-    $("#toggle-showNodes").click(function(event) {
-        tinaviz.toggleNodes();
-    });
-
-    $("#toggle-showEdges").click(function(event) {
-        tinaviz.toggleEdges();
-    });
-
-    **/
-
     $("#toggle-paused").button({
         icons: {
             primary: 'ui-icon-pause'
@@ -460,10 +455,13 @@ toolbar.init = function () {
     }).click(function (event) {
         tinaviz.getCategory(function(data) {
             var cat = data.category;
+            console.log("clicked on category switch. cat: "+cat);
+            console.log(data);
             var next_cat = tinaviz.getOppositeCategory(cat);
+            console.log("opposite cat: "+next_cat);
             tinaviz.getView(function(data){
                var viewName = data.view;
-
+                console.log("view name: "+viewName);
 
 
                     if (viewName == "macro") {
@@ -482,14 +480,16 @@ toolbar.init = function () {
                     var neighbours = tinaviz.infodiv.neighbours;
                     //console.log(neighbours);
                     //tinaviz.infodiv.reset();
-                    tinaviz.setCategory(next_cat, function() {
-                        tinaviz.centerOnSelection(function() {
+                    tinaviz.setCategory(next_cat, function(data) {
+                        console.log(" category should be set now");
+                        tinaviz.centerOnSelection(function(data) {
                             if (viewName == "macro") {
                                 var myArray = new Array();
                                 for (var pos in neighbours) {
                                     myArray.push(neighbours[pos]);
                                 }
                                 tinaviz.select(myArray, function() {
+                                    console.log("selected my array");
                                     tinaviz.infodiv.updateNodeList(viewName, next_cat);
                                     //console.log(neighbours);
                                     tinaviz.infodiv.display_current_category();
@@ -531,12 +531,4 @@ toolbar.updateButton = function (button, state) {
 
     toolbar.values.buttons[button] = state;
     $("#toggle-" + button).toggleClass("ui-state-active", state);
-};
-
-/**
- * Update function, ot be used later
- *
- */
-toolbar.update = function (vals) {
-
 };

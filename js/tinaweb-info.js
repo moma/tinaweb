@@ -60,14 +60,17 @@ var InfoDiv = {
      * dispatch current category displayed
      */
     display_current_category: function () {
+        var categories = this.categories;
         tinaviz.getView(function(data) {
+            var view = data.view;
             tinaviz.getCategory(function(data) {
-            var current_cat = data.category;
-              if (current_cat !== undefined) var opposite = this.categories[tinaviz.getOppositeCategory(current_cat)];
+            var cat = data.category;
+              //var opposite = categories[tinaviz.getOppositeCategory(cat)];
               //$("#title_acc_1").text("current selection of "+ this.categories[current_cat]);
-               if (opposite !== undefined) if (data.view == "macro") $("#toggle-switch").button("option", "label", this.categories[current_cat]);
-               else $("#toggle-switch").button("option", "label", this.categories[current_cat] + " neighbours");
-               else $("#toggle-switch").button("option", "label", "switch category");
+               if (view == "macro") $("#toggle-switch").button("option", "label", categories[cat]);
+               else $("#toggle-switch").button("option", "label", categories[cat] + " neighbours");
+
+               //else $("#toggle-switch").button("option", "label", "switch category");
 
             });
         });
@@ -77,20 +80,22 @@ var InfoDiv = {
      * dispatch current view displayed
      */
     display_current_view: function () {
-        var current_view = tinaviz.getView();
+        tinaviz.getView(function(data) {
+            var view = data.view;
+               if (view !== undefined) {
+                   var level = $("#level");
+                   level.button('option', 'label', view + " level");
+                   var title = $("#infodiv > h3:first");
+                   if (view == "meso") {
+                       level.addClass("ui-state-highlight");
+                       title.addClass("ui-state-highlight");
+                   } else {
+                       level.removeClass("ui-state-highlight");
+                       title.removeClass("ui-state-highlight");
+                   }
+               }
+        });
         //console.log("display_current_view "+current_view);
-        if (current_view !== undefined) {
-            var level = $("#level");
-            level.button('option', 'label', current_view + " level");
-            var title = $("#infodiv > h3:first");
-            if (current_view == "meso") {
-                level.addClass("ui-state-highlight");
-                title.addClass("ui-state-highlight");
-            } else {
-                level.removeClass("ui-state-highlight");
-                title.removeClass("ui-state-highlight");
-            }
-        }
     },
 
     mergeNeighbours: function (category, neighbours) {
@@ -129,8 +134,9 @@ var InfoDiv = {
         if (Object.size(node_list) == 0) {
             return;
         }
-        tinaviz.getCategory(function (current_cat) {
-            neighbours = this.mergeNeighbours(current_cat, neighbours);
+        tinaviz.getCategory(function (data) {
+            var cat = data.category;
+            neighbours = this.mergeNeighbours(cat, neighbours);
             //console.log( neighbours );
             /* some display sizes const */
             // Modif david
@@ -146,8 +152,8 @@ var InfoDiv = {
                 if (i < neighbours.length - 1) requests = requests + "+AND+";
             }
 
-            if (current_cat !== undefined) {
-                var oppositeRealName = this.categories[tinaviz.getOppositeCategory(current_cat)];
+            if (cat !== undefined) {
+                var oppositeRealName = this.categories[tinaviz.getOppositeCategory(cat)];
                 if (oppositeRealName !== undefined) {
                     var tmp = "";
                     tmp = "Search on: <a href=\"";
@@ -225,14 +231,14 @@ var InfoDiv = {
      */
     updateInfo: function (lastselection) {
         tinaviz.getCategory(function(data){
-           var current_cat = data.category;
+           var cat = data.category;
                   var labelinnerdiv = $("<div></div>");
                   var contentinnerdiv = $("<div></div>");
                   var number_of_label = 0;
                   for (var id in lastselection) {
 
                       var node = lastselection[id];
-                      if (node.category == current_cat) {
+                      if (node.category == cat) {
 
                           var label = this.getNodeLabel(node);
 
@@ -263,7 +269,7 @@ var InfoDiv = {
                             $("<p></p>").html( htmlContent )
                           );
                           contentinnerdiv.append($("<p></p>").html (
-                            this.getSearchQueries(label, current_cat)
+                            this.getSearchQueries(label, cat)
                           ));
                       }
                       //contentinnerdiv.append("<br/>");
