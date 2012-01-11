@@ -175,8 +175,9 @@ function Tinaviz(args) {
      * Search nodes
      */
     this.getNodesByLabel = function(label, type, cb) {
-        if (label.length < 3) cb({});
-        applet.getNodesByLabel(makeCallback(cb), label, type);
+        alert("ERROR getNodesByLabel is broken");
+       // if (label.length < 3) cb({});
+       // applet.getNodesByLabel(makeCallback(cb), label, type);
     }
 
     /*
@@ -253,7 +254,6 @@ function Tinaviz(args) {
         this.set("layout.algorithm", name, "String", cb);
     }
     this.setPause = function(value, cb) {
-        console.log("setting pause to "+value);
         this.set("pause", value, "Boolean", cb);
     }
     this.getPause = function(cb) {
@@ -263,10 +263,7 @@ function Tinaviz(args) {
         this.setPause(true, cb);
     }
     this.togglePause = function(cb) {
-        console.log("toggling pause..");
         this.getPause(function(data) {
-            console.log(data);
-            console.log("toggling from "+data.pause);
             tinaviz.setPause(!data.pause, cb);
         });
     }

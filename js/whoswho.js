@@ -225,22 +225,23 @@ $(document).ready(function() {
 				);
 				
 
-	            
-				 //$.post("getgraph.php", query, function(data) {
+	              /*
+				 $.post("getgraph.php", query, function(data) {
 				 	
 				 	 // create the iframe, wait 2 seconds, and then call
-				 	 /*
+
 				 	 tinaviz.open({
 		                view: "macro",
 		                url: url,
 		                layout: "tinaforce"
 		            });
-		            */
-				 	/*
+
+
 					 $('#loading').hide('slow', function() {
 					 // display the TINAVIZ PANEL
-					 });*/
-				// });
+					 });
+			      });
+			      */
 				 
 		});
 		return false;
