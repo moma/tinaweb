@@ -253,6 +253,7 @@ function Tinaviz(args) {
         this.set("layout.algorithm", name, "String", cb);
     }
     this.setPause = function(value, cb) {
+        console.log("setting pause to "+value);
         this.set("pause", value, "Boolean", cb);
     }
     this.getPause = function(cb) {
@@ -262,8 +263,11 @@ function Tinaviz(args) {
         this.setPause(true, cb);
     }
     this.togglePause = function(cb) {
-        this.getPause(function(value) {
-            tinaviz.setPause(!value, cb);
+        console.log("toggling pause..");
+        this.getPause(function(data) {
+            console.log(data);
+            console.log("toggling from "+data.pause);
+            tinaviz.setPause(!data.pause, cb);
         });
     }
 
