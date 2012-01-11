@@ -25,7 +25,7 @@ $(document).ready(function(){
     });
 
     tinaviz.ready(function(){
-    
+                                                                  a
         var infodiv =  InfoDiv('infodiv');
         tinaviz.infodiv = infodiv;
         
