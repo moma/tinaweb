@@ -7,11 +7,11 @@ cbCounter = 0;
 callbacks = {};
 
 $(window).focus(function() {
-  return tinaviz.unfreeze();
+  return typeof tinaviz !== "undefined" && tinaviz !== null ? tinaviz.unfreeze() : void 0;
 });
 
 $(window).blur(function() {
-  return tinaviz.freeze();
+  return typeof tinaviz !== "undefined" && tinaviz !== null ? tinaviz.freeze() : void 0;
 });
 
 callCallback = function(cb_id, cb_args) {
@@ -145,16 +145,17 @@ Tinaviz = function(args) {
     return "Document";
   };
   this.makeWrap = function(alias, real, cb) {
+    var _cb;
+    _cb = function(data) {};
     if (cb != null) {
-      return function(input) {
+      _cb = function(input) {
         var output;
         output = {};
         output[alias] = input[real];
         return cb(output);
       };
-    } else {
-      return function(data) {};
     }
+    return _cb;
   };
   this.getCategory = function(cb) {
     var alias, real;
@@ -169,10 +170,10 @@ Tinaviz = function(args) {
     return this.set(real, value, "String", this.makeWrap(alias, real, cb));
   };
   this.freeze = function() {
-    if (applet !== void 0 && (applet != null)) return applet.freeze();
+    return applet != null ? applet.freeze() : void 0;
   };
   this.unfreeze = function() {
-    if (applet !== void 0 && (applet != null)) return applet.unfreeze();
+    return applet != null ? applet.unfreeze() : void 0;
   };
   this.getView = function(cb) {
     var alias, real;

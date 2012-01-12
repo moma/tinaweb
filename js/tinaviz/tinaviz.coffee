@@ -3,8 +3,8 @@ cbCounter = 0
 callbacks = {}
 
 # manage the window focus / out of focus mode
-$(window).focus -> tinaviz.unfreeze()
-$(window).blur -> tinaviz.freeze()
+$(window).focus -> tinaviz?.unfreeze()
+$(window).blur -> tinaviz?.freeze()
 
 # custom callback engine (necessary to communicate with the Scala actor-based applet)
 callCallback = (cb_id, cb_args) ->
@@ -130,10 +130,10 @@ Tinaviz = (args) ->
     @set real, value, "String", @makeWrap(alias, real, cb)
   
   @freeze = ->
-    applet.freeze()  if applet != undefined and applet?
+    applet?.freeze()
   
   @unfreeze = ->
-    applet.unfreeze()  if applet != undefined and applet?
+    applet?.unfreeze()
   
   @getView = (cb) ->
     alias = "view"
