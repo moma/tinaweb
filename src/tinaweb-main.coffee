@@ -1,6 +1,11 @@
-delay = exports.delay = (t,f) -> setTimeout f, t
+delay = (t,f) -> 
+  console.log("t: "+t)
+  console.log("t")
+  console.log("f: "+f)
+  console.log("f")
+  setTimeout f, t
 
-repeat = exports.repeat = (t,f) -> setInterval f, t
+repeat = (t,f) -> setInterval f, t
 
 
 demo = false
@@ -121,8 +126,7 @@ $(document).ready ->
       checkLoadingStatus = ->
         unless status == "loaded"
           $("#appletInfo").text $("#appletInfo").text() + "."
-          delay 400, ->
-            checkLoadingStatus()
+          delay 400, checkLoadingStatus
 
       firstTimeOpen = (data) ->
         status = data.status

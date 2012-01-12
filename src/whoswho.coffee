@@ -81,12 +81,10 @@ $(document).ready ->
   
   $("#addfilterlaboratory").click ->
     prefix = "working"
-      if $(".filterkeywords") or $(".filterlaboratories")
     popfilter prefix + " at", "laboratories", []
   
   $("#addfilterkeyword").click ->
     prefix = "working"
-      if $(".filterkeywords") or $(".filterlaboratories")
     popfilter prefix + " on", "keywords", []
   
   $("#addfiltertag").click ->

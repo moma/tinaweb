@@ -1,3 +1,7 @@
+delay = (t,f) -> setTimeout f, t
+
+repeat = (t,f) -> setInterval f, t
+
 displayNodeRow = (label, id, category) ->
   $("#node_table > tbody").append $("<tr></tr>").append($("<td id='node_list_" + id + "'></td>").text(label).click((eventObject) ->
     tinaviz.viewMeso id, category
@@ -201,14 +205,14 @@ InfoDiv =
     @display_current_category()
     return  if category == @last_category
     tinaviz.node_list_cache = {}  if tinaviz.node_list_cache == undefined
-    _this = this
-    whenReceivingNodeList = (data) ->
+
+    whenReceivingNodeList = (data) =>
       console.log "receiving and updating node.list: " + (data.nodes.length) + " nodes"
       return  if category == _this.last_category
-      _this.node_list_cache = {}  if _this.node_list_cache == undefined
-      _this.node_list_cache[category] = alphabeticListSort(data.nodes, "label")
-      _this.node_table.empty()
-      _this.last_category = category
+      @node_list_cache = {}  if _this.node_list_cache == undefined
+      @node_list_cache[category] = alphabeticListSort(data.nodes, "label")
+      @.node_table.empty()
+      @last_category = category
       node_list = _this.node_list_cache[category]
       if node_list?
         i = 0
@@ -218,7 +222,7 @@ InfoDiv =
             rowLabel = htmlDecode decodeJSON( node_list[i]["label"] )
             rowId = decodeJSON node_list[i]["id"]
             rowCat = category
-            setTimeout "displayNodeRow(\"" + rowLabel + "\",\"" + rowId + "\",\"" + rowCat + "\")", 0
+            delay 0, -> displayNodeRow rowLabel, rowId, rowCat
           i++
     
     tinaviz.getNodes view, category, whenReceivingNodeList
