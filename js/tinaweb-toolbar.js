@@ -1,4 +1,4 @@
-var callSlider, sliderData, tinaviz, toolbar;
+var callSlider, sliderData, toolbar;
 
 callSlider = function(sliderobj, slider) {
   if (sliderData[slider].scheduled !== true) {
@@ -17,8 +17,6 @@ callSlider = function(sliderobj, slider) {
     });
   }
 };
-
-tinaviz = {};
 
 $(document).ready(function() {
   $.extend($.ui.slider.defaults, {
@@ -339,15 +337,15 @@ toolbar.init = function() {
         console.log("view name: " + viewName);
         if (viewName === "macro") {
           if (next_cat === "Document") {
-            $("#category-A").fadeIn("slow");
-            $("#category-B").fadeOut("slow");
+            show("#category-A");
+            hide("#category-B");
           } else if (next_cat === "NGram") {
-            $("#category-A").fadeOut("slow");
-            $("#category-B").fadeIn("slow");
+            hide("#category-A");
+            show("#category-B");
           }
         } else {
-          $("#category-A").fadeIn("slow");
-          $("#category-B").fadeIn("slow");
+          show("#category-A");
+          show("#category-B");
         }
         neighbours = tinaviz.infodiv.neighbours;
         return tinaviz.setCategory(next_cat, function(data) {
@@ -373,19 +371,18 @@ toolbar.init = function() {
       });
     });
   });
-  $("#export-view").hide();
-  $("#search").hide();
-  $("#export-gexf").hide();
-  $("#level").hide();
-  $("#search_button").hide();
-  $("#toggle-recenter").hide();
-  $("#toggle-switch").hide();
-  $("#toggle-unselect").hide();
-  $("#toggle-paused").hide();
-  $("#cursor-size-block").hide();
-  $("#category-A").hide();
-  $("#category-B").hide();
-  return $("#category-legend").hide();
+  hide("#export-view");
+  hide("#search  hide ");
+  hide("#level");
+  hide("#search_button");
+  hide("#toggle-recenter");
+  hide("#toggle-switch");
+  hide("#toggle-unselect");
+  hide("#toggle-paused");
+  hide("#cursor-size-block");
+  hide("#category-A");
+  hide("#category-B");
+  return hide("#category-legend");
 };
 
 toolbar.updateButton = function(button, state) {

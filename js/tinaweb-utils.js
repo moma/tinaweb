@@ -22,6 +22,7 @@ function IsNumeric(n) {
  * utility modifying the Object prototype
  * to get its lenght
  */
+
 Object.size = function(obj) {
     var size = 0, key;
     for (key in obj) {
@@ -29,6 +30,7 @@ Object.size = function(obj) {
     }
     return size;
 };
+
 /*
  * utility returning a list
  * from the values of a given object
@@ -114,90 +116,6 @@ function alphabeticJquerySort(parentdiv, childrendiv, separator) {
 }
 
 
-/*
- * To html entities
- */
-function htmlEncode(value){
-    return $('<div/>').text(value).html();
-}
-
-/*
- * From html entities to normal text
- */
-function htmlDecode(value){
-    //alert("decoding "+value);
-    return $('<div/>').html(value).text();
-}
-
-/*
- * Cleaning and decode entities of a value from a Json
- */
-function decodeJSON(encvalue) {
-    if (encvalue !== undefined)
-        return jQuery.trim(encvalue
-            .replace(/\+/g, " ").replace(/%21/g, "!")
-            .replace(/%27/g, "'").replace(/%28/g, "(")
-            .replace(/%29/g, ")").replace(/%2A/g, "*")
-            .replace(/\"/g,"'")
-            );
-    else
-        return "";
-}
-
-/*
- * OBSOLETE
- * replace by htmlDecode
- */
-/*function decodeHTML(str) {
-    return str.replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>');
-}*/
-
-
-/* useful for fullscreen mode */
-
-function getScreenWidth() {
-    var x = 0;
-    if (self.innerHeight) {
-        x = self.innerWidth;
-    }
-    else if (document.documentElement && document.documentElement.clientHeight) {
-        x = document.documentElement.clientWidth;
-    }
-    else if (document.body) {
-        x = document.body.clientWidth;
-    }
-    return x;
-}
-
-/* useful for fullscreen mode */
-function getScreenHeight() {
-    var y = 0;
-    if (self.innerHeight) {
-        y = self.innerHeight;
-    }
-    else if (document.documentElement && document.documentElement.clientHeight) {
-        y = document.documentElement.clientHeight;
-    }
-    else if (document.body) {
-        y = document.body.clientHeight;
-    }
-
-    return y;
-}
-
-function resize() {
-    var infoDivWidth = 390;
-
-    var size = {
-        w: getScreenWidth() - infoDivWidth - 55,
-        h: getScreenHeight() - $("#hd").height() - $("#ft").height() - 60
-    };
-
-    $("#appletdiv").css('width', size.w);
-    $("#infodiv").css('width', infoDivWidth);
-    $("#infodivparent").css('height', size.h);
-    return size;
-}
 
 function find(element,array){
     // Find the position of element in the array list,n return
@@ -216,14 +134,3 @@ function find(element,array){
     return pos;
 }
 
-function getUrlVars() {
-    var vars = [], hash;
-    var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
-    for(var i = 0; i < hashes.length; i++)
-    {
-        hash = hashes[i].split('=');
-        vars.push(hash[0]);
-        vars[hash[0]] = hash[1];
-    }
-    return vars;
-}

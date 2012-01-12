@@ -24,11 +24,14 @@ completion = {};
 graphUrl = "";
 
 getGraph = function() {
+  console.log("getting graph from parent frame (via local var)");
   return graphUrl;
 };
 
 $(document).ready(function() {
   var cache, popfilter, xhrs;
+  log("document ready.. installing tinaviz");
+  tinaviz.install();
   popfilter = function(label, type, options) {
     var footer, header, id, id1, id2, input, labelization;
     id = ids++;

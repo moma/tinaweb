@@ -14,10 +14,15 @@ jQuery.fn.disableTextSelect = ->
 ids = 0
 completion = {}
 graphUrl = ""
-getGraph = ->
+getGraph = -> 
+  console.log("getting graph from parent frame (via local var)")
   graphUrl
 
 $(document).ready ->
+    
+  log "document ready.. installing tinaviz"
+  tinaviz.install()
+  
   popfilter = (label, type, options) ->
     id = ids++
     id1 = "filter" + id

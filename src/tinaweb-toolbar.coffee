@@ -7,7 +7,7 @@ callSlider = (sliderobj, slider) ->
         tinaviz.set slider, [ vals[0] / sliderData[slider].size, vals[1] / sliderData[slider].size ], sliderData[slider].type
       else tinaviz.set slider, $(sliderobj).slider("value") / sliderData[slider].size, sliderData[slider].type  if sliderData[slider].type == "Double"
       sliderData[slider].scheduled = false
-tinaviz = {}
+
 $(document).ready ->
   $.extend $.ui.slider.defaults, 
     min: 0
@@ -178,50 +178,43 @@ toolbar.init = ->
     range: true
     values: [ parseFloat(prefs.a_edge_filter_min) * 100.0, parseFloat(prefs.a_edge_filter_max) * 100.0 ]
     animate: true
-    slide: (event, ui) ->
-      callSlider "#sliderAEdgeWeight", "filter.a.edge.weight"
+    slide: (event, ui) -> callSlider "#sliderAEdgeWeight", "filter.a.edge.weight"
   
   $("#sliderANodeWeight").slider 
     range: true
     values: [ parseFloat(prefs.a_node_filter_min) * 100.0, parseFloat(prefs.a_node_filter_max) * 100.0 ]
     animate: true
-    slide: (event, ui) ->
-      callSlider "#sliderANodeWeight", "filter.a.node.weight"
+    slide: (event, ui) -> callSlider "#sliderANodeWeight", "filter.a.node.weight"
   
   $("#sliderBEdgeWeight").slider 
     range: true
     values: [ parseFloat(prefs.b_edge_filter_min) * 100.0, parseFloat(prefs.b_edge_filter_max) * 100.0 ]
     animate: true
-    slide: (event, ui) ->
-      callSlider "#sliderBEdgeWeight", "filter.b.edge.weight"
+    slide: (event, ui) -> callSlider "#sliderBEdgeWeight", "filter.b.edge.weight"
   
   $("#sliderBNodeWeight").slider 
     range: true
     values: [ parseFloat(prefs.b_node_filter_min) * 100.0, parseFloat(prefs.b_node_filter_max) * 100.0 ]
     animate: true
-    slide: (event, ui) ->
-      callSlider "#sliderBNodeWeight", "filter.b.node.weight"
+    slide: (event, ui) -> callSlider "#sliderBNodeWeight", "filter.b.node.weight"
   
   $("#sliderANodeSize").slider 
     value: parseFloat(prefs.a_node_size) * 100.0
     max: 100.0
     animate: true
-    slide: (event, ui) ->
-      callSlider "#sliderANodeSize", "filter.a.node.size"
+    slide: (event, ui) -> callSlider "#sliderANodeSize", "filter.a.node.size"
   
   $("#sliderBNodeSize").slider 
     value: parseFloat(prefs.b_node_size) * 100.0
     max: 100.0
     animate: true
-    slide: (event, ui) ->
-      callSlider "#sliderBNodeSize", "filter.b.node.size"
+    slide: (event, ui) -> callSlider "#sliderBNodeSize", "filter.b.node.size"
   
   $("#sliderSelectionZone").slider 
     value: parseFloat(prefs.cursor_size) * 300.0
     max: 300.0
     animate: true
-    change: (event, ui) ->
-      callSlider "#sliderSelectionZone", "selectionRadius"
+    change: (event, ui) -> callSlider "#sliderSelectionZone", "selectionRadius"
   
   $("#toggle-paused").button(
     icons: primary: "ui-icon-pause"
@@ -239,8 +232,7 @@ toolbar.init = ->
   
   $("#toggle-unselect").button(icons: primary: "ui-icon-close").click (event) ->
     toolbar.lastsearch = ""
-    tinaviz.unselect (data) ->
-      tinaviz.infodiv.reset()
+    tinaviz.unselect (data) -> tinaviz.infodiv.reset()
   
   $("#toggle-recenter").button(
     text: true
@@ -256,21 +248,21 @@ toolbar.init = ->
       cat = data.category
       console.log "clicked on category switch. cat: " + cat
       console.log data
-      next_cat = tinaviz.getOppositeCategory(cat)
+      next_cat = tinaviz.getOppositeCategory cat
       console.log "opposite cat: " + next_cat
       tinaviz.getView (data) ->
         viewName = data.view
         console.log "view name: " + viewName
         if viewName == "macro"
           if next_cat == "Document"
-            $("#category-A").fadeIn "slow"
-            $("#category-B").fadeOut "slow"
+            show "#category-A"
+            hide "#category-B"
           else if next_cat == "NGram"
-            $("#category-A").fadeOut "slow"
-            $("#category-B").fadeIn "slow"
+            hide "#category-A"
+            show "#category-B"
         else
-          $("#category-A").fadeIn "slow"
-          $("#category-B").fadeIn "slow"
+          show "#category-A"
+          show "#category-B"
         neighbours = tinaviz.infodiv.neighbours
         tinaviz.setCategory next_cat, (data) ->
           console.log " category should be set now"
@@ -287,19 +279,20 @@ toolbar.init = ->
               tinaviz.infodiv.updateNodeList viewName, next_cat
               tinaviz.infodiv.display_current_category()
   
-  $("#export-view").hide()
-  $("#search").hide()
-  $("#export-gexf").hide()
-  $("#level").hide()
-  $("#search_button").hide()
-  $("#toggle-recenter").hide()
-  $("#toggle-switch").hide()
-  $("#toggle-unselect").hide()
-  $("#toggle-paused").hide()
-  $("#cursor-size-block").hide()
-  $("#category-A").hide()
-  $("#category-B").hide()
-  $("#category-legend").hide()
+  # TODO replace by a smarter JQuery/CSS selector (using children?)
+  hide "#export-view"
+  hide "#search
+  hide "#export-gexf"
+  hide "#level"
+  hide "#search_button"
+  hide "#toggle-recenter"
+  hide "#toggle-switch"
+  hide "#toggle-unselect"
+  hide "#toggle-paused"
+  hide "#cursor-size-block"
+  hide "#category-A"
+  hide "#category-B"
+  hide "#category-legend"
 
 toolbar.updateButton = (button, state) ->
   toolbar.values.buttons[button] = state

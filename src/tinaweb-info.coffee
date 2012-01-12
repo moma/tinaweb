@@ -1,6 +1,3 @@
-delay = (t,f) -> setTimeout f, t
-
-repeat = (t,f) -> setInterval f, t
 
 displayNodeRow = (label, id, category) ->
   $("#node_table > tbody").append $("<tr></tr>").append($("<td id='node_list_" + id + "'></td>").text(label).click((eventObject) ->
@@ -68,6 +65,7 @@ InfoDiv =
   
   updateTagCloud: (node_list, neighbours) ->
     return  if Object.size(node_list) == 0
+    
     tinaviz.getCategory (data) ->
       cat = data.category
       neighbours = @mergeNeighbours cat, neighbours
@@ -92,11 +90,11 @@ InfoDiv =
           tmp += Googlerequests
           tmp += requests
           tmp += "\" alt=\"search on google\" target=\"_BLANK\"><img src=\""
-          tmp += tinaviz.getPath()
+          tmp += tinaviz.path
           tmp += "css/branding/google.png\" />Google</a> &nbsp;"
           tmp += " <a href=\"" + PubMedrequests + requests
           tmp += "\" alt=\"search on PubMed\" target=\"_BLANK\"><img src=\""
-          tmp += tinaviz.getPath()
+          tmp += tinaviz.path
           tmp += "css/branding/pubmed.png\" />Pubmed</a>"
           @cloudSearch.append tmp
       sizecoef = 15
@@ -192,7 +190,8 @@ InfoDiv =
       return
     @unselect_button.hide()
     @contents.empty().append $("<h4></h4>").html("click on a node to begin exploration")
-    @contents.empty().append $("<h4></h4>").html("<h2>Navigation tips</h2>" + "<p align='left'>" + "<br/>" + "<i>Basic interactions</i><br/><br/>" + "Click on a node to select/unselect and get its information.  In case of multiple selection, the button <img src='" + tinaviz.getPath() + "css/branding/unselect.png' alt='unselect' align='top' height=20/>  clears all selections.<br/><br/>The switch button <img src='" + tinaviz.getPath() + "css/branding/switch.png' alt='switch' align='top' height=20 /> allows to change the view type." + "<br/><br/>" + "<i>Graph manipulation</i><br/><br/>" + "Link and node sizes indicate their strength.<br/><br/> To fold/unfold the graph (keep only strong links or weak links), use the 'edges filter' sliders.<br/><br/> To select a more of less specific area of the graph, use the 'nodes filter' slider.</b><br/><br/>" + "<i>Micro/Macro view</i><br/><br/>To explore the neighborhood of a selection, either double click on the selected nodes, either click on the macro/meso level button. Zoom out in meso view return to macro view.<br/><br/>  " + "Click on the 'all nodes' tab below to view the full clickable list of nodes.<br/><br/>Find additional tips with mouse over the question marks." + "</p>")
+    path = tinaviz.path
+    @contents.empty().append $("<h4></h4>").html("<h2>Navigation tips</h2>" + "<p align='left'>" + "<br/>" + "<i>Basic interactions</i><br/><br/>" + "Click on a node to select/unselect and get its information.  In case of multiple selection, the button <img src='" + path + "css/branding/unselect.png' alt='unselect' align='top' height=20/>  clears all selections.<br/><br/>The switch button <img src='" + path + "css/branding/switch.png' alt='switch' align='top' height=20 /> allows to change the view type." + "<br/><br/>" + "<i>Graph manipulation</i><br/><br/>" + "Link and node sizes indicate their strength.<br/><br/> To fold/unfold the graph (keep only strong links or weak links), use the 'edges filter' sliders.<br/><br/> To select a more of less specific area of the graph, use the 'nodes filter' slider.</b><br/><br/>" + "<i>Micro/Macro view</i><br/><br/>To explore the neighborhood of a selection, either double click on the selected nodes, either click on the macro/meso level button. Zoom out in meso view return to macro view.<br/><br/>  " + "Click on the 'all nodes' tab below to view the full clickable list of nodes.<br/><br/>Find additional tips with mouse over the question marks." + "</p>")
     @cloudSearchCopy.empty()
     @cloudSearch.empty()
     @cloud.empty()
@@ -210,7 +209,7 @@ InfoDiv =
       console.log "receiving and updating node.list: " + (data.nodes.length) + " nodes"
       return  if category == _this.last_category
       @node_list_cache = {}  if _this.node_list_cache == undefined
-      @node_list_cache[category] = alphabeticListSort(data.nodes, "label")
+      @node_list_cache[category] = alphabeticListSort data.nodes, "label"
       @.node_table.empty()
       @last_category = category
       node_list = _this.node_list_cache[category]
@@ -228,10 +227,11 @@ InfoDiv =
     tinaviz.getNodes view, category, whenReceivingNodeList
   
   getSearchQueries: (label, cat) ->
+    path = tinaviz.path
     SearchQuery = label.replace(RegExp(" ", "g"), "+")
     if cat == "Document"
-      $("<p></p>").html "<a href=\"http://www.google.com/#hl=en&source=hp&q=%20" + SearchQuery.replace(",", "OR") + "%20\" align=middle target=blank height=15 width=15> <img src=\"" + tinaviz.getPath() + "css/branding/google.png\" height=15 width=15> </a><a href=\"http://en.wikipedia.org/wiki/" + label.replace(RegExp(" ", "g"), "_") + "\" align=middle target=blank height=15 width=15> <img src=\"" + tinaviz.getPath() + "css/branding/wikipedia.png\" height=15 width=15> </a><a href=\"http://www.flickr.com/search/?w=all&q=" + SearchQuery + "\" align=middle target=blank height=15 width=15> <img src=\"" + tinaviz.getPath() + "css/branding/flickr.png\" height=15 width=15> </a>"
+      $("<p></p>").html "<a href=\"http://www.google.com/#hl=en&source=hp&q=%20" + SearchQuery.replace(",", "OR") + "%20\" align=middle target=blank height=15 width=15> <img src=\"" + path + "css/branding/google.png\" height=15 width=15> </a><a href=\"http://en.wikipedia.org/wiki/" + label.replace(RegExp(" ", "g"), "_") + "\" align=middle target=blank height=15 width=15> <img src=\"" + path + "css/branding/wikipedia.png\" height=15 width=15> </a><a href=\"http://www.flickr.com/search/?w=all&q=" + SearchQuery + "\" align=middle target=blank height=15 width=15> <img src=\"" + path + "css/branding/flickr.png\" height=15 width=15> </a>"
     else if cat == "NGram"
-      $("<p></p>").html "<a href=\"http://www.google.com/#hl=en&source=hp&q=%20" + SearchQuery.replace(",", "OR") + "%20\" align=middle target=blank height=15 width=15> <img src=\"" + tinaviz.getPath() + "css/branding/google.png\" height=15 width=15> </a><a href=\"http://en.wikipedia.org/wiki/" + label.replace(RegExp(" ", "g"), "_") + "\" align=middle target=blank height=15 width=15> <img src=\"" + tinaviz.getPath() + "css/branding/wikipedia.png\" height=15 width=15> </a><a href=\"http://www.flickr.com/search/?w=all&q=" + SearchQuery + "\" align=middle target=blank height=15 width=15> <img src=\"" + tinaviz.getPath() + "css/branding/flickr.png\" height=15 width=15> </a>"
+      $("<p></p>").html "<a href=\"http://www.google.com/#hl=en&source=hp&q=%20" + SearchQuery.replace(",", "OR") + "%20\" align=middle target=blank height=15 width=15> <img src=\"" + path + "css/branding/google.png\" height=15 width=15> </a><a href=\"http://en.wikipedia.org/wiki/" + label.replace(RegExp(" ", "g"), "_") + "\" align=middle target=blank height=15 width=15> <img src=\"" + path + "css/branding/wikipedia.png\" height=15 width=15> </a><a href=\"http://www.flickr.com/search/?w=all&q=" + SearchQuery + "\" align=middle target=blank height=15 width=15> <img src=\"" + path + "css/branding/flickr.png\" height=15 width=15> </a>"
     else
       $ "<p></p>"
