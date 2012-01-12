@@ -7,48 +7,50 @@ Tinaweb = (function(_super) {
   __extends(Tinaweb, _super);
 
   function Tinaweb() {
-    Tinaweb.__super__.constructor.apply(this, arguments);
+    log("Tinaweb: constructor called.. calling supe()");
+    Tinaweb.__super__.constructor.call(this);
+    log("Tinaweb: configuring with default config");
+    this._config = {
+      element: "#tinaviz",
+      gexf: "sample.gexf.gz",
+      view: "macro",
+      category: "Document",
+      node_id: "",
+      search: "",
+      a_node_size: 0.50,
+      b_node_size: 0.50,
+      cursor_size: 0.01,
+      a_edge_filter_min: 0.0,
+      a_edge_filter_max: 1.0,
+      a_node_filter_min: 0.0,
+      a_node_filter_max: 1.0,
+      b_edge_filter_min: 0.0,
+      b_edge_filter_max: 1.0,
+      b_node_filter_min: 0.0,
+      b_node_filter_max: 1.0,
+      layout: "tinaforce",
+      layout_speed: 30,
+      pause: false,
+      demo: false
+    };
+    this._status = "done";
+    this._demo_running = false;
+    this._demo_possible = false;
   }
 
-  Tinaweb.prototype._config = {
-    element: "#tinaviz",
-    gexf: "sample.gexf.gz",
-    view: "macro",
-    category: "Document",
-    node_id: "",
-    search: "",
-    a_node_size: 0.50,
-    b_node_size: 0.50,
-    cursor_size: 0.01,
-    a_edge_filter_min: 0.0,
-    a_edge_filter_max: 1.0,
-    a_node_filter_min: 0.0,
-    a_node_filter_max: 1.0,
-    b_edge_filter_min: 0.0,
-    b_edge_filter_max: 1.0,
-    b_node_filter_min: 0.0,
-    b_node_filter_max: 1.0,
-    layout: "tinaforce",
-    layout_speed: 30,
-    pause: false,
-    demo: false
-  };
-
-  Tinaweb.prototype._status = "done";
-
-  Tinaweb.prototype._demo_running = false;
-
-  Tinaweb.prototype._demo_possible = false;
-
-  Tinaweb.prototype.configure = function(params) {
+  Tinaweb.prototype.configure_using = function(params) {
     var key, value, _results;
-    log("Tinaweb: configure() -> updating  self config..");
+    log("Tinaweb: configure_using(params) -> loading..");
     _results = [];
     for (key in params) {
       value = params[key];
       _results.push(this._config[key] = value);
     }
     return _results;
+  };
+
+  Tinaweb.prototype.load_url_params = function() {
+    return loadURLParamsUsing(this._config);
   };
 
   Tinaweb.prototype.computeSize = function() {
@@ -173,8 +175,21 @@ Tinaweb = (function(_super) {
 
   Tinaweb.prototype.install = function() {
     var _this = this;
-    log("Tinaweb: install()");
+    log("Tinaweb: install() -> loading url parameters");
+    log("Tinaweb: install() -> loading generic, enforced parameters (like logo or engine)");
+    this.config = {
+      path: "",
+      tag: "#vizdiv",
+      logo: "css/logo.png",
+      context: "",
+      engine: "software"
+    };
+    this.libPath = this.path + "js/tinaviz/";
+    this.config.brandingIcon = "" + this.config.libPath + "tina_icon.png";
+    this.configure(this.config);
+    log("Tinaweb: install() -> calling preInstall");
     this.preInstall();
+    log("Tinaweb: install() -> calling @_inject => { ... }");
     return this._inject(function() {
       var delayBetweenChanges, waitTimeBeforeStartingDemo;
       log("Tinaweb: _inject() -> creating callbacks");

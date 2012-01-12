@@ -4,8 +4,9 @@
 # by using url parameters, like index.html?search=optics
 #
 default_config = 
-  element: "#tinaviz"        # canvas element
+  element: "#tinaviz"        # canvas element 
   gexf: "sample.gexf.gz"     # gexf file to load by default
+  embed: false               # if set to true, the config.getGraph function will be called. else, config.gexf will be called
 #  view: "macro"             # default view to show the graph
   category: "Document"       # default category used to show the graph
 #  node_id: ""               # default node to select ("" means no node will be selected)

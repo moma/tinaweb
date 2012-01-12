@@ -22,8 +22,7 @@ makeCallback = function(cb) {
 
 Tinaviz = (function() {
 
-  function Tinaviz(option) {
-    this.option = option;
+  function Tinaviz() {
     log("Tinaviz: called constructor()");
     this.applet = void 0;
     this.appletTag = "#tinapplet";

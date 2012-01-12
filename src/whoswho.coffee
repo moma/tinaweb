@@ -1,9 +1,9 @@
 jQuery.fn.disableTextSelect = ->
   @each ->
-    unless typeof @onselectstart == "undefined"
+    unless typeof @onselectstart is "undefined"
       @onselectstart = ->
         false
-    else unless typeof @style.MozUserSelect == "undefined"
+    else unless typeof @style.MozUserSelect is "undefined"
       @style.MozUserSelect = "none"
     else
       @onmousedown = ->
@@ -15,24 +15,23 @@ ids = 0
 completion = {}
 graphUrl = ""
 getGraph = -> 
-  console.log("getting graph from parent frame (via local var)")
+  log "getting graph from parent frame (via local var)"
   graphUrl
 
 $(document).ready ->
     
-  log "document ready.. installing tinaviz"
-  tinaviz.install()
+  log "document ready.. installing whoswho"
   
   popfilter = (label, type, options) ->
     id = ids++
     id1 = "filter" + id
     id2 = "combo" + id
-    header = "<li id=\"" + id1 + "\" class=\"filter\" style=\"padding-top: 5px;\">"
-    labelization = "<span style=\"color: #fff;\">&nbsp; " + label + " </span>"
-    input = "<input type=\"text\" id=\"" + id2 + "\" class=\"medium filter" + type + "\" placeholder=\"" + type + "\" />"
+    header = "<li id=\"#{id1}\" class=\"filter\" style=\"padding-top: 5px;\">"
+    labelization = "<span style=\"color: #fff;\">&nbsp; #{label} </span>"
+    input = "<input type=\"text\" id=\"#{id2}\" class=\"medium filter#{type}\" placeholder=\"#{type}\" />"
     footer = "</li>;"
     $(header + labelization + input + footer).insertBefore "#refine"
-    $("#" + id2).catcomplete 
+    $("##{id2}").catcomplete 
       minLength: 2
       source: (request, response) ->
         term = request.term
@@ -42,8 +41,8 @@ $(document).ready ->
         , (data, status, xhr) ->
           response data.results
     
-    $("#" + id1 + "").hide()
-    $("#" + id1 + "").fadeIn 500
+    $("#{id1}").hide()
+    show "##{id1}"
     false
   jQuery(".unselectable").disableTextSelect()
   $(".unselectable").hover (->
@@ -51,7 +50,7 @@ $(document).ready ->
   ), ->
     $(this).css "cursor", "auto"
   
-  $("#search-form").hide()
+  hide "#search-form"
   $(".topbar").hover (->
     $(this).stop().animate opacity: 0.98, "fast"
   ), ->
@@ -72,8 +71,8 @@ $(document).ready ->
         term = item.term
         self._renderItem ul, item
       
-      ul.append "<li class='ui-autocomplete-category'>" + size + "/" + total + " results</li>"
-      console.log term
+      ul.append "<li class='ui-autocomplete-category'>#{size}/#{total} results</li>"
+      log term
       ul.highlight term
   
   cache = {}
@@ -86,50 +85,51 @@ $(document).ready ->
   
   $("#addfilterlaboratory").click ->
     prefix = "working"
-    popfilter prefix + " at", "laboratories", []
+    popfilter "#{prefix} at", "laboratories", []
   
   $("#addfilterkeyword").click ->
     prefix = "working"
-    popfilter prefix + " on", "keywords", []
+    popfilter "#{prefix} on", "keywords", []
   
   $("#addfiltertag").click ->
     popfilter "tagged", "tags", []
   
-  $("#loading").fadeOut()
+  hide "#loading"
   $("#example").click ->
-    $(".hero-unit").fadeOut "slow"
+    hide ".hero-unit"
     $("#welcome").fadeOut "slow", ->
-      $("#loading").fadeIn "fast"
+      show "#loading", "fast"
   
   $("#generate").click ->
-    $(".hero-unit").fadeOut "slow"
+    hide ".hero-unit"
     $("#welcome").fadeOut "slow", ->
-      $("#loading").fadeIn "fast"
-      console.log "loading"
+      show "#loading", "fast"
+      log "loading"
       collect = (k) ->
         t = []
-        console.log "collecting " + ".filter" + k + ""
-        $(".filter" + k + "").each (i, e) ->
+        log "collecting .filter#{k}"
+        $(".filter#{k}").each (i, e) ->
           value = $(e).val()
           return  if value == undefined
           value = value.replace(/^\s+/g, "").replace(/\s+$/g, "")
-          t.push value  if value == "" or value == " "
+          t.push value  if value is "" or value is " "
         t
       
-      console.log "collecting.."
+      log "collecting.."
       query = 
         categorya: $("#categorya :selected").text()
         categoryb: $("#categoryb :selected").text()
-        keywords: collect("keywords")
-        countries: collect("countries")
-        laboratories: collect("laboratories")
+        keywords: collect "keywords"
+        countries: collect "countries"
+        laboratories: collect "laboratories"
         coloredby: []
-        tags: collect("tags")
-        organizations: collect("organizations")
+        tags: collect "tags"
+        organizations: collect "organizations"
       
-      console.log query
-      url = "getgraph.php?query=" + encodeURIComponent(JSON.stringify(query))
-      console.log url
+      log query
+      query =  encodeURIComponent JSON.stringify(query)
+      url = "getgraph.php?query=#{query}"
+      log url
       graphUrl = url
       $("#visualization").html "<iframe src=\"tinaframe.html\" class=\"frame\" border=\"0\" frameborder=\"0\" scrolling=\"no\" id=\"frame\" name=\"frame\"></iframe>"
     

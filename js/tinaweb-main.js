@@ -6,40 +6,14 @@ MyTinaweb = (function(_super) {
 
   __extends(MyTinaweb, _super);
 
-  function MyTinaweb(config) {
-    this.config = config;
-    log("MyTinaweb: called constructor using some config");
+  function MyTinaweb() {
+    MyTinaweb.__super__.constructor.apply(this, arguments);
   }
-
-  MyTinaweb.prototype.resize = function() {
-    var height, infoDivWidth, width;
-    log("MyTinaweb: custom computeSize()");
-    infoDivWidth = 390;
-    width = getScreenWidth() - infoDivWidth - 55;
-    height = getScreenHeight() - $("#hd").height() - $("#ft").height() - 60;
-    $("#appletdiv").css("width", width);
-    $("#infodiv").css("width", infoDivWidth);
-    $("#infodivparent").css("height", height);
-    return this._resize({
-      width: width,
-      height: height
-    });
-  };
 
   MyTinaweb.prototype.preInstall = function() {
     log("MyTinaweb: preInstall");
-    this.configure(this.config);
-    this.configure(loadURLParamsUsing(this.config));
-    this.config = {
-      path: "",
-      tag: "#vizdiv",
-      logo: "css/logo.png",
-      context: "",
-      engine: "software"
-    };
-    this.libPath = this.path + "js/tinaviz/";
-    this.config.brandingIcon = "" + this.config.libPath + "tina_icon.png";
-    return this.configure(this.config);
+    this.configure_using(default_config);
+    return this.configure_using(this.load_url_params());
   };
 
   MyTinaweb.prototype.postInstall = function() {
@@ -153,6 +127,21 @@ MyTinaweb = (function(_super) {
     }
   };
 
+  MyTinaweb.prototype.resize = function() {
+    var height, infoDivWidth, width;
+    log("MyTinaweb: custom computeSize()");
+    infoDivWidth = 390;
+    width = getScreenWidth() - infoDivWidth - 55;
+    height = getScreenHeight() - $("#hd").height() - $("#ft").height() - 60;
+    $("#appletdiv").css("width", width);
+    $("#infodiv").css("width", infoDivWidth);
+    $("#infodivparent").css("height", height);
+    return this._resize({
+      width: width,
+      height: height
+    });
+  };
+
   MyTinaweb.prototype.viewMeso = function(id, category) {
     var _this = this;
     return this.getCategory(function(data) {
@@ -200,8 +189,8 @@ MyTinaweb = (function(_super) {
         });
         return _this.setCategory(data2.category, function() {
           return _this.centerOnSelection(function() {
-            this.infodiv.updateNodeList("meso", data2.category);
-            return this.infodiv.display_current_category();
+            _this.infodiv.updateNodeList("meso", data2.category);
+            return _this.infodiv.display_current_category();
           });
         });
       });
@@ -247,4 +236,9 @@ MyTinaweb = (function(_super) {
 
 })(Tinaweb);
 
-tinaweb = new MyTinaweb(default_config);
+tinaweb = new MyTinaweb;
+
+$(document).ready(function() {
+  log("document ready.. installing tinaviz");
+  return tinaviz.install();
+});

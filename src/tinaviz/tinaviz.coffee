@@ -13,7 +13,7 @@ makeCallback = (cb = ->) ->
 
 class Tinaviz
 
-  constructor: (@option) ->
+  constructor: () ->
      
     log "Tinaviz: called constructor()"
     @applet = undefined 

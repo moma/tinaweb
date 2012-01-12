@@ -24,14 +24,13 @@ completion = {};
 graphUrl = "";
 
 getGraph = function() {
-  console.log("getting graph from parent frame (via local var)");
+  log("getting graph from parent frame (via local var)");
   return graphUrl;
 };
 
 $(document).ready(function() {
   var cache, popfilter, xhrs;
-  log("document ready.. installing tinaviz");
-  tinaviz.install();
+  log("document ready.. installing whoswho");
   popfilter = function(label, type, options) {
     var footer, header, id, id1, id2, input, labelization;
     id = ids++;
@@ -55,8 +54,8 @@ $(document).ready(function() {
         });
       }
     });
-    $("#" + id1 + "").hide();
-    $("#" + id1 + "").fadeIn(500);
+    $("" + id1).hide();
+    show("#" + id1);
     return false;
   };
   jQuery(".unselectable").disableTextSelect();
@@ -65,7 +64,7 @@ $(document).ready(function() {
   }), function() {
     return $(this).css("cursor", "auto");
   });
-  $("#search-form").hide();
+  hide("#search-form");
   $(".topbar").hover((function() {
     return $(this).stop().animate({
       opacity: 0.98
@@ -94,7 +93,7 @@ $(document).ready(function() {
           return self._renderItem(ul, item);
         });
         ul.append("<li class='ui-autocomplete-category'>" + size + "/" + total + " results</li>");
-        console.log(term);
+        log(term);
         return ul.highlight(term);
       });
     }
@@ -110,34 +109,34 @@ $(document).ready(function() {
   $("#addfilterlaboratory").click(function() {
     var prefix;
     prefix = "working";
-    return popfilter(prefix + " at", "laboratories", []);
+    return popfilter("" + prefix + " at", "laboratories", []);
   });
   $("#addfilterkeyword").click(function() {
     var prefix;
     prefix = "working";
-    return popfilter(prefix + " on", "keywords", []);
+    return popfilter("" + prefix + " on", "keywords", []);
   });
   $("#addfiltertag").click(function() {
     return popfilter("tagged", "tags", []);
   });
-  $("#loading").fadeOut();
+  hide("#loading");
   $("#example").click(function() {
-    $(".hero-unit").fadeOut("slow");
+    hide(".hero-unit");
     return $("#welcome").fadeOut("slow", function() {
-      return $("#loading").fadeIn("fast");
+      return show("#loading", "fast");
     });
   });
   return $("#generate").click(function() {
-    $(".hero-unit").fadeOut("slow");
+    hide(".hero-unit");
     $("#welcome").fadeOut("slow", function() {
       var collect, query, url;
-      $("#loading").fadeIn("fast");
-      console.log("loading");
+      show("#loading", "fast");
+      log("loading");
       collect = function(k) {
         var t;
         t = [];
-        console.log("collecting " + ".filter" + k + "");
-        $(".filter" + k + "").each(function(i, e) {
+        log("collecting .filter" + k);
+        $(".filter" + k).each(function(i, e) {
           var value;
           value = $(e).val();
           if (value === void 0) return;
@@ -146,7 +145,7 @@ $(document).ready(function() {
         });
         return t;
       };
-      console.log("collecting..");
+      log("collecting..");
       query = {
         categorya: $("#categorya :selected").text(),
         categoryb: $("#categoryb :selected").text(),
@@ -157,9 +156,10 @@ $(document).ready(function() {
         tags: collect("tags"),
         organizations: collect("organizations")
       };
-      console.log(query);
-      url = "getgraph.php?query=" + encodeURIComponent(JSON.stringify(query));
-      console.log(url);
+      log(query);
+      query = encodeURIComponent(JSON.stringify(query));
+      url = "getgraph.php?query=" + query;
+      log(url);
       graphUrl = url;
       return $("#visualization").html("<iframe src=\"tinaframe.html\" class=\"frame\" border=\"0\" frameborder=\"0\" scrolling=\"no\" id=\"frame\" name=\"frame\"></iframe>");
     });

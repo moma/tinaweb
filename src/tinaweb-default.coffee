@@ -1,51 +1,67 @@
 
 class Tinaweb extends Tinaviz
   
-  _config:
-    element: "#tinaviz"      
-    gexf: "sample.gexf.gz"    # gexf file to load by default
-    view: "macro"             # default view to show the graph
-    category: "Document"      # default category used to show the graph
-    node_id: ""               # default node to select ("" means no node will be selected)
-    search: ""                # default search query ("" means no search will be run)
-    a_node_size: 0.50         # node size for category A
-    b_node_size: 0.50         # node size for category B
-    cursor_size: 0.01         # default selection cursor size
-    a_edge_filter_min: 0.0    # initial position of the edge filter for category A (lower-bound)
-    a_edge_filter_max: 1.0    # initial position of the edge filter for category A (higher-bound)
-    a_node_filter_min: 0.0    # initial position of the edge filter for category A (lower-bound)
-    a_node_filter_max: 1.0    # initial position of the edge filter for category A (higher-bound)
-    b_edge_filter_min: 0.0    # initial position of the edge filter for category B (lower-bound)
-    b_edge_filter_max: 1.0    # initial position of the edge filter for category B (higher-bound)
-    b_node_filter_min: 0.0    # initial position of the edge filter for category B (lower-bound)
-    b_node_filter_max: 1.0    # initial position of the edge filter for category B (higher-bound)
-    layout: "tinaforce"       # default layout (note: for the moment, only "tinaforce" is recommended)
-    layout_speed: 30          # layout speed (in iterations by seconds)
-    pause: false              # should we be paused by default?
-    demo: false               # should we enable the demo mode?
-    
-  _status: "done"
-  _demo_running: false
-  _demo_possible: false
+  constructor: () ->
+    log "Tinaweb: constructor called.. calling supe()"
+    super()
+     
+    log "Tinaweb: configuring with default config"
+    @_config =
+      element: "#tinaviz"      
+      gexf: "sample.gexf.gz"    # gexf file to load by default
+      view: "macro"             # default view to show the graph
+      category: "Document"      # default category used to show the graph
+      node_id: ""               # default node to select ("" means no node will be selected)
+      search: ""                # default search query ("" means no search will be run)
+      a_node_size: 0.50         # node size for category A
+      b_node_size: 0.50         # node size for category B
+      cursor_size: 0.01         # default selection cursor size
+      a_edge_filter_min: 0.0    # initial position of the edge filter for category A (lower-bound)
+      a_edge_filter_max: 1.0    # initial position of the edge filter for category A (higher-bound)
+      a_node_filter_min: 0.0    # initial position of the edge filter for category A (lower-bound)
+      a_node_filter_max: 1.0    # initial position of the edge filter for category A (higher-bound)
+      b_edge_filter_min: 0.0    # initial position of the edge filter for category B (lower-bound)
+      b_edge_filter_max: 1.0    # initial position of the edge filter for category B (higher-bound)
+      b_node_filter_min: 0.0    # initial position of the edge filter for category B (lower-bound)
+      b_node_filter_max: 1.0    # initial position of the edge filter for category B (higher-bound)
+      layout: "tinaforce"       # default layout (note: for the moment, only "tinaforce" is recommended)
+      layout_speed: 30          # layout speed (in iterations by seconds)
+      pause: false              # should we be paused by default?
+      demo: false               # should we enable the demo mode?
+      
+    @_status = "done"
+    @_demo_running = false
+    @_demo_possible = false
 
-  configure: (params) ->
-    log "Tinaweb: configure() -> updating  self config.."
+  # configure Tinaweb using some params
+  configure_using: (params) ->
+    log "Tinaweb: configure_using(params) -> loading.."
     for key, value of params
       @_config[key] = value
+ 
+  # an utility function that loads URL params as a config
+  # since an URL is a String, we need to know the type of each 
+  # parameter. For this, we are simply using another model config file
+  # to know the types
+  load_url_params: -> loadURLParamsUsing @_config
   
+  # compute some default size values
   computeSize: -> 
     log "Tinaweb: default computeSize() function"
     {width: 10, height: 10}
   
+  # resize tinaweb
   resize: ->
     log "Tinaweb: default resize() -> self-resizing"
     @_resize @computeSize()
-    
+   
+  # open a graph for download and visualization 
   open: (url, cb) ->
     log "Tinaweb: open #{url}"
     url = document.location.href.substring(0, document.location.href.lastIndexOf("/") + 1) + url  if url.search("://") == -1
     @_open url, cb
 
+  # recenter the view
   recenter: (cb) -> @set "camera.target", "all", "String", cb
   
   centerOnSelection: (cb) -> @set "camera.target", "selection", "String", cb
@@ -68,7 +84,7 @@ class Tinaweb extends Tinaviz
 
   getOppositeCategory: (cat) ->
     if cat == "Document" then "NGram" else "Document"
-  
+
   makeWrap: (alias, real, cb) ->
     _cb = (data) ->
     
@@ -103,9 +119,26 @@ class Tinaweb extends Tinaviz
     log "Tinaweb: default preInstall()"
   postInstall: ->
     log "Tinaweb: default postInstall()"
+    
   install: ->
-    log "Tinaweb: install()"
+    log "Tinaweb: install() -> loading url parameters"
+        
+    log "Tinaweb: install() -> loading generic, enforced parameters (like logo or engine)"
+    # third layer: bypass and force some config values
+    @config = 
+      path: "" # $("meta[name=tinaviz]").attr("content")
+      tag:  "#vizdiv"           # DOM element, where to inject the applet
+      logo: "css/logo.png"      # default logo to show
+      context: ""
+      engine: "software"
+    @libPath = @path + "js/tinaviz/"  
+    @config.brandingIcon = "#{@config.libPath}tina_icon.png"
+    @configure @config
+    
+    log "Tinaweb: install() -> calling preInstall"
     @preInstall()
+    
+    log "Tinaweb: install() -> calling @_inject => { ... }"
     @_inject =>
               
       log "Tinaweb: _inject() -> creating callbacks"

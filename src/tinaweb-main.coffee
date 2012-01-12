@@ -1,39 +1,25 @@
-
+#
+# MyTinaweb: an example application
+# 
+# This class contains all the business logic of a generic bipartite
+# visualizer
+#
+# WARNING NOTE: The app is still in development.
+# for the moment, categories must be either Document or NGram 
+# (the "Document" and "NGram" variables keywords are hard-coded in the code! 
+# this will be fixed in a future release)
+# 
 class MyTinaweb extends Tinaweb
 
-  constructor: (@config) ->
-    log "MyTinaweb: called constructor using some config"
-
-  resize: ->
-    log "MyTinaweb: custom computeSize()"
-    infoDivWidth = 390
-    width = getScreenWidth() - infoDivWidth - 55
-    height = getScreenHeight() - $("#hd").height() - $("#ft").height() - 60
-
-    $("#appletdiv").css "width", width
-    $("#infodiv").css "width", infoDivWidth
-    $("#infodivparent").css "height", height
-    
-    @_resize {width, height}
-   
+  # This fonction is called just before inserting the visualization in the page
   preInstall: ->
     log "MyTinaweb: preInstall"
-    # first layer: default config provided by developer
-    @configure @config
     
-    # second layer: runtime config provided by browser user
-    @configure loadURLParamsUsing @config
+    # you can overload default settings
+    @configure_using default_config
     
-    # third layer: bypass and force some config values
-    @config = 
-      path: "" # $("meta[name=tinaviz]").attr("content")
-      tag:  "#vizdiv"           # DOM element, where to inject the applet
-      logo: "css/logo.png"      # default logo to show
-      context: ""
-      engine: "software"
-    @libPath = @path + "js/tinaviz/"  
-    @config.brandingIcon = "#{@config.libPath}tina_icon.png"
-    @configure @config
+    # note, however, that URL params will overload them too
+    @configure_using @load_url_params()
     
   postInstall: ->
     log "MyTinaweb: postInstall"
@@ -128,6 +114,18 @@ class MyTinaweb extends Tinaweb
     else
         log "unknow status #{status}"
  
+  resize: ->
+    log "MyTinaweb: custom computeSize()"
+    infoDivWidth = 390
+    width = getScreenWidth() - infoDivWidth - 55
+    height = getScreenHeight() - $("#hd").height() - $("#ft").height() - 60
+
+    $("#appletdiv").css "width", width
+    $("#infodiv").css "width", infoDivWidth
+    $("#infodivparent").css "height", height
+    
+    @_resize {width, height}
+   
   viewMeso: (id, category) ->
     @getCategory (data) =>
       cat = data.category
@@ -144,25 +142,25 @@ class MyTinaweb extends Tinaweb
   selectionChanged: (data) ->
     log "-- selection automatically changed: #{data.selection}"
     active = $("#infodiv").accordion "option", "active"
-    selectionIsEmpty = (Object.size(data.selection) == 0)
+    selectionIsEmpty = (Object.size(data.selection) is 0)
     log "selectionIsEmpty: #{selectionIsEmpty}"
-    if not selectionIsEmpty and active != 0
+    if not selectionIsEmpty and active isnt 0
       log "MyTinaweb: selection is not empty, and active tab is not 0"
       $("#infodiv").accordion "activate", 0
-    else if selectionIsEmpty and active != "false"
+    else if selectionIsEmpty and active isnt "false"
       log "MyTinaweb: selection is empty and active is not false"
       $("infodiv").accordion "activate", 0
-    if data.mouse == "left"
+    if data.mouse is "left"
        
-    else if data.mouse == "right"
+    else if data.mouse is "right"
       
-    else if data.mouse == "doubleLeft"
+    else if data.mouse is "doubleLeft"
       log "MyTinaweb: double click on left mouse:"
       @setView "meso", =>
         @getCategory (data2) =>
             log "switching to #{data2.category}"
           @setCategory data2.category, =>
-            @centerOnSelection ->
+            @centerOnSelection =>
               @infodiv.updateNodeList "meso", data2.category
               @infodiv.display_current_category()
     @infodiv.update data.view, data.selection
@@ -200,5 +198,8 @@ class MyTinaweb extends Tinaweb
         @recenter()
         
 # create a new customized Tinaweb, using default_config from preferences.js (preferences.coffee)     
-tinaweb = new MyTinaweb default_config
+tinaweb = new MyTinaweb
 
+$(document).ready ->
+  log "document ready.. installing tinaviz"
+  tinaviz.install()
