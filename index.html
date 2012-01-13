@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     <link rel="shortcut icon" href="css/branding/favicon.ico" type="image/x-icon"/>
     <!-- CSS LINKS -->
     <!-- JQUERY UI CSS -->
-    <link type="text/css" rel="stylesheet" href="css/start/jquery-ui-1.8.9.custom.css"/>
+    <link type="text/css" rel="stylesheet" href="css/brownian-motion/jquery-ui-1.8.16.custom.css"/>
     <link type="text/css" rel="stylesheet" href="css/start_redstart/jquery-ui-1.8.10.custom.css"/>
     <link type="text/css" rel="stylesheet" href="css/start_greenstart/jquery-ui-1.8.10.custom.css"/>
     <link type="text/css" rel="stylesheet" href="css/ui.spinner.css"/>
@@ -39,14 +39,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     <!--<script type="text/javascript" src="js/firebug-lite/firebug-lite.js"></script> -->
 
     <!-- JQUERY -->
-    <script type="text/javascript" src="js/jquery/jquery-1.4.4.min.js"></script>
+    <script type="text/javascript" src="js/jquery/jquery-1.7.min.js"></script>
     <script type="text/javascript" src="js/jquery/jquery.ba-dotimeout.min.js"></script>
     <script type="text/javascript" src="js/jquery/jquery.json-2.2.min.js"></script>
     <script type="text/javascript" src="js/jquery/jquery.qtip.min.js"></script>
     <script type="text/javascript" src="js/jquery/jquery.nap-1.0.0.js"></script>
 
     <!-- JQUERY UI -->
-    <script type="text/javascript" src="js/jquery-ui/jquery-ui-1.8.9.custom.min.js"></script>
+    <script type="text/javascript" src="js/jquery-ui/jquery-ui-1.8.16.custom.min.js"></script>
     <script type="text/javascript" src="js/jquery/jquery.notify.min.js"></script>
     <script type="text/javascript" src="js/jquery-ui/ui.spinner.min.js"></script>
     <!--<script type="text/javascript" src='js/rating/jquery.ratings.js' ></script>-->
@@ -54,36 +54,40 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     <!--TINAWEB APPLET LOADER -->
     <script type="text/javascript" src="js/tinaviz/deployJava.js"></script>
     <!-- PREFERENCES -->
-    <script type="text/javascript" src="js/preferences.js"></script>
+    <script type="text/javascript" src="js/config.js"></script>
+    
+    <script type="text/javascript" src="js/misc/underscore.min.js"></script>
+    <!-- SOME FUNCTIONS -->
+    <script type="text/javascript" src="js/utils.js"></script>
     <!-- TINAVIZ -->
     <script type="text/javascript" src="js/tinaviz/tinaviz.js"></script>
     <!-- WE USE TINAWEB UTILS-->
     <script type="text/javascript" src="js/tinaweb-utils.js"></script>
-    <!-- WE USE TINAWEB INFO PANEL -->
-    <script type="text/javascript" src="js/tinaweb-info.js"></script>
-    <!-- WE USE TINAWEB INFO PANEL -->
-    <script type="text/javascript" src="js/tinaweb-toolbar.js"></script>
+    <!-- TINAWEB MAIN -->
+    <script type="text/javascript" src="js/tinaweb-demo.js"></script>
+    <!-- TINAWEB MAIN -->
+    <script type="text/javascript" src="js/tinaweb-default.js"></script>
     <!-- TINAWEB MAIN -->
     <script type="text/javascript" src="js/tinaweb-main.js"></script>
-    <!-- TINASOFT UTILITIES -->
-    <script type="text/javascript" src="js/cache.js"></script>
+     <!-- WE USE TINAWEB INFO PANEL -->
+    <script type="text/javascript" src="js/tinaweb-toolbar.js"></script>
+    <!-- WE USE TINAWEB INFO PANEL -->
+    <script type="text/javascript" src="js/tinaweb-info.js"></script>
 
 </head>
 <body>
-<div id="notification">
-    <div id="basic-template">
-        <a class="ui-notify-cross ui-notify-close" href="#">x</a>
-
-        <h1>#{title}</h1>
-
-        <p>#{text}</p>
-    </div>
-</div>
+<script type="text/javascript">
+	/* small extension to Tinaviz, to allow callbacking between iframes */
+	default_config.embed = "true";
+	default_config.getGraph = function() {
+		return window.parent.getGraph();
+	};
+</script>
 <div id="doc3" class="yui-t5 ui-widget">
     <div id="hd" class="ui-widget">
         <div id="hdb">
             <div id="htoolbar" class="toolbardiv fg-toolbar ui-widget-header ui-corner-all ui-helper-clearfix">
-                <div id="title" class="noSelect toolbar-left" style="width: 550px;">
+                <div id="title" class="unselectable toolbar-left" style="width: 550px;">
                     <button id="toggle-paused" class="fg-button toolbar-left">play</button>
                     <button id="toggle-switch" class="fg-button toolbar-left">switch category</button>
                     <button id="level" class="fg-button toolbar-left">macro</button>
@@ -96,7 +100,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
                 <!-- block for Category A Filter -->
-                <div id="category-A" class="noSelect toolbar-left" style="width: 130px;">
+                <div id="category-A" class="unselectable toolbar-left" style="width: 130px;">
                     <div>
                         &nbsp;&nbsp;&nbsp;&nbsp;Documents
                     </div>
@@ -112,7 +116,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                 </div>
 
                 <!-- block for Document/NGram label -->
-                <div  id="category-legend" class="noSelect toolbar-left" style="width: 90px;">
+                <div  id="category-legend" class="unselectable toolbar-left" style="width: 90px;">
                     <div>&nbsp;</div>
                     <div style="height: 16px;">
                         Node Filter
@@ -126,7 +130,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                 </div>
 
                  <!-- block for Category B Filter -->
-                <div id="category-B" class="noSelect toolbar-left" style="width: 130px;">
+                <div id="category-B" class="unselectable toolbar-left" style="width: 130px;">
                     <div>
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;NGrams
                     </div>
@@ -143,17 +147,17 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
                  <div class="toolbar-right" style="width: 430px;">
                     <!--
-                    <button id="export-png" class="noSelect fg-button toolbar-right">PNG</button>
-                    <button id="export-pdf" class="noSelect fg-button toolbar-right">PDF</button>
+                    <button id="export-png" class="unselectable fg-button toolbar-right">PNG</button>
+                    <button id="export-pdf" class="unselectable fg-button toolbar-right">PDF</button>
                     -->
-                    <button id="export-gexf" class="noSelect fg-button toolbar-right">GEXF</button>
-                    <button id="toggle-recenter" class="noSelect fg-button toolbar-right">center</button>
+                    <button id="export-gexf" class="unselectable fg-button toolbar-right">GEXF</button>
+                    <button id="toggle-recenter" class="unselectable fg-button toolbar-right">center</button>
                     <form id="search" action="#" class="toolbar-right">
                         <input id="search_input" type="text" value=""/>
-                        <button id="search_button" class="noSelect fg-button">search</button>
+                        <button id="search_button" class="unselectable fg-button">search</button>
                         <!--
-                        <button id="searchCurrent_button" class="noSelect fg-button">search current</button>
-                        <button id="searchOpposite_button" class="noSelect fg-button">search opposite</button>
+                        <button id="searchCurrent_button" class="unselectable fg-button">search current</button>
+                        <button id="searchOpposite_button" class="unselectable fg-button">search opposite</button>
                         -->
                     </form>
                 </div>
@@ -212,7 +216,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                                         <tbody>
                                         </tbody>
                                     </table>
-                                </div><img alt='' src='css/branding/whereRU.gif' style='float: left;' border='0' height='100'>&nbsp; &nbsp;
+                                </div>
+                                <!--<img alt='' src='css/branding/whereRU.gif' style='float: left;' border='0' height='100'>&nbsp; &nbsp;-->
                             </div>
                             <!-- accordion 3 -->
                         </div>
@@ -229,19 +234,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     </div>
     <!-- end of bd -->
     <div style="clear: both;"></div>
-    <div id="ft" class="ui-widget ui-widget-header ui-corner-all">
-        <p class="ui-corner-all" style="margin: 0;">Copyright MOMA, CREA, CNRS - 2009, 2010, 2011.</p>
 
-        <p class="ui-widget-content ui-corner-all" style="margin: 0;">
-            Tinaweb is developed by <a href="http://moma.csregistry.org" target="_BLANK"><img
-                src="css/branding/moma-crea.png" height="15px"/></a> under the <a
-                href="http://www.gnu.org/licenses/gpl.html" target="_BLANK">GNU GPL license</a> with the support of <a
-                href="http://cordis.europa.eu/fp7/ict/programme/fet_en.html" target="_BLANK">EU FP7 ICT - Future and
-            emerging technologies</a><br/>
-            Our partners : <img src="css/branding/partners_small.jpg" height=15px/>
-            Our softwares : <a href="http://tinasoft.eu/"><img src="css/branding/get-tinasoft.png" height=15px/></a>
-        </p>
-    </div>
     <!-- end of ft -->
 </div>
 <!-- end of doc3 -->

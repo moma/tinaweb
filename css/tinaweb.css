@@ -37,8 +37,8 @@ body {
 }
 
 #title {
-    margin: 7px;
-    width: 480px;
+    margin: 3px;
+   width: 380px;
 }
 
 #toggle-unselect {
@@ -54,7 +54,9 @@ body {
 }
 
 #infodiv {
-    margin: 4px 9px;
+    margin: 0px;
+    padding: 0px;
+    border: 0px;
     float: right;
 }
 
@@ -93,7 +95,7 @@ body {
 }
 
 .appletInfo {
-    font-size: 20px;
+    font-size: 18px;
 }
 
 
