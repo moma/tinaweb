@@ -1,7 +1,7 @@
 
 displayNodeRow = (label, id, category) ->
   $("#node_table > tbody").append $("<tr></tr>").append($("<td id='node_list_" + id + "'></td>").text(label).click((eventObject) ->
-    tinaviz.viewMeso id, category
+    app.viewMeso id, category
   ))
 InfoDiv = 
   id: null
@@ -22,9 +22,9 @@ InfoDiv =
   
   display_current_category: ->
     categories = @categories
-    tinaviz.getView (data) ->
+    app.getView (data) ->
       view = data.view
-      tinaviz.getCategory (data) ->
+      app.getCategory (data) ->
         cat = data.category
         if view == "macro"
           $("#toggle-switch").button "option", "label", categories[cat]
@@ -32,13 +32,13 @@ InfoDiv =
           $("#toggle-switch").button "option", "label", categories[cat] + " neighbours"
   
   display_current_view: ->
-    tinaviz.getView (data) ->
+    app.getView (data) ->
       view = data.view
-      if view != undefined
+      if view isnt undefined
         level = $ "#level"
         level.button "option", "label", view + " level"
         title = $ "#infodiv > h3:first"
-        if view == "meso"
+        if view is "meso"
           level.addClass "ui-state-highlight"
           title.addClass "ui-state-highlight"
         else
@@ -66,7 +66,7 @@ InfoDiv =
   updateTagCloud: (node_list, neighbours) ->
     return  if Object.size(node_list) == 0
     
-    tinaviz.getCategory (data) ->
+    app.getCategory (data) ->
       cat = data.category
       neighbours = @mergeNeighbours cat, neighbours
       @cloudSearch.empty()
@@ -83,18 +83,18 @@ InfoDiv =
         requests = requests + "+AND+"  if i < neighbours.length - 1
         i++
       if cat != undefined
-        oppositeRealName = @categories[tinaviz.getOppositeCategory(cat)]
-        if oppositeRealName != undefined
+        oppositeRealName = @categories[app.getOppositeCategory(cat)]
+        if oppositeRealName?
           tmp = ""
           tmp = "Search on: <a href=\""
           tmp += Googlerequests
           tmp += requests
           tmp += "\" alt=\"search on google\" target=\"_BLANK\"><img src=\""
-          tmp += tinaviz.path
+          tmp += app.config.path
           tmp += "css/branding/google.png\" />Google</a> &nbsp;"
           tmp += " <a href=\"" + PubMedrequests + requests
           tmp += "\" alt=\"search on PubMed\" target=\"_BLANK\"><img src=\""
-          tmp += tinaviz.path
+          tmp += app.config.path
           tmp += "css/branding/pubmed.png\" />Pubmed</a>"
           @cloudSearch.append tmp
       sizecoef = 15
@@ -116,7 +116,7 @@ InfoDiv =
             attached_id = tag.id
             attached_cat = tag.category
             tagspan.click ->
-              tinaviz.viewMeso attached_id, attached_cat, ->
+              app.viewMeso attached_id, attached_cat, ->
           if neighbours.length == 1
             if tag["category"] == "Document"
               tagspan.css "font-size", const_doc_tag
@@ -142,7 +142,7 @@ InfoDiv =
       @cloudSearchCopy.append tagcloud.clone()
   
   updateInfo: (lastselection) ->
-    tinaviz.getCategory (data) ->
+    app.getCategory (data) ->
       cat = data.category
       labelinnerdiv = $ "<div></div>"
       contentinnerdiv = $ "<div></div>"
@@ -157,10 +157,10 @@ InfoDiv =
           else
             labelinnerdiv.append $("<b></b>").text("[...]")  if number_of_label == 5
           @selection.push node.id
-          console.log "label: " + label
+          log "label: " + label
           contentinnerdiv.append $("<b></b>").text(label)
           htmlContent = htmlDecode(decodeJSON(node.content))
-          console.log "  htmlContent: " + htmlContent
+          log "  htmlContent: " + htmlContent
           contentinnerdiv.append $("<p></p>").html(htmlContent)
           contentinnerdiv.append $("<p></p>").html(@getSearchQueries(label, cat))
       unless @selection.length == 0
@@ -176,13 +176,13 @@ InfoDiv =
     unless @id?
       alert "error : infodiv not initialized with its HTML DIV id"
       return
-    if Object.size(lastselection) == 0
+    if Object.size(lastselection) is 0
       @reset()
       return
     @selection = []
     @updateInfo lastselection
-    tinaviz.getNeighbourhood "macro", @selection, (data) ->
-      console.log "received neighbourhood"
+    app.getNeighbourhood "macro", @selection, (data) ->
+      log "received neighbourhood"
   
   reset: ->
     unless @id?
@@ -190,7 +190,7 @@ InfoDiv =
       return
     @unselect_button.hide()
     @contents.empty().append $("<h4></h4>").html("click on a node to begin exploration")
-    path = tinaviz.path
+    path = app.path
     @contents.empty().append $("<h4></h4>").html("<h2>Navigation tips</h2>" + "<p align='left'>" + "<br/>" + "<i>Basic interactions</i><br/><br/>" + "Click on a node to select/unselect and get its information.  In case of multiple selection, the button <img src='" + path + "css/branding/unselect.png' alt='unselect' align='top' height=20/>  clears all selections.<br/><br/>The switch button <img src='" + path + "css/branding/switch.png' alt='switch' align='top' height=20 /> allows to change the view type." + "<br/><br/>" + "<i>Graph manipulation</i><br/><br/>" + "Link and node sizes indicate their strength.<br/><br/> To fold/unfold the graph (keep only strong links or weak links), use the 'edges filter' sliders.<br/><br/> To select a more of less specific area of the graph, use the 'nodes filter' slider.</b><br/><br/>" + "<i>Micro/Macro view</i><br/><br/>To explore the neighborhood of a selection, either double click on the selected nodes, either click on the macro/meso level button. Zoom out in meso view return to macro view.<br/><br/>  " + "Click on the 'all nodes' tab below to view the full clickable list of nodes.<br/><br/>Find additional tips with mouse over the question marks." + "</p>")
     @cloudSearchCopy.empty()
     @cloudSearch.empty()
@@ -202,13 +202,13 @@ InfoDiv =
   
   updateNodeList: (view, category) ->
     @display_current_category()
-    return  if category == @last_category
-    tinaviz.node_list_cache = {}  if tinaviz.node_list_cache == undefined
+    return  if category is @last_category
+    app.node_list_cache = {}  if app.node_list_cache is undefined
 
     whenReceivingNodeList = (data) =>
-      console.log "receiving and updating node.list: " + (data.nodes.length) + " nodes"
-      return  if category == _this.last_category
-      @node_list_cache = {}  if _this.node_list_cache == undefined
+      log "receiving and updating node.list: #{data.nodes.length} nodes"
+      return  if category is _this.last_category
+      @node_list_cache = {}  if _this.node_list_cache is undefined
       @node_list_cache[category] = alphabeticListSort data.nodes, "label"
       @.node_table.empty()
       @last_category = category
@@ -224,10 +224,10 @@ InfoDiv =
             delay 0, -> displayNodeRow rowLabel, rowId, rowCat
           i++
     
-    tinaviz.getNodes view, category, whenReceivingNodeList
+    app.getNodes view, category, whenReceivingNodeList
   
   getSearchQueries: (label, cat) ->
-    path = tinaviz.path
+    path = app.config.path
     SearchQuery = label.replace(RegExp(" ", "g"), "+")
     if cat == "Document"
       $("<p></p>").html "<a href=\"http://www.google.com/#hl=en&source=hp&q=%20" + SearchQuery.replace(",", "OR") + "%20\" align=middle target=blank height=15 width=15> <img src=\"" + path + "css/branding/google.png\" height=15 width=15> </a><a href=\"http://en.wikipedia.org/wiki/" + label.replace(RegExp(" ", "g"), "_") + "\" align=middle target=blank height=15 width=15> <img src=\"" + path + "css/branding/wikipedia.png\" height=15 width=15> </a><a href=\"http://www.flickr.com/search/?w=all&q=" + SearchQuery + "\" align=middle target=blank height=15 width=15> <img src=\"" + path + "css/branding/flickr.png\" height=15 width=15> </a>"

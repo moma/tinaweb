@@ -2,7 +2,7 @@ var InfoDiv, displayNodeRow;
 
 displayNodeRow = function(label, id, category) {
   return $("#node_table > tbody").append($("<tr></tr>").append($("<td id='node_list_" + id + "'></td>").text(label).click(function(eventObject) {
-    return tinaviz.viewMeso(id, category);
+    return app.viewMeso(id, category);
   })));
 };
 
@@ -26,10 +26,10 @@ InfoDiv = {
   display_current_category: function() {
     var categories;
     categories = this.categories;
-    return tinaviz.getView(function(data) {
+    return app.getView(function(data) {
       var view;
       view = data.view;
-      return tinaviz.getCategory(function(data) {
+      return app.getCategory(function(data) {
         var cat;
         cat = data.category;
         if (view === "macro") {
@@ -41,7 +41,7 @@ InfoDiv = {
     });
   },
   display_current_view: function() {
-    return tinaviz.getView(function(data) {
+    return app.getView(function(data) {
       var level, title, view;
       view = data.view;
       if (view !== void 0) {
@@ -83,7 +83,7 @@ InfoDiv = {
   },
   updateTagCloud: function(node_list, neighbours) {
     if (Object.size(node_list) === 0) return;
-    return tinaviz.getCategory(function(data) {
+    return app.getCategory(function(data) {
       var Googlerequests, PubMedrequests, cat, const_doc_tag, i, nb_displayed_tag, oppositeRealName, requests, sizecoef, tag, tagLabel, tagcloud, tagspan, tmp, tooltip;
       cat = data.category;
       neighbours = this.mergeNeighbours(cat, neighbours);
@@ -101,18 +101,18 @@ InfoDiv = {
         i++;
       }
       if (cat !== void 0) {
-        oppositeRealName = this.categories[tinaviz.getOppositeCategory(cat)];
-        if (oppositeRealName !== void 0) {
+        oppositeRealName = this.categories[app.getOppositeCategory(cat)];
+        if (oppositeRealName != null) {
           tmp = "";
           tmp = "Search on: <a href=\"";
           tmp += Googlerequests;
           tmp += requests;
           tmp += "\" alt=\"search on google\" target=\"_BLANK\"><img src=\"";
-          tmp += tinaviz.path;
+          tmp += app.config.path;
           tmp += "css/branding/google.png\" />Google</a> &nbsp;";
           tmp += " <a href=\"" + PubMedrequests + requests;
           tmp += "\" alt=\"search on PubMed\" target=\"_BLANK\"><img src=\"";
-          tmp += tinaviz.path;
+          tmp += app.config.path;
           tmp += "css/branding/pubmed.png\" />Pubmed</a>";
           this.cloudSearch.append(tmp);
         }
@@ -136,7 +136,7 @@ InfoDiv = {
             attached_id = tag.id;
             attached_cat = tag.category;
             return tagspan.click(function() {
-              return tinaviz.viewMeso(attached_id, attached_cat, function() {});
+              return app.viewMeso(attached_id, attached_cat, function() {});
             });
           })();
           if (neighbours.length === 1) {
@@ -171,7 +171,7 @@ InfoDiv = {
     });
   },
   updateInfo: function(lastselection) {
-    return tinaviz.getCategory(function(data) {
+    return app.getCategory(function(data) {
       var cat, contentinnerdiv, htmlContent, id, label, labelinnerdiv, node, number_of_label;
       cat = data.category;
       labelinnerdiv = $("<div></div>");
@@ -190,10 +190,10 @@ InfoDiv = {
             }
           }
           this.selection.push(node.id);
-          console.log("label: " + label);
+          log("label: " + label);
           contentinnerdiv.append($("<b></b>").text(label));
           htmlContent = htmlDecode(decodeJSON(node.content));
-          console.log("  htmlContent: " + htmlContent);
+          log("  htmlContent: " + htmlContent);
           contentinnerdiv.append($("<p></p>").html(htmlContent));
           contentinnerdiv.append($("<p></p>").html(this.getSearchQueries(label, cat)));
         }
@@ -220,8 +220,8 @@ InfoDiv = {
     }
     this.selection = [];
     this.updateInfo(lastselection);
-    return tinaviz.getNeighbourhood("macro", this.selection, function(data) {
-      return console.log("received neighbourhood");
+    return app.getNeighbourhood("macro", this.selection, function(data) {
+      return log("received neighbourhood");
     });
   },
   reset: function() {
@@ -232,7 +232,7 @@ InfoDiv = {
     }
     this.unselect_button.hide();
     this.contents.empty().append($("<h4></h4>").html("click on a node to begin exploration"));
-    path = tinaviz.path;
+    path = app.path;
     this.contents.empty().append($("<h4></h4>").html("<h2>Navigation tips</h2>" + "<p align='left'>" + "<br/>" + "<i>Basic interactions</i><br/><br/>" + "Click on a node to select/unselect and get its information.  In case of multiple selection, the button <img src='" + path + "css/branding/unselect.png' alt='unselect' align='top' height=20/>  clears all selections.<br/><br/>The switch button <img src='" + path + "css/branding/switch.png' alt='switch' align='top' height=20 /> allows to change the view type." + "<br/><br/>" + "<i>Graph manipulation</i><br/><br/>" + "Link and node sizes indicate their strength.<br/><br/> To fold/unfold the graph (keep only strong links or weak links), use the 'edges filter' sliders.<br/><br/> To select a more of less specific area of the graph, use the 'nodes filter' slider.</b><br/><br/>" + "<i>Micro/Macro view</i><br/><br/>To explore the neighborhood of a selection, either double click on the selected nodes, either click on the macro/meso level button. Zoom out in meso view return to macro view.<br/><br/>  " + "Click on the 'all nodes' tab below to view the full clickable list of nodes.<br/><br/>Find additional tips with mouse over the question marks." + "</p>"));
     this.cloudSearchCopy.empty();
     this.cloudSearch.empty();
@@ -246,10 +246,10 @@ InfoDiv = {
       _this = this;
     this.display_current_category();
     if (category === this.last_category) return;
-    if (tinaviz.node_list_cache === void 0) tinaviz.node_list_cache = {};
+    if (app.node_list_cache === void 0) app.node_list_cache = {};
     whenReceivingNodeList = function(data) {
       var i, node_list, _results;
-      console.log("receiving and updating node.list: " + data.nodes.length + " nodes");
+      log("receiving and updating node.list: " + data.nodes.length + " nodes");
       if (category === _this.last_category) return;
       if (_this.node_list_cache === void 0) _this.node_list_cache = {};
       _this.node_list_cache[category] = alphabeticListSort(data.nodes, "label");
@@ -274,11 +274,11 @@ InfoDiv = {
         return _results;
       }
     };
-    return tinaviz.getNodes(view, category, whenReceivingNodeList);
+    return app.getNodes(view, category, whenReceivingNodeList);
   },
   getSearchQueries: function(label, cat) {
     var SearchQuery, path;
-    path = tinaviz.path;
+    path = app.config.path;
     SearchQuery = label.replace(RegExp(" ", "g"), "+");
     if (cat === "Document") {
       return $("<p></p>").html("<a href=\"http://www.google.com/#hl=en&source=hp&q=%20" + SearchQuery.replace(",", "OR") + "%20\" align=middle target=blank height=15 width=15> <img src=\"" + path + "css/branding/google.png\" height=15 width=15> </a><a href=\"http://en.wikipedia.org/wiki/" + label.replace(RegExp(" ", "g"), "_") + "\" align=middle target=blank height=15 width=15> <img src=\"" + path + "css/branding/wikipedia.png\" height=15 width=15> </a><a href=\"http://www.flickr.com/search/?w=all&q=" + SearchQuery + "\" align=middle target=blank height=15 width=15> <img src=\"" + path + "css/branding/flickr.png\" height=15 width=15> </a>");
