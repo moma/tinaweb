@@ -150,34 +150,43 @@ class Application extends Tinaweb
 
   selectionChanged: (data) =>
     log "-- selection automatically changed:"
-    log data.selection
-    active = $("#infodiv").accordion "option", "active"
-    selectionIsEmpty = (Object.size(data.selection) is 0)
-    log "selectionIsEmpty: #{selectionIsEmpty}"
-    if not selectionIsEmpty and active isnt 0
-      log "Application: selection is not empty, and active tab is not 0"
-      $("#infodiv").accordion "activate", 0
-    else if selectionIsEmpty and active isnt "false"
-      log "Application: selection is empty and active is not false"
-      $("#infodiv").accordion "activate", 0
-    if data.mouse is "left"
-       
-    else if data.mouse is "right"
-      
-    else if data.mouse is "doubleLeft"
-      log "Application: double click on left mouse:"
-      @setView "meso", =>
-        @getCategory (data2) =>
-            log "switching to #{data2.category}"
-          @setCategory data2.category, =>
-            @centerOnSelection =>
-              @infodiv.updateNodeList "meso", data2.category
-              @infodiv.display_current_category()
-    @infodiv.update data.view, data.selection
+    mouse = data.mouse
+    selection = data.selection
+    @getView (data) =>
+      view = data.view
+        
+      active = $("#infodiv").accordion "option", "active"
+      selectionIsEmpty = (Object.size(selection) is 0)
+      log "selectionIsEmpty: #{selectionIsEmpty}"
+      if not selectionIsEmpty and active isnt 0
+        log "Application: selection is not empty, and active tab is not 0"
+        $("#infodiv").accordion "activate", 0
+      else if selectionIsEmpty and active isnt "false"
+        log "Application: selection is empty and active is not false"
+        $("#infodiv").accordion "activate", 0
+        
+      if mouse is "left"
+         
+      else if mouse is "right"
+        
+      else if mouse is "doubleLeft"
+        log "Application: double click on left mouse:"
+        
+        unless selectionIsEmpty
+          @getCategory (data) =>
+            category = data.category
+            @setView "meso", =>
+              log "switching to #{category}"
+              @setCategory category, =>
+                @infodiv.updateNodeList "meso", category
+                @infodiv.display_current_category()
+                @infodiv.update view, selection
+                @centerOnSelection =>
+        
+      @infodiv.display_current_category()
+      @infodiv.update view, selection
     
-  #neighbourhood: (data) ->
-  #    log "getNeighbourhood"
-  #tinaviz.infodiv.updateTagCloud data.selection, data.neighbours
+    
     
     
   viewChanged: (data) =>

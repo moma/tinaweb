@@ -1,5 +1,4 @@
-var InfoDiv, displayNodeRow,
-  _this = this;
+var InfoDiv, displayNodeRow;
 
 displayNodeRow = function(label, id, category) {
   return $("#node_table > tbody").append($("<tr></tr>").append($("<td id='node_list_" + id + "'></td>").text(label).click(function(eventObject) {
@@ -88,7 +87,7 @@ InfoDiv = {
     var _this = this;
     if (Object.size(node_list) === 0) return;
     return app.getCategory(function(data) {
-      var Googlerequests, PubMedrequests, cat, const_doc_tag, i, nb_displayed_tag, oppositeRealName, requests, sizecoef, tag, tagLabel, tagcloud, tagspan, tmp, tooltip;
+      var Googlerequests, PubMedrequests, cat, const_doc_tag, i, nb_displayed_tag, oppositeRealName, requests, sizecoef, tag, tagLabel, tagcloud, tagcloud2, tagspan, tmp, tmp1, tmp2, tooltip;
       cat = data.category;
       neighbours = _this.mergeNeighbours(cat, neighbours);
       _this.cloudSearch.empty();
@@ -166,14 +165,24 @@ InfoDiv = {
         i++;
       }
       _this.cloud.empty();
-      _this.cloud.append("<h3>selection related to " + oppositeRealName + ": <span class=\"ui-icon ui-icon-help icon-right\" title=\"" + tooltip + "\"></span></h3>");
+      tmp1 = $("<h3>selection related to " + oppositeRealName + ": <span class=\"ui-icon ui-icon-help icon-right\" title=\"" + tooltip + "\"></span></h3>").hide();
+      _this.cloud.append(tmp1);
+      show(tmp1);
+      tagcloud.hide();
       _this.cloud.append(tagcloud);
+      show(tagcloud);
       _this.cloudSearchCopy.empty();
-      _this.cloudSearchCopy.append("<h3>global search on " + oppositeRealName + ": <span class=\"ui-icon ui-icon-help icon-right\" title=\"" + tooltip + "\"></span></h3>");
-      return _this.cloudSearchCopy.append(tagcloud.clone());
+      tmp2 = $("<h3>global search on " + oppositeRealName + ": <span class=\"ui-icon ui-icon-help icon-right\" title=\"" + tooltip + "\"></span></h3>").hide();
+      _this.cloudSearchCopy.append(tmp2);
+      show(tmp2);
+      tagcloud2 = tagcloud.clone();
+      tagcloud2.hide();
+      _this.cloudSearchCopy.append(tagcloud2);
+      return show(tagcloud2);
     });
   },
   updateInfo: function(lastselection) {
+    var _this = this;
     return app.getCategory(function(data) {
       var cat, contentinnerdiv, htmlContent, id, label, labelinnerdiv, node, number_of_label;
       cat = data.category;
@@ -213,44 +222,39 @@ InfoDiv = {
     });
   },
   update: function(view, lastselection) {
-    if (_this.id == null) {
-      alert("error : infodiv not initialized with its HTML DIV id");
-      return;
-    }
+    var _this = this;
     if (Object.size(lastselection) === 0) {
-      _this.reset();
+      this.reset();
       return;
     }
-    _this.selection = [];
-    _this.updateInfo(lastselection);
-    return app.getNeighbourhood("macro", _this.selection, function(data) {
-      return log("received neighbourhood");
+    this.selection = [];
+    this.updateInfo(lastselection);
+    return app.getNeighbourhood("macro", this.selection, function(data) {
+      log("received neighbourhood of selection");
+      log(data);
+      return _this.updateTagCloud(data.nodes, data.neighbours);
     });
   },
   reset: function() {
     var path;
-    if (_this.id == null) {
-      alert("error : infodiv not initialized with its HTML DIV id");
-      return;
-    }
-    _this.unselect_button.hide();
-    _this.contents.empty().append($("<h4></h4>").html("click on a node to begin exploration"));
+    this.unselect_button.hide();
+    this.contents.empty().append($("<h4></h4>").html("click on a node to begin exploration"));
     path = app.config.path;
-    _this.contents.empty().append($("<h4></h4>").html("<h2>Navigation tips</h2>" + "<p align='left'>" + "<br/>" + "<i>Basic interactions</i><br/><br/>" + "Click on a node to select/unselect and get its information.  In case of multiple selection, the button <img src='" + path + "css/branding/unselect.png' alt='unselect' align='top' height=20/>  clears all selections.<br/><br/>The switch button <img src='" + path + "css/branding/switch.png' alt='switch' align='top' height=20 /> allows to change the view type." + "<br/><br/>" + "<i>Graph manipulation</i><br/><br/>" + "Link and node sizes indicate their strength.<br/><br/> To fold/unfold the graph (keep only strong links or weak links), use the 'edges filter' sliders.<br/><br/> To select a more of less specific area of the graph, use the 'nodes filter' slider.</b><br/><br/>" + "<i>Micro/Macro view</i><br/><br/>To explore the neighborhood of a selection, either double click on the selected nodes, either click on the macro/meso level button. Zoom out in meso view return to macro view.<br/><br/>  " + "Click on the 'all nodes' tab below to view the full clickable list of nodes.<br/><br/>Find additional tips with mouse over the question marks." + "</p>"));
-    _this.cloudSearchCopy.empty();
-    _this.cloudSearch.empty();
-    _this.cloud.empty();
-    _this.selection = [];
-    _this.neighbours = [];
-    _this.last_category = "";
+    this.label.empty();
+    this.contents.empty().append($("<h4></h4>").html("<h2>Navigation tips</h2>" + "<p align='left'>" + "<br/>" + "<i>Basic interactions</i><br/><br/>" + "Click on a node to select/unselect and get its information.  In case of multiple selection, the button <img src='" + path + "css/branding/unselect.png' alt='unselect' align='top' height=20/>  clears all selections.<br/><br/>The switch button <img src='" + path + "css/branding/switch.png' alt='switch' align='top' height=20 /> allows to change the view type." + "<br/><br/>" + "<i>Graph manipulation</i><br/><br/>" + "Link and node sizes indicate their strength.<br/><br/> To fold/unfold the graph (keep only strong links or weak links), use the 'edges filter' sliders.<br/><br/> To select a more of less specific area of the graph, use the 'nodes filter' slider.</b><br/><br/>" + "<i>Micro/Macro view</i><br/><br/>To explore the neighborhood of a selection, either double click on the selected nodes, either click on the macro/meso level button. Zoom out in meso view return to macro view.<br/><br/>  " + "Click on the 'all nodes' tab below to view the full clickable list of nodes.<br/><br/>Find additional tips with mouse over the question marks." + "</p>"));
+    this.cloudSearchCopy.empty();
+    this.cloudSearch.empty();
+    this.cloud.empty();
+    this.selection = [];
+    this.neighbours = [];
+    this.last_category = "";
   },
   updateNodeList: function(view, category) {
-    var whenReceivingNodeList,
-      _this = this;
+    var _this = this;
     this.display_current_category();
     if (category === this.last_category) return;
     if (app.node_list_cache === void 0) app.node_list_cache = {};
-    whenReceivingNodeList = function(data) {
+    return app.getNodes(view, category, function(data) {
       var i, node_list, _results;
       log("receiving and updating node.list: " + data.nodes.length + " nodes");
       if (category === _this.last_category) return;
@@ -277,8 +281,7 @@ InfoDiv = {
         }
         return _results;
       }
-    };
-    return app.getNodes(view, category, whenReceivingNodeList);
+    });
   },
   getSearchQueries: function(label, cat) {
     var SearchQuery, path;

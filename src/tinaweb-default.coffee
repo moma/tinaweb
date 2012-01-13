@@ -108,7 +108,7 @@ class Tinaweb extends Tinaviz
     real = "filter.view"
     @get real, @makeWrap(alias, real, cb)
   
-  setView: (view, cb) =>
+  setView: (value, cb) =>
     alias = "view"
     real = "filter.view"
     @set real, value, "String", @makeWrap(alias, real, cb)    

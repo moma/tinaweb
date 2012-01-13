@@ -185,35 +185,45 @@ Application = (function(_super) {
   };
 
   Application.prototype.selectionChanged = function(data) {
-    var active, selectionIsEmpty,
+    var mouse, selection,
       _this = this;
     log("-- selection automatically changed:");
-    log(data.selection);
-    active = $("#infodiv").accordion("option", "active");
-    selectionIsEmpty = Object.size(data.selection) === 0;
-    log("selectionIsEmpty: " + selectionIsEmpty);
-    if (!selectionIsEmpty && active !== 0) {
-      log("Application: selection is not empty, and active tab is not 0");
-      $("#infodiv").accordion("activate", 0);
-    } else if (selectionIsEmpty && active !== "false") {
-      log("Application: selection is empty and active is not false");
-      $("#infodiv").accordion("activate", 0);
-    }
-    if (data.mouse === "left") {} else if (data.mouse === "right") {} else if (data.mouse === "doubleLeft") {
-      log("Application: double click on left mouse:");
-      this.setView("meso", function() {
-        _this.getCategory(function(data2) {
-          return log("switching to " + data2.category);
-        });
-        return _this.setCategory(data2.category, function() {
-          return _this.centerOnSelection(function() {
-            _this.infodiv.updateNodeList("meso", data2.category);
-            return _this.infodiv.display_current_category();
+    mouse = data.mouse;
+    selection = data.selection;
+    return this.getView(function(data) {
+      var active, selectionIsEmpty, view;
+      view = data.view;
+      active = $("#infodiv").accordion("option", "active");
+      selectionIsEmpty = Object.size(selection) === 0;
+      log("selectionIsEmpty: " + selectionIsEmpty);
+      if (!selectionIsEmpty && active !== 0) {
+        log("Application: selection is not empty, and active tab is not 0");
+        $("#infodiv").accordion("activate", 0);
+      } else if (selectionIsEmpty && active !== "false") {
+        log("Application: selection is empty and active is not false");
+        $("#infodiv").accordion("activate", 0);
+      }
+      if (mouse === "left") {} else if (mouse === "right") {} else if (mouse === "doubleLeft") {
+        log("Application: double click on left mouse:");
+        if (!selectionIsEmpty) {
+          _this.getCategory(function(data) {
+            var category;
+            category = data.category;
+            return _this.setView("meso", function() {
+              log("switching to " + category);
+              return _this.setCategory(category, function() {
+                _this.infodiv.updateNodeList("meso", category);
+                _this.infodiv.display_current_category();
+                _this.infodiv.update(view, selection);
+                return _this.centerOnSelection(function() {});
+              });
+            });
           });
-        });
-      });
-    }
-    return this.infodiv.update(data.view, data.selection);
+        }
+      }
+      _this.infodiv.display_current_category();
+      return _this.infodiv.update(view, selection);
+    });
   };
 
   Application.prototype.viewChanged = function(data) {

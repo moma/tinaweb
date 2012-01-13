@@ -26,7 +26,7 @@ InfoDiv =
       view = data.view
       app.getCategory (data) =>
         cat = data.category
-        if view is "macro"
+        if view == "macro"
           $("#toggle-switch").button "option", "label", categories[cat]
         else
           $("#toggle-switch").button "option", "label", categories[cat] + " neighbours"
@@ -134,13 +134,26 @@ InfoDiv =
           break
         i++
       @cloud.empty()
-      @cloud.append "<h3>selection related to #{oppositeRealName}: <span class=\"ui-icon ui-icon-help icon-right\" title=\"#{tooltip}\"></span></h3>"
+      
+      tmp1 = $("<h3>selection related to #{oppositeRealName}: <span class=\"ui-icon ui-icon-help icon-right\" title=\"#{tooltip}\"></span></h3>").hide()
+      @cloud.append tmp1
+      show tmp1
+      
+      tagcloud.hide()
       @cloud.append tagcloud
+      show tagcloud
+      
       @cloudSearchCopy.empty()
-      @cloudSearchCopy.append "<h3>global search on #{oppositeRealName}: <span class=\"ui-icon ui-icon-help icon-right\" title=\"#{tooltip}\"></span></h3>"
-      @cloudSearchCopy.append tagcloud.clone()
+      tmp2 = $("<h3>global search on #{oppositeRealName}: <span class=\"ui-icon ui-icon-help icon-right\" title=\"#{tooltip}\"></span></h3>").hide()
+      @cloudSearchCopy.append tmp2
+      show tmp2
+      
+      tagcloud2 = tagcloud.clone()
+      tagcloud2.hide()
+      @cloudSearchCopy.append tagcloud2
+      show tagcloud2
   
-  updateInfo: (lastselection) =>
+  updateInfo: (lastselection) ->
     app.getCategory (data) =>
       cat = data.category
       labelinnerdiv = $ "<div></div>"
@@ -171,25 +184,22 @@ InfoDiv =
       else
         @reset()
   
-  update: (view, lastselection) =>
-    unless @id?
-      alert "error : infodiv not initialized with its HTML DIV id"
-      return
+  update: (view, lastselection) ->
     if Object.size(lastselection) is 0
       @reset()
       return
     @selection = []
     @updateInfo lastselection
     app.getNeighbourhood "macro", @selection, (data) =>
-      log "received neighbourhood"
+      log "received neighbourhood of selection"
+      log data
+      @updateTagCloud data.nodes, data.neighbours
   
-  reset: =>
-    unless @id?
-      alert "error : infodiv not initialized with its HTML DIV id"
-      return
+  reset: ->
     @unselect_button.hide()
     @contents.empty().append $("<h4></h4>").html("click on a node to begin exploration")
     path = app.config.path
+    @label.empty()
     @contents.empty().append $("<h4></h4>").html("<h2>Navigation tips</h2>" + "<p align='left'>" + "<br/>" + "<i>Basic interactions</i><br/><br/>" + "Click on a node to select/unselect and get its information.  In case of multiple selection, the button <img src='" + path + "css/branding/unselect.png' alt='unselect' align='top' height=20/>  clears all selections.<br/><br/>The switch button <img src='" + path + "css/branding/switch.png' alt='switch' align='top' height=20 /> allows to change the view type." + "<br/><br/>" + "<i>Graph manipulation</i><br/><br/>" + "Link and node sizes indicate their strength.<br/><br/> To fold/unfold the graph (keep only strong links or weak links), use the 'edges filter' sliders.<br/><br/> To select a more of less specific area of the graph, use the 'nodes filter' slider.</b><br/><br/>" + "<i>Micro/Macro view</i><br/><br/>To explore the neighborhood of a selection, either double click on the selected nodes, either click on the macro/meso level button. Zoom out in meso view return to macro view.<br/><br/>  " + "Click on the 'all nodes' tab below to view the full clickable list of nodes.<br/><br/>Find additional tips with mouse over the question marks." + "</p>")
     @cloudSearchCopy.empty()
     @cloudSearch.empty()
@@ -204,7 +214,7 @@ InfoDiv =
     return  if category is @last_category
     app.node_list_cache = {}  if app.node_list_cache is undefined
 
-    whenReceivingNodeList = (data) =>
+    app.getNodes view, category, (data) =>
       log "receiving and updating node.list: #{data.nodes.length} nodes"
       return  if category is _this.last_category
       @node_list_cache = {}  if _this.node_list_cache is undefined
@@ -223,8 +233,6 @@ InfoDiv =
             delay 0, => displayNodeRow rowLabel, rowId, rowCat
           i++
     
-    app.getNodes view, category, whenReceivingNodeList
-  
   getSearchQueries: (label, cat) ->
     path = app.config.path
     SearchQuery = label.replace(RegExp(" ", "g"), "+")

@@ -167,7 +167,7 @@ Tinaweb = (function(_super) {
     return this.get(real, this.makeWrap(alias, real, cb));
   };
 
-  Tinaweb.prototype.setView = function(view, cb) {
+  Tinaweb.prototype.setView = function(value, cb) {
     var alias, real;
     alias = "view";
     real = "filter.view";
