@@ -1,29 +1,29 @@
-var MyTinaweb, tinaweb,
+var Application, app,
   __hasProp = Object.prototype.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor; child.__super__ = parent.prototype; return child; };
 
-MyTinaweb = (function(_super) {
+Application = (function(_super) {
 
-  __extends(MyTinaweb, _super);
+  __extends(Application, _super);
 
-  function MyTinaweb() {
-    MyTinaweb.__super__.constructor.apply(this, arguments);
+  function Application() {
+    Application.__super__.constructor.apply(this, arguments);
   }
 
-  MyTinaweb.prototype.preInstall = function() {
-    log("MyTinaweb: preInstall");
+  Application.prototype.preInstall = function() {
+    log("Application: preInstall");
     this.configure_using(default_config);
     return this.configure_using(this.load_url_params());
   };
 
-  MyTinaweb.prototype.postInstall = function() {
-    log("MyTinaweb: postInstall");
+  Application.prototype.postInstall = function() {
+    log("Application: postInstall");
     if (this.config.layout === "phyloforce") {
       this.infodiv = PhyloInfoDiv;
     } else {
       this.infodiv = InfoDiv;
     }
-    log("MyTinaweb: configuring page layout, and info panel's DIV");
+    log("Application: configuring page layout, and info panel's DIV");
     this.infodiv.id = "infodiv";
     this.infodiv.label = $("#node_label");
     this.infodiv.contents = $("#node_contents");
@@ -41,7 +41,7 @@ MyTinaweb = (function(_super) {
     });
     this.infodiv.reset();
     toolbar.init();
-    log("MyTinaweb: trying to automatically open GEXF file from config");
+    log("Application: trying to automatically open GEXF file from config");
     if (this.config.gexf != null) {
       if (this.config.gexf !== "") {
         return this.open("" + this.config.gexf, this.graphLoadingProgress);
@@ -49,14 +49,14 @@ MyTinaweb = (function(_super) {
     }
   };
 
-  MyTinaweb.prototype.animateAppletInfo = function() {
+  Application.prototype.animateAppletInfo = function() {
     if (this.status !== "loaded") {
       $("#appletInfo").text($("#appletInfo").text() + ".");
       return delay(400, this.animateAppletInfo);
     }
   };
 
-  MyTinaweb.graphLoadingProgress = function(data) {
+  Application.graphLoadingProgress = function(data) {
     var status;
     status = data.status;
     if (status === "downloading") {
@@ -127,9 +127,9 @@ MyTinaweb = (function(_super) {
     }
   };
 
-  MyTinaweb.prototype.resize = function() {
+  Application.prototype.resize = function() {
     var height, infoDivWidth, width;
-    log("MyTinaweb: custom computeSize()");
+    log("Application: custom computeSize()");
     infoDivWidth = 390;
     width = getScreenWidth() - infoDivWidth - 55;
     height = getScreenHeight() - $("#hd").height() - $("#ft").height() - 60;
@@ -142,8 +142,9 @@ MyTinaweb = (function(_super) {
     });
   };
 
-  MyTinaweb.prototype.viewMeso = function(id, category) {
+  Application.prototype.viewMeso = function(id, category) {
     var _this = this;
+    log("Application: viewMeso(" + id + ", " + category + ")");
     return this.getCategory(function(data) {
       var cat;
       cat = data.category;
@@ -167,7 +168,7 @@ MyTinaweb = (function(_super) {
     });
   };
 
-  MyTinaweb.prototype.selectionChanged = function(data) {
+  Application.prototype.selectionChanged = function(data) {
     var active, selectionIsEmpty,
       _this = this;
     log("-- selection automatically changed: " + data.selection);
@@ -175,14 +176,14 @@ MyTinaweb = (function(_super) {
     selectionIsEmpty = Object.size(data.selection) === 0;
     log("selectionIsEmpty: " + selectionIsEmpty);
     if (!selectionIsEmpty && active !== 0) {
-      log("MyTinaweb: selection is not empty, and active tab is not 0");
+      log("Application: selection is not empty, and active tab is not 0");
       $("#infodiv").accordion("activate", 0);
     } else if (selectionIsEmpty && active !== "false") {
-      log("MyTinaweb: selection is empty and active is not false");
+      log("Application: selection is empty and active is not false");
       $("infodiv").accordion("activate", 0);
     }
     if (data.mouse === "left") {} else if (data.mouse === "right") {} else if (data.mouse === "doubleLeft") {
-      log("MyTinaweb: double click on left mouse:");
+      log("Application: double click on left mouse:");
       this.setView("meso", function() {
         _this.getCategory(function(data2) {
           return log("switching to " + data2.category);
@@ -198,10 +199,10 @@ MyTinaweb = (function(_super) {
     return this.infodiv.update(data.view, data.selection);
   };
 
-  MyTinaweb.prototype.viewChanged = function(data) {
+  Application.prototype.viewChanged = function(data) {
     var view,
       _this = this;
-    log("MyTinaweb: default view automatically changed to " + data.view);
+    log("Application: default view automatically changed to " + data.view);
     view = data.view;
     return this.getCategory(function(data) {
       var category, level, title;
@@ -232,13 +233,14 @@ MyTinaweb = (function(_super) {
     });
   };
 
-  return MyTinaweb;
+  return Application;
 
 })(Tinaweb);
 
-tinaweb = new MyTinaweb;
+app = new Application;
 
 $(document).ready(function() {
-  log("document ready.. installing tinaviz");
-  return tinaviz.install();
+  log("document ready.. installing app");
+  log(app);
+  return app.install();
 });

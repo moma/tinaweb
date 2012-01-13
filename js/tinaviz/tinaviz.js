@@ -78,12 +78,10 @@ Tinaviz = (function() {
   };
 
   Tinaviz.prototype.freeze = function() {
-    log("Tinaviz: freeze()");
     return this.applet.freeze();
   };
 
   Tinaviz.prototype.unfreeze = function() {
-    log("Tinaviz: unfreeze()");
     return this.applet.unfreeze();
   };
 
@@ -111,13 +109,22 @@ Tinaviz = (function() {
   };
 
   Tinaviz.prototype.set = function(key, obj, t, cb) {
-    var cbId;
+    var cbId, o;
     debug("Tinaviz: set(key: " + key + ", obj: " + obj + ", t: " + t + ")");
     cbId = makeCallback(cb);
-    if (t == null) {
-      log("Warning, setting unknow (" + key + ", " + obj + ")");
-      this.applet.sendSet(cbId, key, obj, "");
-      return;
+    if (!t) {
+      o = _(obj);
+      if (o.isNumber) {
+        t = "Double";
+      } else if (o.isBoolean) {
+        t = "Boolean";
+      } else if (current.isString) {
+        t = "String";
+      } else {
+        log("Warning, setting unknow (" + key + ", " + obj + ")");
+        this.applet.sendSet(cbId, key, obj, "");
+        return;
+      }
     }
     if (t.indexOf("Tuple2") !== -1) {
       if (t.indexOf("[Double]") !== -1) {
@@ -134,14 +141,6 @@ Tinaviz = (function() {
     } else {
       this.applet.sendSet(cbId, key, obj, t);
     }
-  };
-
-  Tinaviz.prototype.selectionChanged = function(data) {
-    return log("default selection changed " + data.selection);
-  };
-
-  Tinaviz.prototype.viewChanged = function(data) {
-    return log("default view automatically changed to " + data.view);
   };
 
   Tinaviz.prototype._generateAppletHTML = function() {

@@ -1,8 +1,8 @@
 
 class Tinaweb extends Tinaviz
   
-  constructor: () ->
-    log "Tinaweb: constructor called.. calling supe()"
+  constructor: ->
+    log "Tinaweb: constructor called.. calling super()"
     super()
      
     log "Tinaweb: configuring with default config"
@@ -32,6 +32,7 @@ class Tinaweb extends Tinaviz
     @_status = "done"
     @_demo_running = false
     @_demo_possible = false
+    log "Tinaweb: end of constructor"
 
   # configure Tinaweb using some params
   configure_using: (params) ->
@@ -115,28 +116,15 @@ class Tinaweb extends Tinaviz
     alias = "view"
     real = "filter.view"
     @set real, value, "String", @makeWrap(alias, real, cb)    
-  preInstall: ->
-    log "Tinaweb: default preInstall()"
-  postInstall: ->
-    log "Tinaweb: default postInstall()"
-    
+
   install: ->
-    log "Tinaweb: install() -> loading url parameters"
+    #log "Tinaweb: install() -> loading url parameters"
         
-    log "Tinaweb: install() -> loading generic, enforced parameters (like logo or engine)"
-    # third layer: bypass and force some config values
-    @config = 
-      path: "" # $("meta[name=tinaviz]").attr("content")
-      tag:  "#vizdiv"           # DOM element, where to inject the applet
-      logo: "css/logo.png"      # default logo to show
-      context: ""
-      engine: "software"
-    @libPath = @path + "js/tinaviz/"  
-    @config.brandingIcon = "#{@config.libPath}tina_icon.png"
-    @configure @config
+    #log "Tinaweb: install() -> loading generic, enforced parameters (like logo or engine)"
+    #@onfigure_using @config
     
     log "Tinaweb: install() -> calling preInstall"
-    @preInstall()
+    @preInstall?()
     
     log "Tinaweb: install() -> calling @_inject => { ... }"
     @_inject =>
@@ -182,5 +170,5 @@ class Tinaweb extends Tinaviz
       @set "layoutSpeed", @_config.layout_speed, "Int"
       @set "pause", @_config.pause, "Boolean"
     
-      log "Tinaweb: _postInject() terminated, calling postInstall()"
-      @postInstall()
+      log "Tinaweb: _postInject() terminated, calling postInstall() if available"
+      @postInstall?()

@@ -13,7 +13,7 @@ makeCallback = (cb = ->) ->
 
 class Tinaviz
 
-  constructor: () ->
+  constructor: ->
      
     log "Tinaviz: called constructor()"
     @applet = undefined 
@@ -64,18 +64,12 @@ class Tinaviz
   #@getNeighboursFromDatabase = (id) ->
   #  elem = id.split "::"
   #  TinaService.getNGrams 0, elem[1], success: (data) ->
-    
 
-  freeze: ->
-    log "Tinaviz: freeze()"
-    @applet.freeze()
+  freeze: -> @applet.freeze()
   
-  unfreeze: -> 
-    log "Tinaviz: unfreeze()"
-    @applet.unfreeze()
+  unfreeze: -> @applet.unfreeze()
     
-  getNodes: (view, category, cb) ->
-    @applet.getNodes makeCallback(cb), view, category
+  getNodes: (view, category, cb) -> @applet.getNodes makeCallback(cb), view, category
   
   _resize: ({width,height}) ->
     log "Tinaviz: resize() -> self-resizing"
@@ -96,10 +90,18 @@ class Tinaviz
   set: (key, obj, t, cb) ->
     debug "Tinaviz: set(key: #{key}, obj: #{obj}, t: #{t})"
     cbId = makeCallback(cb)
-    unless t?
-      log "Warning, setting unknow (#{key}, #{obj})"
-      @applet.sendSet cbId, key, obj, ""
-      return
+    unless t
+      o = _ obj
+      if o.isNumber
+        t = "Double"
+      else if o.isBoolean
+        t = "Boolean"
+      else if current.isString
+        t = "String"
+      else
+        log "Warning, setting unknow (#{key}, #{obj})"
+        @applet.sendSet cbId, key, obj, ""
+        return
 
     unless t.indexOf("Tuple2") == -1
       unless t.indexOf("[Double]") == -1
@@ -116,13 +118,6 @@ class Tinaviz
       @applet.sendSet cbId, key, obj, t
     return
   
-      
-  selectionChanged: (data) ->
-    log "default selection changed #{data.selection}"
-    
-  viewChanged: (data) ->
-    log "default view automatically changed to #{data.view}"
-    
   _generateAppletHTML: ->
 
     buff = ""

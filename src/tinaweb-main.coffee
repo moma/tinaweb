@@ -1,5 +1,5 @@
 #
-# MyTinaweb: an example application
+# Application: an example application
 # 
 # This class contains all the business logic of a generic bipartite
 # visualizer
@@ -9,11 +9,11 @@
 # (the "Document" and "NGram" variables keywords are hard-coded in the code! 
 # this will be fixed in a future release)
 # 
-class MyTinaweb extends Tinaweb
+class Application extends Tinaweb
 
   # This fonction is called just before inserting the visualization in the page
   preInstall: ->
-    log "MyTinaweb: preInstall"
+    log "Application: preInstall"
     
     # you can overload default settings
     @configure_using default_config
@@ -22,14 +22,14 @@ class MyTinaweb extends Tinaweb
     @configure_using @load_url_params()
     
   postInstall: ->
-    log "MyTinaweb: postInstall"
+    log "Application: postInstall"
 
     if @config.layout == "phyloforce"
       @infodiv = PhyloInfoDiv
     else
       @infodiv = InfoDiv
           
-    log "MyTinaweb: configuring page layout, and info panel's DIV"
+    log "Application: configuring page layout, and info panel's DIV"
     @infodiv.id = "infodiv"
     @infodiv.label = $ "#node_label"
     @infodiv.contents = $ "#node_contents"
@@ -46,7 +46,7 @@ class MyTinaweb extends Tinaweb
     @infodiv.reset()
     toolbar.init()
     
-    log "MyTinaweb: trying to automatically open GEXF file from config"
+    log "Application: trying to automatically open GEXF file from config"
     if @config.gexf?
       if @config.gexf isnt ""
         @open "#{@config.gexf}", @graphLoadingProgress 
@@ -115,7 +115,7 @@ class MyTinaweb extends Tinaweb
         log "unknow status #{status}"
  
   resize: ->
-    log "MyTinaweb: custom computeSize()"
+    log "Application: custom computeSize()"
     infoDivWidth = 390
     width = getScreenWidth() - infoDivWidth - 55
     height = getScreenHeight() - $("#hd").height() - $("#ft").height() - 60
@@ -127,6 +127,7 @@ class MyTinaweb extends Tinaweb
     @_resize {width, height}
    
   viewMeso: (id, category) ->
+    log "Application: viewMeso(#{id}, #{category})"
     @getCategory (data) =>
       cat = data.category
       @setView "macro", =>
@@ -145,17 +146,17 @@ class MyTinaweb extends Tinaweb
     selectionIsEmpty = (Object.size(data.selection) is 0)
     log "selectionIsEmpty: #{selectionIsEmpty}"
     if not selectionIsEmpty and active isnt 0
-      log "MyTinaweb: selection is not empty, and active tab is not 0"
+      log "Application: selection is not empty, and active tab is not 0"
       $("#infodiv").accordion "activate", 0
     else if selectionIsEmpty and active isnt "false"
-      log "MyTinaweb: selection is empty and active is not false"
+      log "Application: selection is empty and active is not false"
       $("infodiv").accordion "activate", 0
     if data.mouse is "left"
        
     else if data.mouse is "right"
       
     else if data.mouse is "doubleLeft"
-      log "MyTinaweb: double click on left mouse:"
+      log "Application: double click on left mouse:"
       @setView "meso", =>
         @getCategory (data2) =>
             log "switching to #{data2.category}"
@@ -171,7 +172,7 @@ class MyTinaweb extends Tinaweb
     
     
   viewChanged: (data) ->
-    log "MyTinaweb: default view automatically changed to #{data.view}"
+    log "Application: default view automatically changed to #{data.view}"
     view = data.view
     @getCategory (data) =>
       category = data.category
@@ -198,8 +199,9 @@ class MyTinaweb extends Tinaweb
         @recenter()
         
 # create a new customized Tinaweb, using default_config from preferences.js (preferences.coffee)     
-tinaweb = new MyTinaweb
+app = new Application
 
 $(document).ready ->
-  log "document ready.. installing tinaviz"
-  tinaviz.install()
+  log "document ready.. installing app"
+  log app
+  app.install()

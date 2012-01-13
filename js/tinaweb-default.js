@@ -7,7 +7,7 @@ Tinaweb = (function(_super) {
   __extends(Tinaweb, _super);
 
   function Tinaweb() {
-    log("Tinaweb: constructor called.. calling supe()");
+    log("Tinaweb: constructor called.. calling super()");
     Tinaweb.__super__.constructor.call(this);
     log("Tinaweb: configuring with default config");
     this._config = {
@@ -36,6 +36,7 @@ Tinaweb = (function(_super) {
     this._status = "done";
     this._demo_running = false;
     this._demo_possible = false;
+    log("Tinaweb: end of constructor");
   }
 
   Tinaweb.prototype.configure_using = function(params) {
@@ -165,30 +166,10 @@ Tinaweb = (function(_super) {
     return this.set(real, value, "String", this.makeWrap(alias, real, cb));
   };
 
-  Tinaweb.prototype.preInstall = function() {
-    return log("Tinaweb: default preInstall()");
-  };
-
-  Tinaweb.prototype.postInstall = function() {
-    return log("Tinaweb: default postInstall()");
-  };
-
   Tinaweb.prototype.install = function() {
     var _this = this;
-    log("Tinaweb: install() -> loading url parameters");
-    log("Tinaweb: install() -> loading generic, enforced parameters (like logo or engine)");
-    this.config = {
-      path: "",
-      tag: "#vizdiv",
-      logo: "css/logo.png",
-      context: "",
-      engine: "software"
-    };
-    this.libPath = this.path + "js/tinaviz/";
-    this.config.brandingIcon = "" + this.config.libPath + "tina_icon.png";
-    this.configure(this.config);
     log("Tinaweb: install() -> calling preInstall");
-    this.preInstall();
+    if (typeof this.preInstall === "function") this.preInstall();
     log("Tinaweb: install() -> calling @_inject => { ... }");
     return this._inject(function() {
       var delayBetweenChanges, waitTimeBeforeStartingDemo;
@@ -223,8 +204,8 @@ Tinaweb = (function(_super) {
       _this.set("layout", _this._config.layout, "String");
       _this.set("layoutSpeed", _this._config.layout_speed, "Int");
       _this.set("pause", _this._config.pause, "Boolean");
-      log("Tinaweb: _postInject() terminated, calling postInstall()");
-      return _this.postInstall();
+      log("Tinaweb: _postInject() terminated, calling postInstall() if available");
+      return typeof _this.postInstall === "function" ? _this.postInstall() : void 0;
     });
   };
 
