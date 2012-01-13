@@ -223,7 +223,7 @@ toolbar.init = ->
   ).click (event) ->
     app.togglePause (data) ->
       p = $("#toggle-paused")
-      if p.button("option", "icons")["primary"] == "ui-icon-pause"
+      if p.button("option", "icons")["primary"] is "ui-icon-pause"
         p.button "option", "icons", primary: "ui-icon-play"
         p.button "option", "label", "play"
       else
@@ -252,7 +252,7 @@ toolbar.init = ->
       log "opposite cat: #{next_cat}"
       app.getView (data) ->
         viewName = data.view
-        console.log "view name: #{viewName}"
+        log "view name: #{viewName}"
         if viewName is "macro"
           if next_cat is "Document"
             show "#category-A"

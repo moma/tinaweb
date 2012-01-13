@@ -1,4 +1,5 @@
 var Tinaweb,
+  __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
   __hasProp = Object.prototype.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor; child.__super__ = parent.prototype; return child; };
 
@@ -7,7 +8,24 @@ Tinaweb = (function(_super) {
   __extends(Tinaweb, _super);
 
   function Tinaweb() {
-    log("Tinaweb: constructor called.. calling super()");
+    this.install = __bind(this.install, this);
+    this.setView = __bind(this.setView, this);
+    this.getView = __bind(this.getView, this);
+    this.setCategory = __bind(this.setCategory, this);
+    this.getCategory = __bind(this.getCategory, this);
+    this.select = __bind(this.select, this);
+    this.unselect = __bind(this.unselect, this);
+    this.togglePause = __bind(this.togglePause, this);
+    this.pause = __bind(this.pause, this);
+    this.getPause = __bind(this.getPause, this);
+    this.setPause = __bind(this.setPause, this);
+    this.setLayout = __bind(this.setLayout, this);
+    this.centerOnSelection = __bind(this.centerOnSelection, this);
+    this.recenter = __bind(this.recenter, this);
+    this.open = __bind(this.open, this);
+    this.resize = __bind(this.resize, this);
+    this.computeSize = __bind(this.computeSize, this);
+    this.load_url_params = __bind(this.load_url_params, this);    log("Tinaweb: constructor called.. calling super()");
     Tinaweb.__super__.constructor.call(this);
     log("Tinaweb: configuring with default config");
     this._tinaweb_defaults = {
@@ -90,8 +108,9 @@ Tinaweb = (function(_super) {
   };
 
   Tinaweb.prototype.togglePause = function(cb) {
+    var _this = this;
     return this.getPause(function(data) {
-      return this.setPause(!data.pause, cb);
+      return _this.setPause(!data.pause, cb);
     });
   };
 
@@ -173,11 +192,11 @@ Tinaweb = (function(_super) {
         return _this.resize;
       });
       log("Tinaweb: _inject() -> binding blur and focus");
-      $(window).bind("blur", function() {
-        return _this.freeze;
+      $(window).blur(function() {
+        return _this.freeze();
       });
-      $(window).bind("focus", function() {
-        return _this.unfreeze;
+      $(window).focus(function() {
+        return _this.unfreeze();
       });
       log("Tinaweb: _postInject() -> checking for demo mode");
       if (_this.config.demo != null) _this._demo_possible = true;

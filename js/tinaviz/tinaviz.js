@@ -1,4 +1,5 @@
-var Tinaviz, callCallback, callbacks, cbCounter, cblatency, makeCallback;
+var Tinaviz, callCallback, callbacks, cbCounter, cblatency, makeCallback,
+  __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
 
 cblatency = 100;
 
@@ -23,7 +24,23 @@ makeCallback = function(cb) {
 Tinaviz = (function() {
 
   function Tinaviz() {
-    log("Tinaviz: called constructor()");
+    this._inject = __bind(this._inject, this);
+    this.set = __bind(this.set, this);
+    this.get = __bind(this.get, this);
+    this.getAs = __bind(this.getAs, this);
+    this._resize = __bind(this._resize, this);
+    this.getNodes = __bind(this.getNodes, this);
+    this.unfreeze = __bind(this.unfreeze, this);
+    this.freeze = __bind(this.freeze, this);
+    this.getNeighbourhood = __bind(this.getNeighbourhood, this);
+    this.getNodeAttributes = __bind(this.getNodeAttributes, this);
+    this.highlightByNeighbourPattern = __bind(this.highlightByNeighbourPattern, this);
+    this.highlightByPattern = __bind(this.highlightByPattern, this);
+    this.selectByNeighbourPattern = __bind(this.selectByNeighbourPattern, this);
+    this.selectByPattern = __bind(this.selectByPattern, this);
+    this.getNodesByLabel = __bind(this.getNodesByLabel, this);
+    this._open = __bind(this._open, this);
+    this.configure_using = __bind(this.configure_using, this);    log("Tinaviz: called constructor()");
     this.applet = void 0;
     this.config = {
       jarFile: "tinaviz-2.0-SNAPSHOT.jar",
@@ -95,10 +112,12 @@ Tinaviz = (function() {
   };
 
   Tinaviz.prototype.freeze = function() {
+    log("freezing");
     return this.applet.freeze();
   };
 
   Tinaviz.prototype.unfreeze = function() {
+    log("unfreezing");
     return this.applet.unfreeze();
   };
 
@@ -107,14 +126,14 @@ Tinaviz = (function() {
   };
 
   Tinaviz.prototype._resize = function(_arg) {
-    var height, width;
+    var height, width, _ref, _ref2, _ref3;
     width = _arg.width, height = _arg.height;
     log("Tinaviz: resize() -> self-resizing");
     $("" + this.config.element).css("height", "" + height + "px");
     $("" + this.config.element).css("width", "" + width + "px");
-    this.applet.height = height;
-    this.applet.width = width;
-    return this.applet.resize(width, height);
+    if ((_ref = this.applet) != null) _ref.height = height;
+    if ((_ref2 = this.applet) != null) _ref2.width = width;
+    return (_ref3 = this.applet) != null ? typeof _ref3.resize === "function" ? _ref3.resize(width, height) : void 0 : void 0;
   };
 
   Tinaviz.prototype.getAs = function(key, type, cb) {

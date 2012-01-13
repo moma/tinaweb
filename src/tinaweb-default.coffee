@@ -38,47 +38,49 @@ class Tinaweb extends Tinaviz
   # since an URL is a String, we need to know the type of each 
   # parameter. For this, we are simply using another model config file
   # to know the types
-  load_url_params: -> loadURLParamsUsing @config
+  load_url_params: => loadURLParamsUsing @config
   
   # compute some default size values
-  computeSize: -> 
+  computeSize: => 
     log "Tinaweb: default computeSize() function"
     {width: 10, height: 10}
   
   # resize tinaweb
-  resize: ->
+  resize: =>
     log "Tinaweb: default resize() -> self-resizing"
     @_resize @computeSize()
    
   # open a graph for download and visualization 
-  open: (url, cb) ->
+  open: (url, cb) =>
     log "Tinaweb: open #{url}"
     url = document.location.href.substring(0, document.location.href.lastIndexOf("/") + 1) + url  if url.search("://") == -1
     @_open url, cb
 
   # recenter the view
-  recenter: (cb) -> @set "camera.target", "all", "String", cb
+  recenter: (cb) => @set "camera.target", "all", "String", cb
   
-  centerOnSelection: (cb) -> @set "camera.target", "selection", "String", cb
+  centerOnSelection: (cb) => @set "camera.target", "selection", "String", cb
   
-  setLayout: (name, cb) -> @set "layout.algorithm", name, "String", cb
+  setLayout: (name, cb) => @set "layout.algorithm", name, "String", cb
   
-  setPause: (value=true, cb) ->  @set "pause", value, "Boolean", cb
+  setPause: (value=true, cb) =>  @set "pause", value, "Boolean", cb
   
-  getPause: (cb) -> @get "pause", cb
+  getPause: (cb) => @get "pause", cb
   
-  pause: (cb) -> @setPause cb
+  pause: (cb) => @setPause cb
   
-  togglePause: (cb) -> @getPause (data) -> @setPause((not data.pause), cb)
+  togglePause: (cb) => 
+    @getPause (data) => 
+      @setPause (not data.pause), cb
 
-  unselect: (cb) -> @set "select", "", "String", cb  
+  unselect: (cb) => @set "select", "", "String", cb  
   
-  select: (toBeSelected, cb) ->
+  select: (toBeSelected, cb) =>
     t = if $.isArray(toBeSelected) then "Json" else "String"
     @set "select", toBeSelected, t, cb
 
   getOppositeCategory: (cat) ->
-    if cat == "Document" then "NGram" else "Document"
+    if cat is "Document" then "NGram" else "Document"
 
   makeWrap: (alias, real, cb) ->
     _cb = (data) ->
@@ -90,28 +92,28 @@ class Tinaweb extends Tinaviz
         cb output
     _cb
   
-  getCategory: (cb) ->
+  getCategory: (cb) =>
     alias = "category"
     real = "filter.node.category"
     @get real, @makeWrap alias, real, cb
   
-  setCategory: (value, cb) ->
+  setCategory: (value, cb) =>
     alias = "category"
     real = "filter.node.category"
     @set real, value, "String", @makeWrap(alias, real, cb)
   
   
-  getView: (cb) ->
+  getView: (cb) =>
     alias = "view"
     real = "filter.view"
     @get real, @makeWrap(alias, real, cb)
   
-  setView: (view, cb) ->
+  setView: (view, cb) =>
     alias = "view"
     real = "filter.view"
     @set real, value, "String", @makeWrap(alias, real, cb)    
 
-  install: ->
+  install: =>
     #log "Tinaweb: install() -> loading url parameters"
         
     log "Tinaweb: install() -> loading some additionnal default settings"
@@ -133,8 +135,8 @@ class Tinaweb extends Tinaviz
       $(window).bind "resize", => @resize
       
       log "Tinaweb: _inject() -> binding blur and focus"
-      $(window).bind "blur", => @freeze
-      $(window).bind "focus", => @unfreeze
+      $(window).blur => @freeze()
+      $(window).focus => @unfreeze()
   
       log "Tinaweb: _postInject() -> checking for demo mode"
       @_demo_possible = true if @config.demo?

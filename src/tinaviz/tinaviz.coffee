@@ -35,12 +35,12 @@ class Tinaviz
 
     
   # configure Tinaweb using some params
-  configure_using: (params) ->
+  configure_using: (params) =>
     log "Tinaviz: configure_using(params) -> loading.."
     for key, value of params
       @config[key] = value
  
-  _open: (url, cb) ->
+  _open: (url, cb) =>
     log "Tinaviz: _open() -> opening #{url}"
     try
       @applet.openURI makeCallback(cb), url
@@ -50,27 +50,27 @@ class Tinaviz
         success: false
         error: e
   
-  getNodesByLabel: (label, type, cb) ->
+  getNodesByLabel: (label, type, cb) =>
     alert "ERROR getNodesByLabel is broken"
   
-  selectByPattern: (pattern, patternMode, cb) ->
+  selectByPattern: (pattern, patternMode, cb) =>
     return  if pattern.length > 0 and pattern.length < 3
     @applet.selectByPattern makeCallback(cb), pattern, patternMode
   
-  selectByNeighbourPattern: (pattern, patternMode, category, cb) ->
+  selectByNeighbourPattern: (pattern, patternMode, category, cb) =>
     return  if pattern.length > 0 and pattern.length < 3
     @applet.selectByNeighbourPattern makeCallback(cb), pattern, patternMode, category
   
-  highlightByPattern: (pattern, patternMode, cb) ->
+  highlightByPattern: (pattern, patternMode, cb) =>
     @applet.highlightByPattern makeCallback(cb), pattern, patternMode
   
-  highlightByNeighbourPattern: (pattern, patternMode, cb) ->
+  highlightByNeighbourPattern: (pattern, patternMode, cb) =>
     @applet.highlightByNeighbourPattern makeCallback(cb), pattern, patternMode
   
-  getNodeAttributes: (view, id, cb) ->
+  getNodeAttributes: (view, id, cb) =>
     @applet.getNodeAttributes makeCallback(cb), view, id
   
-  getNeighbourhood: (view, node_list, cb) ->
+  getNeighbourhood: (view, node_list, cb) =>
     @applet.getNeighbourhood makeCallback(cb), view, $.toJSON(node_list)
   
   
@@ -78,29 +78,33 @@ class Tinaviz
   #  elem = id.split "::"
   #  TinaService.getNGrams 0, elem[1], success: (data) ->
 
-  freeze: -> @applet.freeze()
+  freeze: => 
+    log "freezing"
+    @applet.freeze()
   
-  unfreeze: -> @applet.unfreeze()
+  unfreeze: =>
+    log "unfreezing"
+    @applet.unfreeze()
     
-  getNodes: (view, category, cb) -> @applet.getNodes makeCallback(cb), view, category
+  getNodes: (view, category, cb) => @applet.getNodes makeCallback(cb), view, category
   
-  _resize: ({width,height}) ->
+  _resize: ({width,height}) =>
     log "Tinaviz: resize() -> self-resizing"
     $("#{@config.element}").css "height", "#{height}px"
     $("#{@config.element}").css "width", "#{width}px"
-    @applet.height = height
-    @applet.width = width
-    @applet.resize width, height
+    @applet?.height = height
+    @applet?.width = width
+    @applet?.resize? width, height
   
-  getAs: (key, type, cb) ->
+  getAs: (key, type, cb) =>
     @applet.sendGet makeCallback(cb), key, type
     return
   
-  get: (key, cb) ->
+  get: (key, cb) =>
     @applet.sendGet makeCallback(cb), key, "Any"
     return
   
-  set: (key, obj, t, cb) ->
+  set: (key, obj, t, cb) =>
     debug "Tinaviz: set(key: #{key}, obj: #{obj}, t: #{t})"
     cbId = makeCallback(cb)
     unless t
@@ -116,16 +120,16 @@ class Tinaviz
         @applet.sendSet cbId, key, obj, ""
         return
 
-    unless t.indexOf("Tuple2") == -1
-      unless t.indexOf("[Double]") == -1
+    unless t.indexOf("Tuple2") is -1
+      unless t.indexOf("[Double]") is -1
         @applet.sendSetTuple2 cbId, key, obj[0], obj[1], "Double"
-      else unless t.indexOf("[Int]") == -1
+      else unless t.indexOf("[Int]") is -1
         @applet.sendSetTuple2 cbId, key, obj[0], obj[1], "Int"
-      else unless t.indexOf("[Float]") == -1
+      else unless t.indexOf("[Float]") is -1
         @applet.sendSetTuple2 cbId, key, obj[0], obj[1], "Float"
       else
         @applet.sendSetTuple2 cbId, key, obj[0], obj[1], ""
-    else if t == "Json"
+    else if t is "Json"
       @applet.sendSet cbId, key, $.toJSON(obj), t
     else
       @applet.sendSet cbId, key, obj, t
@@ -163,7 +167,7 @@ class Tinaviz
 
     buff
     
-  _inject: (cb) ->
+  _inject: (cb) =>
     log "Tinaviz: preparing first hook.."
     makeCallback (data) =>
       log "Tinaviz: Injected.."

@@ -1,4 +1,5 @@
 var Application, app,
+  __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
   __hasProp = Object.prototype.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor; child.__super__ = parent.prototype; return child; };
 
@@ -7,6 +8,13 @@ Application = (function(_super) {
   __extends(Application, _super);
 
   function Application() {
+    this.viewChanged = __bind(this.viewChanged, this);
+    this.selectionChanged = __bind(this.selectionChanged, this);
+    this.resize = __bind(this.resize, this);
+    this.graphLoadingProgress = __bind(this.graphLoadingProgress, this);
+    this.animateAppletInfo = __bind(this.animateAppletInfo, this);
+    this.postInstall = __bind(this.postInstall, this);
+    this.preInstall = __bind(this.preInstall, this);
     Application.__super__.constructor.apply(this, arguments);
   }
 
@@ -36,6 +44,8 @@ Application = (function(_super) {
       NGram: "Keywords",
       Document: "Projects"
     };
+    log("Application: resizing here");
+    this.resize();
     $("#infodiv").accordion({
       fillSpace: true
     });
@@ -50,13 +60,19 @@ Application = (function(_super) {
   };
 
   Application.prototype.animateAppletInfo = function() {
-    if (this.status !== "loaded") {
-      $("#appletInfo").text($("#appletInfo").text() + ".");
-      return delay(400, this.animateAppletInfo);
+    var txt,
+      _this = this;
+    if (status !== "loaded") {
+      txt = $("#appletInfo").text();
+      $("#appletInfo").text("" + txt + ".");
+      return delay(400, function() {
+        return _this.animateAppletInfo();
+      });
     }
   };
 
   Application.prototype.graphLoadingProgress = function(data) {
+    var _this = this;
     this.status = data.status;
     if (this.status === "downloading") {
       $("#appletInfo").effect("pulsate", "fast");
@@ -69,7 +85,7 @@ Application = (function(_super) {
     } else if (this.status === "updated") {} else if (this.status === "loaded") {
       log("graph loaded");
       log("update the node list (may fail)");
-      this.infodiv.updateNodeList("macro", prefs.category);
+      this.infodiv.updateNodeList("macro", this.config.category);
       log("displaying current category");
       this.infodiv.display_current_category();
       log("displaying current view");
@@ -109,7 +125,7 @@ Application = (function(_super) {
       });
       if (this.config.node_id !== "") {
         delay(200, function() {
-          return this.select(this.config.node_id);
+          return _this.select(_this.config.node_id);
         });
       }
       if (this.config.search !== "") {
@@ -135,6 +151,8 @@ Application = (function(_super) {
     $("#appletdiv").css("width", width);
     $("#infodiv").css("width", infoDivWidth);
     $("#infodivparent").css("height", height);
+    this.config.width = width;
+    this.config.height = height;
     return this._resize({
       width: width,
       height: height
@@ -149,8 +167,7 @@ Application = (function(_super) {
       cat = data.category;
       return _this.setView("macro", function() {
         return _this.unselect(function() {
-          var _this = this;
-          return this.setCategory(category, function() {
+          return _this.setCategory(category, function() {
             return _this.select(id, function() {
               return _this.setView("meso", function() {
                 if (category !== cat) {
@@ -170,7 +187,8 @@ Application = (function(_super) {
   Application.prototype.selectionChanged = function(data) {
     var active, selectionIsEmpty,
       _this = this;
-    log("-- selection automatically changed: " + data.selection);
+    log("-- selection automatically changed:");
+    log(data.selection);
     active = $("#infodiv").accordion("option", "active");
     selectionIsEmpty = Object.size(data.selection) === 0;
     log("selectionIsEmpty: " + selectionIsEmpty);

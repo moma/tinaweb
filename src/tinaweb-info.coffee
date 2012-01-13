@@ -22,17 +22,17 @@ InfoDiv =
   
   display_current_category: ->
     categories = @categories
-    app.getView (data) ->
+    app.getView (data) =>
       view = data.view
-      app.getCategory (data) ->
+      app.getCategory (data) =>
         cat = data.category
-        if view == "macro"
+        if view is "macro"
           $("#toggle-switch").button "option", "label", categories[cat]
         else
           $("#toggle-switch").button "option", "label", categories[cat] + " neighbours"
   
   display_current_view: ->
-    app.getView (data) ->
+    app.getView (data) =>
       view = data.view
       if view isnt undefined
         level = $ "#level"
@@ -66,7 +66,7 @@ InfoDiv =
   updateTagCloud: (node_list, neighbours) ->
     return  if Object.size(node_list) == 0
     
-    app.getCategory (data) ->
+    app.getCategory (data) =>
       cat = data.category
       neighbours = @mergeNeighbours cat, neighbours
       @cloudSearch.empty()
@@ -82,10 +82,9 @@ InfoDiv =
         requests = requests + "%22" + tagLabel.replace(" ", "+") + "%22"
         requests = requests + "+AND+"  if i < neighbours.length - 1
         i++
-      if cat != undefined
+      if cat?
         oppositeRealName = @categories[app.getOppositeCategory(cat)]
         if oppositeRealName?
-          tmp = ""
           tmp = "Search on: <a href=\""
           tmp += Googlerequests
           tmp += requests
@@ -135,27 +134,27 @@ InfoDiv =
           break
         i++
       @cloud.empty()
-      @cloud.append "<h3>selection related to " + oppositeRealName + ": <span class=\"ui-icon ui-icon-help icon-right\" title=\"" + tooltip + "\"></span></h3>"
+      @cloud.append "<h3>selection related to #{oppositeRealName}: <span class=\"ui-icon ui-icon-help icon-right\" title=\"#{tooltip}\"></span></h3>"
       @cloud.append tagcloud
       @cloudSearchCopy.empty()
-      @cloudSearchCopy.append "<h3>global search on " + oppositeRealName + ": <span class=\"ui-icon ui-icon-help icon-right\" title=\"" + tooltip + "\"></span></h3>"
+      @cloudSearchCopy.append "<h3>global search on #{oppositeRealName}: <span class=\"ui-icon ui-icon-help icon-right\" title=\"#{tooltip}\"></span></h3>"
       @cloudSearchCopy.append tagcloud.clone()
   
-  updateInfo: (lastselection) ->
-    app.getCategory (data) ->
+  updateInfo: (lastselection) =>
+    app.getCategory (data) =>
       cat = data.category
       labelinnerdiv = $ "<div></div>"
       contentinnerdiv = $ "<div></div>"
       number_of_label = 0
       for id of lastselection
         node = lastselection[id]
-        if node.category == cat
-          label = @getNodeLabel(node)
+        if node.category is cat
+          label = node.label
           number_of_label++
           if number_of_label < 5
             labelinnerdiv.append $("<b></b>").text(label)
           else
-            labelinnerdiv.append $("<b></b>").text("[...]")  if number_of_label == 5
+            labelinnerdiv.append $("<b></b>").text("[...]")  if number_of_label is 5
           @selection.push node.id
           log "label: " + label
           contentinnerdiv.append $("<b></b>").text(label)
@@ -163,7 +162,7 @@ InfoDiv =
           log "  htmlContent: " + htmlContent
           contentinnerdiv.append $("<p></p>").html(htmlContent)
           contentinnerdiv.append $("<p></p>").html(@getSearchQueries(label, cat))
-      unless @selection.length == 0
+      unless @selection.length is 0
         @label.empty()
         @unselect_button.show()
         @contents.empty()
@@ -172,7 +171,7 @@ InfoDiv =
       else
         @reset()
   
-  update: (view, lastselection) ->
+  update: (view, lastselection) =>
     unless @id?
       alert "error : infodiv not initialized with its HTML DIV id"
       return
@@ -181,16 +180,16 @@ InfoDiv =
       return
     @selection = []
     @updateInfo lastselection
-    app.getNeighbourhood "macro", @selection, (data) ->
+    app.getNeighbourhood "macro", @selection, (data) =>
       log "received neighbourhood"
   
-  reset: ->
+  reset: =>
     unless @id?
       alert "error : infodiv not initialized with its HTML DIV id"
       return
     @unselect_button.hide()
     @contents.empty().append $("<h4></h4>").html("click on a node to begin exploration")
-    path = app.path
+    path = app.config.path
     @contents.empty().append $("<h4></h4>").html("<h2>Navigation tips</h2>" + "<p align='left'>" + "<br/>" + "<i>Basic interactions</i><br/><br/>" + "Click on a node to select/unselect and get its information.  In case of multiple selection, the button <img src='" + path + "css/branding/unselect.png' alt='unselect' align='top' height=20/>  clears all selections.<br/><br/>The switch button <img src='" + path + "css/branding/switch.png' alt='switch' align='top' height=20 /> allows to change the view type." + "<br/><br/>" + "<i>Graph manipulation</i><br/><br/>" + "Link and node sizes indicate their strength.<br/><br/> To fold/unfold the graph (keep only strong links or weak links), use the 'edges filter' sliders.<br/><br/> To select a more of less specific area of the graph, use the 'nodes filter' slider.</b><br/><br/>" + "<i>Micro/Macro view</i><br/><br/>To explore the neighborhood of a selection, either double click on the selected nodes, either click on the macro/meso level button. Zoom out in meso view return to macro view.<br/><br/>  " + "Click on the 'all nodes' tab below to view the full clickable list of nodes.<br/><br/>Find additional tips with mouse over the question marks." + "</p>")
     @cloudSearchCopy.empty()
     @cloudSearch.empty()
@@ -221,7 +220,7 @@ InfoDiv =
             rowLabel = htmlDecode decodeJSON( node_list[i]["label"] )
             rowId = decodeJSON node_list[i]["id"]
             rowCat = category
-            delay 0, -> displayNodeRow rowLabel, rowId, rowCat
+            delay 0, => displayNodeRow rowLabel, rowId, rowCat
           i++
     
     app.getNodes view, category, whenReceivingNodeList

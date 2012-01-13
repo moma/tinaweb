@@ -334,7 +334,7 @@ toolbar.init = function() {
       return app.getView(function(data) {
         var neighbours, viewName;
         viewName = data.view;
-        console.log("view name: " + viewName);
+        log("view name: " + viewName);
         if (viewName === "macro") {
           if (next_cat === "Document") {
             show("#category-A");

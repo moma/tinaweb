@@ -1,4 +1,5 @@
-var InfoDiv, displayNodeRow;
+var InfoDiv, displayNodeRow,
+  _this = this;
 
 displayNodeRow = function(label, id, category) {
   return $("#node_table > tbody").append($("<tr></tr>").append($("<td id='node_list_" + id + "'></td>").text(label).click(function(eventObject) {
@@ -24,7 +25,8 @@ InfoDiv = {
     Document: "Documents"
   },
   display_current_category: function() {
-    var categories;
+    var categories,
+      _this = this;
     categories = this.categories;
     return app.getView(function(data) {
       var view;
@@ -41,6 +43,7 @@ InfoDiv = {
     });
   },
   display_current_view: function() {
+    var _this = this;
     return app.getView(function(data) {
       var level, title, view;
       view = data.view;
@@ -82,12 +85,13 @@ InfoDiv = {
     return merged;
   },
   updateTagCloud: function(node_list, neighbours) {
+    var _this = this;
     if (Object.size(node_list) === 0) return;
     return app.getCategory(function(data) {
       var Googlerequests, PubMedrequests, cat, const_doc_tag, i, nb_displayed_tag, oppositeRealName, requests, sizecoef, tag, tagLabel, tagcloud, tagspan, tmp, tooltip;
       cat = data.category;
-      neighbours = this.mergeNeighbours(cat, neighbours);
-      this.cloudSearch.empty();
+      neighbours = _this.mergeNeighbours(cat, neighbours);
+      _this.cloudSearch.empty();
       Googlerequests = "http://www.google.com/#q=";
       PubMedrequests = "http://www.ncbi.nlm.nih.gov/pubmed?term=";
       requests = "";
@@ -100,10 +104,9 @@ InfoDiv = {
         if (i < neighbours.length - 1) requests = requests + "+AND+";
         i++;
       }
-      if (cat !== void 0) {
-        oppositeRealName = this.categories[app.getOppositeCategory(cat)];
+      if (cat != null) {
+        oppositeRealName = _this.categories[app.getOppositeCategory(cat)];
         if (oppositeRealName != null) {
-          tmp = "";
           tmp = "Search on: <a href=\"";
           tmp += Googlerequests;
           tmp += requests;
@@ -114,7 +117,7 @@ InfoDiv = {
           tmp += "\" alt=\"search on PubMed\" target=\"_BLANK\"><img src=\"";
           tmp += app.config.path;
           tmp += "css/branding/pubmed.png\" />Pubmed</a>";
-          this.cloudSearch.append(tmp);
+          _this.cloudSearch.append(tmp);
         }
       }
       sizecoef = 15;
@@ -162,12 +165,12 @@ InfoDiv = {
         }
         i++;
       }
-      this.cloud.empty();
-      this.cloud.append("<h3>selection related to " + oppositeRealName + ": <span class=\"ui-icon ui-icon-help icon-right\" title=\"" + tooltip + "\"></span></h3>");
-      this.cloud.append(tagcloud);
-      this.cloudSearchCopy.empty();
-      this.cloudSearchCopy.append("<h3>global search on " + oppositeRealName + ": <span class=\"ui-icon ui-icon-help icon-right\" title=\"" + tooltip + "\"></span></h3>");
-      return this.cloudSearchCopy.append(tagcloud.clone());
+      _this.cloud.empty();
+      _this.cloud.append("<h3>selection related to " + oppositeRealName + ": <span class=\"ui-icon ui-icon-help icon-right\" title=\"" + tooltip + "\"></span></h3>");
+      _this.cloud.append(tagcloud);
+      _this.cloudSearchCopy.empty();
+      _this.cloudSearchCopy.append("<h3>global search on " + oppositeRealName + ": <span class=\"ui-icon ui-icon-help icon-right\" title=\"" + tooltip + "\"></span></h3>");
+      return _this.cloudSearchCopy.append(tagcloud.clone());
     });
   },
   updateInfo: function(lastselection) {
@@ -180,7 +183,7 @@ InfoDiv = {
       for (id in lastselection) {
         node = lastselection[id];
         if (node.category === cat) {
-          label = this.getNodeLabel(node);
+          label = node.label;
           number_of_label++;
           if (number_of_label < 5) {
             labelinnerdiv.append($("<b></b>").text(label));
@@ -189,57 +192,57 @@ InfoDiv = {
               labelinnerdiv.append($("<b></b>").text("[...]"));
             }
           }
-          this.selection.push(node.id);
+          _this.selection.push(node.id);
           log("label: " + label);
           contentinnerdiv.append($("<b></b>").text(label));
           htmlContent = htmlDecode(decodeJSON(node.content));
           log("  htmlContent: " + htmlContent);
           contentinnerdiv.append($("<p></p>").html(htmlContent));
-          contentinnerdiv.append($("<p></p>").html(this.getSearchQueries(label, cat)));
+          contentinnerdiv.append($("<p></p>").html(_this.getSearchQueries(label, cat)));
         }
       }
-      if (this.selection.length !== 0) {
-        this.label.empty();
-        this.unselect_button.show();
-        this.contents.empty();
-        this.label.append(alphabeticJquerySort(labelinnerdiv, "b", ", &nbsp;"));
-        return this.contents.append(contentinnerdiv);
+      if (_this.selection.length !== 0) {
+        _this.label.empty();
+        _this.unselect_button.show();
+        _this.contents.empty();
+        _this.label.append(alphabeticJquerySort(labelinnerdiv, "b", ", &nbsp;"));
+        return _this.contents.append(contentinnerdiv);
       } else {
-        return this.reset();
+        return _this.reset();
       }
     });
   },
   update: function(view, lastselection) {
-    if (this.id == null) {
+    if (_this.id == null) {
       alert("error : infodiv not initialized with its HTML DIV id");
       return;
     }
     if (Object.size(lastselection) === 0) {
-      this.reset();
+      _this.reset();
       return;
     }
-    this.selection = [];
-    this.updateInfo(lastselection);
-    return app.getNeighbourhood("macro", this.selection, function(data) {
+    _this.selection = [];
+    _this.updateInfo(lastselection);
+    return app.getNeighbourhood("macro", _this.selection, function(data) {
       return log("received neighbourhood");
     });
   },
   reset: function() {
     var path;
-    if (this.id == null) {
+    if (_this.id == null) {
       alert("error : infodiv not initialized with its HTML DIV id");
       return;
     }
-    this.unselect_button.hide();
-    this.contents.empty().append($("<h4></h4>").html("click on a node to begin exploration"));
-    path = app.path;
-    this.contents.empty().append($("<h4></h4>").html("<h2>Navigation tips</h2>" + "<p align='left'>" + "<br/>" + "<i>Basic interactions</i><br/><br/>" + "Click on a node to select/unselect and get its information.  In case of multiple selection, the button <img src='" + path + "css/branding/unselect.png' alt='unselect' align='top' height=20/>  clears all selections.<br/><br/>The switch button <img src='" + path + "css/branding/switch.png' alt='switch' align='top' height=20 /> allows to change the view type." + "<br/><br/>" + "<i>Graph manipulation</i><br/><br/>" + "Link and node sizes indicate their strength.<br/><br/> To fold/unfold the graph (keep only strong links or weak links), use the 'edges filter' sliders.<br/><br/> To select a more of less specific area of the graph, use the 'nodes filter' slider.</b><br/><br/>" + "<i>Micro/Macro view</i><br/><br/>To explore the neighborhood of a selection, either double click on the selected nodes, either click on the macro/meso level button. Zoom out in meso view return to macro view.<br/><br/>  " + "Click on the 'all nodes' tab below to view the full clickable list of nodes.<br/><br/>Find additional tips with mouse over the question marks." + "</p>"));
-    this.cloudSearchCopy.empty();
-    this.cloudSearch.empty();
-    this.cloud.empty();
-    this.selection = [];
-    this.neighbours = [];
-    this.last_category = "";
+    _this.unselect_button.hide();
+    _this.contents.empty().append($("<h4></h4>").html("click on a node to begin exploration"));
+    path = app.config.path;
+    _this.contents.empty().append($("<h4></h4>").html("<h2>Navigation tips</h2>" + "<p align='left'>" + "<br/>" + "<i>Basic interactions</i><br/><br/>" + "Click on a node to select/unselect and get its information.  In case of multiple selection, the button <img src='" + path + "css/branding/unselect.png' alt='unselect' align='top' height=20/>  clears all selections.<br/><br/>The switch button <img src='" + path + "css/branding/switch.png' alt='switch' align='top' height=20 /> allows to change the view type." + "<br/><br/>" + "<i>Graph manipulation</i><br/><br/>" + "Link and node sizes indicate their strength.<br/><br/> To fold/unfold the graph (keep only strong links or weak links), use the 'edges filter' sliders.<br/><br/> To select a more of less specific area of the graph, use the 'nodes filter' slider.</b><br/><br/>" + "<i>Micro/Macro view</i><br/><br/>To explore the neighborhood of a selection, either double click on the selected nodes, either click on the macro/meso level button. Zoom out in meso view return to macro view.<br/><br/>  " + "Click on the 'all nodes' tab below to view the full clickable list of nodes.<br/><br/>Find additional tips with mouse over the question marks." + "</p>"));
+    _this.cloudSearchCopy.empty();
+    _this.cloudSearch.empty();
+    _this.cloud.empty();
+    _this.selection = [];
+    _this.neighbours = [];
+    _this.last_category = "";
   },
   updateNodeList: function(view, category) {
     var whenReceivingNodeList,
@@ -261,7 +264,8 @@ InfoDiv = {
         _results = [];
         while (i < node_list.length) {
           (function() {
-            var rowCat, rowId, rowLabel;
+            var rowCat, rowId, rowLabel,
+              _this = this;
             rowLabel = htmlDecode(decodeJSON(node_list[i]["label"]));
             rowId = decodeJSON(node_list[i]["id"]);
             rowCat = category;

@@ -9,10 +9,11 @@
 # (the "Document" and "NGram" variables keywords are hard-coded in the code! 
 # this will be fixed in a future release)
 # 
+      
 class Application extends Tinaweb
 
   # This fonction is called just before inserting the visualization in the page
-  preInstall: ->
+  preInstall: =>
     log "Application: preInstall"
     
     # you can overload default settings
@@ -21,7 +22,7 @@ class Application extends Tinaweb
     # note, however, that URL params will overload them too
     @configure_using @load_url_params()
     
-  postInstall: ->
+  postInstall: =>
     log "Application: postInstall"
 
     if @config.layout is "phyloforce"
@@ -42,6 +43,9 @@ class Application extends Tinaweb
       NGram: "Keywords"
       Document: "Projects"
 
+    log "Application: resizing here"
+    @resize()
+    
     $("#infodiv").accordion fillSpace: true
     @infodiv.reset()
     toolbar.init()
@@ -51,12 +55,14 @@ class Application extends Tinaweb
       if @config.gexf isnt ""
         @open "#{@config.gexf}", @graphLoadingProgress 
 
-  animateAppletInfo: ->
-    unless @status is "loaded"
-      $("#appletInfo").text $("#appletInfo").text() + "."
-      delay 400, @animateAppletInfo
 
-  graphLoadingProgress: (data) ->
+  animateAppletInfo: =>
+    unless status is "loaded"
+      txt = $("#appletInfo").text()
+      $("#appletInfo").text "#{txt}."
+      delay 400, => @animateAppletInfo()
+    
+  graphLoadingProgress: (data) =>
     @status = data.status
     if @status is "downloading"
       $("#appletInfo").effect "pulsate", "fast"
@@ -71,7 +77,7 @@ class Application extends Tinaweb
     else if @status is "loaded"
       log "graph loaded"
       log "update the node list (may fail)"
-      @infodiv.updateNodeList "macro", prefs.category
+      @infodiv.updateNodeList "macro", @config.category
       log "displaying current category"
       @infodiv.display_current_category()
       log "displaying current view"
@@ -102,19 +108,19 @@ class Application extends Tinaweb
                         , "slow", ->
 
       if @config.node_id isnt ""
-        delay 200, ->
+        delay 200, =>
           @select @config.node_id
       if @config.search isnt ""
         $("#search_input").val @config.search
         @selectByPattern @config.search, "containsIgnoreCase"
-    else if @status == "error"
+    else if @status is "error"
       $("#notification").notify "create", 
         title: "Tinasoft Notification"
         text: "Error loading the network, please consult logs"
     else
         log "unknow status #{@status}"
  
-  resize: ->
+  resize: =>
     log "Application: custom computeSize()"
     infoDivWidth = 390
     width = getScreenWidth() - infoDivWidth - 55
@@ -123,6 +129,8 @@ class Application extends Tinaweb
     $("#appletdiv").css "width", width
     $("#infodiv").css "width", infoDivWidth
     $("#infodivparent").css "height", height
+    @config.width = width
+    @config.height = height
     
     @_resize {width, height}
    
@@ -131,7 +139,7 @@ class Application extends Tinaweb
     @getCategory (data) =>
       cat = data.category
       @setView "macro", =>
-        @unselect ->
+        @unselect =>
           @setCategory category, =>
             @select id, =>
               @setView "meso", =>
@@ -140,8 +148,9 @@ class Application extends Tinaweb
                 show "#category-B"
                 @recenter()
 
-  selectionChanged: (data) ->
-    log "-- selection automatically changed: #{data.selection}"
+  selectionChanged: (data) =>
+    log "-- selection automatically changed:"
+    log data.selection
     active = $("#infodiv").accordion "option", "active"
     selectionIsEmpty = (Object.size(data.selection) is 0)
     log "selectionIsEmpty: #{selectionIsEmpty}"
@@ -171,7 +180,7 @@ class Application extends Tinaweb
   #tinaviz.infodiv.updateTagCloud data.selection, data.neighbours
     
     
-  viewChanged: (data) ->
+  viewChanged: (data) =>
     log "Application: default view automatically changed to #{data.view}"
     view = data.view
     @getCategory (data) =>
@@ -198,7 +207,7 @@ class Application extends Tinaweb
         title.addClass "ui-state-highlight"
         @recenter()
         
-# create a new customized Tinaweb, using default_config from preferences.js (preferences.coffee)     
+# create a new customized Tinaweb
 app = new Application
 
 $(document).ready ->
