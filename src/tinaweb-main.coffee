@@ -24,7 +24,7 @@ class Application extends Tinaweb
   postInstall: ->
     log "Application: postInstall"
 
-    if @config.layout == "phyloforce"
+    if @config.layout is "phyloforce"
       @infodiv = PhyloInfoDiv
     else
       @infodiv = InfoDiv
@@ -52,23 +52,23 @@ class Application extends Tinaweb
         @open "#{@config.gexf}", @graphLoadingProgress 
 
   animateAppletInfo: ->
-    unless @status == "loaded"
+    unless @status is "loaded"
       $("#appletInfo").text $("#appletInfo").text() + "."
       delay 400, @animateAppletInfo
 
-  @graphLoadingProgress: (data) ->
-    status = data.status
-    if status == "downloading"
+  graphLoadingProgress: (data) ->
+    @status = data.status
+    if @status is "downloading"
       $("#appletInfo").effect "pulsate", "fast"
       $("#appletInfo").text "Downloading data.."
       show "#appletInfo"
       @animateAppletInfo()
-    else if status == "downloaded"
+    else if @status is "downloaded"
       $("#appletInfo").effect "pulsate", "fast"
       $("#appletInfo").text "Generating graph.."
-    else if status == "updated"
+    else if @status is "updated"
 
-    else if status == "loaded"
+    else if @status is "loaded"
       log "graph loaded"
       log "update the node list (may fail)"
       @infodiv.updateNodeList "macro", prefs.category
@@ -101,18 +101,18 @@ class Application extends Tinaweb
                           height: "toggle"
                         , "slow", ->
 
-      unless prefs.node_id == ""
+      if @config.node_id isnt ""
         delay 200, ->
-          @select prefs.node_id
-      unless prefs.search == ""
-        $("#search_input").val prefs.search
-        @selectByPattern prefs.search, "containsIgnoreCase"
-    else if status == "error"
+          @select @config.node_id
+      if @config.search isnt ""
+        $("#search_input").val @config.search
+        @selectByPattern @config.search, "containsIgnoreCase"
+    else if @status == "error"
       $("#notification").notify "create", 
         title: "Tinasoft Notification"
         text: "Error loading the network, please consult logs"
     else
-        log "unknow status #{status}"
+        log "unknow status #{@status}"
  
   resize: ->
     log "Application: custom computeSize()"
@@ -150,7 +150,7 @@ class Application extends Tinaweb
       $("#infodiv").accordion "activate", 0
     else if selectionIsEmpty and active isnt "false"
       log "Application: selection is empty and active is not false"
-      $("infodiv").accordion "activate", 0
+      $("#infodiv").accordion "activate", 0
     if data.mouse is "left"
        
     else if data.mouse is "right"
@@ -182,11 +182,11 @@ class Application extends Tinaweb
       level = $ "#level"
       level.button "option", "label", "#{view} level"
       title = $ "#infodiv > h3:first"
-      if view == "macro"
-        if cat == "Document"
+      if view is "macro"
+        if cat is "Document"
           show "#category-A", "fast"
           hide "#category-B", "fast"
-        else if cat == "NGram"
+        else if cat is "NGram"
           hide "#category-A", "fast"
           show "#category-B", "fast"
         level.removeClass "ui-state-highlight"

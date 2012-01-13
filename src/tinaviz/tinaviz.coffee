@@ -16,21 +16,34 @@ class Tinaviz
   constructor: ->
      
     log "Tinaviz: called constructor()"
+    
     @applet = undefined 
-    @appletTag = "#tinapplet"
+
+    @config =
+      jarFile: "tinaviz-2.0-SNAPSHOT.jar"
+      appletId: "tinapplet"
+      elementId: "vizdiv"
+      path: ""    
+      context: ""
+      engine: "software"
+      brandingIcon: ""
+      width: 10
+      height: 10
+      
+    @config.libPath = @config.path + "js/tinaviz/"
+    @config.brandingIcon = @config.libPath + "tina_icon.png"
+
     
-    @path = ""
-    @libPath = @path + "js/tinaviz/"
-    @brandingIcon = @libPath + "tina_icon.png"
-    
-    @context = ""
-    @engine = "software"
-    @brandingIcon = ""
-    
+  # configure Tinaweb using some params
+  configure_using: (params) ->
+    log "Tinaviz: configure_using(params) -> loading.."
+    for key, value of params
+      @config[key] = value
+ 
   _open: (url, cb) ->
     log "Tinaviz: _open() -> opening #{url}"
     try
-      applet.openURI makeCallback(cb), url
+      @applet.openURI makeCallback(cb), url
     catch e
       logError "Tinaviz: _open() -> Couldn't import graph: " + e
       cb 
@@ -73,8 +86,8 @@ class Tinaviz
   
   _resize: ({width,height}) ->
     log "Tinaviz: resize() -> self-resizing"
-    $("#{@_config.element}").css "height", "#{height}px"
-    $("#{@_config.element}").css "width", "#{width}px"
+    $("#{@config.element}").css "height", "#{height}px"
+    $("#{@config.element}").css "width", "#{width}px"
     @applet.height = height
     @applet.width = width
     @applet.resize width, height
@@ -125,18 +138,18 @@ class Tinaviz
     document.write = (arg) -> buff += arg
     
     res = deployJava.writeAppletTag(
-      id: "tinapplet"
+      id: @config.appletId
       code: "eu.tinasoft.tinaviz.Main.class"
-      archive: @libPath + "tinaviz-2.0-SNAPSHOT.jar"
-      width: @width
-      height: @height
+      archive: "#{@config.libPath}#{@config.jarFile}"
+      width: @config.width
+      height: @config.height
       image: "css/branding/appletLoading.gif"
       standby: "Loading Tinaviz..."
     , 
-      engine: @engine
-      js_context: @context
-      root_prefix: @path
-      brandingIcon: @brandingIcon
+      engine: @config.engine
+      js_context: @config.context
+      root_prefix: @config.path
+      brandingIcon: @config.brandingIcon
       progressbar: false
       boxbgcolor: "#FFFFFF"
       boxmessage: "Loading Tinaviz..."
@@ -145,16 +158,20 @@ class Tinaviz
       scriptable: true
     )
     document.write = func
+    log("html: ")
+    log buff
+
     buff
     
   _inject: (cb) ->
     log "Tinaviz: preparing first hook.."
     makeCallback (data) =>
       log "Tinaviz: Injected.."
-      @applet = $(@appletTag)[0]
-      unless @applet?
-        alert "Error: couldn't get the applet!"
-        return
-      @cb()
+      @applet = $("##{@config.appletId}")[0]
+      if @applet
+        cb()
+      else
+        alert "applet couldn't be initialized, should put this in results"
+    log @config
     log "Tinaviz: Injecting..."
-    tag.html @_generateAppletHTML()
+    $("##{@config.elementId}").html @_generateAppletHTML()

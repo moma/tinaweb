@@ -1,7 +1,7 @@
 var default_config;
 
 default_config = {
-  element: "#tinaviz",
+  elementId: "vizdiv",
   gexf: "sample.gexf.gz",
   embed: false,
   view: "macro",

@@ -56,18 +56,17 @@ Application = (function(_super) {
     }
   };
 
-  Application.graphLoadingProgress = function(data) {
-    var status;
-    status = data.status;
-    if (status === "downloading") {
+  Application.prototype.graphLoadingProgress = function(data) {
+    this.status = data.status;
+    if (this.status === "downloading") {
       $("#appletInfo").effect("pulsate", "fast");
       $("#appletInfo").text("Downloading data..");
       show("#appletInfo");
       return this.animateAppletInfo();
-    } else if (status === "downloaded") {
+    } else if (this.status === "downloaded") {
       $("#appletInfo").effect("pulsate", "fast");
       return $("#appletInfo").text("Generating graph..");
-    } else if (status === "updated") {} else if (status === "loaded") {
+    } else if (this.status === "updated") {} else if (this.status === "loaded") {
       log("graph loaded");
       log("update the node list (may fail)");
       this.infodiv.updateNodeList("macro", prefs.category);
@@ -108,22 +107,22 @@ Application = (function(_super) {
           });
         });
       });
-      if (prefs.node_id !== "") {
+      if (this.config.node_id !== "") {
         delay(200, function() {
-          return this.select(prefs.node_id);
+          return this.select(this.config.node_id);
         });
       }
-      if (prefs.search !== "") {
-        $("#search_input").val(prefs.search);
-        return this.selectByPattern(prefs.search, "containsIgnoreCase");
+      if (this.config.search !== "") {
+        $("#search_input").val(this.config.search);
+        return this.selectByPattern(this.config.search, "containsIgnoreCase");
       }
-    } else if (status === "error") {
+    } else if (this.status === "error") {
       return $("#notification").notify("create", {
         title: "Tinasoft Notification",
         text: "Error loading the network, please consult logs"
       });
     } else {
-      return log("unknow status " + status);
+      return log("unknow status " + this.status);
     }
   };
 
@@ -180,7 +179,7 @@ Application = (function(_super) {
       $("#infodiv").accordion("activate", 0);
     } else if (selectionIsEmpty && active !== "false") {
       log("Application: selection is empty and active is not false");
-      $("infodiv").accordion("activate", 0);
+      $("#infodiv").accordion("activate", 0);
     }
     if (data.mouse === "left") {} else if (data.mouse === "right") {} else if (data.mouse === "doubleLeft") {
       log("Application: double click on left mouse:");

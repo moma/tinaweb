@@ -6,8 +6,8 @@ class Tinaweb extends Tinaviz
     super()
      
     log "Tinaweb: configuring with default config"
-    @_config =
-      element: "#tinaviz"      
+    @_tinaweb_defaults =
+      elementId: "vizdiv"       #   
       gexf: "sample.gexf.gz"    # gexf file to load by default
       view: "macro"             # default view to show the graph
       category: "Document"      # default category used to show the graph
@@ -34,17 +34,11 @@ class Tinaweb extends Tinaviz
     @_demo_possible = false
     log "Tinaweb: end of constructor"
 
-  # configure Tinaweb using some params
-  configure_using: (params) ->
-    log "Tinaweb: configure_using(params) -> loading.."
-    for key, value of params
-      @_config[key] = value
- 
   # an utility function that loads URL params as a config
   # since an URL is a String, we need to know the type of each 
   # parameter. For this, we are simply using another model config file
   # to know the types
-  load_url_params: -> loadURLParamsUsing @_config
+  load_url_params: -> loadURLParamsUsing @config
   
   # compute some default size values
   computeSize: -> 
@@ -120,8 +114,9 @@ class Tinaweb extends Tinaviz
   install: ->
     #log "Tinaweb: install() -> loading url parameters"
         
-    #log "Tinaweb: install() -> loading generic, enforced parameters (like logo or engine)"
-    #@onfigure_using @config
+    log "Tinaweb: install() -> loading some additionnal default settings"
+    @configure_using @_tinaweb_defaults
+    
     
     log "Tinaweb: install() -> calling preInstall"
     @preInstall?()
@@ -142,7 +137,7 @@ class Tinaweb extends Tinaviz
       $(window).bind "focus", => @unfreeze
   
       log "Tinaweb: _postInject() -> checking for demo mode"
-      @_demo_possible = true if @_config.demo?
+      @_demo_possible = true if @config.demo?
         
       waitTimeBeforeStartingDemo = 6
       delayBetweenChanges = 10
@@ -158,17 +153,17 @@ class Tinaweb extends Tinaviz
       #  $.doTimeout "demo_loop"
             
       log "Tinaweb: _postInject() -> sending parameters to the applet"  
-      @set "filter.a.edge.weight", [ @_config.a_edge_filter_min, @_config.a_edge_filter_max ], "Tuple2[Double]"
-      @set "filter.a.node.weight", [ @_config.a_node_filter_min, @_config.a_node_filter_max ], "Tuple2[Double]"
-      @set "filter.b.edge.weight", [ @_config.b_edge_filter_min, @_config.b_edge_filter_max ], "Tuple2[Double]"
-      @set "filter.b.node.weight", [ @_config.b_node_filter_min, @_config.b_node_filter_max ], "Tuple2[Double]"
-      @set "filter.a.node.size", @_config.a_node_size, "Double"
-      @set "filter.b.node.size", @_config.b_node_size, "Double"
-      @set "filter.node.category", @_config.category, "String"
-      @set "selectionRadius", @_config.cursor_size, "Double"
-      @set "layout", @_config.layout, "String"
-      @set "layoutSpeed", @_config.layout_speed, "Int"
-      @set "pause", @_config.pause, "Boolean"
+      @set "filter.a.edge.weight", [ @config.a_edge_filter_min, @config.a_edge_filter_max ], "Tuple2[Double]"
+      @set "filter.a.node.weight", [ @config.a_node_filter_min, @config.a_node_filter_max ], "Tuple2[Double]"
+      @set "filter.b.edge.weight", [ @config.b_edge_filter_min, @config.b_edge_filter_max ], "Tuple2[Double]"
+      @set "filter.b.node.weight", [ @config.b_node_filter_min, @config.b_node_filter_max ], "Tuple2[Double]"
+      @set "filter.a.node.size", @config.a_node_size, "Double"
+      @set "filter.b.node.size", @config.b_node_size, "Double"
+      @set "filter.node.category", @config.category, "String"
+      @set "selectionRadius", @config.cursor_size, "Double"
+      @set "layout", @config.layout, "String"
+      @set "layoutSpeed", @config.layout_speed, "Double"
+      @set "pause", @config.pause, "Boolean"
     
       log "Tinaweb: _postInject() terminated, calling postInstall() if available"
       @postInstall?()

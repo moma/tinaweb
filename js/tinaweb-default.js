@@ -10,8 +10,8 @@ Tinaweb = (function(_super) {
     log("Tinaweb: constructor called.. calling super()");
     Tinaweb.__super__.constructor.call(this);
     log("Tinaweb: configuring with default config");
-    this._config = {
-      element: "#tinaviz",
+    this._tinaweb_defaults = {
+      elementId: "vizdiv",
       gexf: "sample.gexf.gz",
       view: "macro",
       category: "Document",
@@ -39,19 +39,8 @@ Tinaweb = (function(_super) {
     log("Tinaweb: end of constructor");
   }
 
-  Tinaweb.prototype.configure_using = function(params) {
-    var key, value, _results;
-    log("Tinaweb: configure_using(params) -> loading..");
-    _results = [];
-    for (key in params) {
-      value = params[key];
-      _results.push(this._config[key] = value);
-    }
-    return _results;
-  };
-
   Tinaweb.prototype.load_url_params = function() {
-    return loadURLParamsUsing(this._config);
+    return loadURLParamsUsing(this.config);
   };
 
   Tinaweb.prototype.computeSize = function() {
@@ -168,6 +157,8 @@ Tinaweb = (function(_super) {
 
   Tinaweb.prototype.install = function() {
     var _this = this;
+    log("Tinaweb: install() -> loading some additionnal default settings");
+    this.configure_using(this._tinaweb_defaults);
     log("Tinaweb: install() -> calling preInstall");
     if (typeof this.preInstall === "function") this.preInstall();
     log("Tinaweb: install() -> calling @_inject => { ... }");
@@ -189,21 +180,21 @@ Tinaweb = (function(_super) {
         return _this.unfreeze;
       });
       log("Tinaweb: _postInject() -> checking for demo mode");
-      if (_this._config.demo != null) _this._demo_possible = true;
+      if (_this.config.demo != null) _this._demo_possible = true;
       waitTimeBeforeStartingDemo = 6;
       delayBetweenChanges = 10;
       log("Tinaweb: _postInject() -> sending parameters to the applet");
-      _this.set("filter.a.edge.weight", [_this._config.a_edge_filter_min, _this._config.a_edge_filter_max], "Tuple2[Double]");
-      _this.set("filter.a.node.weight", [_this._config.a_node_filter_min, _this._config.a_node_filter_max], "Tuple2[Double]");
-      _this.set("filter.b.edge.weight", [_this._config.b_edge_filter_min, _this._config.b_edge_filter_max], "Tuple2[Double]");
-      _this.set("filter.b.node.weight", [_this._config.b_node_filter_min, _this._config.b_node_filter_max], "Tuple2[Double]");
-      _this.set("filter.a.node.size", _this._config.a_node_size, "Double");
-      _this.set("filter.b.node.size", _this._config.b_node_size, "Double");
-      _this.set("filter.node.category", _this._config.category, "String");
-      _this.set("selectionRadius", _this._config.cursor_size, "Double");
-      _this.set("layout", _this._config.layout, "String");
-      _this.set("layoutSpeed", _this._config.layout_speed, "Int");
-      _this.set("pause", _this._config.pause, "Boolean");
+      _this.set("filter.a.edge.weight", [_this.config.a_edge_filter_min, _this.config.a_edge_filter_max], "Tuple2[Double]");
+      _this.set("filter.a.node.weight", [_this.config.a_node_filter_min, _this.config.a_node_filter_max], "Tuple2[Double]");
+      _this.set("filter.b.edge.weight", [_this.config.b_edge_filter_min, _this.config.b_edge_filter_max], "Tuple2[Double]");
+      _this.set("filter.b.node.weight", [_this.config.b_node_filter_min, _this.config.b_node_filter_max], "Tuple2[Double]");
+      _this.set("filter.a.node.size", _this.config.a_node_size, "Double");
+      _this.set("filter.b.node.size", _this.config.b_node_size, "Double");
+      _this.set("filter.node.category", _this.config.category, "String");
+      _this.set("selectionRadius", _this.config.cursor_size, "Double");
+      _this.set("layout", _this.config.layout, "String");
+      _this.set("layoutSpeed", _this.config.layout_speed, "Double");
+      _this.set("pause", _this.config.pause, "Boolean");
       log("Tinaweb: _postInject() terminated, calling postInstall() if available");
       return typeof _this.postInstall === "function" ? _this.postInstall() : void 0;
     });

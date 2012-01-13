@@ -7,10 +7,10 @@ callSlider = function(sliderobj, slider) {
       var vals;
       if (sliderData[slider].type === "Tuple2[Double]") {
         vals = $(sliderobj).slider("values");
-        tinaviz.set(slider, [vals[0] / sliderData[slider].size, vals[1] / sliderData[slider].size], sliderData[slider].type);
+        app.set(slider, [vals[0] / sliderData[slider].size, vals[1] / sliderData[slider].size], sliderData[slider].type);
       } else {
         if (sliderData[slider].type === "Double") {
-          tinaviz.set(slider, $(sliderobj).slider("value") / sliderData[slider].size, sliderData[slider].type);
+          app.set(slider, $(sliderobj).slider("value") / sliderData[slider].size, sliderData[slider].type);
         }
       }
       return sliderData[slider].scheduled = false;
@@ -49,13 +49,13 @@ $(document).ready(function() {
     return $(this).css("cursor", "auto");
   });
   $("#nodeRadiusSelector").change(function() {
-    return tinaviz.set("filter.map.node.radius", $("#nodeRadiusSelector").val(), "String");
+    return app.set("filter.map.node.radius", $("#nodeRadiusSelector").val(), "String");
   });
   $("#nodeShapeSelector").change(function() {
-    return tinaviz.set("filter.map.node.shape", $("#nodeShapeSelector").val(), "String");
+    return app.set("filter.map.node.shape", $("#nodeShapeSelector").val(), "String");
   });
   return $("#nodeColorSelector").change(function() {
-    return tinaviz.set("filter.map.node.color", $("#nodeColorSelector").val(), "String");
+    return app.set("filter.map.node.color", $("#nodeColorSelector").val(), "String");
   });
 });
 
@@ -90,9 +90,9 @@ toolbar.checkSearchForm = function() {
   txt = $("#search_input").val();
   if (txt !== toolbar.lastSearch) {
     toolbar.lastSearch = txt;
-    tinaviz.highlightByPattern(txt, "containsIgnoreCase");
+    app.highlightByPattern(txt, "containsIgnoreCase");
   }
-  return setTimeout("toolbar.checkSearchForm()", 200);
+  return delay(200, toolbar.checkSearchForm);
 };
 
 toolbar.checkSearchFormNoRepeat = function() {
@@ -100,29 +100,29 @@ toolbar.checkSearchFormNoRepeat = function() {
   txt = $("#search_input").val();
   if (txt !== toolbar.lastSearch) {
     toolbar.lastSearch = txt;
-    return tinaviz.highlightByPattern(txt, "containsIgnoreCase");
+    return app.highlightByPattern(txt, "containsIgnoreCase");
   }
 };
 
 toolbar.runSearchFormNoRepeat = function() {
   var txt;
   txt = $("#search_input").val();
-  console.log("runSearchFormNoRepeat:" + txt);
-  tinaviz.unselect(function() {
+  log("runSearchFormNoRepeat: " + txt);
+  app.unselect(function() {
     var cat, whenDone;
-    tinaviz.infodiv.reset();
-    cat = tinaviz.getCategory();
+    app.infodiv.reset();
+    cat = app.getCategory();
     whenDone = function() {
       if (txt !== "") {
-        return tinaviz.centerOnSelection();
+        return app.centerOnSelection();
       } else {
-        return tinaviz.recenter();
+        return app.recenter();
       }
     };
     if (cat === "Document") {
-      return tinaviz.selectByPattern(txt, "containsIgnoreCase", whenDone);
+      return app.selectByPattern(txt, "containsIgnoreCase", whenDone);
     } else {
-      return tinaviz.selectByPattern(txt, "containsIgnoreCase", whenDone);
+      return app.selectByPattern(txt, "containsIgnoreCase", whenDone);
     }
   });
   return false;
@@ -184,17 +184,17 @@ toolbar.init = function() {
   $("#export-gexf").button({
     text: true
   }).click(function(eventObject) {
-    return tinaviz.set("export", "GEXF", "String");
+    return app.set("export", "GEXF", "String");
   });
   $("#export-png").button({
     text: true
   }).click(function(eventObject) {
-    return tinaviz.set("export", "PNG", "String");
+    return app.set("export", "PNG", "String");
   });
   $("#export-pdf").button({
     text: true
   }).click(function(eventObject) {
-    return tinaviz.set("export", "PDF", "String");
+    return app.set("export", "PDF", "String");
   });
   $("#level").button({
     text: true,
@@ -202,15 +202,15 @@ toolbar.init = function() {
       primary: "ui-icon-help"
     }
   }).click(function(eventObject) {
-    return tinaviz.getView(function(data) {
+    return app.getView(function(data) {
       if (data.view === "macro") {
-        if (tinaviz === void 0 || tinaviz.infodiv.selection.length === 0) {
+        if (app === void 0 || app.infodiv.selection.length === 0) {
           return alert("You need to select a node before switching to meso view");
         } else {
-          return tinaviz.setView("meso");
+          return app.setView("meso");
         }
       } else {
-        if (data.view === "meso") return tinaviz.setView("macro");
+        if (data.view === "meso") return app.setView("macro");
       }
     });
   });
@@ -223,7 +223,7 @@ toolbar.init = function() {
   }).click(function(eventObject) {});
   $("#sliderAEdgeWeight").slider({
     range: true,
-    values: [parseFloat(prefs.a_edge_filter_min) * 100.0, parseFloat(prefs.a_edge_filter_max) * 100.0],
+    values: [app.config.a_edge_filter_min * 100.0, app.config.a_edge_filter_max * 100.0],
     animate: true,
     slide: function(event, ui) {
       return callSlider("#sliderAEdgeWeight", "filter.a.edge.weight");
@@ -231,7 +231,7 @@ toolbar.init = function() {
   });
   $("#sliderANodeWeight").slider({
     range: true,
-    values: [parseFloat(prefs.a_node_filter_min) * 100.0, parseFloat(prefs.a_node_filter_max) * 100.0],
+    values: [app.config.a_node_filter_min * 100.0, app.config.a_node_filter_max * 100.0],
     animate: true,
     slide: function(event, ui) {
       return callSlider("#sliderANodeWeight", "filter.a.node.weight");
@@ -239,7 +239,7 @@ toolbar.init = function() {
   });
   $("#sliderBEdgeWeight").slider({
     range: true,
-    values: [parseFloat(prefs.b_edge_filter_min) * 100.0, parseFloat(prefs.b_edge_filter_max) * 100.0],
+    values: [app.config.b_edge_filter_min * 100.0, app.config.b_edge_filter_max * 100.0],
     animate: true,
     slide: function(event, ui) {
       return callSlider("#sliderBEdgeWeight", "filter.b.edge.weight");
@@ -247,14 +247,14 @@ toolbar.init = function() {
   });
   $("#sliderBNodeWeight").slider({
     range: true,
-    values: [parseFloat(prefs.b_node_filter_min) * 100.0, parseFloat(prefs.b_node_filter_max) * 100.0],
+    values: [app.config.b_node_filter_min * 100.0, app.config.b_node_filter_max * 100.0],
     animate: true,
     slide: function(event, ui) {
       return callSlider("#sliderBNodeWeight", "filter.b.node.weight");
     }
   });
   $("#sliderANodeSize").slider({
-    value: parseFloat(prefs.a_node_size) * 100.0,
+    value: app.config.a_node_size * 100.0,
     max: 100.0,
     animate: true,
     slide: function(event, ui) {
@@ -262,7 +262,7 @@ toolbar.init = function() {
     }
   });
   $("#sliderBNodeSize").slider({
-    value: parseFloat(prefs.b_node_size) * 100.0,
+    value: app.config.b_node_size * 100.0,
     max: 100.0,
     animate: true,
     slide: function(event, ui) {
@@ -270,7 +270,7 @@ toolbar.init = function() {
     }
   });
   $("#sliderSelectionZone").slider({
-    value: parseFloat(prefs.cursor_size) * 300.0,
+    value: app.config.cursor_size * 300.0,
     max: 300.0,
     animate: true,
     change: function(event, ui) {
@@ -284,7 +284,7 @@ toolbar.init = function() {
     text: true,
     label: "pause"
   }).click(function(event) {
-    return tinaviz.togglePause(function(data) {
+    return app.togglePause(function(data) {
       var p;
       p = $("#toggle-paused");
       if (p.button("option", "icons")["primary"] === "ui-icon-pause") {
@@ -306,8 +306,8 @@ toolbar.init = function() {
     }
   }).click(function(event) {
     toolbar.lastsearch = "";
-    return tinaviz.unselect(function(data) {
-      return tinaviz.infodiv.reset();
+    return app.unselect(function(data) {
+      return app.infodiv.reset();
     });
   });
   $("#toggle-recenter").button({
@@ -316,7 +316,7 @@ toolbar.init = function() {
       primary: "ui-icon-home"
     }
   }).click(function(event) {
-    return tinaviz.recenter(function() {});
+    return app.recenter(function() {});
   });
   $("#toggle-switch").button({
     text: true,
@@ -324,14 +324,14 @@ toolbar.init = function() {
       primary: "ui-icon-arrows"
     }
   }).click(function(event) {
-    return tinaviz.getCategory(function(data) {
+    return app.getCategory(function(data) {
       var cat, next_cat;
       cat = data.category;
-      console.log("clicked on category switch. cat: " + cat);
-      console.log(data);
-      next_cat = tinaviz.getOppositeCategory(cat);
-      console.log("opposite cat: " + next_cat);
-      return tinaviz.getView(function(data) {
+      log("clicked on category switch. cat: " + cat);
+      log(data);
+      next_cat = app.getOppositeCategory(cat);
+      log("opposite cat: " + next_cat);
+      return app.getView(function(data) {
         var neighbours, viewName;
         viewName = data.view;
         console.log("view name: " + viewName);
@@ -347,24 +347,24 @@ toolbar.init = function() {
           show("#category-A");
           show("#category-B");
         }
-        neighbours = tinaviz.infodiv.neighbours;
-        return tinaviz.setCategory(next_cat, function(data) {
-          console.log(" category should be set now");
-          return tinaviz.centerOnSelection(function(data) {
+        neighbours = app.infodiv.neighbours;
+        return app.setCategory(next_cat, function(data) {
+          log(" category should be set now");
+          return app.centerOnSelection(function(data) {
             var myArray, pos;
             if (viewName === "macro") {
               myArray = new Array();
               for (pos in neighbours) {
                 myArray.push(neighbours[pos]);
               }
-              return tinaviz.select(myArray, function() {
-                console.log("selected my array");
-                tinaviz.infodiv.updateNodeList(viewName, next_cat);
-                return tinaviz.infodiv.display_current_category();
+              return app.select(myArray, function() {
+                log("selected my array");
+                app.infodiv.updateNodeList(viewName, next_cat);
+                return app.infodiv.display_current_category();
               });
             } else {
-              tinaviz.infodiv.updateNodeList(viewName, next_cat);
-              return tinaviz.infodiv.display_current_category();
+              app.infodiv.updateNodeList(viewName, next_cat);
+              return app.infodiv.display_current_category();
             }
           });
         });

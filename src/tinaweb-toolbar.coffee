@@ -1,11 +1,11 @@
 callSlider = (sliderobj, slider) ->
-  unless sliderData[slider].scheduled == true
+  unless sliderData[slider].scheduled is true
     sliderData[slider].scheduled = true
     $.doTimeout sliderData[slider].delay, ->
-      if sliderData[slider].type == "Tuple2[Double]"
+      if sliderData[slider].type is "Tuple2[Double]"
         vals = $(sliderobj).slider("values")
-        tinaviz.set slider, [ vals[0] / sliderData[slider].size, vals[1] / sliderData[slider].size ], sliderData[slider].type
-      else tinaviz.set slider, $(sliderobj).slider("value") / sliderData[slider].size, sliderData[slider].type  if sliderData[slider].type == "Double"
+        app.set slider, [ vals[0] / sliderData[slider].size, vals[1] / sliderData[slider].size ], sliderData[slider].type
+      else app.set slider, $(sliderobj).slider("value") / sliderData[slider].size, sliderData[slider].type  if sliderData[slider].type == "Double"
       sliderData[slider].scheduled = false
 
 $(document).ready ->
@@ -18,10 +18,10 @@ $(document).ready ->
   
   jQuery.fn.disableTextSelect = ->
     @each ->
-      unless typeof @onselectstart == "undefined"
+      unless typeof @onselectstart is "undefined"
         @onselectstart = ->
           false
-      else unless typeof @style.MozUserSelect == "undefined"
+      else unless typeof @style.MozUserSelect is "undefined"
         @style.MozUserSelect = "none"
       else
         @onmousedown = ->
@@ -36,13 +36,13 @@ $(document).ready ->
     $(this).css "cursor", "auto"
   
   $("#nodeRadiusSelector").change ->
-    tinaviz.set "filter.map.node.radius", $("#nodeRadiusSelector").val(), "String"
+    app.set "filter.map.node.radius", $("#nodeRadiusSelector").val(), "String"
   
   $("#nodeShapeSelector").change ->
-    tinaviz.set "filter.map.node.shape", $("#nodeShapeSelector").val(), "String"
+    app.set "filter.map.node.shape", $("#nodeShapeSelector").val(), "String"
   
   $("#nodeColorSelector").change ->
-    tinaviz.set "filter.map.node.color", $("#nodeColorSelector").val(), "String"
+    app.set "filter.map.node.color", $("#nodeColorSelector").val(), "String"
 
 toolbar = values: 
   search: ""
@@ -66,33 +66,33 @@ toolbar = values:
 toolbar.lastSearch = ""
 toolbar.checkSearchForm = ->
   txt = $("#search_input").val()
-  unless txt == toolbar.lastSearch
+  unless txt is toolbar.lastSearch
     toolbar.lastSearch = txt
-    tinaviz.highlightByPattern txt, "containsIgnoreCase"
-  setTimeout "toolbar.checkSearchForm()", 200
+    app.highlightByPattern txt, "containsIgnoreCase"
+  delay 200, toolbar.checkSearchForm
 
 toolbar.checkSearchFormNoRepeat = ->
   txt = $("#search_input").val()
-  unless txt == toolbar.lastSearch
+  unless txt is toolbar.lastSearch
     toolbar.lastSearch = txt
-    tinaviz.highlightByPattern txt, "containsIgnoreCase"
+    app.highlightByPattern txt, "containsIgnoreCase"
 
 toolbar.runSearchFormNoRepeat = ->
   txt = $("#search_input").val()
-  console.log "runSearchFormNoRepeat:" + txt
-  tinaviz.unselect ->
-    tinaviz.infodiv.reset()
-    cat = tinaviz.getCategory()
+  log "runSearchFormNoRepeat: #{txt}"
+  app.unselect ->
+    app.infodiv.reset()
+    cat = app.getCategory()
     whenDone = ->
-      if txt != ""
-        tinaviz.centerOnSelection()
+      if txt isnt ""
+        app.centerOnSelection()
       else
-        tinaviz.recenter()
+        app.recenter()
     
-    if cat == "Document"
-      tinaviz.selectByPattern txt, "containsIgnoreCase", whenDone
+    if cat is "Document"
+      app.selectByPattern txt, "containsIgnoreCase", whenDone
     else
-      tinaviz.selectByPattern txt, "containsIgnoreCase", whenDone
+      app.selectByPattern txt, "containsIgnoreCase", whenDone
   
   false
 
@@ -148,25 +148,25 @@ toolbar.init = ->
     toolbar.checkSearchFormNoRepeat()
   
   $("#export-gexf").button(text: true).click (eventObject) ->
-    tinaviz.set "export", "GEXF", "String"
+    app.set "export", "GEXF", "String"
   
   $("#export-png").button(text: true).click (eventObject) ->
-    tinaviz.set "export", "PNG", "String"
+    app.set "export", "PNG", "String"
   
   $("#export-pdf").button(text: true).click (eventObject) ->
-    tinaviz.set "export", "PDF", "String"
+    app.set "export", "PDF", "String"
   
   $("#level").button(
     text: true
     icons: primary: "ui-icon-help"
   ).click (eventObject) ->
-    tinaviz.getView (data) ->
-      if data.view == "macro"
-        if tinaviz == undefined or tinaviz.infodiv.selection.length == 0
+    app.getView (data) ->
+      if data.view is "macro"
+        if app is undefined or app.infodiv.selection.length is 0
           alert "You need to select a node before switching to meso view"
         else
-          tinaviz.setView "meso"
-      else tinaviz.setView "macro"  if data.view == "meso"
+          app.setView "meso"
+      else app.setView "macro"  if data.view is "meso"
   
   $("#level").attr "title", "click to switch the level"
   $("#search_button").button(
@@ -176,42 +176,42 @@ toolbar.init = ->
   
   $("#sliderAEdgeWeight").slider 
     range: true
-    values: [ parseFloat(prefs.a_edge_filter_min) * 100.0, parseFloat(prefs.a_edge_filter_max) * 100.0 ]
+    values: [ app.config.a_edge_filter_min * 100.0, app.config.a_edge_filter_max * 100.0 ]
     animate: true
     slide: (event, ui) -> callSlider "#sliderAEdgeWeight", "filter.a.edge.weight"
   
   $("#sliderANodeWeight").slider 
     range: true
-    values: [ parseFloat(prefs.a_node_filter_min) * 100.0, parseFloat(prefs.a_node_filter_max) * 100.0 ]
+    values: [ app.config.a_node_filter_min * 100.0, app.config.a_node_filter_max * 100.0 ]
     animate: true
     slide: (event, ui) -> callSlider "#sliderANodeWeight", "filter.a.node.weight"
   
   $("#sliderBEdgeWeight").slider 
     range: true
-    values: [ parseFloat(prefs.b_edge_filter_min) * 100.0, parseFloat(prefs.b_edge_filter_max) * 100.0 ]
+    values: [ app.config.b_edge_filter_min * 100.0, app.config.b_edge_filter_max * 100.0 ]
     animate: true
     slide: (event, ui) -> callSlider "#sliderBEdgeWeight", "filter.b.edge.weight"
   
   $("#sliderBNodeWeight").slider 
     range: true
-    values: [ parseFloat(prefs.b_node_filter_min) * 100.0, parseFloat(prefs.b_node_filter_max) * 100.0 ]
+    values: [ app.config.b_node_filter_min * 100.0, app.config.b_node_filter_max * 100.0 ]
     animate: true
     slide: (event, ui) -> callSlider "#sliderBNodeWeight", "filter.b.node.weight"
   
   $("#sliderANodeSize").slider 
-    value: parseFloat(prefs.a_node_size) * 100.0
+    value: app.config.a_node_size * 100.0
     max: 100.0
     animate: true
     slide: (event, ui) -> callSlider "#sliderANodeSize", "filter.a.node.size"
   
   $("#sliderBNodeSize").slider 
-    value: parseFloat(prefs.b_node_size) * 100.0
+    value: app.config.b_node_size * 100.0
     max: 100.0
     animate: true
     slide: (event, ui) -> callSlider "#sliderBNodeSize", "filter.b.node.size"
   
   $("#sliderSelectionZone").slider 
-    value: parseFloat(prefs.cursor_size) * 300.0
+    value: app.config.cursor_size * 300.0
     max: 300.0
     animate: true
     change: (event, ui) -> callSlider "#sliderSelectionZone", "selectionRadius"
@@ -221,7 +221,7 @@ toolbar.init = ->
     text: true
     label: "pause"
   ).click (event) ->
-    tinaviz.togglePause (data) ->
+    app.togglePause (data) ->
       p = $("#toggle-paused")
       if p.button("option", "icons")["primary"] == "ui-icon-pause"
         p.button "option", "icons", primary: "ui-icon-play"
@@ -232,52 +232,52 @@ toolbar.init = ->
   
   $("#toggle-unselect").button(icons: primary: "ui-icon-close").click (event) ->
     toolbar.lastsearch = ""
-    tinaviz.unselect (data) -> tinaviz.infodiv.reset()
+    app.unselect (data) -> app.infodiv.reset()
   
   $("#toggle-recenter").button(
     text: true
     icons: primary: "ui-icon-home"
   ).click (event) ->
-    tinaviz.recenter ->
+    app.recenter ->
   
   $("#toggle-switch").button(
     text: true
     icons: primary: "ui-icon-arrows"
   ).click (event) ->
-    tinaviz.getCategory (data) ->
+    app.getCategory (data) ->
       cat = data.category
-      console.log "clicked on category switch. cat: " + cat
-      console.log data
-      next_cat = tinaviz.getOppositeCategory cat
-      console.log "opposite cat: " + next_cat
-      tinaviz.getView (data) ->
+      log "clicked on category switch. cat: #{cat}"
+      log data
+      next_cat = app.getOppositeCategory cat
+      log "opposite cat: #{next_cat}"
+      app.getView (data) ->
         viewName = data.view
-        console.log "view name: " + viewName
-        if viewName == "macro"
-          if next_cat == "Document"
+        console.log "view name: #{viewName}"
+        if viewName is "macro"
+          if next_cat is "Document"
             show "#category-A"
             hide "#category-B"
-          else if next_cat == "NGram"
+          else if next_cat is "NGram"
             hide "#category-A"
             show "#category-B"
         else
           show "#category-A"
           show "#category-B"
-        neighbours = tinaviz.infodiv.neighbours
-        tinaviz.setCategory next_cat, (data) ->
-          console.log " category should be set now"
-          tinaviz.centerOnSelection (data) ->
-            if viewName == "macro"
+        neighbours = app.infodiv.neighbours
+        app.setCategory next_cat, (data) ->
+          log " category should be set now"
+          app.centerOnSelection (data) ->
+            if viewName is "macro"
               myArray = new Array()
               for pos of neighbours
                 myArray.push neighbours[pos]
-              tinaviz.select myArray, ->
-                console.log "selected my array"
-                tinaviz.infodiv.updateNodeList viewName, next_cat
-                tinaviz.infodiv.display_current_category()
+              app.select myArray, ->
+                log "selected my array"
+                app.infodiv.updateNodeList viewName, next_cat
+                app.infodiv.display_current_category()
             else
-              tinaviz.infodiv.updateNodeList viewName, next_cat
-              tinaviz.infodiv.display_current_category()
+              app.infodiv.updateNodeList viewName, next_cat
+              app.infodiv.display_current_category()
   
   # TODO replace by a smarter JQuery/CSS selector (using children?)
   hide "#export-view"
