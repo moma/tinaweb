@@ -54,8 +54,8 @@ class Application extends Tinaweb
     @reloadGraph()
 
   reloadGraph: =>
-    repeat 2000, =>
-      log "Application: pinging \"#{@config.gexf}\""
+    repeat 1500, =>
+      #log "Application: pinging \"#{@config.gexf}\""
       @config.gexf = window.parent.gexf
       if @config.gexf?
         if @config.gexf isnt ""

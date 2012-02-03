@@ -86,7 +86,7 @@ if ($keywords) {
 			if ($word == "") continue;
 			if ($i > 0)
 				$f .= " OR ";
-			$f .= 'keywords LIKE "%' . $word . '%"';
+			$f .= 'keywords LIKE "%' . $word . '%" ';
 			$i++;
 		}
 	}
@@ -105,7 +105,7 @@ if ($countries) {
 		if ($country == "") continue;
 		if ($i > 0)
 			$f .= " OR ";
-		$f .= 'country = "' . $country . '"';
+		$f .= 'country = "' . $country . '" ';
 		$i++;
 	}
 	$f .= "  ";
@@ -122,7 +122,7 @@ if ($laboratories) {
 		if ($lab == "") continue;
 		if ($i > 0)
 			$f .= " OR ";
-		$f .= 'lab LIKE "%' . $lab . '%"';
+		$f .= 'lab LIKE "%' . $lab . '%" ';
 		$i++;
 	}
 	$f .= "  ";
@@ -137,9 +137,10 @@ if ($organizations) {
 	$i = 0;
 	foreach ($organizations as $org) {
 		$org = sanitize_input(trim(strtolower($org)));
+		
 		if ($org == "") continue;
-		if ($i > 0)
-		$f .= 'affiliation LIKE "%' . $org . '%" OR affiliation2 LIKE "%' . $org . '%"';
+
+		$f .= 'affiliation LIKE "%' . $org . '%" OR affiliation2 LIKE "%' . $org . '%" ';
                 //'affiliation LIKE "%' . $org . '% OR affiliation2 LIKE "%' . $org . '%"';
 		$i++;
 	}

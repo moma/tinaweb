@@ -58,8 +58,7 @@ Application = (function(_super) {
 
   Application.prototype.reloadGraph = function() {
     var _this = this;
-    return repeat(2000, function() {
-      log("Application: pinging \"" + _this.config.gexf + "\"");
+    return repeat(1500, function() {
       _this.config.gexf = window.parent.gexf;
       if (_this.config.gexf != null) {
         if (_this.config.gexf !== "") {

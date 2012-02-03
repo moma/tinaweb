@@ -129,12 +129,18 @@ $(document).ready(function() {
       collect = function(k) {
         var t;
         t = [];
+        log("collecting .filter" + k);
         $(".filter" + k).each(function(i, e) {
           var value;
           value = $(e).val();
           if (value != null) {
+            log("got: " + value);
             value = value.replace(/^\s+/g, "").replace(/\s+$/g, "");
-            if (value !== " " || value !== "") return t.push(value);
+            log("sanitized: " + value);
+            if (value !== " " || value !== "") {
+              log("keeping " + value);
+              return t.push(value);
+            }
           }
         });
         return t;
