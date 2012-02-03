@@ -75,7 +75,7 @@ $organizations = $data["organizations"];
 $f = "";// requête
 if ($keywords) {
 	if (sizeof($keywords) > 0) {
-		$f .= ' AND (';
+		$f .= 'AND (';
 	}
 
 	foreach ($keywords as $kw) {
@@ -95,7 +95,7 @@ if ($keywords) {
 if ($countries) {
 
 	if (sizeof($countries) > 0) {
-		$f .= ' AND (';
+		$f .= 'AND (';
 	}
 
 	$i = 0;
@@ -113,7 +113,7 @@ if ($countries) {
 if ($laboratories) {
 
 	if (sizeof($laboratories) > 0) {
-		$f .= ' AND (';
+		$f .= 'AND (';
 	}
 
 	$i = 0;
@@ -154,8 +154,14 @@ $gexf .= ' <attribute id="6" title="type" type="string"> </attribute>' . "\n";
 $gexf .= "</attributes>" . "\n";
 $gexf .= "<nodes>" . "\n";
 
+
+//echo(substr($f, 0,3));
 // liste des chercheurs
-$sql = "SELECT * FROM scholars " . $scholar_filter . " " . $f;
+if (substr($f, 0,3)=='AND'){
+    $f=substr($f,3,-1);
+}
+        
+$sql = "SELECT * FROM scholars where " . " " . $f;
 //pt('f:'.$f);
 //pt($sql);
 //exit();
