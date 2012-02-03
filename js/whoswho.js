@@ -1,247 +1,168 @@
-/**
- * Prevents click-based selectiion of text in all matched elements.
- */
+var completion, getGraph, graphUrl, ids;
+
 jQuery.fn.disableTextSelect = function() {
-	return this.each(function() {
-		if( typeof this.onselectstart != "undefined")// IE
-		{
-			this.onselectstart = function() {
-				return false;
-			};
-		} else if( typeof this.style.MozUserSelect != "undefined")// Firefox
-		{
-			this.style.MozUserSelect = "none";
-		} else// All others
-		{
-			this.onmousedown = function() {
-				return false;
-			};
-			this.style.cursor = "default";
-		}
-	});
+  return this.each(function() {
+    if (typeof this.onselectstart !== "undefined") {
+      return this.onselectstart = function() {
+        return false;
+      };
+    } else if (typeof this.style.MozUserSelect !== "undefined") {
+      return this.style.MozUserSelect = "none";
+    } else {
+      this.onmousedown = function() {
+        return false;
+      };
+      return this.style.cursor = "default";
+    }
+  });
 };
-var ids = 0;
-var completion = {};
-var graphUrl = "";
-var getGraph = function () {
-	return graphUrl;
-}
+
+ids = 0;
+
+completion = {};
+
+graphUrl = "";
+
+getGraph = function() {
+  log("getting graph from parent frame (via local var)");
+  return graphUrl;
+};
 
 $(document).ready(function() {
-
-	jQuery('.unselectable').disableTextSelect();
-	$('.unselectable').hover(function() {
-		$(this).css('cursor', 'default');
-	}, function() {
-		$(this).css('cursor', 'auto');
-	});
-	/*
-	 $.ajax({
-	 url : "../community/getmenu.php",
-	 dataType : "json",
-	 success : function(msg) {
-
-	 console.log(msg);
-	 var cata = $("#categorya").get(0);
-	 cata.options.length = 0;
-	 cata.options[0] = new Option("Select gender", "-1");
-
-	 $.each(msg.d, function(index, item) {
-	 cata.options[cata.options.length] = new Option(item.Display, item.Value);
-	 });
-	 },
-	 error : function() {
-	 alert("Failed to load genders");
-	 }
-	 });
-	 */
-	$('#search-form').hide();
-
-	
-	$('.topbar').hover(function() {
-		$(this).stop().animate({
-			"opacity" : 0.98
-		}, "fast");
-	}, function() {
-		$(this).stop().animate({
-			"opacity" : 0.93
-		}, "fast");
-	});
-	function popfilter(label, type, options) {
-		var id = ids++;
-		var id1 = "filter" + id;
-		var id2 = "combo" + id;
-
-		var header = '<li id="' + id1 + '" class="filter" style="padding-top: 5px;">';
-		var labelization = '<span style="color: #fff;">&nbsp; ' + label + ' </span>';
-		//var selection = '<select id="' + id2 + '" class="small filterselect filter' + type + '">' + options + '</select>';
-		var input = '<input type="text" id="' + id2 + '" class="medium filter'+type+'" placeholder="' + type + '" />';
-		var footer = '</li>;'
-		$(header + labelization + input
-		// +       selection
-		+ footer).insertBefore('#refine');
-
-		$("#" + id2).catcomplete({
-			minLength : 2,
-			source : function(request, response) {
-				var term = request.term;
-
-				$.getJSON("autocomplete.php", {
-					category : type,
-					term : request.term
-				}, function(data, status, xhr) {
-					response(data.results);
-				});
-			}
-		});
-
-		$('#' + id1 + '').hide();
-		$('#' + id1 + '').fadeIn(500);
-		return false;
-	};
-
-
-	$.widget("custom.catcomplete", $.ui.autocomplete, {
-		_renderMenu : function(ul, items) {
-
-			var self = this, categories = _.groupBy(items, function(o) {
-				return o.category;
-			});
-
-			_.each(categories, function(data, category) {
-				var size = 0;
-				var total = 0;
-				var term = "";
-				_.each(data, function(item) {
-					size = item.size;
-					total = item.total;
-					term = item.term;
-					self._renderItem(ul, item);
-				});
-				ul.append("<li class='ui-autocomplete-category'>" + size + "/" + total + " results</li>");
-				console.log(term);
-				ul.highlight(term);
-			});
-		}
-	});
-
-	var cache = {};
-	var xhrs = {};
-
-	$('#addfiltercountry').click(function() {
-		return popfilter('in', 'countries', []);
-	});
-	$('#addfilterorganization').click(function() {
-
-		return popfilter('from', 'organizations', []);
-	});
-	$('#addfilterlaboratory').click(function() {
-		var prefix = "working";
-		if($(".filterkeywords") || $(".filterlaboratories")) {
-			//prefix = "";
-		}
-		return popfilter(prefix + ' at', 'laboratories', []);
-
-	});
-
-	$('#addfilterkeyword').click(function() {
-		var prefix = "working";
-		if($(".filterkeywords") || $(".filterlaboratories")) {
-			//prefix = "";
-		}
-		return popfilter(prefix + ' on', 'keywords', []);
-	});
-	$('#addfiltertag').click(function() {
-		return popfilter('tagged', 'tags', []);
-	});
-	/*
-	 $.ajax({
-	 url : "../community/getmenu.php",
-	 dataType : "json",
-	 success : function(msg) {
-
-	 console.log(msg);
-	 var cata = $("#categorya").get(0);
-	 cata.options.length = 0;
-	 cata.options[0] = new Option("Select gender", "-1");
-
-	 $.each(msg.d, function(index, item) {
-	 cata.options[cata.options.length] = new Option(item.Display, item.Value);
-	 });
-	 },
-	 error : function() {
-	 alert("Failed to load genders");
-	 }
-	 });
-	 */
-
-	$('#loading').hide();
-	$('#example').click(function() {
-		$('#welcome').toggle('slow', function() {
-			$('#loading').toggle('slow');
-		});
-	});
-	$('#generate').click(function() {
-		$('#welcome').fadeOut('fasy', function() {
-			$('#loading').fadeIn('slow', function() {
-			});
-			
-			console.log("loading");
-				var collect = function(k) {
-					var t = [];
-					console.log("collecting "+'.filter' + k + '');
-					$('.filter' + k + '').each(function(i, e) {
-						var value = $(e).val();
-						if (value === undefined) return;
-						value = value.replace(/^\s+/g,'').replace(/\s+$/g,'');
-						if (value == "" || value == " ") {
-							t.push(value);	
-						}
-					});
-					return t;
-				}
-				console.log("collecting..");
-				var query = {
-					categorya : $('#categorya :selected').text(),
-					categoryb : $('#categoryb :selected').text(),
-					keywords : collect('keywords'),
-					countries : collect('countries'),
-					laboratories : collect('laboratories'),
-					coloredby : [],
-					tags : collect('tags'),
-					organizations : collect('organizations')
-				};
-
-				console.log(query);
-				// we send this to tinaviz to do the job
-				//console.log("STRINGY: "+JSON.stringify(query));
-				var url = "getgraph.php?query=" + encodeURIComponent(JSON.stringify(query));
-				console.log(url);
-				
-				graphUrl = url;
-				$("#visualization").html(
-			'<iframe src="tinaframe.html" class="frame" border="0" frameborder="0" scrolling="no" id="frame" name="frame"></iframe>'
-				);
-				
-
-	            
-				 //$.post("getgraph.php", query, function(data) {
-				 	
-				 	 // create the iframe, wait 2 seconds, and then call
-				 	 /*
-				 	 tinaviz.open({
-		                view: "macro",
-		                url: url,
-		                layout: "tinaforce"
-		            });
-		            */
-				 	/*
-					 $('#loading').hide('slow', function() {
-					 // display the TINAVIZ PANEL
-					 });*/
-				// });
-				 
-		});
-		return false;
-	});
+  var cache, popfilter, xhrs;
+  log("document ready.. installing whoswho");
+  popfilter = function(label, type, options) {
+    var footer, header, id, id1, id2, input, labelization;
+    id = ids++;
+    id1 = "filter" + id;
+    id2 = "combo" + id;
+    header = "<li id=\"" + id1 + "\" class=\"filter\" style=\"padding-top: 5px;\">";
+    labelization = "<span style=\"color: #fff;\">&nbsp; " + label + " </span>";
+    input = "<input type=\"text\" id=\"" + id2 + "\" class=\"medium filter" + type + "\" placeholder=\"" + type + "\" />";
+    footer = "</li>;";
+    $(header + labelization + input + footer).insertBefore("#refine");
+    $("#" + id2).catcomplete({
+      minLength: 2,
+      source: function(request, response) {
+        var term;
+        term = request.term;
+        return $.getJSON("autocomplete.php", {
+          category: type,
+          term: request.term
+        }, function(data, status, xhr) {
+          return response(data.results);
+        });
+      }
+    });
+    $("" + id1).hide();
+    show("#" + id1);
+    return false;
+  };
+  jQuery(".unselectable").disableTextSelect();
+  $(".unselectable").hover((function() {
+    return $(this).css("cursor", "default");
+  }), function() {
+    return $(this).css("cursor", "auto");
+  });
+  hide("#search-form");
+  $(".topbar").hover((function() {
+    return $(this).stop().animate({
+      opacity: 0.98
+    }, "fast");
+  }), function() {
+    return $(this).stop().animate({
+      opacity: 0.93
+    }, "fast");
+  });
+  $.widget("custom.catcomplete", $.ui.autocomplete, {
+    _renderMenu: function(ul, items) {
+      var categories, self;
+      self = this;
+      categories = _.groupBy(items, function(o) {
+        return o.category;
+      });
+      return _.each(categories, function(data, category) {
+        var size, term, total;
+        size = 0;
+        total = 0;
+        term = "";
+        _.each(data, function(item) {
+          size = item.size;
+          total = item.total;
+          term = item.term;
+          return self._renderItem(ul, item);
+        });
+        ul.append("<li class='ui-autocomplete-category'>" + size + "/" + total + " results</li>");
+        log(term);
+        return ul.highlight(term);
+      });
+    }
+  });
+  cache = {};
+  xhrs = {};
+  $("#addfiltercountry").click(function() {
+    return popfilter("in", "countries", []);
+  });
+  $("#addfilterorganization").click(function() {
+    return popfilter("from", "organizations", []);
+  });
+  $("#addfilterlaboratory").click(function() {
+    var prefix;
+    prefix = "working";
+    return popfilter("" + prefix + " at", "laboratories", []);
+  });
+  $("#addfilterkeyword").click(function() {
+    var prefix;
+    prefix = "working";
+    return popfilter("" + prefix + " on", "keywords", []);
+  });
+  $("#addfiltertag").click(function() {
+    return popfilter("tagged", "tags", []);
+  });
+  hide("#loading");
+  $("#example").click(function() {
+    hide(".hero-unit");
+    return $("#welcome").fadeOut("slow", function() {
+      return show("#loading", "fast");
+    });
+  });
+  return $("#generate").click(function() {
+    hide(".hero-unit");
+    $("#welcome").fadeOut("slow", function() {
+      var collect, query, url;
+      show("#loading", "fast");
+      log("loading");
+      collect = function(k) {
+        var t;
+        t = [];
+        log("collecting .filter" + k);
+        $(".filter" + k).each(function(i, e) {
+          var value;
+          value = $(e).val();
+          if (value === void 0) return;
+          value = value.replace(/^\s+/g, "").replace(/\s+$/g, "");
+          if (value === "" || value === " ") return t.push(value);
+        });
+        return t;
+      };
+      log("collecting..");
+      query = {
+        categorya: $("#categorya :selected").text(),
+        categoryb: $("#categoryb :selected").text(),
+        keywords: collect("keywords"),
+        countries: collect("countries"),
+        laboratories: collect("laboratories"),
+        coloredby: [],
+        tags: collect("tags"),
+        organizations: collect("organizations")
+      };
+      log(query);
+      query = encodeURIComponent(JSON.stringify(query));
+      url = "getgraph.php?query=" + query;
+      log(url);
+      graphUrl = url;
+      return $("#visualization").html("<iframe src=\"tinaframe.html\" class=\"frame\" border=\"0\" frameborder=\"0\" scrolling=\"no\" id=\"frame\" name=\"frame\"></iframe>");
+    });
+    return false;
+  });
 });

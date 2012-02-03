@@ -54,28 +54,32 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     <!--TINAWEB APPLET LOADER -->
     <script type="text/javascript" src="js/tinaviz/deployJava.js"></script>
     <!-- PREFERENCES -->
-    <script type="text/javascript" src="js/preferences.js"></script>
+    <script type="text/javascript" src="js/config.js"></script>
+    
+    <script type="text/javascript" src="js/misc/underscore.min.js"></script>
+    <!-- SOME FUNCTIONS -->
+    <script type="text/javascript" src="js/utils.js"></script>
     <!-- TINAVIZ -->
     <script type="text/javascript" src="js/tinaviz/tinaviz.js"></script>
     <!-- WE USE TINAWEB UTILS-->
     <script type="text/javascript" src="js/tinaweb-utils.js"></script>
+    <!-- TINAWEB MAIN -->
+    <script type="text/javascript" src="js/tinaweb-demo.js"></script>
+    <!-- TINAWEB MAIN -->
+    <script type="text/javascript" src="js/tinaweb-default.js"></script>
+    <!-- TINAWEB MAIN -->
+    <script type="text/javascript" src="js/tinaweb-main.js"></script>
+     <!-- WE USE TINAWEB INFO PANEL -->
+    <script type="text/javascript" src="js/tinaweb-toolbar.js"></script>
     <!-- WE USE TINAWEB INFO PANEL -->
     <script type="text/javascript" src="js/tinaweb-info.js"></script>
-    <!-- WE USE TINAWEB INFO PANEL -->
-    <script type="text/javascript" src="js/tinaweb-toolbar.js"></script>
-	    <!-- TINAWEB MAIN -->
-    <script type="text/javascript" src="js/tinaweb-main.js"></script>
-    <!-- TINASOFT UTILITIES -->
-    <script type="text/javascript" src="js/cache.js"></script>
 
 </head>
 <body>
 <script type="text/javascript">
 	/* small extension to Tinaviz, to allow callbacking between iframes */
-	prefs.embed = "true";
-	prefs.getGraph = function() {
-		return window.parent.getGraph();
-	};
+	default_config.gexf = window.parent.gexf;
+	
 </script>
 <div id="doc3" class="yui-t5 ui-widget">
     <div id="hd" class="ui-widget">

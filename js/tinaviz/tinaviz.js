@@ -1,705 +1,232 @@
-/*
-    Copyright (C) 2009-2011 CREA Lab, CNRS/Ecole Polytechnique UMR 7656 (Fr)
+var Tinaviz, callCallback, callbacks, cbCounter, cblatency, makeCallback,
+  __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
 
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
+cblatency = 100;
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+cbCounter = 0;
 
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
+callbacks = {};
 
+callCallback = function(cb_id, cb_args) {
+  return delay(cblatency, function() {
+    return callbacks[cb_id]($.parseJSON(cb_args));
+  });
+};
 
-function Tinaviz(args) {
+makeCallback = function(cb) {
+  var id;
+  if (cb == null) cb = function() {};
+  id = cbCounter++;
+  callbacks[id] = cb;
+  return "" + id;
+};
 
-    var openDefaults = {
-        success: function(){},
-        error: function(msg){},
-        before: function(){},
-        after: function(){},
-        clear: true,
-        view: "macro",
-        url: "",
-        layout: "tinaforce"
+Tinaviz = (function() {
+
+  function Tinaviz() {
+    this._inject = __bind(this._inject, this);
+    this.set = __bind(this.set, this);
+    this.get = __bind(this.get, this);
+    this.getAs = __bind(this.getAs, this);
+    this._resize = __bind(this._resize, this);
+    this.getNodes = __bind(this.getNodes, this);
+    this.unfreeze = __bind(this.unfreeze, this);
+    this.freeze = __bind(this.freeze, this);
+    this.getNeighbourhood = __bind(this.getNeighbourhood, this);
+    this.getNodeAttributes = __bind(this.getNodeAttributes, this);
+    this.highlightByNeighbourPattern = __bind(this.highlightByNeighbourPattern, this);
+    this.highlightByPattern = __bind(this.highlightByPattern, this);
+    this.selectByNeighbourPattern = __bind(this.selectByNeighbourPattern, this);
+    this.selectByPattern = __bind(this.selectByPattern, this);
+    this.getNodesByLabel = __bind(this.getNodesByLabel, this);
+    this._open = __bind(this._open, this);
+    this.configure_using = __bind(this.configure_using, this);    this.applet = void 0;
+    this.config = {
+      jarFile: "tinaviz-2.0-SNAPSHOT.jar",
+      loadingImage: "css/branding/appletLoading.gif",
+      appletId: "tinapplet",
+      elementId: "vizdiv",
+      path: "",
+      assets: "",
+      context: "",
+      engine: "software",
+      brandingIcon: "",
+      width: 10,
+      height: 10
     };
+  }
 
-    var cbCounter = 0;
-    var callbacks = {};
+  Tinaviz.prototype.configure_using = function(params) {
+    var key, value, _results;
+    _results = [];
+    for (key in params) {
+      value = params[key];
+      _results.push(this.config[key] = value);
+    }
+    return _results;
+  };
 
-    var opts = {
-        context: "",
-        path: "",
-        engine: 'software',
-        brandingIcon: "",
-        pause: false,
-        width: 800,
-        height: 600
+  Tinaviz.prototype._open = function(url, cb) {
+    log("Tinaviz: _open() -> opening " + url);
+    try {
+      return this.applet.openURI(makeCallback(cb), url);
+    } catch (e) {
+      logError("Tinaviz: _open() -> Couldn't import graph: " + e);
+      return cb({
+        success: false,
+        error: e
+      });
+    }
+  };
+
+  Tinaviz.prototype.getNodesByLabel = function(label, type, cb) {
+    return alert("ERROR getNodesByLabel is broken");
+  };
+
+  Tinaviz.prototype.selectByPattern = function(pattern, patternMode, cb) {
+    if (pattern.length > 0 && pattern.length < 3) return;
+    return this.applet.selectByPattern(makeCallback(cb), pattern, patternMode);
+  };
+
+  Tinaviz.prototype.selectByNeighbourPattern = function(pattern, patternMode, category, cb) {
+    if (pattern.length > 0 && pattern.length < 3) return;
+    return this.applet.selectByNeighbourPattern(makeCallback(cb), pattern, patternMode, category);
+  };
+
+  Tinaviz.prototype.highlightByPattern = function(pattern, patternMode, cb) {
+    return this.applet.highlightByPattern(makeCallback(cb), pattern, patternMode);
+  };
+
+  Tinaviz.prototype.highlightByNeighbourPattern = function(pattern, patternMode, cb) {
+    return this.applet.highlightByNeighbourPattern(makeCallback(cb), pattern, patternMode);
+  };
+
+  Tinaviz.prototype.getNodeAttributes = function(view, id, cb) {
+    return this.applet.getNodeAttributes(makeCallback(cb), view, id);
+  };
+
+  Tinaviz.prototype.getNeighbourhood = function(view, node_list, cb) {
+    return this.applet.getNeighbourhood(makeCallback(cb), view, $.toJSON(node_list));
+  };
+
+  Tinaviz.prototype.freeze = function() {
+    log("freezing");
+    return this.applet.freeze();
+  };
+
+  Tinaviz.prototype.unfreeze = function() {
+    log("unfreezing");
+    return this.applet.unfreeze();
+  };
+
+  Tinaviz.prototype.getNodes = function(view, category, cb) {
+    return this.applet.getNodes(makeCallback(cb), view, category);
+  };
+
+  Tinaviz.prototype._resize = function(_arg) {
+    var height, width, _ref, _ref2, _ref3;
+    width = _arg.width, height = _arg.height;
+    log("Tinaviz: resize() -> self-resizing");
+    $("" + this.config.element).css("height", "" + height + "px");
+    $("" + this.config.element).css("width", "" + width + "px");
+    if ((_ref = this.applet) != null) _ref.height = height;
+    if ((_ref2 = this.applet) != null) _ref2.width = width;
+    return (_ref3 = this.applet) != null ? typeof _ref3.resize === "function" ? _ref3.resize(width, height) : void 0 : void 0;
+  };
+
+  Tinaviz.prototype.getAs = function(key, type, cb) {
+    this.applet.sendGet(makeCallback(cb), key, type);
+  };
+
+  Tinaviz.prototype.get = function(key, cb) {
+    this.applet.sendGet(makeCallback(cb), key, "Any");
+  };
+
+  Tinaviz.prototype.set = function(key, obj, t, cb) {
+    var cbId, o;
+    debug("Tinaviz: set(key: " + key + ", obj: " + obj + ", t: " + t + ")");
+    cbId = makeCallback(cb);
+    if (!t) {
+      o = _(obj);
+      if (o.isNumber) {
+        t = "Double";
+      } else if (o.isBoolean) {
+        t = "Boolean";
+      } else if (current.isString) {
+        t = "String";
+      } else {
+        log("Warning, setting unknow (" + key + ", " + obj + ")");
+        this.applet.sendSet(cbId, key, obj, "");
+        return;
+      }
+    }
+    if (t.indexOf("Tuple2") !== -1) {
+      if (t.indexOf("[Double]") !== -1) {
+        this.applet.sendSetTuple2(cbId, key, obj[0], obj[1], "Double");
+      } else if (t.indexOf("[Int]") !== -1) {
+        this.applet.sendSetTuple2(cbId, key, obj[0], obj[1], "Int");
+      } else if (t.indexOf("[Float]") !== -1) {
+        this.applet.sendSetTuple2(cbId, key, obj[0], obj[1], "Float");
+      } else {
+        this.applet.sendSetTuple2(cbId, key, obj[0], obj[1], "");
+      }
+    } else if (t === "Json") {
+      this.applet.sendSet(cbId, key, $.toJSON(obj), t);
+    } else {
+      this.applet.sendSet(cbId, key, obj, t);
+    }
+  };
+
+  Tinaviz.prototype._generateAppletHTML = function() {
+    var buff, func, res;
+    buff = "";
+    func = document.write;
+    document.write = function(arg) {
+      return buff += arg;
     };
-    for (x in args) {
-        opts[x] = args[x]
-    }
-
-    // PRIVATE MEMBERS
-    var wrapper = null;
-    var applet = null;
-    var cbsAwait = {};
-    var cbsRun = {};
-    this.toBeSelected = new Array();
-
-    this.callbackReady = function () {};
-    this.callbackBeforeImport = function() {};
-    this.callbackImported = function(success) {};
-    this.callbackViewChanged = function(view) {};
-    this.callbackSelectionChanged = function(view) {};
-
-    // PUBLIC MEMBERS
-    this.isReady = 0;
-    this.infodiv = {};
-
-    this.opts = opts;
-    this.height = opts.height;
-    this.width = opts.width;
-    this.tag = opts.tag;
-    this.path = opts.path;
-
-    this.libPath = this.path + "js/tinaviz/";
-    this.engine = opts.engine;
-    this.context = opts.context;
-    this.brandingIcon = this.libPath + "tina_icon.png";
-
-    this._initCallback = function() {
-        if (this.xulrunner == true) {
-            wrapper = $('#vizframe').contents().find("#tinapplet")[0];
-        } else {
-            wrapper = $("#tinapplet")[0];
-        }
-        if (wrapper == null) {
-            alert("Error: couldn't get the applet!");
-            return;
-        }
-
-        applet = wrapper;
-
-        if (applet == null) {
-            alert("Error: couldn't get the applet!");
-            return;
-        }
-        this.applet = applet;
-
-        this.setupDefaults();
-
-        callbackReady(this);
-        this.isReady = 1;
-    }
-    this.setupDefaults=function() {
-        // setup defaults
-        //this.set("pause",false, "Boolean");
-    }
-    this.ready=function(cb) {
-        // TODO: if not ready, append to the callbacks
-        // if ready, execute asynchronously
-
-        callbackReady = cb;
-    }
-    this.getPath=function() {
-        return this.path;
-    }
-
-    this.open=function(args) {
-
-        var opts = {};
-
-        // initialize using default values
-        for (x in openDefaults) {
-            opts[x] = openDefaults[x];
-        }
-
-        // overload using parameters values
-        for (x in args) {
-            opts[x] = args[x];
-        }
-
-        if (args["url"] === undefined) {
-            for (x in opts) {
-                openDefaults[x] = opts[x];
-            }
-        } else {
-
-         if (args["url"] != "") {
-             // we canced the loading if the URL is empty
-
-        if (opts.layout) {
-            this.set("layout.algorithm", opts.layout, "String")
-        }
-        callbackImported = function(msg){
-            if (msg=="success") {
-                opts.success();
-            } else {
-                opts.error(msg);
-            }
-        };
-
-        callbackBeforeImport = opts.before;
-        callbackBeforeImport();
-
-
-
-        try {
-           if (opts.url.search("://") != -1) {
-                            tinaviz.logNormal("applet.openURI("+opts.url+");");
-                            applet.openURI(opts.url);
-           } else {
-                            var sPath = document.location.href;
-                            tinaviz.logNormal("applet.openURI("+(sPath.substring(0, sPath.lastIndexOf('/') + 1) + opts.url)+");");
-                            applet.openURI(sPath.substring(0, sPath.lastIndexOf('/') + 1) + opts.url);
-           }
-        } catch (e) {
-                        tinaviz.logError("Couldn't import graph: "+e);
-                        opts.error(e);
-        }
-
-
-         }
-       }
-    }
-
-
-    this.event=function(args) {
-        var opts = {
-            viewChanged: function(view){},
-            categoryChanged: function(view){},
-            selectionChanged: function(selection){},
-            getNeighbourhood: function(node_list, neighbours){}
-        };
-        for (x in args) {
-            opts[x]=args[x]
-        }
-        this.callbackViewChanged = opts.viewChanged;
-        this.callbackCategoryChanged = opts.categoryChanged;
-        this.callbackSelectionChanged = opts.selectionChanged;
-        this.callbackGetNeighbourhood = opts.getNeighbourhood;
-    }
-
-    this._setNeighbourhood = function(id,rawNeighbourhood) {
-        //alert("got" +data.edges);
-        console.log("_setNeighbourhood("+id+"): applet.setNeighbourhood("+id+", "+$.toJSON(rawNeighbourhood)+");")
-        var jsonNeighbourhood = $.toJSON(rawNeighbourhood);
-        if (jsonNeighbourhood == null | jsonNeighbourhood == undefined) {
-            console.error("_setNeighbourhood("+id+"): invalid neigbourhood, "+rawNeighbourhood+" cannot be JSONified");
-            jsonNeighbourhood = {};
-        }
-        applet.setNeighbourhood(id, jsonNeighbourhood);
-
-    }
-    this.askForNeighbours = function(dataset, id, category) {
-        switch (category) {
-            case 'Document':
-                TinaService.getDocument(dataset, id, {
-                    success: function(data, textStatus, XMLHttpRequest) {
-                        tinaviz._setNeighbourhood(category+"::"+id, data.edges);
-                    },
-                    error: function(XMLHttpRequest, textStatus, errorThrown) {
-
-                    },
-                    complete: function(XMLHttpRequest, textStatus) {
-
-                    },
-                    beforeSend: function() {
-                    }
-                }
-                );
-                break;
-            case 'NGram':
-                TinaService.getNGram(dataset, id, {
-                    success: function(data, textStatus, XMLHttpRequest) {
-                        tinaviz._setNeighbourhood(category+"::"+id, data.edges);
-                    },
-                    error: function(XMLHttpRequest, textStatus, errorThrown) {
-                    },
-                    complete: function(XMLHttpRequest, textStatus) {
-                    },
-                    beforeSend: function() {
-                    }
-                }
-                );
-                break;
-        }
-    }
-
-    /*
-     * Search nodes
-     */
-    this.getNodesByLabel = function(label, type) {
-        if (label.length < 3) return {};
-        return $.parseJSON( applet.getNodesByLabel(label, type));
-    }
-
-    /*
-     * Search and select nodes
-     */
-    this.selectByPattern = function(pattern, patternMode) {
-        if (pattern.length > 0 && pattern.length < 3) return;
-        applet.selectByPattern(pattern, patternMode);
-    }
-
-    /*
-     * Search and select nodes
-     */
-    this.selectByNeighbourPattern = function(pattern, patternMode, category) {
-        if (pattern.length > 0 && pattern.length < 3) return;
-        applet.selectByNeighbourPattern(pattern, patternMode, category);
-    }
-
-    /*
-     * Search and highlight nodes
-     */
-    this.highlightByPattern = function(pattern, patternMode) {
-        //if (pattern.length < 3) return;
-        applet.highlightByPattern(pattern, patternMode);
-    }
-
-    //this.highlightNodes= function(label, type) {
-    //    var matchlist = this.getNodesByLabel(label, type);
-    //    for (var i = 0; i < matchlist.length; i++ ) {
-    //        this.select(decodeJSON( matchlist[i]['id'] ) );
-    //    }
-    //}
-    
-    /*
-     * Search and highlight nodes by their neighborhood
-     */
-    this.highlightByNeighbourPattern = function(pattern, patternMode) {
-        //if (pattern.length < 3) return;
-        applet.highlightByNeighbourPattern(pattern, patternMode);
-    }
-
-    //this.highlightNodes= function(label, type) {
-    //    var matchlist = this.getNodesByLabel(label, type);
-    //    for (var i = 0; i < matchlist.length; i++ ) {
-    //        this.select(decodeJSON( matchlist[i]['id'] ) );
-    //    }
-    //}
-    
-    /*
-     *  Gets attributes o a given node
-     */
-    this.getNodeAttributes = function(view,id) {
-        if (applet == null) return {};
-        return $.parseJSON(
-            applet.getNodeAttributes(view,id)
-            );
-    }
-
-    // called by the applet
-    this._callbackGetNeighbourhood = function(selection_list_str,neighbour_node_list_str) {
-        // do some magic before calling the callback
-        //alert("var selection_list = $.parseJSON("+selection_list_str+");");
-        var selection_list = $.parseJSON(selection_list_str);
-        //alert("var neighbour_node_list = $.parseJSON("+neighbour_node_list_str+");");
-        var neighbour_node_list = $.parseJSON(neighbour_node_list_str);
-        //alert("this.callbackGetNeighbourhood(selection_list, neighbour_node_list);");
-        this.callbackGetNeighbourhood(selection_list, neighbour_node_list);
-    }
-
-    /*
-     * Calls for the list of neighbours for a given node list
-     * its callback is defined in this.event, called from main.js
-     */
-    this.getNeighbourhood = function(view, node_list) {
-        applet.getNeighbourhood(view, $.toJSON( node_list ));
-        // do not return.. this is a callback call
-    }
-
-    /*
-     * Gets neighbours from TinaService using AJAX
-     */
-    this.getNeighboursFromDatabase = function(id) {
-        var elem = id.split('::');
-        TinaService.getNGrams(
-            0, elem[1],
-            {
-                success: function(data) {
-                }
-            }
-         );
-    }
-
-    /**
-     * Callback after clicks on nodes
-     *
-     * @param selection
-     * @param mouse
-     * @return
-     */
-    this._callbackSelectionChanged = function(selection, mouse) {
-        this.callbackSelectionChanged({
-            'viewName':'macro',
-            'data':$.parseJSON(selection),
-            'mouseMode':mouse
-        });
-    }
-
-
-
-    this._callbackViewChanged = function(data) {
-        var view = $.parseJSON(data);
-        console.log("_callbackViewChanged data: "+data);
-        console.log("   view: ");
-        console.log(view);
-        this.callbackViewChanged(view);
-    }
-
-    this.recenter = function() {
-         this.set("camera.target", "all", "String");
-    }
-    this.centerOnSelection = function() {
-         this.set("camera.target", "selection", "String");
-    }
-    this.setLayout = function(name) {
-        this.set("layout.algorithm", name, "String");
-    }
-    this.setPause = function(value) {
-        this.set("pause", value, "Boolean");
-    }
-    this.getPause = function() {
-        return this.get("pause");
-    }
-    this.pause = function() {
-        this.setPause(true);
-    }
-    this.togglePause = function() {
-        var n = !this.getPause();
-        this.setPause(n);
-        return n;
-    }
-
-    /**
-    * Select a node from it's ID (String)
-    * this can be a String or a String array (to select multiple nodes)
-    */
-    this.select = function(toBeSelected) {
-        if ($.isArray(toBeSelected)) {
-          this.set("select", toBeSelected, "Json");
-        } else {
-          this.set("select", toBeSelected, "String");
-        }
-    }
-
-    /**
-     * Manually unselect all nodes
-     */
-    this.unselect = function() {
-         this.set("select", "", "String");
-    }
-
-    /**
-     * Get the opposite category name (the NOT DISPLAYED one)
-     */
-    this.getOppositeCategory = function(cat) {
-        if (cat == "Document")
-            return "NGram";
-        else if (cat == "NGram")
-            return "Document";
-        return "Document";
-    }
-
-
-    this.getCategory = function() {
-        return this.get("filter.node.category");
-    }
-
-    this.setCategory = function(value) {
-         this.set("filter.node.category", value, "String");
-    }
-
-
-
-    /**
-     * Get the current view: eg. "macro", "meso"..
-     *
-     */
-    this.getView = function() {
-        return this.get("filter.view");
-    }
-
-    /**
-     * Set the current view. Will force the applet
-     * to show the new corresponding graph
-     * argument:
-     *  - view: String. eg. "macro", "meso"..
-     *
-     */
-    this.setView = function(view) {
-        this.set("filter.view", view, "String");
-    }
-
-    /**
-     * Manual toggle of the current view (Eg. when button is pressed)
-     *
-     */
-
-    this.toggleView = function() {
-        //toolbar.resetSlidersValues();
-        if (this.getView() == "macro") {
-            // check if selection is empty
-            if (this.infodiv.selection.length != 0) {
-                this.setView("meso");
-
-            } else {
-                alert("You need to select a node before switching to meso view");
-            }
-        } else if (this.getView() == "meso") {
-            this.setView("macro");
-        }
-    }
-
-    /**
-     * Switch to meso view of a particular node (BUG won't work with multiple selection)
-     * arguments:
-     *   - id: String
-     *   - category: String
-     */
-    this.viewMeso = function(id, category) {
-            var cat = tinaviz.getCategory();
-            tinaviz.setView("macro");
-            $.doTimeout(100, function(){
-                tinaviz.unselect(); // unselect nodes in current category
-                $.doTimeout(100, function(){
-                    //$.doTimeout( 400, function(){
-                    tinaviz.setCategory(category);
-                    $.doTimeout(100, function(){
-                        tinaviz.unselect();  // unselect nodes in the desired category
-                        $.doTimeout(100, function(){
-                            tinaviz.select(id);
-                            $.doTimeout(1500, function(){
-                                tinaviz.setView("meso");
-                                //alert("recentering");
-                                //alert("setting category to "+category);
-                                if (category != cat) tinaviz.infodiv.updateNodeList("meso", category);
-                                // always enable
-                                $("#category-A").fadeIn();
-                                $("#category-B").fadeIn();
-                                //this.infoviz.updateNodeList("meso", category);
-                                tinaviz.recenter();
-                                false;
-                            });
-                            false;
-                        });
-                        false;
-                    });
-                    false;
-                });
-                false;
-            });
-    }
-
-
-    /**
-     *  Retrieves list of all nodes
-     *
-     *  Usage:
-     *  nodes = tinaviz.getNodes("macro", "NGram")
-     */
-    this.getNodes = function(view, category) {
-        var nodes = applet.getNodes(view, category);
-        return $.parseJSON( nodes );
-    }
-
-    /**
-     * Dynamic div width
-     */
-    this.size = function(width, height) {
-        if (wrapper == null || applet == null) return;
-        $('#tinaviz').css("height",""+(height)+"px");
-        $('#tinaviz').css("width",""+(width)+"px");
-        wrapper.height = height;
-        wrapper.width = width;
-        applet.resize(width, height);
-    }
-
-    /**
-     * Callback changing button states
-     */
-    this._buttonStateCallback = function(button, enabled) {
-        toolbar.updateButton(button, enabled);
-    }
-
-    /**
-     * Callback changing utton states
-     */
-    this._graphImportedCallback = function(msg) {
-        callbackImported($.parseJSON(msg));
-    }
-
-
-    /*
-     called by the applet. work only with json args
-    */
-    this.callCallback = function(cb_id, cb_args) {
-        $.doTimeout(500, function() {
-            delete callbacks[cb_id];
-            callbacks[cb_id]($.parseJSON(cb_args));
-        });
-
-    }
-
-    this.makeCallback = function(cb) {
-        if (cb === undefined) return undefined;
-        ++cbCounter;
-        var id = "" + cbCounter;
-        callbacks[id] = cb;
-        return id;
-    }
-
-    /**
-     * Core method communicating with the applet
-     */
-    this.get = function(key) {
-
-            return applet.get(key);
-
-    }
-
-    /**
-     * Core method communicating with the applet
-     */
-    this.cbGet = function(key,cb) {
-        applet.cbGet(tinaviz.makeCallback(cb),key);
-        return undefined;
-    }
-
-
-    /**
-     * Core method communicating with the applet
-     */
-    this.get = function(key,type,cb) {
-        applet.cbGetAs(tinaviz.makeCallback(cb),key,type);
-        return undefined;
-    }
-
-
-    /**
-     * Set a value to all views
-     * Argument "t" is optional. But if given, must be a string with one of these values:
-     * "String"
-     * "Int"
-     * "Double"
-     * "Float"
-     * "Boolean" : 1, 0, true, false
-     */
-
-    this.update = function(key, obj, t, cb) {
-         //if (t=="Json") alert("key:"+key+" obj: "+obj+" t: "+t);
-        console.log("applet.send key: "+key+" , obj: "+obj+", t:"+t);
-        var cbId = makeCallback(cb);
-        if (t === undefined) {
-            this.logNormal("Warning, setting unknow ("+key+","+obj+")");
-            applet.send(cbId, key, obj, "");
-        } else {
-           if (t.indexOf("Tuple2") != -1) {
-              if (t.indexOf("[Double]") != -1) {
-                  applet.sendTuple2(cbId, key, obj[0], obj[1], "Double");
-              } else if (t.indexOf("[Int]") != -1) {
-                  applet.sendTuple2(cbId, key, obj[0], obj[1], "Int");
-              } else if (t.indexOf("[Float]") != -1) {
-                  applet.sendTuple2(cbId, key, obj[0], obj[1], "Float");
-              } else {
-                  applet.sendTuple2(cbId, key, obj[0], obj[1], "");
-              }
-           } else if (t=="Json") {
-             applet.send(cbId, key,$.toJSON(obj), t);
-           } else {
-              //this.logNormal("send("+key+","+obj+","+t+")");
-              applet.send(cbId, key, obj, t);
-           }
-        }
-    }
-
-    /**
-     * Set a value, to be converted to a Scala type
-
-
-    //this.set = function(key, json) {
-    //    applet.msgNoCb(key,$.toJSON(json));
-    //}
-
-    /**
-     * Called by the applet
-     */
-    this.logNormal = function(msg) {
-        try {
-            console.log(msg);
-        }
-        catch (e){
-            return;
-        }
-    };
-
-    /**
-     * Called by the applet
-     */
-    this.logDebug = function(msg) {
-        try {
-            console.log(msg);
-        }
-        catch (e){
-            return;
-        }
-    };
-
-    /**
-     * Called by the applet
-     */
-    this.logError = function(msg) {
-        try {
-            console.error(msg);
-        }
-        catch (e){
-            alert(msg);
-            return;
-        }
-    };
-
-    this.getHTML = function() {
-        var path = this.libPath;
-        var context = this.context;
-        var engine = this.engine;
-        var w = this.width;
-        var h = this.height;
-
-        var buff = '';
-        var func = document.write;
-        document.write = function(arg){
-            buff += arg;
-        }
-        var res = deployJava.writeAppletTag({
-            id: "tinapplet",
-            code: 'eu.tinasoft.tinaviz.Main.class',
-            archive: path+'tinaviz-2.0-SNAPSHOT.jar',
-            width: w,
-            height: h,
-            image: 'css/branding/appletLoading.gif',
-            standby: "Loading Tinaviz..."
-        }, {
-            engine: engine,
-            js_context: context,
-            root_prefix: path,
-            brandingIcon: this.brandingIcon,
-            progressbar: false,
-            boxbgcolor: "#FFFFFF",
-            boxmessage: "Loading Tinaviz...",
-            image: "css/branding/appletLoading.gif",
-            mayscript: true,
-            scriptable: true
-        });
-        document.write = func;
-        return buff;
-    }
-    this.tag.html( this.getHTML() );
-}
+    res = deployJava.writeAppletTag({
+      id: this.config.appletId,
+      code: "eu.tinasoft.tinaviz.Main.class",
+      archive: "" + this.config.path + this.config.jarFile,
+      width: this.config.width,
+      height: this.config.height,
+      image: this.config.loadingImage,
+      standby: "Loading Tinaviz..."
+    }, {
+      engine: this.config.engine,
+      js_context: this.config.context,
+      root_prefix: this.config.path,
+      brandingIcon: this.config.path + "tina_icon.png",
+      progressbar: false,
+      boxbgcolor: "#FFFFFF",
+      boxmessage: "Loading Tinaviz...",
+      image: this.config.loadingImage,
+      mayscript: true,
+      scriptable: true
+    });
+    document.write = func;
+    log("html: ");
+    log(buff);
+    return buff;
+  };
+
+  Tinaviz.prototype._inject = function(cb) {
+    var _this = this;
+    log("Tinaviz: preparing first hook..");
+    makeCallback(function(data) {
+      log("Tinaviz: Injected..");
+      _this.applet = $("#" + _this.config.appletId)[0];
+      if (_this.applet) {
+        return cb();
+      } else {
+        return alert("applet couldn't be initialized, should put this in results");
+      }
+    });
+    log(this.config);
+    log("Tinaviz: Injecting...");
+    return $("#" + this.config.elementId).html(this._generateAppletHTML());
+  };
+
+  return Tinaviz;
+
+})();

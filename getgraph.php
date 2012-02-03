@@ -1,5 +1,5 @@
 <?php
-header ("Content-Type:text/xml");  
+//header ("Content-Type:text/xml");  
 
 /*
  * Génère le gexf des scholars à partir de la base sqlite
@@ -11,34 +11,60 @@ include ("normalize.php");
 
 define('_is_utf8_split', 5000);
 
-function is_utf8($string) {// v1.01
-	if (strlen($string) > _is_utf8_split) {
-		// Based on: http://mobile-website.mobi/php-utf8-vs-iso-8859-1-59
-		for ($i = 0, $s = _is_utf8_split, $j = ceil(strlen($string) / _is_utf8_split); $i < $j; $i++, $s += _is_utf8_split) {
-			if (is_utf8(substr($string, $s, _is_utf8_split)))
-				return true;
-		}
-		return false;
-	} else {
-		// From http://w3.org/International/questions/qa-forms-utf-8.html
-		return preg_match('%^(?: 
-                [x09x0Ax0Dx20-x7E]            # ASCII 
-            | [xC2-xDF][x80-xBF]             # non-overlong 2-byte 
-            |  xE0[xA0-xBF][x80-xBF]        # excluding overlongs 
-            | [xE1-xECxEExEF][x80-xBF]{2}  # straight 3-byte 
-            |  xED[x80-x9F][x80-xBF]        # excluding surrogates 
-            |  xF0[x90-xBF][x80-xBF]{2}     # planes 1-3 
-            | [xF1-xF3][x80-xBF]{3}          # planes 4-15 
-            |  xF4[x80-x8F][x80-xBF]{2}     # plane 16 
-        )*$%xs', $string);
-	}
+function is_utf8($string) {
+   
+    // From http://w3.org/International/questions/qa-forms-utf-8.html
+    return preg_match('%^(?:
+          [\x09\x0A\x0D\x20-\x7E]            # ASCII
+        | [\xC2-\xDF][\x80-\xBF]             # non-overlong 2-byte
+        |  \xE0[\xA0-\xBF][\x80-\xBF]        # excluding overlongs
+        | [\xE1-\xEC\xEE\xEF][\x80-\xBF]{2}  # straight 3-byte
+        |  \xED[\x80-\x9F][\x80-\xBF]        # excluding surrogates
+        |  \xF0[\x90-\xBF][\x80-\xBF]{2}     # planes 1-3
+        | [\xF1-\xF3][\x80-\xBF]{3}          # planes 4-15
+        |  \xF4[\x80-\x8F][\x80-\xBF]{2}     # plane 16
+    )*$%xs', $string);
+   
 }
 
-
+//phpinfo();
 $gexf = '<?xml version="1.0" encoding="UTF-8"?>';
+//echo $_GET['query']."<br/>";
+$data = json_decode($_GET['query']);
 
-$data = json_decode($_GET['query'], true);
+function objectToArray($d) {
+		if (is_object($d)) {
+			// Gets the properties of the given object
+			// with get_object_vars function
+			$d = get_object_vars($d);
+		}
+ 
+		if (is_array($d)) {
+			/*
+			* Return array converted to object
+			* Using __FUNCTION__ (Magic constant)
+			* for recursive call
+			*/
+			return array_map(__FUNCTION__, $d);
+		}
+		else {
+			// Return array
+			return $d;
+		}
+	}
 
+$data = objectToArray($data);
+
+//echo 'data '.$data;
+
+//echo json_decode('{ countries: [ "France" ]}');
+
+//$json = '{"a":1,"b":2,"c":3,"d":4,"e":5}';
+//pt($json);
+//pt(json_decode($json));
+//exit();
+//$data = json_decode('', true);
+//print_r($data);
 $categorya = $data["categorya"];
 $categoryb = $data["categoryb"];
 $countries = $data["countries"];
@@ -46,7 +72,7 @@ $keywords = $data["keywords"];
 $laboratories = $data["laboratories"];
 $organizations = $data["organizations"];
 
-$f = "";
+$f = "";// requête
 if ($keywords) {
 	if (sizeof($keywords) > 0) {
 		$f .= ' AND (';
@@ -74,11 +100,12 @@ if ($countries) {
 
 	$i = 0;
 	foreach ($countries as $country) {
-		$country = sanitize_input(trim(strtolower($country)));
+		//$country = sanitize_input(trim(strtolower($country)));
+                $country = sanitize_input(trim($country ));
 		if ($country == "") continue;
 		if ($i > 0)
 			$f .= " OR ";
-		$f .= 'country LIKE "%' . $country . '%"';
+		$f .= 'country = "' . $country . '"';
 		$i++;
 	}
 	$f .= ") ";
@@ -129,6 +156,9 @@ $gexf .= "<nodes>" . "\n";
 
 // liste des chercheurs
 $sql = "SELECT * FROM scholars " . $scholar_filter . " " . $f;
+//pt('f:'.$f);
+//pt($sql);
+//exit();
 $scholars = array();
 //echo $sql . " <br/>";
 //print_r($data);
@@ -272,7 +302,7 @@ foreach ($terms_array as $term) {
 foreach ($scholars as $scholar) {
 	//pt($scholar['unique_id']. '-'.count($scholarsMatrix[$scholar['unique_id']]['cooc']));
 	$uniqueId = $scholar['unique_id'];
-	if (!array_key_exists($uniqueId, $scholarsMatrix)) {
+        if (!array_key_exists($uniqueId, $scholarsMatrix)) {
 		continue;
 	}
 	if (count($scholarsMatrix[$uniqueId]['cooc']) >= $min_num_friends) {
@@ -318,7 +348,7 @@ foreach ($scholars as $scholar) {
 		//pt($scholar['last_name'].','.$scholar['css_voter'].','.$scholar['css_member']);
 		//pt($color);
 		//pt($content);
-		if (is_utf8($nodeLabel)) {
+                if (is_utf8($nodeLabel)) {
 			$gexf .= '<node id="' . $nodeId . '" label="' . $nodeLabel . '">' . "\n";
 			$gexf .= '<viz:color ' . $color . '/>' . "\n";
 			$gexf .= '<viz:position x="' . (rand(0, 100) / 100) . '"    y="' . $nodePositionY . '"  z="0" />' . "\n";
@@ -408,5 +438,13 @@ foreach ($scholars as $scholar) {
 
 $gexf .= '</edges></graph></gexf>';
 
+//pt(count($scholarsMatrix).' scholars');
+//pt($scholarsIncluded.' scholars included');
+//pt(count($termsMatrix).' terms');
+
 echo $gexf;
+
+function pt($string){
+    echo $string.'<br/>';
+}
 ?>
