@@ -139,7 +139,7 @@ if ($organizations) {
 		$org = sanitize_input(trim(strtolower($org)));
 		if ($org == "") continue;
 		if ($i > 0)
-		$f .= 'affiliation LIKE "%' . $org . '% OR affiliation2 LIKE "%' . $org . '%"';
+		$f .= 'affiliation LIKE "%' . $org . '%" OR affiliation2 LIKE "%' . $org . '%"';
                 //'affiliation LIKE "%' . $org . '% OR affiliation2 LIKE "%' . $org . '%"';
 		$i++;
 	}
@@ -180,7 +180,11 @@ if (substr($f, 0,3)=='AND'){
     $f=substr($f,3,-1);
 }
         
+if (strlen($f)>0){
 $sql = "SELECT * FROM scholars where " . " " . $f;
+}else{
+    $sql = "SELECT * FROM scholars";
+}
 //pt('f:'.$f);
 //pt($sql);
 //exit();
