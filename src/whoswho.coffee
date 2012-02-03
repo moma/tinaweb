@@ -133,6 +133,8 @@ $(document).ready ->
       gexf = "getgraph.php?query=#{query}"
       log  "url query: "+ gexf
       log "injecting applet"
-      $("#visualization").html "<iframe src=\"tinaframe.html\" class=\"frame\" border=\"0\" frameborder=\"0\" scrolling=\"no\" id=\"frame\" name=\"frame\"></iframe>"
-      
+      if $('#visualization').length is 0
+        $("#visualization").html "<iframe src=\"tinaframe.html\" class=\"frame\" border=\"0\" frameborder=\"0\" scrolling=\"no\" id=\"frame\" name=\"frame\"></iframe>"
+      else
+        log "applet already exists"
     false

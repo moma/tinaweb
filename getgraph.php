@@ -75,11 +75,11 @@ $organizations = $data["organizations"];
 $f = "";// requête
 if ($keywords) {
 	if (sizeof($keywords) > 0) {
-		$f .= 'AND (';
+		$f .= 'AND ';
 	}
 
 	foreach ($keywords as $kw) {
-		$words = explode(',', $keywords);
+		$words = explode(',', $kw);
 		$i = 0;
 		foreach ($words as $word) {
 			$word = sanitize_input(trim(strtolower($word)));
@@ -90,12 +90,12 @@ if ($keywords) {
 			$i++;
 		}
 	}
-	$f .= ")";
+	$f .= "  ";
 }
 if ($countries) {
 
 	if (sizeof($countries) > 0) {
-		$f .= 'AND (';
+		$f .= 'AND ';
 	}
 
 	$i = 0;
@@ -108,12 +108,12 @@ if ($countries) {
 		$f .= 'country = "' . $country . '"';
 		$i++;
 	}
-	$f .= ") ";
+	$f .= "  ";
 }
 if ($laboratories) {
 
 	if (sizeof($laboratories) > 0) {
-		$f .= 'AND (';
+		$f .= 'AND ';
 	}
 
 	$i = 0;
@@ -125,7 +125,7 @@ if ($laboratories) {
 		$f .= 'lab LIKE "%' . $lab . '%"';
 		$i++;
 	}
-	$f .= ") ";
+	$f .= "  ";
 }
 
 $base = new PDO("sqlite:" . $dbname);

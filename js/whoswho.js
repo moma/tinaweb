@@ -156,7 +156,11 @@ $(document).ready(function() {
       gexf = "getgraph.php?query=" + query;
       log("url query: " + gexf);
       log("injecting applet");
-      return $("#visualization").html("<iframe src=\"tinaframe.html\" class=\"frame\" border=\"0\" frameborder=\"0\" scrolling=\"no\" id=\"frame\" name=\"frame\"></iframe>");
+      if ($('#visualization').length === 0) {
+        return $("#visualization").html("<iframe src=\"tinaframe.html\" class=\"frame\" border=\"0\" frameborder=\"0\" scrolling=\"no\" id=\"frame\" name=\"frame\"></iframe>");
+      } else {
+        return log("applet already exists");
+      }
     });
     return false;
   });
