@@ -13,10 +13,7 @@ jQuery.fn.disableTextSelect = ->
 
 ids = 0
 completion = {}
-graphUrl = ""
-getGraph = -> 
-  log "getting graph from parent frame (via local var)"
-  graphUrl
+gexf = ""
 
 $(document).ready ->
     
@@ -126,11 +123,12 @@ $(document).ready ->
         tags: collect "tags"
         organizations: collect "organizations"
       
+      log "raw query: "
       log query
       query =  encodeURIComponent JSON.stringify(query)
-      url = "getgraph.php?query=#{query}"
-      log url
-      graphUrl = url
+      gexf = "getgraph.php?query=#{query}"
+      log  "url query: "+ gexf
+      log "injecting applet"
       $("#visualization").html "<iframe src=\"tinaframe.html\" class=\"frame\" border=\"0\" frameborder=\"0\" scrolling=\"no\" id=\"frame\" name=\"frame\"></iframe>"
-    
+      
     false

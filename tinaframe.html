@@ -78,10 +78,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 <body>
 <script type="text/javascript">
 	/* small extension to Tinaviz, to allow callbacking between iframes */
-	default_config.embed = "true";
-	default_config.getGraph = function() {
-		return window.parent.getGraph();
-	};
+	default_config.gexf = window.parent.gexf;
+	
 </script>
 <div id="doc3" class="yui-t5 ui-widget">
     <div id="hd" class="ui-widget">

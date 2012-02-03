@@ -5,7 +5,9 @@
 #
 default_config = 
   elementId: "vizdiv"        # element ID to which inject the viz
-  gexf: "sample.gexf.gz"     # gexf file to load by default
+  gexf: ""                   # gexf file to load by default
+  path: "js/tinaviz/"        # path to tinaviz (need the / at the end)
+  assets: ""                 # use this as a path where are stored some assets (eg. icons)
   embed: no                  # if set to true, the config.getGraph function will be called. else, config.gexf will be called
   view: "macro"              # default view to show the graph
   category: "Document"       # default category used to show the graph
@@ -26,3 +28,7 @@ default_config =
   layout_speed: 30           # layout speed (in iterations by seconds)
   pause: off                 # should we be paused by default?
   demo: no                   # should we enable the demo mode?
+  
+  # used by WHOSWHO
+  graphURL: ""
+  
