@@ -54,13 +54,15 @@ class Application extends Tinaweb
     @reloadGraph()
 
   reloadGraph: =>
-    log "Application: trying to automatically open GEXF file from: \"#{@config.gexf}\""
-    if @config.gexf?
-      if @config.gexf isnt ""
-        if @config.gexf isnt @previous
-          @previous = @config.gexf
-          log "loading #{@config.gexf}"
-          @open "#{@config.gexf}", @graphLoadingProgress
+    repeat 2000, =>
+      log "Application: pinging \"#{@config.gexf}\""
+      @config.gexf = window.parent.gexf
+      if @config.gexf?
+        if @config.gexf isnt ""
+          if @config.gexf isnt @previous
+            @previous = @config.gexf
+            log "new graph detected! loading #{@config.gexf}"
+            @open "#{@config.gexf}", @graphLoadingProgress
 
   animateAppletInfo: =>
     unless status is "loaded"

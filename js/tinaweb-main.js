@@ -57,16 +57,20 @@ Application = (function(_super) {
   };
 
   Application.prototype.reloadGraph = function() {
-    log("Application: trying to automatically open GEXF file from: \"" + this.config.gexf + "\"");
-    if (this.config.gexf != null) {
-      if (this.config.gexf !== "") {
-        if (this.config.gexf !== this.previous) {
-          this.previous = this.config.gexf;
-          log("loading " + this.config.gexf);
-          return this.open("" + this.config.gexf, this.graphLoadingProgress);
+    var _this = this;
+    return repeat(2000, function() {
+      log("Application: pinging \"" + _this.config.gexf + "\"");
+      _this.config.gexf = window.parent.gexf;
+      if (_this.config.gexf != null) {
+        if (_this.config.gexf !== "") {
+          if (_this.config.gexf !== _this.previous) {
+            _this.previous = _this.config.gexf;
+            log("new graph detected! loading " + _this.config.gexf);
+            return _this.open("" + _this.config.gexf, _this.graphLoadingProgress);
+          }
         }
       }
-    }
+    });
   };
 
   Application.prototype.animateAppletInfo = function() {
