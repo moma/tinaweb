@@ -1,4 +1,4 @@
-var completion, getGraph, graphUrl, ids;
+var completion, gexf, ids;
 
 jQuery.fn.disableTextSelect = function() {
   return this.each(function() {
@@ -21,12 +21,7 @@ ids = 0;
 
 completion = {};
 
-graphUrl = "";
-
-getGraph = function() {
-  log("getting graph from parent frame (via local var)");
-  return graphUrl;
-};
+gexf = "";
 
 $(document).ready(function() {
   var cache, popfilter, xhrs;
@@ -129,23 +124,22 @@ $(document).ready(function() {
   return $("#generate").click(function() {
     hide(".hero-unit");
     $("#welcome").fadeOut("slow", function() {
-      var collect, query, url;
+      var collect, query;
       show("#loading", "fast");
-      log("loading");
       collect = function(k) {
         var t;
         t = [];
-        log("collecting .filter" + k);
         $(".filter" + k).each(function(i, e) {
           var value;
           value = $(e).val();
-          if (value === void 0) return;
-          value = value.replace(/^\s+/g, "").replace(/\s+$/g, "");
-          if (value === "" || value === " ") return t.push(value);
+          if (value != null) {
+            value = value.replace(/^\s+/g, "").replace(/\s+$/g, "");
+            if (value !== " " || value !== "") return t.push(value);
+          }
         });
         return t;
       };
-      log("collecting..");
+      log("reading filters forms..");
       query = {
         categorya: $("#categorya :selected").text(),
         categoryb: $("#categoryb :selected").text(),
@@ -156,11 +150,12 @@ $(document).ready(function() {
         tags: collect("tags"),
         organizations: collect("organizations")
       };
+      log("raw query: ");
       log(query);
       query = encodeURIComponent(JSON.stringify(query));
-      url = "getgraph.php?query=" + query;
-      log(url);
-      graphUrl = url;
+      gexf = "getgraph.php?query=" + query;
+      log("url query: " + gexf);
+      log("injecting applet");
       return $("#visualization").html("<iframe src=\"tinaframe.html\" class=\"frame\" border=\"0\" frameborder=\"0\" scrolling=\"no\" id=\"frame\" name=\"frame\"></iframe>");
     });
     return false;

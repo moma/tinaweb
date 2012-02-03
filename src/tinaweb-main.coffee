@@ -50,9 +50,10 @@ class Application extends Tinaweb
     @infodiv.reset()
     toolbar.init()
     
-    log "Application: trying to automatically open GEXF file from config"
+    log "Application: trying to automatically open GEXF file from: \"#{@config.gexf}\""
     if @config.gexf?
       if @config.gexf isnt ""
+        log "loading #{@config.gexf}"
         @open "#{@config.gexf}", @graphLoadingProgress 
 
 

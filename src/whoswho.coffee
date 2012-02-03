@@ -101,27 +101,31 @@ $(document).ready ->
     hide ".hero-unit"
     $("#welcome").fadeOut "slow", ->
       show "#loading", "fast"
-      log "loading"
+      #log "loading"
       collect = (k) ->
         t = []
-        log "collecting .filter#{k}"
+        #log "collecting .filter#{k}"
         $(".filter#{k}").each (i, e) ->
           value = $(e).val()
-          return  if value == undefined
-          value = value.replace(/^\s+/g, "").replace(/\s+$/g, "")
-          t.push value  if value is "" or value is " "
+          if value?
+            #log "got: "+value
+            value = value.replace(/^\s+/g, "").replace(/\s+$/g, "")
+            #log "sanitized: "+value
+            if value isnt " " or value isnt ""
+              #log "keeping "+value
+              t.push(value)
         t
       
-      log "collecting.."
+      log "reading filters forms.."
       query = 
         categorya: $("#categorya :selected").text()
         categoryb: $("#categoryb :selected").text()
-        keywords: collect "keywords"
-        countries: collect "countries"
-        laboratories: collect "laboratories"
+        keywords: collect("keywords")
+        countries: collect("countries")
+        laboratories: collect("laboratories")
         coloredby: []
-        tags: collect "tags"
-        organizations: collect "organizations"
+        tags: collect("tags")
+        organizations: collect("organizations")
       
       log "raw query: "
       log query

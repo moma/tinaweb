@@ -51,9 +51,10 @@ Application = (function(_super) {
     });
     this.infodiv.reset();
     toolbar.init();
-    log("Application: trying to automatically open GEXF file from config");
+    log("Application: trying to automatically open GEXF file from: \"" + this.config.gexf + "\"");
     if (this.config.gexf != null) {
       if (this.config.gexf !== "") {
+        log("loading " + this.config.gexf);
         return this.open("" + this.config.gexf, this.graphLoadingProgress);
       }
     }

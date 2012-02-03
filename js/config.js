@@ -2,7 +2,7 @@ var default_config;
 
 default_config = {
   elementId: "vizdiv",
-  gexf: "sample.gexf.gz",
+  gexf: "",
   path: "js/tinaviz/",
   assets: "",
   embed: false,
@@ -24,5 +24,6 @@ default_config = {
   layout: "tinaforce",
   layout_speed: 30,
   pause: false,
-  demo: false
+  demo: false,
+  graphURL: ""
 };
