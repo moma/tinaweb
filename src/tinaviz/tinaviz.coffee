@@ -15,7 +15,7 @@ class Tinaviz
 
   constructor: ->
      
-    log "Tinaviz: called constructor()"
+    #log "Tinaviz: called constructor()"
     
     @applet = undefined 
 
@@ -25,20 +25,19 @@ class Tinaviz
       appletId: "tinapplet"
       elementId: "vizdiv"
       path: ""    
+      assets: ""
       context: ""
       engine: "software"
       brandingIcon: ""
       width: 10
       height: 10
-      
-    @config.brandingIcon = @config.path + "tina_icon.png"
 
     
   # configure Tinaweb using some params
   configure_using: (params) =>
-    log "Tinaviz: configure_using(params) -> loading.."
+    #log "Tinaviz: configure_using(params) -> loading.."
     for key, value of params
-      log "storing "+key+" as "+value
+      #log "storing "+key+" as "+value
       @config[key] = value
  
   _open: (url, cb) =>
@@ -154,7 +153,7 @@ class Tinaviz
       engine: @config.engine
       js_context: @config.context
       root_prefix: @config.path
-      brandingIcon: @config.brandingIcon
+      brandingIcon:  @config.path + "tina_icon.png"
       progressbar: false
       boxbgcolor: "#FFFFFF"
       boxmessage: "Loading Tinaviz..."

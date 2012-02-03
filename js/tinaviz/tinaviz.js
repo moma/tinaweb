@@ -40,30 +40,27 @@ Tinaviz = (function() {
     this.selectByPattern = __bind(this.selectByPattern, this);
     this.getNodesByLabel = __bind(this.getNodesByLabel, this);
     this._open = __bind(this._open, this);
-    this.configure_using = __bind(this.configure_using, this);    log("Tinaviz: called constructor()");
-    this.applet = void 0;
+    this.configure_using = __bind(this.configure_using, this);    this.applet = void 0;
     this.config = {
       jarFile: "tinaviz-2.0-SNAPSHOT.jar",
       loadingImage: "css/branding/appletLoading.gif",
       appletId: "tinapplet",
       elementId: "vizdiv",
       path: "",
+      assets: "",
       context: "",
       engine: "software",
       brandingIcon: "",
       width: 10,
       height: 10
     };
-    this.config.brandingIcon = this.config.path + "tina_icon.png";
   }
 
   Tinaviz.prototype.configure_using = function(params) {
     var key, value, _results;
-    log("Tinaviz: configure_using(params) -> loading..");
     _results = [];
     for (key in params) {
       value = params[key];
-      log("storing " + key + " as " + value);
       _results.push(this.config[key] = value);
     }
     return _results;
@@ -199,7 +196,7 @@ Tinaviz = (function() {
       engine: this.config.engine,
       js_context: this.config.context,
       root_prefix: this.config.path,
-      brandingIcon: this.config.brandingIcon,
+      brandingIcon: this.config.path + "tina_icon.png",
       progressbar: false,
       boxbgcolor: "#FFFFFF",
       boxmessage: "Loading Tinaviz...",
