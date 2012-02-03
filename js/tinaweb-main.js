@@ -13,6 +13,7 @@ Application = (function(_super) {
     this.resize = __bind(this.resize, this);
     this.graphLoadingProgress = __bind(this.graphLoadingProgress, this);
     this.animateAppletInfo = __bind(this.animateAppletInfo, this);
+    this.reloadGraph = __bind(this.reloadGraph, this);
     this.postInstall = __bind(this.postInstall, this);
     this.preInstall = __bind(this.preInstall, this);
     Application.__super__.constructor.apply(this, arguments);
@@ -51,11 +52,19 @@ Application = (function(_super) {
     });
     this.infodiv.reset();
     toolbar.init();
+    this.previous = "";
+    return this.reloadGraph();
+  };
+
+  Application.prototype.reloadGraph = function() {
     log("Application: trying to automatically open GEXF file from: \"" + this.config.gexf + "\"");
     if (this.config.gexf != null) {
       if (this.config.gexf !== "") {
-        log("loading " + this.config.gexf);
-        return this.open("" + this.config.gexf, this.graphLoadingProgress);
+        if (this.config.gexf !== this.previous) {
+          this.previous = this.config.gexf;
+          log("loading " + this.config.gexf);
+          return this.open("" + this.config.gexf, this.graphLoadingProgress);
+        }
       }
     }
   };
