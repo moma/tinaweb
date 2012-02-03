@@ -128,6 +128,25 @@ if ($laboratories) {
 	$f .= "  ";
 }
 
+if ($organizations) {
+
+	if (sizeof($organizations) > 0) {
+		$f .= 'AND ';
+	}
+
+	$i = 0;
+	foreach ($organizations as $org) {
+		$org = sanitize_input(trim(strtolower($org)));
+		if ($org == "") continue;
+		if ($i > 0)
+		$f .= 'affiliation LIKE "%' . $org . '% OR affiliation2 LIKE "%' . $org . '%"';
+                //'affiliation LIKE "%' . $org . '% OR affiliation2 LIKE "%' . $org . '%"';
+		$i++;
+	}
+	$f .= "  ";
+}
+
+
 $base = new PDO("sqlite:" . $dbname);
 
 $termsMatrix = array();
