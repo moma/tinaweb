@@ -21,6 +21,7 @@ class Tinaviz
 
     @config =
       jarFile: "tinaviz-2.0-SNAPSHOT.jar"
+      loadingImage: "css/branding/appletLoading.gif"
       appletId: "tinapplet"
       elementId: "vizdiv"
       path: ""    
@@ -30,14 +31,14 @@ class Tinaviz
       width: 10
       height: 10
       
-    @config.libPath = @config.path + "js/tinaviz/"
-    @config.brandingIcon = @config.libPath + "tina_icon.png"
+    @config.brandingIcon = @config.path + "tina_icon.png"
 
     
   # configure Tinaweb using some params
   configure_using: (params) =>
     log "Tinaviz: configure_using(params) -> loading.."
     for key, value of params
+      log "storing "+key+" as "+value
       @config[key] = value
  
   _open: (url, cb) =>
@@ -144,10 +145,10 @@ class Tinaviz
     res = deployJava.writeAppletTag(
       id: @config.appletId
       code: "eu.tinasoft.tinaviz.Main.class"
-      archive: "#{@config.libPath}#{@config.jarFile}"
+      archive: "#{@config.path}#{@config.jarFile}"
       width: @config.width
       height: @config.height
-      image: "css/branding/appletLoading.gif"
+      image: @config.loadingImage
       standby: "Loading Tinaviz..."
     , 
       engine: @config.engine
@@ -157,12 +158,12 @@ class Tinaviz
       progressbar: false
       boxbgcolor: "#FFFFFF"
       boxmessage: "Loading Tinaviz..."
-      image: "css/branding/appletLoading.gif"
+      image: @config.loadingImage
       mayscript: true
       scriptable: true
     )
     document.write = func
-    log("html: ")
+    log "html: "
     log buff
 
     buff

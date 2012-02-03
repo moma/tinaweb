@@ -44,6 +44,7 @@ Tinaviz = (function() {
     this.applet = void 0;
     this.config = {
       jarFile: "tinaviz-2.0-SNAPSHOT.jar",
+      loadingImage: "css/branding/appletLoading.gif",
       appletId: "tinapplet",
       elementId: "vizdiv",
       path: "",
@@ -53,8 +54,7 @@ Tinaviz = (function() {
       width: 10,
       height: 10
     };
-    this.config.libPath = this.config.path + "js/tinaviz/";
-    this.config.brandingIcon = this.config.libPath + "tina_icon.png";
+    this.config.brandingIcon = this.config.path + "tina_icon.png";
   }
 
   Tinaviz.prototype.configure_using = function(params) {
@@ -63,6 +63,7 @@ Tinaviz = (function() {
     _results = [];
     for (key in params) {
       value = params[key];
+      log("storing " + key + " as " + value);
       _results.push(this.config[key] = value);
     }
     return _results;
@@ -189,10 +190,10 @@ Tinaviz = (function() {
     res = deployJava.writeAppletTag({
       id: this.config.appletId,
       code: "eu.tinasoft.tinaviz.Main.class",
-      archive: "" + this.config.libPath + this.config.jarFile,
+      archive: "" + this.config.path + this.config.jarFile,
       width: this.config.width,
       height: this.config.height,
-      image: "css/branding/appletLoading.gif",
+      image: this.config.loadingImage,
       standby: "Loading Tinaviz..."
     }, {
       engine: this.config.engine,
@@ -202,7 +203,7 @@ Tinaviz = (function() {
       progressbar: false,
       boxbgcolor: "#FFFFFF",
       boxmessage: "Loading Tinaviz...",
-      image: "css/branding/appletLoading.gif",
+      image: this.config.loadingImage,
       mayscript: true,
       scriptable: true
     });

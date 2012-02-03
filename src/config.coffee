@@ -6,6 +6,7 @@
 default_config = 
   elementId: "vizdiv"        # element ID to which inject the viz
   gexf: "sample.gexf.gz"     # gexf file to load by default
+  path: "js/tinaviz"         # path to tinaviz
   embed: no                  # if set to true, the config.getGraph function will be called. else, config.gexf will be called
   view: "macro"              # default view to show the graph
   category: "Document"       # default category used to show the graph
