@@ -104,15 +104,15 @@ $(document).ready ->
       #log "loading"
       collect = (k) ->
         t = []
-        #log "collecting .filter#{k}"
+        log "collecting .filter#{k}"
         $(".filter#{k}").each (i, e) ->
           value = $(e).val()
           if value?
-            #log "got: "+value
+            log "got: "+value
             value = value.replace(/^\s+/g, "").replace(/\s+$/g, "")
-            #log "sanitized: "+value
+            log "sanitized: "+value
             if value isnt " " or value isnt ""
-              #log "keeping "+value
+              log "keeping "+value
               t.push(value)
         t
       
