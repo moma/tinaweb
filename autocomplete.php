@@ -33,10 +33,11 @@ if ($category == 'country' || $category == 'countries') {
   exit();
 }
 
-  $filtered = array (
+$filtered = array (
   "yes", "1", "0", "nvgfpmeilym", "no", "mr", "ms", "", " ", "   "
-  );
+);
 function filter_word($value) {
+  if ($value == null) return true;
   return ! in_array(strtolower($value),$filtered); 
 }
 
