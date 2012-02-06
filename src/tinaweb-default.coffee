@@ -9,6 +9,7 @@ class Tinaweb extends Tinaviz
     @_tinaweb_defaults =
       elementId: "vizdiv"       #   
       gexf: "sample.gexf.gz"    # gexf file to load by default
+      path: "js/tinaviz/"       #
       view: "macro"             # default view to show the graph
       category: "Document"      # default category used to show the graph
       node_id: ""               # default node to select ("" means no node will be selected)
