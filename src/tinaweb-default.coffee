@@ -134,9 +134,9 @@ class Tinaweb extends Tinaviz
       log "Tinaweb: _inject() -> binding automatic resize"
       $(window).bind "resize", => @resize
       
-      log "Tinaweb: _inject() -> binding blur and focus"
-      $(window).blur => @freeze()
-      $(window).focus => @unfreeze()
+      log "Tinaweb: _inject() -> binding mouse enter/leave events"
+      $(window).mouseleave => @freeze()
+      $(window).mouseenter => @unfreeze()
   
       log "Tinaweb: _postInject() -> checking for demo mode"
       @_demo_possible = true if @config.demo?

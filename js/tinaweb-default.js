@@ -191,11 +191,11 @@ Tinaweb = (function(_super) {
       $(window).bind("resize", function() {
         return _this.resize;
       });
-      log("Tinaweb: _inject() -> binding blur and focus");
-      $(window).blur(function() {
+      log("Tinaweb: _inject() -> binding mouse enter/leave events");
+      $(window).mouseleave(function() {
         return _this.freeze();
       });
-      $(window).focus(function() {
+      $(window).mouseenter(function() {
         return _this.unfreeze();
       });
       log("Tinaweb: _postInject() -> checking for demo mode");

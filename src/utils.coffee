@@ -44,6 +44,14 @@ getScreenHeight = ->
 show = (k, speed="slow") -> $("#{k}").fadeIn speed
 hide = (k, speed="slow") -> $("#{k}").fadeOut speed
 
+show = (k, speed="slow") ->
+  o = if ((typeof k) is "string") then $(k) else k
+  o.fadeIn speed
+
+hide = (k, speed="slow") ->
+  o = if ((typeof k) is "string") then $(k) else k
+  o.fadeOut speed
+
 strToBoolean = (s) ->
   switch s.toLowerCase()
     when "true", "yes", "on", "1" then true

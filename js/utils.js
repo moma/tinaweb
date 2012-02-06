@@ -71,6 +71,20 @@ hide = function(k, speed) {
   return $("" + k).fadeOut(speed);
 };
 
+show = function(k, speed) {
+  var o;
+  if (speed == null) speed = "slow";
+  o = (typeof k) === "string" ? $(k) : k;
+  return o.fadeIn(speed);
+};
+
+hide = function(k, speed) {
+  var o;
+  if (speed == null) speed = "slow";
+  o = (typeof k) === "string" ? $(k) : k;
+  return o.fadeOut(speed);
+};
+
 strToBoolean = function(s) {
   switch (s.toLowerCase()) {
     case "true":
