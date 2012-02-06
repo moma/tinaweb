@@ -64,6 +64,7 @@ class Application extends Tinaweb
             log "new graph detected! loading #{@config.gexf}"
             @open "#{@config.gexf}", @graphLoadingProgress
 
+
   animateAppletInfo: =>
     unless status is "loaded"
       txt = $("#appletInfo").text()

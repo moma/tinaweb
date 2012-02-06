@@ -24,6 +24,5 @@ default_config = {
   layout: "tinaforce",
   layout_speed: 30,
   pause: false,
-  demo: false,
-  graphURL: ""
+  demo: false
 };

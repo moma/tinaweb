@@ -28,7 +28,4 @@ default_config =
   layout_speed: 30           # layout speed (in iterations by seconds)
   pause: off                 # should we be paused by default?
   demo: no                   # should we enable the demo mode?
-  
-  # used by WHOSWHO
-  graphURL: ""
-  
+

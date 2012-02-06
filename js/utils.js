@@ -62,13 +62,17 @@ getScreenHeight = function() {
 };
 
 show = function(k, speed) {
+  var o;
   if (speed == null) speed = "slow";
-  return $("" + k).fadeIn(speed);
+  o = (typeof k) === "string" ? $(k) : k;
+  return o.fadeIn(speed);
 };
 
 hide = function(k, speed) {
+  var o;
   if (speed == null) speed = "slow";
-  return $("" + k).fadeOut(speed);
+  o = (typeof k) === "string" ? $(k) : k;
+  return o.fadeOut(speed);
 };
 
 strToBoolean = function(s) {

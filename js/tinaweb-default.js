@@ -31,6 +31,7 @@ Tinaweb = (function(_super) {
     this._tinaweb_defaults = {
       elementId: "vizdiv",
       gexf: "sample.gexf.gz",
+      path: "js/tinaviz/",
       view: "macro",
       category: "Document",
       node_id: "",
@@ -191,11 +192,11 @@ Tinaweb = (function(_super) {
       $(window).bind("resize", function() {
         return _this.resize;
       });
-      log("Tinaweb: _inject() -> binding blur and focus");
-      $(window).blur(function() {
+      log("Tinaweb: _inject() -> binding mouse enter/leave events");
+      $(window).mouseleave(function() {
         return _this.freeze();
       });
-      $(window).focus(function() {
+      $(window).mouseenter(function() {
         return _this.unfreeze();
       });
       log("Tinaweb: _postInject() -> checking for demo mode");
