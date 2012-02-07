@@ -108,11 +108,11 @@ class Tinaviz
   
   set: (key, obj, t, cb) =>
     cbId = makeCallback(cb)
-    debug "Tinaviz: set(key: #{key}, obj: #{obj}, t: #{t}, cb: #{cbId})"
+    #debug "Tinaviz: set(key: #{key}, obj: #{obj}, t: #{t}, cb: #{cbId})"
     unless t?
       o = _ obj
       if o.isNumber
-        t = "Double"
+        t = "Double" # however, sometimes we might need an "int"
       else if o.isBoolean
         t = "Boolean"
       else if current.isString
@@ -121,7 +121,7 @@ class Tinaviz
         log "Warning, setting unknow (#{key}, #{obj})"
         @applet.sendSet cbId, key, obj, ""
         return
-    log "type ----> #{t}"
+    #log "type ----> #{t}"
     unless t.indexOf("Tuple2") is -1
       unless t.indexOf("[Double]") is -1
         @applet.sendSetTuple2 cbId, key, obj[0], obj[1], "Double"

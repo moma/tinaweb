@@ -149,7 +149,6 @@ Tinaviz = (function() {
   Tinaviz.prototype.set = function(key, obj, t, cb) {
     var cbId, o;
     cbId = makeCallback(cb);
-    debug("Tinaviz: set(key: " + key + ", obj: " + obj + ", t: " + t + ", cb: " + cbId + ")");
     if (t == null) {
       o = _(obj);
       if (o.isNumber) {
@@ -164,7 +163,6 @@ Tinaviz = (function() {
         return;
       }
     }
-    log("type ----> " + t);
     if (t.indexOf("Tuple2") !== -1) {
       if (t.indexOf("[Double]") !== -1) {
         this.applet.sendSetTuple2(cbId, key, obj[0], obj[1], "Double");
