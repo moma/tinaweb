@@ -31,6 +31,7 @@ Tinaweb = (function(_super) {
     this._tinaweb_defaults = {
       elementId: "vizdiv",
       gexf: "sample.gexf.gz",
+      path: "js/tinaviz/",
       view: "macro",
       category: "Document",
       node_id: "",
