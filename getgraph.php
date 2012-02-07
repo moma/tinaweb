@@ -279,38 +279,28 @@ foreach ($terms_array as $term) {
 	foreach ($base->query($query) as $row) {
 		$term_scholars[] = $row['scholar'];
 		// ensemble des scholars partageant ce term
-	}
-	// on en profite pour construire le réseau des scholars partageant les mêmes termes
-	for ($k = 0; $k < count($term_scholars); $k++) {
-		if ($scholarsMatrix[$term_scholars[$k]] != null) {
-			$scholarsMatrix[$term_scholars[$k]]['occ'] = $scholarsMatrix[$term_scholars[$k]]['occ'] + 1;
-			for ($l = 0; $l < count($term_scholars); $l++) {
-				if (array_key_exists($term_scholars[$l], $scholars)) {
-					if ($scholarsMatrix[$term_scholars[$k]]['cooc'][$term_scholars[$l]] != null) {
-						$a = log($term['occurrences']) * log($scholars[$term_scholars[$k]]['nb_keywords']);
-						$b = $scholars[$term_scholars[$k]]['nb_keywords'];
-						if ($a > 0 && $b > 0) {
-							$scholarsMatrix[$term_scholars[$k]]['cooc'][$term_scholars[$l]] += 1  / ($a / $b);
-						}
+    }
+    // on en profite pour construire le réseau des scholars partageant les mêmes termes
+    for ($k = 0; $k < count($term_scholars); $k++) {
+        if ($scholarsMatrix[$term_scholars[$k]] != null) {
+            $scholarsMatrix[$term_scholars[$k]]['occ'] = $scholarsMatrix[$term_scholars[$k]]['occ'] + 1;
+            for ($l = 0; $l < count($term_scholars); $l++) {
+                if (array_key_exists($term_scholars[$l], $scholars)) {
+                    if ($scholarsMatrix[$term_scholars[$k]]['cooc'][$term_scholars[$l]] != null) {
+                        $scholarsMatrix[$term_scholars[$k]]['cooc'][$term_scholars[$l]] += scholarlink($term['occurrences'], $scholars[$term_scholars[$k]]['nb_keywords'], $scholars[$term_scholars[$l]]['nb_keywords']);
+                    } else {
+                        $scholarsMatrix[$term_scholars[$k]]['cooc'][$term_scholars[$l]] = scholarlink($term['occurrences'], $scholars[$term_scholars[$k]]['nb_keywords'], $scholars[$term_scholars[$l]]['nb_keywords']);
+                    }
+                }
+            }
+        } else {
+            $scholarsMatrix[$term_scholars[$k]]['occ'] = 1;
+            for ($l = 0; $l < count($term_scholars); $l++) {
+                if (array_key_exists($term_scholars[$l], $scholars)) {
+                    if ($scholarsMatrix[$term_scholars[$k]]['cooc'][$term_scholars[$l]] != null) {
+						$scholarsMatrix[$term_scholars[$k]]['cooc'][$term_scholars[$l]] += scholarlink($term['occurrences'], $scholars[$term_scholars[$k]]['nb_keywords'], $scholars[$term_scholars[$l]]['nb_keywords']);
 					} else {
-						$a = $scholars[$term_scholars[$k]]['nb_keywords'];
-						if ($a > 0) {
-							$b = log($term['occurrences']) * log($scholars[$term_scholars[$k]]['nb_keywords']) / $a;
-							if ($b > 0) {
-								$scholarsMatrix[$term_scholars[$k]]['cooc'][$term_scholars[$l]] = 1 / $b;
-							}
-						}
-					}
-				}
-			}
-		} else {
-			$scholarsMatrix[$term_scholars[$k]]['occ'] = 1;
-			for ($l = 0; $l < count($term_scholars); $l++) {
-				if (array_key_exists($term_scholars[$l], $scholars)) {
-					if ($scholarsMatrix[$term_scholars[$k]]['cooc'][$term_scholars[$l]] != null) {
-						$scholarsMatrix[$term_scholars[$k]]['cooc'][$term_scholars[$l]] += 1 / (log($term['occurrences']) * log($scholars[$term_scholars[$k]]['nb_keywords']) / $scholars[$term_scholars[$k]]['nb_keywords']); ;
-					} else {
-						$scholarsMatrix[$term_scholars[$k]]['cooc'][$term_scholars[$l]] = 1 / (log($term['occurrences']) * log($scholars[$term_scholars[$k]]['nb_keywords']) / $scholars[$term_scholars[$k]]['nb_keywords']); ;
+						$scholarsMatrix[$term_scholars[$k]]['cooc'][$term_scholars[$l]] = scholarlink($term['occurrences'], $scholars[$term_scholars[$k]]['nb_keywords'], $scholars[$term_scholars[$l]]['nb_keywords']);
 					}
 				}
 			}
@@ -477,4 +467,14 @@ echo $gexf;
 function pt($string){
     echo $string.'<br/>';
 }
+
+function scholarlink($term_occurrences,$scholars1_nb_keywords,$scholars2nb_keywords){
+    if (($term_occurrences>0)&&($scholars1_nb_keywords>0)&&($scholars2_nb_keywords>0)){
+        return 1/log($term_occurrences)*1/log($scholars1_nb_keywords)*1/$scholars2_nb_keywords;    
+    }else {
+        return 0;
+    }
+    
+    }                      
+
 ?>
