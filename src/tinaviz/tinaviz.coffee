@@ -1,15 +1,15 @@
-cblatency = 100
+cblatency = 2 # ms
 cbCounter = 0
 callbacks = {}
 
 # custom callback engine (necessary to communicate with the Scala actor-based applet)
+# TODO: empty the callbacks list after some time (collect garbage)
 callCallback = (cb_id, cb_args) ->
   delay cblatency, -> callbacks[cb_id] $.parseJSON(cb_args)
-  
 makeCallback = (cb = ->) ->
   id = cbCounter++
   callbacks[id] = cb
-  "" + id
+  "#{id}"
 
 class Tinaviz
 
@@ -54,18 +54,20 @@ class Tinaviz
     alert "ERROR getNodesByLabel is broken"
   
   selectByPattern: (pattern, patternMode, cb) =>
-    return  if pattern.length > 0 and pattern.length < 3
-    @applet.selectByPattern makeCallback(cb), pattern, patternMode
+    if pattern.length > 2
+      @applet.selectByPattern makeCallback(cb), pattern, patternMode
   
   selectByNeighbourPattern: (pattern, patternMode, category, cb) =>
-    return  if pattern.length > 0 and pattern.length < 3
-    @applet.selectByNeighbourPattern makeCallback(cb), pattern, patternMode, category
+    if pattern.length > 2
+      @applet.selectByNeighbourPattern makeCallback(cb), pattern, patternMode, category
   
   highlightByPattern: (pattern, patternMode, cb) =>
-    @applet.highlightByPattern makeCallback(cb), pattern, patternMode
+    if pattern.length > 2
+      @applet.highlightByPattern makeCallback(cb), pattern, patternMode
   
   highlightByNeighbourPattern: (pattern, patternMode, cb) =>
-    @applet.highlightByNeighbourPattern makeCallback(cb), pattern, patternMode
+    if pattern.length > 2
+      @applet.highlightByNeighbourPattern makeCallback(cb), pattern, patternMode
   
   getNodeAttributes: (view, id, cb) =>
     @applet.getNodeAttributes makeCallback(cb), view, id
@@ -79,11 +81,11 @@ class Tinaviz
   #  TinaService.getNGrams 0, elem[1], success: (data) ->
 
   freeze: => 
-    log "freezing"
+    #log "freezing"
     @applet.freeze()
   
   unfreeze: =>
-    log "unfreezing"
+    #log "unfreezing"
     @applet.unfreeze()
     
   getNodes: (view, category, cb) => @applet.getNodes makeCallback(cb), view, category
@@ -140,7 +142,6 @@ class Tinaviz
     buff = ""
     func = document.write
     document.write = (arg) -> buff += arg
-    
     res = deployJava.writeAppletTag(
       id: @config.appletId
       code: "eu.tinasoft.tinaviz.Main.class"
@@ -162,20 +163,19 @@ class Tinaviz
       scriptable: true
     )
     document.write = func
-    log "html: "
-    log buff
-
+    #log "html: "
+    #log buff
     buff
     
   _inject: (cb) =>
-    log "Tinaviz: preparing first hook.."
+    #log "Tinaviz: preparing first hook.."
     makeCallback (data) =>
-      log "Tinaviz: Injected.."
+      #log "Tinaviz: Injected.."
       @applet = $("##{@config.appletId}")[0]
       if @applet
         cb()
       else
         alert "applet couldn't be initialized, should put this in results"
     log @config
-    log "Tinaviz: Injecting..."
+    #log "Tinaviz: Injecting..."
     $("##{@config.elementId}").html @_generateAppletHTML()
