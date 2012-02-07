@@ -7,28 +7,28 @@ class Tinaweb extends Tinaviz
      
     log "Tinaweb: configuring with default config"
     @_tinaweb_defaults =
-      elementId: "vizdiv"       #   
-      gexf: "sample.gexf.gz"    # gexf file to load by default
-      path: "js/tinaviz/"       #
-      view: "macro"             # default view to show the graph
-      category: "Document"      # default category used to show the graph
-      node_id: ""               # default node to select ("" means no node will be selected)
-      search: ""                # default search query ("" means no search will be run)
-      a_node_size: 0.50         # node size for category A
-      b_node_size: 0.50         # node size for category B
-      cursor_size: 0.01         # default selection cursor size
-      a_edge_filter_min: 0.0    # initial position of the edge filter for category A (lower-bound)
-      a_edge_filter_max: 1.0    # initial position of the edge filter for category A (higher-bound)
-      a_node_filter_min: 0.0    # initial position of the edge filter for category A (lower-bound)
-      a_node_filter_max: 1.0    # initial position of the edge filter for category A (higher-bound)
-      b_edge_filter_min: 0.0    # initial position of the edge filter for category B (lower-bound)
-      b_edge_filter_max: 1.0    # initial position of the edge filter for category B (higher-bound)
-      b_node_filter_min: 0.0    # initial position of the edge filter for category B (lower-bound)
-      b_node_filter_max: 1.0    # initial position of the edge filter for category B (higher-bound)
-      layout: "tinaforce"       # default layout (note: for the moment, only "tinaforce" is recommended)
-      layout_speed: 30          # layout speed (in iterations by seconds)
-      pause: false              # should we be paused by default?
-      demo: false               # should we enable the demo mode?
+      elementId: "vizdiv"          #   
+      gexf: "sample.gexf.gz"       # gexf file to load by default
+      view: "macro"                # default view to show the graph
+      category: "Document"         # default category used to show the graph
+      node_id: ""                  # default node to select ("" means no node will be selected)
+      search: ""                   # default search query ("" means no search will be run)
+      a_node_size: 0.50            # node size for category A
+      b_node_size: 0.50            # node size for category B
+      cursor_size: 0.01            # default selection cursor size
+      a_edge_filter_min: 0.0       # initial position of the edge filter for category A (lower-bound)
+      a_edge_filter_max: 1.0       # initial position of the edge filter for category A (higher-bound)
+      a_node_filter_min: 0.0       # initial position of the edge filter for category A (lower-bound)
+      a_node_filter_max: 1.0       # initial position of the edge filter for category A (higher-bound)
+      b_edge_filter_min: 0.0       # initial position of the edge filter for category B (lower-bound)
+      b_edge_filter_max: 1.0       # initial position of the edge filter for category B (higher-bound)
+      b_node_filter_min: 0.0       # initial position of the edge filter for category B (lower-bound)
+      b_node_filter_max: 1.0       # initial position of the edge filter for category B (higher-bound)
+      layout: "tinaforce"          # default layout (note: for the moment, only "tinaforce" is recommended)
+      layout_speed: 30             # layout speed (in iterations by seconds)
+      antialiasing_threshold: 1500 # max number of edges, before aliasing the scene (pixel aliasing)
+      pause: false                 # should we be paused by default?
+      demo: false                  # should we enable the demo mode?
       
     @_status = "done"
     @_demo_running = false
@@ -155,7 +155,7 @@ class Tinaweb extends Tinaviz
       #), ->
       #  $.doTimeout "demo_loop"
             
-      log "Tinaweb: _postInject() -> sending parameters to the applet"  
+      log "Tinaweb: _postInject() -> sending (some) default parameters to the applet"  
       @set "filter.a.edge.weight", [ @config.a_edge_filter_min, @config.a_edge_filter_max ], "Tuple2[Double]"
       @set "filter.a.node.weight", [ @config.a_node_filter_min, @config.a_node_filter_max ], "Tuple2[Double]"
       @set "filter.b.edge.weight", [ @config.b_edge_filter_min, @config.b_edge_filter_max ], "Tuple2[Double]"
@@ -167,6 +167,7 @@ class Tinaweb extends Tinaviz
       @set "layout", @config.layout, "String"
       @set "layoutSpeed", @config.layout_speed, "Double"
       @set "pause", @config.pause, "Boolean"
-    
+      @set "antiAliasingThreshold", @config.antialiasing_threshold, "Int", 
+
       log "Tinaweb: _postInject() terminated, calling postInstall() if available"
       @postInstall?()
