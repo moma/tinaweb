@@ -120,7 +120,7 @@ class Tinaweb extends Tinaviz
     @configure_using @_tinaweb_defaults
     
     
-    log "Tinaweb: install() -> calling preInstall"
+    log "Tinaweb: install() -> calling preInstall if available"
     @preInstall?()
     
     log "Tinaweb: install() -> calling @_inject => { ... }"

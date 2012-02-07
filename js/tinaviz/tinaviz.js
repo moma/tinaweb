@@ -1,7 +1,7 @@
 var Tinaviz, callCallback, callbacks, cbCounter, cblatency, makeCallback,
   __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
 
-cblatency = 100;
+cblatency = 2;
 
 cbCounter = 0;
 
@@ -84,21 +84,27 @@ Tinaviz = (function() {
   };
 
   Tinaviz.prototype.selectByPattern = function(pattern, patternMode, cb) {
-    if (pattern.length > 0 && pattern.length < 3) return;
-    return this.applet.selectByPattern(makeCallback(cb), pattern, patternMode);
+    if (pattern.length > 2) {
+      return this.applet.selectByPattern(makeCallback(cb), pattern, patternMode);
+    }
   };
 
   Tinaviz.prototype.selectByNeighbourPattern = function(pattern, patternMode, category, cb) {
-    if (pattern.length > 0 && pattern.length < 3) return;
-    return this.applet.selectByNeighbourPattern(makeCallback(cb), pattern, patternMode, category);
+    if (pattern.length > 2) {
+      return this.applet.selectByNeighbourPattern(makeCallback(cb), pattern, patternMode, category);
+    }
   };
 
   Tinaviz.prototype.highlightByPattern = function(pattern, patternMode, cb) {
-    return this.applet.highlightByPattern(makeCallback(cb), pattern, patternMode);
+    if (pattern.length > 2) {
+      return this.applet.highlightByPattern(makeCallback(cb), pattern, patternMode);
+    }
   };
 
   Tinaviz.prototype.highlightByNeighbourPattern = function(pattern, patternMode, cb) {
-    return this.applet.highlightByNeighbourPattern(makeCallback(cb), pattern, patternMode);
+    if (pattern.length > 2) {
+      return this.applet.highlightByNeighbourPattern(makeCallback(cb), pattern, patternMode);
+    }
   };
 
   Tinaviz.prototype.getNodeAttributes = function(view, id, cb) {
@@ -110,12 +116,10 @@ Tinaviz = (function() {
   };
 
   Tinaviz.prototype.freeze = function() {
-    log("freezing");
     return this.applet.freeze();
   };
 
   Tinaviz.prototype.unfreeze = function() {
-    log("unfreezing");
     return this.applet.unfreeze();
   };
 
@@ -205,16 +209,12 @@ Tinaviz = (function() {
       scriptable: true
     });
     document.write = func;
-    log("html: ");
-    log(buff);
     return buff;
   };
 
   Tinaviz.prototype._inject = function(cb) {
     var _this = this;
-    log("Tinaviz: preparing first hook..");
     makeCallback(function(data) {
-      log("Tinaviz: Injected..");
       _this.applet = $("#" + _this.config.appletId)[0];
       if (_this.applet) {
         return cb();
@@ -223,7 +223,6 @@ Tinaviz = (function() {
       }
     });
     log(this.config);
-    log("Tinaviz: Injecting...");
     return $("#" + this.config.elementId).html(this._generateAppletHTML());
   };
 

@@ -178,7 +178,7 @@ Tinaweb = (function(_super) {
     var _this = this;
     log("Tinaweb: install() -> loading some additionnal default settings");
     this.configure_using(this._tinaweb_defaults);
-    log("Tinaweb: install() -> calling preInstall");
+    log("Tinaweb: install() -> calling preInstall if available");
     if (typeof this.preInstall === "function") this.preInstall();
     log("Tinaweb: install() -> calling @_inject => { ... }");
     return this._inject(function() {
