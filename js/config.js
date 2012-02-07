@@ -23,6 +23,7 @@ default_config = {
   b_node_filter_max: 1.0,
   layout: "tinaforce",
   layout_speed: 30,
+  antialiasing_threshold: 1500,
   pause: false,
   demo: false
 };

@@ -48,6 +48,7 @@ Tinaweb = (function(_super) {
       b_node_filter_max: 1.0,
       layout: "tinaforce",
       layout_speed: 30,
+      antialiasing_threshold: 1500,
       pause: false,
       demo: false
     };
@@ -202,7 +203,7 @@ Tinaweb = (function(_super) {
       if (_this.config.demo != null) _this._demo_possible = true;
       waitTimeBeforeStartingDemo = 6;
       delayBetweenChanges = 10;
-      log("Tinaweb: _postInject() -> sending parameters to the applet");
+      log("Tinaweb: _postInject() -> sending (some) default parameters to the applet");
       _this.set("filter.a.edge.weight", [_this.config.a_edge_filter_min, _this.config.a_edge_filter_max], "Tuple2[Double]");
       _this.set("filter.a.node.weight", [_this.config.a_node_filter_min, _this.config.a_node_filter_max], "Tuple2[Double]");
       _this.set("filter.b.edge.weight", [_this.config.b_edge_filter_min, _this.config.b_edge_filter_max], "Tuple2[Double]");
@@ -214,7 +215,7 @@ Tinaweb = (function(_super) {
       _this.set("layout", _this.config.layout, "String");
       _this.set("layoutSpeed", _this.config.layout_speed, "Double");
       _this.set("pause", _this.config.pause, "Boolean");
-      log("Tinaweb: _postInject() terminated, calling postInstall() if available");
+      _this.set("antiAliasingThreshold", _this.config.antialiasing_threshold, "Int", log("Tinaweb: _postInject() terminated, calling postInstall() if available"));
       return typeof _this.postInstall === "function" ? _this.postInstall() : void 0;
     });
   };
