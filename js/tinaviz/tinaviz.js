@@ -148,9 +148,8 @@ Tinaviz = (function() {
 
   Tinaviz.prototype.set = function(key, obj, t, cb) {
     var cbId, o;
-    debug("Tinaviz: set(key: " + key + ", obj: " + obj + ", t: " + t + ")");
     cbId = makeCallback(cb);
-    if (!t) {
+    if (t == null) {
       o = _(obj);
       if (o.isNumber) {
         t = "Double";

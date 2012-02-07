@@ -168,7 +168,7 @@ class Tinaweb extends Tinaviz
       @set "layout", @config.layout, "String"
       @set "layoutSpeed", @config.layout_speed, "Double"
       @set "pause", @config.pause, "Boolean"
-      @set "antiAliasingThreshold", @config.antialiasing_threshold, "Int", 
+      @set "antiAliasingThreshold", "#{@config.antialiasing_threshold}", "Int"
 
       log "Tinaweb: _postInject() terminated, calling postInstall() if available"
       @postInstall?()
