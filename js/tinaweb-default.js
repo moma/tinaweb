@@ -216,7 +216,8 @@ Tinaweb = (function(_super) {
       _this.set("layout", _this.config.layout, "String");
       _this.set("layoutSpeed", _this.config.layout_speed, "Double");
       _this.set("pause", _this.config.pause, "Boolean");
-      _this.set("antiAliasingThreshold", _this.config.antialiasing_threshold, "Int", log("Tinaweb: _postInject() terminated, calling postInstall() if available"));
+      _this.set("antiAliasingThreshold", "" + _this.config.antialiasing_threshold, "Int");
+      log("Tinaweb: _postInject() terminated, calling postInstall() if available");
       return typeof _this.postInstall === "function" ? _this.postInstall() : void 0;
     });
   };

@@ -148,9 +148,9 @@ Tinaviz = (function() {
 
   Tinaviz.prototype.set = function(key, obj, t, cb) {
     var cbId, o;
-    debug("Tinaviz: set(key: " + key + ", obj: " + obj + ", t: " + t + ")");
     cbId = makeCallback(cb);
-    if (!t) {
+    debug("Tinaviz: set(key: " + key + ", obj: " + obj + ", t: " + t + ", cb: " + cbId + ")");
+    if (t == null) {
       o = _(obj);
       if (o.isNumber) {
         t = "Double";
@@ -164,6 +164,7 @@ Tinaviz = (function() {
         return;
       }
     }
+    log("type ----> " + t);
     if (t.indexOf("Tuple2") !== -1) {
       if (t.indexOf("[Double]") !== -1) {
         this.applet.sendSetTuple2(cbId, key, obj[0], obj[1], "Double");
