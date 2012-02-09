@@ -51,6 +51,7 @@ $(document).ready(function() {
     });
     $("" + id1).hide();
     show("#" + id1);
+    $("#" + id2).focus();
     return false;
   };
   jQuery(".unselectable").disableTextSelect();
@@ -82,10 +83,17 @@ $(document).ready(function() {
         total = 0;
         term = "";
         _.each(data, function(item) {
+          var myRender, whenClicked;
           size = item.size;
           total = item.total;
           term = item.term;
-          return self._renderItem(ul, item);
+          whenClicked = function() {
+            return $("#generate").click();
+          };
+          myRender = function(a, b) {
+            return $("<li></li>").data("item.autocomplete", b).append($("<a></a>").click(whenClicked).text(b.label)).appendTo(a);
+          };
+          return myRender(ul, item);
         });
         ul.append("<li class='ui-autocomplete-category'>" + size + "/" + total + " results</li>");
         log(term);

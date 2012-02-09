@@ -40,6 +40,7 @@ $(document).ready ->
     
     $("#{id1}").hide()
     show "##{id1}"
+    $("##{id2}").focus()
     false
   jQuery(".unselectable").disableTextSelect()
   $(".unselectable").hover (->
@@ -66,7 +67,14 @@ $(document).ready ->
         size = item.size
         total = item.total
         term = item.term
-        self._renderItem ul, item
+
+        whenClicked = () ->
+          $("#generate").click()
+
+        myRender = (a,b) -> 
+          $("<li></li>").data("item.autocomplete",b).append($("<a></a>").click(whenClicked).text(b.label)).appendTo(a)
+        
+        myRender ul, item
       
       ul.append "<li class='ui-autocomplete-category'>#{size}/#{total} results</li>"
       log term
