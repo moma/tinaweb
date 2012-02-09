@@ -36,12 +36,10 @@ $(document).ready(function() {
     input = "<input type=\"text\" id=\"" + id2 + "\" class=\"medium filter" + type + "\" placeholder=\"" + type + "\" />";
     footer = "</li>;";
     $(header + labelization + input + footer).insertBefore("#refine");
-    $("#" + id2).catcomplete({
+    $("#" + id2).filtercomplete({
       minLength: 2,
       source: function(request, response) {
-        var term;
-        term = request.term;
-        return $.getJSON("autocomplete.php", {
+        return $.getJSON("search_filter.php", {
           category: type,
           term: request.term
         }, function(data, status, xhr) {
@@ -70,7 +68,7 @@ $(document).ready(function() {
       opacity: 0.93
     }, "fast");
   });
-  $.widget("custom.catcomplete", $.ui.autocomplete, {
+  $.widget("custom.filtercomplete", $.ui.autocomplete, {
     _renderMenu: function(ul, items) {
       var categories, self;
       self = this;
@@ -101,8 +99,39 @@ $(document).ready(function() {
       });
     }
   });
-  cache = {};
-  xhrs = {};
+  $.widget("custom.scholarcomplete", $.ui.autocomplete, {
+    _renderMenu: function(ul, items) {
+      var categories, self;
+      self = this;
+      categories = _.groupBy(items, function(o) {
+        return o.category;
+      });
+      return _.each(categories, function(data, category) {
+        var login, size, total;
+        size = 0;
+        total = 0;
+        login = "";
+        _.each(data, function(item) {
+          var firstname, lastname, myRender, whenClicked;
+          size = item.size;
+          total = item.total;
+          login = item.login;
+          firstname = item.firstname;
+          lastname = item.lastname;
+          whenClicked = function() {
+            return $("#generate").click();
+          };
+          myRender = function(a, b) {
+            return $("<li></li>").data("item.autocomplete", b).append($("<a></a>").click(whenClicked).text(b.firstname + " " + b.lastname)).appendTo(a);
+          };
+          return myRender(ul, item);
+        });
+        ul.append("<li class='ui-autocomplete-category'>" + size + "/" + total + " results</li>");
+        log(login);
+        return ul.highlight(login);
+      });
+    }
+  });
   $("#addfiltercountry").click(function() {
     return popfilter("in", "countries", []);
   });
@@ -122,14 +151,26 @@ $(document).ready(function() {
   $("#addfiltertag").click(function() {
     return popfilter("tagged", "tags", []);
   });
-  hide("#loading");
-  $("#example").click(function() {
+  $("#searchlogin").scholarcomplete({
+    minLength: 2,
+    source: function(request, response) {
+      log("searchlogin: " + request.term);
+      return $.getJSON("search_scholar.php", {
+        category: "login",
+        login: request.term
+      }, function(data, status, xhr) {
+        log("results: " + data.results);
+        return response(data.results);
+      });
+    }
+  });
+  $("#searchscholar").click(function() {
     hide(".hero-unit");
     return $("#welcome").fadeOut("slow", function() {
       return show("#loading", "fast");
     });
   });
-  return $("#generate").click(function() {
+  $("#generate").click(function() {
     hide(".hero-unit");
     $("#welcome").fadeOut("slow", function() {
       var collect, query;
@@ -178,4 +219,7 @@ $(document).ready(function() {
     });
     return false;
   });
+  hide("#loading");
+  cache = {};
+  return xhrs = {};
 });
