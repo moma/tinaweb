@@ -149,6 +149,7 @@ foreach ($base->query($sql) as $row) {
 	$info['homepage'] = $row['homepage'];
 	$info['title'] = $row['title'];
 	$info['position'] = $row['position'];
+        $info['photo_url']=$row['Photo'];
 	//print_r($row);
 	$scholars[$row['unique_id']] = $info;
 }
@@ -268,6 +269,10 @@ foreach ($scholars as $scholar) {
 		$nodePositionY = rand(0, 100) / 100;
 		$content = '';
 
+                if ($scholar['photo_url'] != null) {
+			$content .= '<img src="'.$scholar['photo_url'].'" width=80 float="right">' . '</br>';
+		}
+                
 		$content .= '<b>Country: </b>' . $scholar['country'] . '</br>';
 
 		if ($scholar['position'] != null) {
