@@ -193,13 +193,9 @@ Tinaweb = (function(_super) {
       $(window).bind("resize", function() {
         return _this.resize;
       });
-      log("Tinaweb: _inject() -> binding mouse enter/leave events");
-      $(window).mouseleave(function() {
-        return _this.freeze();
-      });
-      $(window).mouseenter(function() {
-        return _this.unfreeze();
-      });
+      log("Tinaweb: _inject() -> DISABLED binding of mouse enter/leave events");
+      $(window).mouseleave(function() {});
+      $(window).mouseenter(function() {});
       log("Tinaweb: _postInject() -> checking for demo mode");
       if (_this.config.demo != null) _this._demo_possible = true;
       waitTimeBeforeStartingDemo = 6;
