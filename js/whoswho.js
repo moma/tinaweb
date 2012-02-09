@@ -24,8 +24,18 @@ completion = {};
 gexf = "";
 
 $(document).ready(function() {
-  var cache, popfilter, xhrs;
+  var cache, loadGraph, popfilter, xhrs;
   log("document ready.. installing whoswho");
+  loadGraph = function(g) {
+    gexf = g;
+    log("url query: " + g);
+    log("injecting applet");
+    if ($('#frame').length === 0) {
+      return $("#visualization").html("<iframe src=\"tinaframe.html\" class=\"frame\" border=\"0\" frameborder=\"0\" scrolling=\"no\" id=\"frame\" name=\"frame\"></iframe>");
+    } else {
+      return log("applet already exists");
+    }
+  };
   popfilter = function(label, type, options) {
     var footer, header, id, id1, id2, input, labelization;
     id = ids++;
@@ -119,14 +129,14 @@ $(document).ready(function() {
           firstname = item.firstname;
           lastname = item.lastname;
           whenClicked = function() {
-            return $("#generate").click();
+            return $("#searchscolar").click();
           };
           myRender = function(a, b) {
             return $("<li></li>").data("item.autocomplete", b).append($("<a></a>").click(whenClicked).text(b.firstname + " " + b.lastname)).appendTo(a);
           };
           return myRender(ul, item);
         });
-        ul.append("<li class='ui-autocomplete-category'>" + size + "/" + total + " results</li>");
+        ul.append("<li class='ui-autocomplete-category'>" + size + "/" + total + " people</li>");
         log(login);
         return ul.highlight(login);
       });
@@ -167,7 +177,10 @@ $(document).ready(function() {
   $("#searchscholar").click(function() {
     hide(".hero-unit");
     return $("#welcome").fadeOut("slow", function() {
-      return show("#loading", "fast");
+      var login;
+      show("#loading", "fast");
+      login = $("#searchlogin").text();
+      return loadGraph("get_scholar_graph.php?login=" + login);
     });
   });
   $("#generate").click(function() {
@@ -208,14 +221,7 @@ $(document).ready(function() {
       log("raw query: ");
       log(query);
       query = encodeURIComponent(JSON.stringify(query));
-      gexf = "getgraph.php?query=" + query;
-      log("url query: " + gexf);
-      log("injecting applet");
-      if ($('#frame').length === 0) {
-        return $("#visualization").html("<iframe src=\"tinaframe.html\" class=\"frame\" border=\"0\" frameborder=\"0\" scrolling=\"no\" id=\"frame\" name=\"frame\"></iframe>");
-      } else {
-        return log("applet already exists");
-      }
+      return loadGraph("getgraph.php?query=" + query);
     });
     return false;
   });

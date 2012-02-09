@@ -19,6 +19,15 @@ $(document).ready ->
     
   log "document ready.. installing whoswho"
   
+  loadGraph = (g) ->
+    gexf = g
+    log  "url query: "+ g
+    log "injecting applet"
+    if $('#frame').length is 0
+      $("#visualization").html "<iframe src=\"tinaframe.html\" class=\"frame\" border=\"0\" frameborder=\"0\" scrolling=\"no\" id=\"frame\" name=\"frame\"></iframe>"
+    else
+      log "applet already exists"
+        
   popfilter = (label, type, options) ->
     id = ids++
     id1 = "filter" + id
@@ -96,14 +105,14 @@ $(document).ready ->
         lastname = item.lastname
 
         whenClicked = () ->
-          $("#generate").click()
+          $("#searchscolar").click()
 
         myRender = (a,b) -> 
           $("<li></li>").data("item.autocomplete",b).append($("<a></a>").click(whenClicked).text(b.firstname + " " + b.lastname)).appendTo(a)
         
         myRender ul, item
       
-      ul.append "<li class='ui-autocomplete-category'>#{size}/#{total} results</li>"
+      ul.append "<li class='ui-autocomplete-category'>#{size}/#{total} people</li>"
       log login
       ul.highlight login
         
@@ -141,7 +150,8 @@ $(document).ready ->
     hide ".hero-unit"
     $("#welcome").fadeOut "slow", ->
       show "#loading", "fast"
-      
+      login = $("#searchlogin").text()
+      loadGraph "get_scholar_graph.php?login=#{login}"
   
   $("#generate").click ->
     hide ".hero-unit"
@@ -175,14 +185,8 @@ $(document).ready ->
       
       log "raw query: "
       log query
-      query =  encodeURIComponent JSON.stringify(query)
-      gexf = "getgraph.php?query=#{query}"
-      log  "url query: "+ gexf
-      log "injecting applet"
-      if $('#frame').length is 0
-        $("#visualization").html "<iframe src=\"tinaframe.html\" class=\"frame\" border=\"0\" frameborder=\"0\" scrolling=\"no\" id=\"frame\" name=\"frame\"></iframe>"
-      else
-        log "applet already exists"
+      query = encodeURIComponent JSON.stringify(query)
+      loadGraph "getgraph.php?query=#{query}"
         
     false  
     
