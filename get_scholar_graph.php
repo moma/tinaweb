@@ -71,84 +71,34 @@ $countries = $data["countries"];
 $keywords = $data["keywords"];
 $laboratories = $data["laboratories"];
 $organizations = $data["organizations"];
-
-$f = "";// requête
-if ($keywords) {
-	if (sizeof($keywords) > 0) {
-		$f .= 'AND ';
-	}
-
-	foreach ($keywords as $kw) {
-		$words = explode(',', $kw);
-		$i = 0;
-		foreach ($words as $word) {
-			$word = sanitize_input(trim(strtolower($word)));
-			if ($word == "") continue;
-			if ($i > 0)
-				$f .= " OR ";
-			$f .= 'keywords LIKE "%' . $word . '%" ';
-			$i++;
-		}
-	}
-	$f .= "  ";
-}
-if ($countries) {
-
-	if (sizeof($countries) > 0) {
-		$f .= 'AND ';
-	}
-
-	$i = 0;
-	foreach ($countries as $country) {
-		//$country = sanitize_input(trim(strtolower($country)));
-                $country = sanitize_input(trim($country ));
-		if ($country == "") continue;
-		if ($i > 0)
-			$f .= " OR ";
-		$f .= 'country = "' . $country . '" ';
-		$i++;
-	}
-	$f .= "  ";
-}
-if ($laboratories) {
-
-	if (sizeof($laboratories) > 0) {
-		$f .= 'AND ';
-	}
-
-	$i = 0;
-	foreach ($laboratories as $lab) {
-		$lab = sanitize_input(trim(strtolower($lab)));
-		if ($lab == "") continue;
-		if ($i > 0)
-			$f .= " OR ";
-		$f .= 'lab LIKE "%' . $lab . '%" ';
-		$i++;
-	}
-	$f .= "  ";
-}
-
-if ($organizations) {
-
-	if (sizeof($organizations) > 0) {
-		$f .= 'AND ';
-	}
-
-	$i = 0;
-	foreach ($organizations as $org) {
-		$org = sanitize_input(trim(strtolower($org)));
-		
-		if ($org == "") continue;
-
-		$f .= 'affiliation LIKE "%' . $org . '%" OR affiliation2 LIKE "%' . $org . '%" ';
-                //'affiliation LIKE "%' . $org . '% OR affiliation2 LIKE "%' . $org . '%"';
-		$i++;
-	}
-	$f .= "  ";
-}
-
-
 $base = new PDO("sqlite:" . $dbname);
+
+
+if ($login) {
+    if (sizeof($login) > 0) {
+// liste des chercheurs
+        $sql = "SELECT keywords_ids FROM scholars where unique_id='" . $login . "'";
+        pt($sql);
+        foreach ($base->query($sql) as $row) {
+            $keywords_ids = split(',', $row['keywords_ids']);
+            $scholar_array = array();
+            foreach ($keywords_ids as $keywords_id) {
+                $sql2 = "SELECT * FROM scholars2terms where term_id=" . trim($keywords_id);
+                pt($sql2);
+                foreach ($base->query($sql2) as $row) {
+                    $scholar_array[$row['scholar']] = 1;
+                }
+            }
+        }        
+        $scholar_list = array_keys($scholar_array);
+        $sql = "SELECT * FROM scholars where unique_id='" . array_pop($scholar_list) . "'";
+        foreach ($scholar_list as $scholar_id) {
+            $sql .= "OR unique_id='" . $scholar_id . "'";
+        }
+    }     
+}
+
+
 
 $termsMatrix = array();
 // liste des termes présents chez les scholars avec leurs cooc avec les autres termes
@@ -175,20 +125,6 @@ $gexf .= "</attributes>" . "\n";
 $gexf .= "<nodes>" . "\n";
 
 
-//echo(substr($f, 0,3));
-// liste des chercheurs
-if (substr($f, 0,3)=='AND'){
-    $f=substr($f,3,-1);
-}
-        
-if (strlen($f)>0){
-$sql = "SELECT * FROM scholars where " . " " . $f;
-}else{
-    $sql = "SELECT * FROM scholars";
-}
-//pt('f:'.$f);
-//pt($sql);
-//exit();
 $scholars = array();
 //echo $sql . " <br/>";
 //print_r($data);
