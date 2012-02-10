@@ -46,7 +46,14 @@ $scholarsMatrix = array(); // liste des scholars avec leurs cooc avec les autres
 $scholarsIncluded=0;
 
 
-
+echo '<div id="welcome">
+						<h2>Complex Systems Directory</h2>.
+						<p>
+                                                This is the list of scholars
+						</p>
+						</p>
+						
+            </div>';
 
 // liste des chercheurs
 $sql = "SELECT * FROM scholars ";
@@ -74,7 +81,7 @@ $info['affiliation2'] = $row['affiliation2'];
 $info['homepage'] = $row['homepage'];
 $info['title'] = $row['title'];
 $info['position'] = $row['position'];
-$info['photo_url']=$row['Photo'];
+$info['photo_url']=$row['photo_url'];
 $info['interests']=$row['interests'];
 $info['address']=$row['address'];
 $info['city']=$row['city'];
@@ -85,11 +92,12 @@ $info['fax']=$row['fax'];
 $info['affiliation_acronym']=$row['affiliation_acronym'];
 $scholars[$row['unique_id']] = $info;
 }
-
 $imsize=150;
+
 
 // ajout des scholars
 foreach ($scholars as $scholar) {
+    
 echo '<div class="row">
                 <div class="span12">                    
                     <div class="row">           
@@ -136,9 +144,9 @@ echo '<br/>';
 
 $www='';
 if (substr($scholar['homepage'], 0, 3)==='www'){
-$www.='[ <a href='.str_replace('&', ' and ', 'http://'.$scholar['homepage']).' target=blank > '.str_replace('&', ' and ', 'http://'.$scholar['homepage']).'  </a ><br/>]';
+$www.='<a href='.str_replace('&', ' and ', 'http://'.trim($scholar['homepage'])).' target=blank > '.str_replace('&', ' and ', 'http://'.trim($scholar['homepage'])).'  </a ><br/>';
 }elseif(substr($scholar['homepage'], 0, 4)==='http'){
-$www.='[ <a href='.str_replace('&', ' and ', $scholar['homepage']).' target=blank > '.str_replace('&', ' and ', $scholar['homepage']).' </a >]<br/>';
+$www.='<a href='.str_replace('&', ' and ', trim($scholar['homepage'])).' target=blank > '.str_replace('&', ' and ', trim($scholar['homepage'])).' </a ><br/>';
 }
 
 if (strcmp($www, '')!=0){
@@ -162,7 +170,7 @@ echo '</div>';
 
 if ($scholar['keywords']!=null){
 echo '<div class="span3" align="justify">
-                 <i class="icon-tags"></i>'.$scholar['keywords'];
+                 <i class="icon-tags"></i> '.$scholar['keywords'];
 echo '</div>';
 }
 
@@ -172,14 +180,16 @@ echo '<div class="row">';
 if ($scholar['interests']!=null){
     echo '<h4 class="span9" align="justify">Research</h4>';
     echo '<p class="span9" align="justify">'.$scholar['interests'].'</p>';
+}else{
+    echo '<p class="span9" align="justify"></p>';
 }         
 
-if (($scholar['address']!=null)||($info['phone'])){
+if (($scholar['address']!=null)||($scholar['phone']!=null)){
     echo '<div class="span3" align="justify">';
 }
 if ($scholar['address']!=null){
-    echo '<address><i class="icon-envelope"></i>'.$scholar['address'].'<br/>'.
-          $scholar['city'].'<br/>'.$scholar['postal_code'].'<br/></address>';
+    echo '<address><i class="icon-envelope"></i> '.$scholar['address'].'<br/>'.$scholar['city'].'<br/>'.$scholar['postal_code'].'<br/></address>';
+     
 }
 
 if ($scholar['phone']!=null){
@@ -188,16 +198,18 @@ if ($scholar['phone']!=null){
 }
 
             
+if (($scholar['address']!=null)||($scholar['phone']!=null)){
+    echo '</div>';
+}
 
 echo '</div>';
 echo '</div>';
 echo '</div>';
-echo '</div>';
-echo '<br/>';  
+echo '<br/><br/><br/>';  
     // fin du profil
 
 }
-
+echo '</div>';
 echo '</div>
             <footer>
                 <a href="http://iscpif.fr"><img src="css/branding/logo-iscpif_medium.png" alt="iscpif.fr" style="border: none; margin-bottom : -6px;" title="isc-pif" /></a>- &copy; <a href="http://moma.csregistry.org" target="_BLANK">MOMA</a> - <a href="http://www.crea.polytechnique.fr/LeCREA/" target="_BLANK">CREA</a> - <a href="http://www.cnrs.fr/fr/recherche/index.htm" target="_BLANK">CNRS</a> - 2009-2012
