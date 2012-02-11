@@ -183,6 +183,46 @@ $(document).ready(function() {
       return loadGraph("get_scholar_graph.php?login=" + login);
     });
   });
+  
+  $("#print").click(function() {
+     var collect, query;
+     collect = function(k) {
+        var t;
+        t = [];
+        log("collecting .filter" + k);
+        $(".filter" + k).each(function(i, e) {
+          var value;
+          value = $(e).val();
+          if (value != null) {
+            log("got: " + value);
+            value = value.replace(/^\s+/g, "").replace(/\s+$/g, "");
+            log("sanitized: " + value);
+            if (value !== " " || value !== "") {
+              log("keeping " + value);
+              return t.push(value);
+            }
+          }
+        });
+        return t;
+      }; 
+      log("reading filters forms..");
+      query = {
+        categorya: $("#categorya :selected").text(),
+        categoryb: $("#categoryb :selected").text(),
+        keywords: collect("keywords"),
+        countries: collect("countries"),
+        laboratories: collect("laboratories"),
+        coloredby: [],
+        tags: collect("tags"),
+        organizations: collect("organizations")
+      };
+      log("raw query: ");
+      log(query);
+      query = encodeURIComponent(JSON.stringify(query));
+      window.open("print_directory.php?query=" + query,"Complex Systems Directory");
+      return
+});
+  
   $("#generate").click(function() {
     hide(".hero-unit");
     $("#welcome").fadeOut("slow", function() {

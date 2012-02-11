@@ -1,6 +1,136 @@
-<?php 
+<?php
 
 include ("parametres.php");
+include ("normalize.php");
+//include("../common/library/fonctions_php.php");
+
+
+define('_is_utf8_split', 5000);
+
+function is_utf8($string) {
+   
+    // From http://w3.org/International/questions/qa-forms-utf-8.html
+    return preg_match('%^(?:
+          [\x09\x0A\x0D\x20-\x7E]            # ASCII
+        | [\xC2-\xDF][\x80-\xBF]             # non-overlong 2-byte
+        |  \xE0[\xA0-\xBF][\x80-\xBF]        # excluding overlongs
+        | [\xE1-\xEC\xEE\xEF][\x80-\xBF]{2}  # straight 3-byte
+        |  \xED[\x80-\x9F][\x80-\xBF]        # excluding surrogates
+        |  \xF0[\x90-\xBF][\x80-\xBF]{2}     # planes 1-3
+        | [\xF1-\xF3][\x80-\xBF]{3}          # planes 4-15
+        |  \xF4[\x80-\x8F][\x80-\xBF]{2}     # plane 16
+    )*$%xs', $string);
+   
+}
+
+$data = json_decode($_GET['query']);
+
+function objectToArray($d) {
+		if (is_object($d)) {
+			// Gets the properties of the given object
+			// with get_object_vars function
+			$d = get_object_vars($d);
+		}
+ 
+		if (is_array($d)) {
+			/*
+			* Return array converted to object
+			* Using __FUNCTION__ (Magic constant)
+			* for recursive call
+			*/
+			return array_map(__FUNCTION__, $d);
+		}
+		else {
+			// Return array
+			return $d;
+		}
+	}
+
+$data = objectToArray($data);
+
+$categorya = $data["categorya"];
+$categoryb = $data["categoryb"];
+$countries = $data["countries"];
+$keywords = $data["keywords"];
+$laboratories = $data["laboratories"];
+$organizations = $data["organizations"];
+
+$f = "";// requête
+if ($keywords) {
+	if (sizeof($keywords) > 0) {
+		$f .= 'AND ';
+	}
+
+	foreach ($keywords as $kw) {
+		$words = explode(',', $kw);
+		$i = 0;
+		foreach ($words as $word) {
+			$word = sanitize_input(trim(strtolower($word)));
+			if ($word == "") continue;
+			if ($i > 0)
+				$f .= " OR ";
+			$f .= 'keywords LIKE "%' . $word . '%" ';
+			$i++;
+		}
+	}
+	$f .= "  ";
+}
+if ($countries) {
+
+	if (sizeof($countries) > 0) {
+		$f .= 'AND ';
+	}
+
+	$i = 0;
+	foreach ($countries as $country) {
+		//$country = sanitize_input(trim(strtolower($country)));
+                $country = sanitize_input(trim($country ));
+		if ($country == "") continue;
+		if ($i > 0)
+			$f .= " OR ";
+		$f .= 'country = "' . $country . '" ';
+		$i++;
+	}
+	$f .= "  ";
+}
+if ($laboratories) {
+
+	if (sizeof($laboratories) > 0) {
+		$f .= 'AND ';
+	}
+
+	$i = 0;
+	foreach ($laboratories as $lab) {
+		$lab = sanitize_input(trim(strtolower($lab)));
+		if ($lab == "") continue;
+		if ($i > 0)
+			$f .= " OR ";
+		$f .= 'lab LIKE "%' . $lab . '%" ';
+		$i++;
+	}
+	$f .= "  ";
+}
+
+if ($organizations) {
+
+	if (sizeof($organizations) > 0) {
+		$f .= 'AND ';
+	}
+
+	$i = 0;
+	foreach ($organizations as $org) {
+		$org = sanitize_input(trim(strtolower($org)));
+		
+		if ($org == "") continue;
+
+		$f .= 'affiliation LIKE "%' . $org . '%" OR affiliation2 LIKE "%' . $org . '%" ';
+                //'affiliation LIKE "%' . $org . '% OR affiliation2 LIKE "%' . $org . '%"';
+		$i++;
+	}
+	$f .= "  ";
+}
+
+
 
 $content = '<!DOCTYPE html>
 <html lang="en">
@@ -47,39 +177,27 @@ $scholarsMatrix = array(); // liste des scholars avec leurs cooc avec les autres
 $scholarsIncluded = 0;
 
 
-$content .= '<div class="row" id="welcome">
-    <div class="span12" align="justify">
-<img src="img/RegistryBanner.png" align="center">
-<br/><br/>
-<h1>Complex Systems Scholars</h1>
-<br/>
-<br/>
-<p>
-This directory presents the profiles of scholars and organizations in
-the field of Complex Systems edited by the Complex Systems Registry.
-It is supported by the <i>Complex Systems
-Society</i> (<a href="http://cssociety.org">http://cssociety.org</a>) and the
-<i>Complex Systems Institute of Paris Ile-de-France</i> (<a href="http://iscpif.fr">http://iscpif.fr</a>). 
-Its aims are to foster interactions 
-between protagonists in the fields of Complex Systems science and Complexity
-science,   as well as  to increase their visibility at the international scale.
+$content .= '<div id="welcome">
+<img src="img/RegistryBanner.png" align="center">						
+<h2>Complex Systems Directory</h2>.
+						<p>
+                                                This is the list of scholars
+						</p>
+						
+						
+            </div>';
 
-<ul>
-<li><i>This directory is open</i>. Anybody can have her profile in this directory
-provided it is related to Complex Systems science and Complexity science. Information are given on a
-voluntary basis and people are responsible for the validity and integrity of their data.
-<li><i>This directory is browsable online on the website of the society :</i> http://csbrowser.cssociety.org
-</ul> 
-
-<p>Contributions and ideas are welcome to improve this directory. Please feedback at :<br/>
-<a href="http://css.csregistry.org/whoswho+feedback">http://css.csregistry.org/whoswho+feedback</a></p>
-<br/>
-<br/>
-<br/>
-</div>
-</div>';
 // liste des chercheurs
-$sql = "SELECT * FROM scholars where country='France' ORDER BY last_name";
+// liste des chercheurs
+if (substr($f, 0,3)=='AND'){
+    $f=substr($f,3,-1);
+}
+        
+if (strlen($f)>0){
+$sql = "SELECT * FROM scholars where " . " " . $f;
+}else{
+    $sql = "SELECT * FROM scholars";
+}
 
 $scholars = array();
 //$query = "SELECT * FROM scholars";
@@ -158,7 +276,7 @@ foreach ($scholars as $scholar) {
         $affiliation2.=$scholar['affiliation2'];
     }
     if (($scholar['affiliation2'] != null) | ($scholar['lab2'] != null)) {
-        $content .= '<dd><i>Second affiliation: </i>' . $affiliation2 . '</dd>';
+        $content .= '<dd><i>Second affiliation :</i>' . $affiliation2 . '</dd>';
     }
 
     if ((strcmp($affiliation2, '') != 0) | (strcmp($affiliation, '') != 0)) {
@@ -230,8 +348,7 @@ $content .= '</div>';
 
     $content .= '</div>';
     $content .= '</div>';
-    
-    $content .= '<img src="img/bar.png" align="center">';
+    $content .= '<br/>';
     $content .= '<br/>';
     $content .= '<br/>';
     // fin du profil
