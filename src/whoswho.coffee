@@ -19,6 +19,15 @@ $(document).ready ->
     
   log "document ready.. installing whoswho"
   
+  loadGraph = (g) ->
+    gexf = g
+    log  "url query: "+ g
+    log "injecting applet"
+    if $('#frame').length is 0
+      $("#visualization").html "<iframe src=\"tinaframe.html\" class=\"frame\" border=\"0\" frameborder=\"0\" scrolling=\"no\" id=\"frame\" name=\"frame\"></iframe>"
+    else
+      log "applet already exists"
+        
   popfilter = (label, type, options) ->
     id = ids++
     id1 = "filter" + id
@@ -28,11 +37,10 @@ $(document).ready ->
     input = "<input type=\"text\" id=\"#{id2}\" class=\"medium filter#{type}\" placeholder=\"#{type}\" />"
     footer = "</li>;"
     $(header + labelization + input + footer).insertBefore "#refine"
-    $("##{id2}").catcomplete 
+    $("##{id2}").filtercomplete 
       minLength: 2
       source: (request, response) ->
-        term = request.term
-        $.getJSON "autocomplete.php", 
+        $.getJSON "search_filter.php", 
           category: type
           term: request.term
         , (data, status, xhr) ->
@@ -54,7 +62,7 @@ $(document).ready ->
   ), ->
     $(this).stop().animate opacity: 0.93, "fast"
   
-  $.widget "custom.catcomplete", $.ui.autocomplete, _renderMenu: (ul, items) ->
+  $.widget "custom.filtercomplete", $.ui.autocomplete, _renderMenu: (ul, items) ->
     self = this
     categories = _.groupBy(items, (o) ->
       o.category
@@ -79,9 +87,36 @@ $(document).ready ->
       ul.append "<li class='ui-autocomplete-category'>#{size}/#{total} results</li>"
       log term
       ul.highlight term
-  
-  cache = {}
-  xhrs = {}
+      
+  $.widget "custom.scholarcomplete", $.ui.autocomplete, _renderMenu: (ul, items) ->
+    self = this
+    categories = _.groupBy(items, (o) ->
+      o.category
+    )
+    _.each categories, (data, category) ->
+      size = 0
+      total = 0
+      login = ""
+      _.each data, (item) ->
+        size = item.size
+        total = item.total
+        login = item.login
+        firstname = item.firstname
+        lastname = item.lastname
+
+        whenClicked = () ->
+          $("#searchscolar").click()
+
+        myRender = (a,b) -> 
+          $("<li></li>").data("item.autocomplete",b).append($("<a></a>").click(whenClicked).text(b.firstname + " " + b.lastname)).appendTo(a)
+        
+        myRender ul, item
+      
+      ul.append "<li class='ui-autocomplete-category'>#{size}/#{total} people</li>"
+      log login
+      ul.highlight login
+        
+
   $("#addfiltercountry").click ->
     popfilter "in", "countries", []
   
@@ -98,12 +133,25 @@ $(document).ready ->
   
   $("#addfiltertag").click ->
     popfilter "tagged", "tags", []
+
+  $("#searchlogin").scholarcomplete 
+    minLength: 2
+    source: (request, response) ->
+      log "searchlogin: #{request.term}"
+      $.getJSON "search_scholar.php", 
+        category: "login"
+        login: request.term
+      , (data, status, xhr) ->
+        log "results: #{data.results}"
+        response data.results
+
   
-  hide "#loading"
-  $("#example").click ->
+  $("#searchscholar").click ->
     hide ".hero-unit"
     $("#welcome").fadeOut "slow", ->
       show "#loading", "fast"
+      login = $("#searchlogin").text()
+      loadGraph "get_scholar_graph.php?login=#{login}"
   
   $("#generate").click ->
     hide ".hero-unit"
@@ -137,13 +185,13 @@ $(document).ready ->
       
       log "raw query: "
       log query
-      query =  encodeURIComponent JSON.stringify(query)
-      gexf = "getgraph.php?query=#{query}"
-      log  "url query: "+ gexf
-      log "injecting applet"
-      if $('#frame').length is 0
-        $("#visualization").html "<iframe src=\"tinaframe.html\" class=\"frame\" border=\"0\" frameborder=\"0\" scrolling=\"no\" id=\"frame\" name=\"frame\"></iframe>"
-      else
-        log "applet already exists"
+      query = encodeURIComponent JSON.stringify(query)
+      loadGraph "getgraph.php?query=#{query}"
         
-    false
+    false  
+    
+  
+  # ACTIONS
+  hide "#loading"
+  cache = {}
+  xhrs = {}

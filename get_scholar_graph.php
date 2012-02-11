@@ -52,7 +52,7 @@ function objectToArray($d) {
 			return $d;
 		}
 	}
-
+echo "data: ".$data.";";
 $data = objectToArray($data);
 
 //echo 'data '.$data;
@@ -65,12 +65,7 @@ $data = objectToArray($data);
 //exit();
 //$data = json_decode('', true);
 //print_r($data);
-$categorya = $data["categorya"];
-$categoryb = $data["categoryb"];
-$countries = $data["countries"];
-$keywords = $data["keywords"];
-$laboratories = $data["laboratories"];
-$organizations = $data["organizations"];
+$login = $data["login"];
 $base = new PDO("sqlite:" . $dbname);
 
 
@@ -124,10 +119,11 @@ $gexf .= ' <attribute id="6" title="type" type="string"> </attribute>' . "\n";
 $gexf .= "</attributes>" . "\n";
 $gexf .= "<nodes>" . "\n";
 
-
+echo "login: ".$login.";";
 $scholars = array();
-//echo $sql . " <br/>";
-//print_r($data);
+echo $sql . ";<br/>";
+print_r($data);
+echo "END;";
 foreach ($base->query($sql) as $row) {
 	$info = array();
 	$info['unique_id'] = $row['unique_id'];
