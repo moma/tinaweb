@@ -36,9 +36,7 @@ $content = '<!DOCTYPE html>
         <div id="visualization"></div>
         <!-- Main hero unit for a primary marketing message or call to action -->
         <div class="hero-unit">
-            <div id="loading" style="padding-left:-175px; margin-left: 27%;">
-                <img src="css/loading.gif" style="border: 0px; opacity: 0.05; " />
-            </div>';
+            ';
 
 
 $base = new PDO("sqlite:" . $dbname);
@@ -231,7 +229,8 @@ $content .= '</div>';
     $content .= '</div>';
     $content .= '</div>';
     
-    $content .= '<img src="img/bar.png" align="center">';
+    $content .= '
+<center><img src="img/bar.png"></center>';
     $content .= '<br/>';
     $content .= '<br/>';
     // fin du profil
