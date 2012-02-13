@@ -76,8 +76,13 @@ loadURLParamsUsing = (config) ->
   
 htmlEncode = (value) ->
   $("<div/>").text(value).html()
-htmlDecode = (value) ->
-  $("<div/>").html(value).text()
+htmlDecode = (t) ->
+  # try to detect if its really necessary to decode 
+  # (right I should use a regex to look for HTML tags but I'm very pressé)
+  if t.indexOf('<br>') >0 or t.indexOf('<br/>') >0 or t.indexOf('</a>') >0
+    $("<div/>").html(t).text()
+  else
+    value # avoid too much decoding
 decodeJSON = (encvalue) ->
   if encvalue?
     jQuery.trim encvalue.replace(/\+/g, " ").replace(/%21/g, "!").replace(/%27/g, "'").replace(/%28/g, "(").replace(/%29/g, ")").replace(/%2A/g, "*").replace(/\"/g, "'")
