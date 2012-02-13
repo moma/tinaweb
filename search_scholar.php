@@ -63,7 +63,7 @@ $completion = array(
 foreach($results as $row) {
      array_push($completion["results"], array(
         'id' => $row["unique_id"],
-        'login' => $row["unique_id"],
+        'term' => $login,
         'firstname' => $row["first_name"],
         'lastname' => $row["last_name"],
        'score' => 1,

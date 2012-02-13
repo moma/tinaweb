@@ -96,25 +96,23 @@ $(document).ready ->
     _.each categories, (data, category) ->
       size = 0
       total = 0
-      login = ""
+      term = ""
+      fullname = ""
       _.each data, (item) ->
         size = item.size
         total = item.total
-        login = item.login
+        term = item.term
         firstname = item.firstname
         lastname = item.lastname
-
-        whenClicked = () ->
-          $("#searchscolar").click()
+        fullname = "#{firstname} #{lastname}"
 
         myRender = (a,b) -> 
-          $("<li></li>").data("item.autocomplete",b).append($("<a></a>").click(whenClicked).text(b.firstname + " " + b.lastname)).appendTo(a)
+          $("<li></li>").data("item.autocomplete",b).append($("<a></a>").text(fullname)).appendTo(a)
         
         myRender ul, item
       
       ul.append "<li class='ui-autocomplete-category'>#{size}/#{total} people</li>"
-      log login
-      ul.highlight login
+      ul.highlight term
         
 
   $("#addfiltercountry").click ->
@@ -134,25 +132,25 @@ $(document).ready ->
   $("#addfiltertag").click ->
     popfilter "tagged", "tags", []
 
-  $("#searchlogin").scholarcomplete 
+  $("#searchname").scholarcomplete 
     minLength: 2
     source: (request, response) ->
-      log "searchlogin: #{request.term}"
+      log "searchname: #{request.term}"
       $.getJSON "search_scholar.php", 
         category: "login"
         login: request.term
       , (data, status, xhr) ->
         log "results: #{data.results}"
         response data.results
-
-  
-  $("#searchscholar").click ->
-    hide ".hero-unit"
-    $("#welcome").fadeOut "slow", ->
-      show "#loading", "fast"
-      login = $("#searchlogin").text()
-      loadGraph "get_scholar_graph.php?login=#{login}"
-  
+    select: (event, ui) ->
+      console.log ui.item
+      if ui.item?
+        console.log "Selected: " + ui.item.firstname + " aka " + ui.item.id
+        hide ".hero-unit"
+        $("#welcome").fadeOut "slow", ->
+          show "#loading", "fast"
+          loadGraph "get_scholar_graph.php?login=#{ui.item.id}"
+        
   $("#generate").click ->
     hide ".hero-unit"
     $("#welcome").fadeOut "slow", ->

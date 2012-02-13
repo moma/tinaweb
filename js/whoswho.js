@@ -117,28 +117,26 @@ $(document).ready(function() {
         return o.category;
       });
       return _.each(categories, function(data, category) {
-        var login, size, total;
+        var fullname, size, term, total;
         size = 0;
         total = 0;
-        login = "";
+        term = "";
+        fullname = "";
         _.each(data, function(item) {
-          var firstname, lastname, myRender, whenClicked;
+          var firstname, lastname, myRender;
           size = item.size;
           total = item.total;
-          login = item.login;
+          term = item.term;
           firstname = item.firstname;
           lastname = item.lastname;
-          whenClicked = function() {
-            return $("#searchscolar").click();
-          };
+          fullname = "" + firstname + " " + lastname;
           myRender = function(a, b) {
-            return $("<li></li>").data("item.autocomplete", b).append($("<a></a>").click(whenClicked).text(b.firstname + " " + b.lastname)).appendTo(a);
+            return $("<li></li>").data("item.autocomplete", b).append($("<a></a>").text(fullname)).appendTo(a);
           };
           return myRender(ul, item);
         });
         ul.append("<li class='ui-autocomplete-category'>" + size + "/" + total + " people</li>");
-        log(login);
-        return ul.highlight(login);
+        return ul.highlight(term);
       });
     }
   });
@@ -161,10 +159,10 @@ $(document).ready(function() {
   $("#addfiltertag").click(function() {
     return popfilter("tagged", "tags", []);
   });
-  $("#searchlogin").scholarcomplete({
+  $("#searchname").scholarcomplete({
     minLength: 2,
     source: function(request, response) {
-      log("searchlogin: " + request.term);
+      log("searchname: " + request.term);
       return $.getJSON("search_scholar.php", {
         category: "login",
         login: request.term
@@ -172,57 +170,19 @@ $(document).ready(function() {
         log("results: " + data.results);
         return response(data.results);
       });
+    },
+    select: function(event, ui) {
+      console.log(ui.item);
+      if (ui.item != null) {
+        console.log("Selected: " + ui.item.firstname + " aka " + ui.item.id);
+        hide(".hero-unit");
+        return $("#welcome").fadeOut("slow", function() {
+          show("#loading", "fast");
+          return loadGraph("get_scholar_graph.php?login=" + ui.item.id);
+        });
+      }
     }
   });
-  $("#searchscholar").click(function() {
-    hide(".hero-unit");
-    return $("#welcome").fadeOut("slow", function() {
-      var login;
-      show("#loading", "fast");
-      login = $("#searchlogin").text();
-      return loadGraph("get_scholar_graph.php?login=" + login);
-    });
-  });
-  
-  $("#print").click(function() {
-     var collect, query;
-     collect = function(k) {
-        var t;
-        t = [];
-        log("collecting .filter" + k);
-        $(".filter" + k).each(function(i, e) {
-          var value;
-          value = $(e).val();
-          if (value != null) {
-            log("got: " + value);
-            value = value.replace(/^\s+/g, "").replace(/\s+$/g, "");
-            log("sanitized: " + value);
-            if (value !== " " || value !== "") {
-              log("keeping " + value);
-              return t.push(value);
-            }
-          }
-        });
-        return t;
-      }; 
-      log("reading filters forms..");
-      query = {
-        categorya: $("#categorya :selected").text(),
-        categoryb: $("#categoryb :selected").text(),
-        keywords: collect("keywords"),
-        countries: collect("countries"),
-        laboratories: collect("laboratories"),
-        coloredby: [],
-        tags: collect("tags"),
-        organizations: collect("organizations")
-      };
-      log("raw query: ");
-      log(query);
-      query = encodeURIComponent(JSON.stringify(query));
-      window.open("print_directory.php?query=" + query,"Complex Systems Directory");
-      return
-});
-  
   $("#generate").click(function() {
     hide(".hero-unit");
     $("#welcome").fadeOut("slow", function() {
