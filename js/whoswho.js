@@ -91,15 +91,12 @@ $(document).ready(function() {
         total = 0;
         term = "";
         _.each(data, function(item) {
-          var myRender, whenClicked;
+          var myRender;
           size = item.size;
           total = item.total;
           term = item.term;
-          whenClicked = function() {
-            return $("#generate").click();
-          };
           myRender = function(a, b) {
-            return $("<li></li>").data("item.autocomplete", b).append($("<a></a>").click(whenClicked).text(b.label)).appendTo(a);
+            return $("<li></li>").data("item.autocomplete", b).append($("<a></a>").text(b.label)).appendTo(a);
           };
           return myRender(ul, item);
         });

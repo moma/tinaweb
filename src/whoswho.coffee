@@ -76,11 +76,8 @@ $(document).ready ->
         total = item.total
         term = item.term
 
-        whenClicked = () ->
-          $("#generate").click()
-
         myRender = (a,b) -> 
-          $("<li></li>").data("item.autocomplete",b).append($("<a></a>").click(whenClicked).text(b.label)).appendTo(a)
+          $("<li></li>").data("item.autocomplete",b).append($("<a></a>").text(b.label)).appendTo(a)
         
         myRender ul, item
       
