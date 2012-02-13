@@ -131,10 +131,10 @@ htmlEncode = function(value) {
 };
 
 htmlDecode = function(t) {
-  if (t.indexOf('<br>') > 0 || t.indexOf('<br/>') > 0 || t.indexOf('</a>') > 0) {
-    return $("<div/>").html(t).text();
+  if (t.indexOf('<br>') > 0 || t.indexOf('<br/>') > 0 || t.indexOf('</a>') > 0 || t.indexOf('</b>') > 0 || t.indexOf('</i>') > 0) {
+    return t;
   } else {
-    return value;
+    return $("<div/>").html(t).text();
   }
 };
 
