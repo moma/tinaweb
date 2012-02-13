@@ -30,42 +30,8 @@ function is_utf8($string) {
 //phpinfo();
 $gexf = '<?xml version="1.0" encoding="UTF-8"?>';
 //echo $_GET['query']."<br/>";
-$data = json_decode($_GET['query']);
+$login = $_GET['login'];
 
-function objectToArray($d) {
-		if (is_object($d)) {
-			// Gets the properties of the given object
-			// with get_object_vars function
-			$d = get_object_vars($d);
-		}
- 
-		if (is_array($d)) {
-			/*
-			* Return array converted to object
-			* Using __FUNCTION__ (Magic constant)
-			* for recursive call
-			*/
-			return array_map(__FUNCTION__, $d);
-		}
-		else {
-			// Return array
-			return $d;
-		}
-	}
-echo "data: ".$data.";";
-$data = objectToArray($data);
-
-//echo 'data '.$data;
-
-//echo json_decode('{ countries: [ "France" ]}');
-
-//$json = '{"a":1,"b":2,"c":3,"d":4,"e":5}';
-//pt($json);
-//pt(json_decode($json));
-//exit();
-//$data = json_decode('', true);
-//print_r($data);
-$login = $data["login"];
 $base = new PDO("sqlite:" . $dbname);
 
 
@@ -73,13 +39,13 @@ if ($login) {
     if (sizeof($login) > 0) {
 // liste des chercheurs
         $sql = "SELECT keywords_ids FROM scholars where unique_id='" . $login . "'";
-        pt($sql);
+        #pt($sql);
         foreach ($base->query($sql) as $row) {
             $keywords_ids = split(',', $row['keywords_ids']);
             $scholar_array = array();
             foreach ($keywords_ids as $keywords_id) {
                 $sql2 = "SELECT * FROM scholars2terms where term_id=" . trim($keywords_id);
-                pt($sql2);
+                #pt($sql2);
                 foreach ($base->query($sql2) as $row) {
                     $scholar_array[$row['scholar']] = 1;
                 }
@@ -119,11 +85,11 @@ $gexf .= ' <attribute id="6" title="type" type="string"> </attribute>' . "\n";
 $gexf .= "</attributes>" . "\n";
 $gexf .= "<nodes>" . "\n";
 
-echo "login: ".$login.";";
+#echo "login: ".$login.";";
 $scholars = array();
-echo $sql . ";<br/>";
-print_r($data);
-echo "END;";
+#echo $sql . ";<br/>";
+#print_r($data);
+#echo "END;";
 foreach ($base->query($sql) as $row) {
 	$info = array();
 	$info['unique_id'] = $row['unique_id'];
