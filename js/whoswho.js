@@ -24,7 +24,7 @@ completion = {};
 gexf = "";
 
 $(document).ready(function() {
-  var cache, loadGraph, popfilter, xhrs;
+  var cache, collectFilters, loadGraph, popfilter, xhrs;
   log("document ready.. installing whoswho");
   loadGraph = function(g) {
     gexf = g;
@@ -183,45 +183,58 @@ $(document).ready(function() {
       }
     }
   });
+  collectFilters = function(cb) {
+    var collect, query;
+    collect = function(k) {
+      var t;
+      t = [];
+      log("collecting .filter" + k);
+      $(".filter" + k).each(function(i, e) {
+        var value;
+        value = $(e).val();
+        if (value != null) {
+          log("got: " + value);
+          value = value.replace(/^\s+/g, "").replace(/\s+$/g, "");
+          log("sanitized: " + value);
+          if (value !== " " || value !== "") {
+            log("keeping " + value);
+            return t.push(value);
+          }
+        }
+      });
+      return t;
+    };
+    log("reading filters forms..");
+    query = {
+      categorya: $("#categorya :selected").text(),
+      categoryb: $("#categoryb :selected").text(),
+      keywords: collect("keywords"),
+      countries: collect("countries"),
+      laboratories: collect("laboratories"),
+      coloredby: [],
+      tags: collect("tags"),
+      organizations: collect("organizations")
+    };
+    log("raw query: ");
+    log(query);
+    query = encodeURIComponent(JSON.stringify(query));
+    return cb(query);
+  };
   $("#generate").click(function() {
     hide(".hero-unit");
     $("#welcome").fadeOut("slow", function() {
-      var collect, query;
       show("#loading", "fast");
-      collect = function(k) {
-        var t;
-        t = [];
-        log("collecting .filter" + k);
-        $(".filter" + k).each(function(i, e) {
-          var value;
-          value = $(e).val();
-          if (value != null) {
-            log("got: " + value);
-            value = value.replace(/^\s+/g, "").replace(/\s+$/g, "");
-            log("sanitized: " + value);
-            if (value !== " " || value !== "") {
-              log("keeping " + value);
-              return t.push(value);
-            }
-          }
-        });
-        return t;
-      };
-      log("reading filters forms..");
-      query = {
-        categorya: $("#categorya :selected").text(),
-        categoryb: $("#categoryb :selected").text(),
-        keywords: collect("keywords"),
-        countries: collect("countries"),
-        laboratories: collect("laboratories"),
-        coloredby: [],
-        tags: collect("tags"),
-        organizations: collect("organizations")
-      };
-      log("raw query: ");
-      log(query);
-      query = encodeURIComponent(JSON.stringify(query));
-      return loadGraph("getgraph.php?query=" + query);
+      return collectFilters(function(query) {
+        return loadGraph("getgraph.php?query=" + query);
+      });
+    });
+    return false;
+  });
+  $("#print").click(function() {
+    console.log("clicked on print");
+    collectFilters(function(query) {
+      console.log("collected filters: " + query);
+      return window.open("print_directory.php?query=" + query, "Scholar's list");
     });
     return false;
   });

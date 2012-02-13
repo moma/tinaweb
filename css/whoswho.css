@@ -131,7 +131,14 @@ background: white;
 */
 .highlight {
 font-weight: bold;
+text-decoration:underline;
 }
+
+.highlight :hover {
+font-weight: bold;
+text-decoration:underline;
+}
+
 
 .frame {
 width:100%;

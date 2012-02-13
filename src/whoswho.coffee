@@ -150,42 +150,54 @@ $(document).ready ->
         $("#welcome").fadeOut "slow", ->
           show "#loading", "fast"
           loadGraph "get_scholar_graph.php?login=#{ui.item.id}"
-        
+    
+  
+  collectFilters = (cb) ->
+    #log "loading"
+    collect = (k) ->
+      t = []
+      log "collecting .filter#{k}"
+      $(".filter#{k}").each (i, e) ->
+        value = $(e).val()
+        if value?
+          log "got: "+value
+          value = value.replace(/^\s+/g, "").replace(/\s+$/g, "")
+          log "sanitized: "+value
+          if value isnt " " or value isnt ""
+            log "keeping "+value
+            t.push(value)
+      t
+      
+    log "reading filters forms.."
+    query = 
+      categorya: $("#categorya :selected").text()
+      categoryb: $("#categoryb :selected").text()
+      keywords: collect("keywords")
+      countries: collect("countries")
+      laboratories: collect("laboratories")
+      coloredby: []
+      tags: collect("tags")
+      organizations: collect("organizations")
+      
+    log "raw query: "
+    log query
+    query = encodeURIComponent JSON.stringify(query)
+    cb query
+      
   $("#generate").click ->
     hide ".hero-unit"
     $("#welcome").fadeOut "slow", ->
       show "#loading", "fast"
-      #log "loading"
-      collect = (k) ->
-        t = []
-        log "collecting .filter#{k}"
-        $(".filter#{k}").each (i, e) ->
-          value = $(e).val()
-          if value?
-            log "got: "+value
-            value = value.replace(/^\s+/g, "").replace(/\s+$/g, "")
-            log "sanitized: "+value
-            if value isnt " " or value isnt ""
-              log "keeping "+value
-              t.push(value)
-        t
-      
-      log "reading filters forms.."
-      query = 
-        categorya: $("#categorya :selected").text()
-        categoryb: $("#categoryb :selected").text()
-        keywords: collect("keywords")
-        countries: collect("countries")
-        laboratories: collect("laboratories")
-        coloredby: []
-        tags: collect("tags")
-        organizations: collect("organizations")
-      
-      log "raw query: "
-      log query
-      query = encodeURIComponent JSON.stringify(query)
-      loadGraph "getgraph.php?query=#{query}"
-        
+      collectFilters (query) ->
+        loadGraph "getgraph.php?query=#{query}" 
+    false  
+
+  $("#print").click ->
+    console.log "clicked on print"
+    collectFilters (query) ->
+      console.log "collected filters: #{query}"
+      window.open "print_directory.php?query=#{query}", "Scholar's list"
+ 
     false  
     
   
