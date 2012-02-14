@@ -185,6 +185,8 @@ if (substr($f, 0,3)=='AND'){
 if (substr($labfilter, 0,3)=='AND'){
     $labfilter=substr($labfilter,3,-1);
 }
+
+
 $imsize = 150;
 
 $content='';
@@ -232,37 +234,7 @@ foreach ($base->query($sql) as $row) {
     $scholars[$row['unique_id']] = $info;
 }
 
-// liste des labs
-
-if (strlen(trim($labfilter))>0){
-    $sql = "SELECT * FROM labs where " . " " . $labfilter.' ORDER BY organization,name';
-}else {
-    $sql = "SELECT * FROM labs ORDER BY organization,name";
-}
-
-$labs = array();
-foreach ($base->query($sql) as $row) {
-    $info = array();
-    $info['unique_id'] = $row['id'];
-    $info['name'] = $row['name'];
-    $info['acronym'] = $row['acronym'];
-    $info['homepage'] = $row['homepage'];
-    $info['keywords'] = $row['keywords'];
-    $info['country'] = $row['country'];
-    $info['address'] = $row['address'];  
-    $info['organization'] = $row['organization'];
-    $info['organization2'] = $row['organization2'];
-    $info['object'] = $row['object'];
-    $info['methods'] = $row['methods'];
-    $info['director'] = $row['director'];
-    $info['admin'] = $row['admin'];
-    $info['phone'] = $row['phone'];
-    $info['fax'] = $row['fax'];
-    $info['login'] = $row['login'];    
-    $labs[$row['id']] = $info;
-}
-
-
+$lab_query='';
 // ajout des scholars
 foreach ($scholars as $scholar) {
 
@@ -290,9 +262,11 @@ foreach ($scholars as $scholar) {
     $affiliation = '';
     if ($scholar['lab'] != null) {
         $affiliation.=$scholar['lab'] . ',';
+        $lab_query.='OR "'.$scholar['lab'].'" ';
     }
     if ($scholar['affiliation'] != null) {
         $affiliation.=$scholar['affiliation'];
+        $lab_query.='OR "'.$scholar['affiliation'].'" ';
     }
     if (($scholar['affiliation'] != null) | ($scholar['lab'] != null)) {
         $content .= '<dd>' . $affiliation . '</dd> ';
@@ -302,6 +276,7 @@ foreach ($scholars as $scholar) {
     $affiliation2 = '';
     if ($scholar['lab2'] != null) {
         $affiliation2.=$scholar['lab2'] . ',';
+        $lab_query.='OR "'.$scholar['lab2'].'" ';
     }
     if ($scholar['affiliation2'] != null) {
         $affiliation2.=$scholar['affiliation2'];
@@ -387,6 +362,44 @@ $content .= '</div>';
     $content .= '<br/>';
     // fin du profil
 }
+
+if (strcmp(substr($lab_query, 0,2),'OR')==0){
+    $lab_query=substr($lab_query,2);
+}
+
+
+// liste des labs
+
+if (strlen(trim($labfilter))>0){
+    $sql = "SELECT * FROM labs where name=". $lab_query.' ORDER BY organization,name';
+}else {
+    $sql = "SELECT * FROM labs ORDER BY organization,name";
+}
+echo $sql;
+
+$labs = array();
+foreach ($base->query($sql) as $row) {
+    $info = array();
+    $info['unique_id'] = $row['id'];
+    $info['name'] = $row['name'];
+    $info['acronym'] = $row['acronym'];
+    $info['homepage'] = $row['homepage'];
+    $info['keywords'] = $row['keywords'];
+    $info['country'] = $row['country'];
+    $info['address'] = $row['address'];  
+    $info['organization'] = $row['organization'];
+    $info['organization2'] = $row['organization2'];
+    $info['object'] = $row['object'];
+    $info['methods'] = $row['methods'];
+    $info['director'] = $row['director'];
+    $info['admin'] = $row['admin'];
+    $info['phone'] = $row['phone'];
+    $info['fax'] = $row['fax'];
+    $info['login'] = $row['login'];    
+    $labs[$row['id']] = $info;
+}
+
+
 
 ///////Ajout des labs
 $content .='<br/>
