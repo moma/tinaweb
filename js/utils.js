@@ -130,8 +130,12 @@ htmlEncode = function(value) {
   return $("<div/>").text(value).html();
 };
 
-htmlDecode = function(value) {
-  return $("<div/>").html(value).text();
+htmlDecode = function(t) {
+  if (t.indexOf('<br>') > 0 || t.indexOf('<br/>') > 0 || t.indexOf('</a>') > 0 || t.indexOf('</b>') > 0 || t.indexOf('</i>') > 0) {
+    return t;
+  } else {
+    return $("<div/>").html(t).text();
+  }
 };
 
 decodeJSON = function(encvalue) {
