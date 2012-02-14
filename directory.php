@@ -53,7 +53,7 @@ $scholarsIncluded = 0;
 //between protagonists in the fields of Complex Systems science and Complexity
 //science,   as well as  to increase their visibility at the international scale.
 
-$filters=" where country='France' ";
+$filters="";
 
 // liste des chercheurs
 $sql = "SELECT * FROM scholars ".$filters.' ORDER BY last_name';
@@ -379,7 +379,7 @@ $content .= '</div>
 
 //////// Header
 $header = '<div class="row" id="welcome">
-    <div class="span12" align="justify">
+    <div class="span13" align="justify">
 <img src="img/RegistryBanner.png" align="center">
 <br/><br/>
 <h1>Complex Systems Scholars</h1>
@@ -396,7 +396,8 @@ science,   as well as  to increase their visibility at the international scale.
 <ul>
 <li><b><i>This directory is open</i></b>. Anybody can have her profile included
 provided it is related to Complex Systems science and Complexity science. Personal data are given on a
-voluntary basis and people are responsible for the validity and integrity of their data.
+voluntary basis and people are responsible for the validity and integrity of their data. To add your profile in this directory
+visite the <a href="http://main.csregistry.org/tiki-index.php?page=whoswhodata">complex systems registry</a>.
 <li><i><b>This directory is browsable online</b> on the website of the complex systems society :</i> http://csbrowser.cssociety.org
 </ul> 
 </p>

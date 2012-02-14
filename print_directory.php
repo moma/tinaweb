@@ -111,6 +111,7 @@ if ($keywords) {
 		}
 	}
 	$f .= "  ";
+	$labfilter .= "  ";
 }
 if ($countries) {
 
@@ -126,10 +127,11 @@ if ($countries) {
 		if ($i > 0)
 			$f .= " OR ";
 		$f .= 'country = "' . $country . '" ';
-                $labfilter.= 'country LIKE "%' . $country . '%" ';
+                $labfilter .= 'country = "' . $country . '" ';
 		$i++;
 	}
 	$f .= "  ";
+	$labfilter .= "  ";
 }
 if ($laboratories) {
 
@@ -147,6 +149,7 @@ if ($laboratories) {
 		$i++;
 	}
 	$f .= "  ";
+        $labfilter .= "  ";
 }
 
 if ($organizations) {
@@ -167,6 +170,7 @@ if ($organizations) {
 		$i++;
 	}
 	$f .= "  ";
+	$labfilter .= "  ";
 }
 
 $base = new PDO("sqlite:" . $dbname);
@@ -229,11 +233,13 @@ foreach ($base->query($sql) as $row) {
 }
 
 // liste des labs
-if (strlen(trim($labfilter)>0)){
+
+if (strlen(trim($labfilter))>0){
     $sql = "SELECT * FROM labs where " . " " . $labfilter.' ORDER BY organization,name';
 }else {
     $sql = "SELECT * FROM labs ORDER BY organization,name";
 }
+
 $labs = array();
 foreach ($base->query($sql) as $row) {
     $info = array();
@@ -321,7 +327,7 @@ foreach ($scholars as $scholar) {
 
     if ($scholar['css_member'] === 'Yes') {
         if ($scholar['css_voter'] === 'Yes') {
-            $content .= '<dd><i class="icon-user"></i> CSS Member premium</dd> ';
+            $content .= '<dd><i class="icon-user"></i> CSS Voting Member</dd> ';
         } else {
             $content .= '<dd><i class="icon-user"></i> CSS Member</dd> ';
         }
