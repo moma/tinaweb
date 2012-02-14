@@ -2,7 +2,7 @@
 
 include ("parametres.php");
 
-$content = '<!DOCTYPE html>
+$meta = '<!DOCTYPE html>
 <html lang="en">
     <head>
         <meta charset="utf-8">
@@ -33,7 +33,7 @@ $content = '<!DOCTYPE html>
     <body>
         <script type="text/javascript" src="js/whoswho.js"></script>
     <div class="container-fluid">
-        <div id="visualization"></div>
+        
         <!-- Main hero unit for a primary marketing message or call to action -->
         <div class="hero-unit">
             ';
@@ -44,41 +44,19 @@ $termsMatrix = array(); // liste des termes présents chez les scholars avec leu
 $scholarsMatrix = array(); // liste des scholars avec leurs cooc avec les autres termes
 $scholarsIncluded = 0;
 
+//This directory presents the profiles of scholars and organizations in
+//the field of Complex Systems edited by the Complex Systems Registry.
+//It is supported by the <i>Complex Systems
+//Society</i> (<a href="http://cssociety.org">http://cssociety.org</a>) and the
+//<i>Complex Systems Institute of Paris Ile-de-France</i> (<a href="http://iscpif.fr">http://iscpif.fr</a>). 
+//Its aims are to foster interactions 
+//between protagonists in the fields of Complex Systems science and Complexity
+//science,   as well as  to increase their visibility at the international scale.
 
-$content .= '<div class="row" id="welcome">
-    <div class="span12" align="justify">
-<img src="img/RegistryBanner.png" align="center">
-<br/><br/>
-<h1>Complex Systems Scholars</h1>
-<br/>
-<br/>
-<p>
-This directory presents the profiles of scholars and organizations in
-the field of Complex Systems edited by the Complex Systems Registry.
-It is supported by the <i>Complex Systems
-Society</i> (<a href="http://cssociety.org">http://cssociety.org</a>) and the
-<i>Complex Systems Institute of Paris Ile-de-France</i> (<a href="http://iscpif.fr">http://iscpif.fr</a>). 
-Its aims are to foster interactions 
-between protagonists in the fields of Complex Systems science and Complexity
-science,   as well as  to increase their visibility at the international scale.
+$filters=" where country='France' ";
 
-<ul>
-<li><i>This directory is open</i>. Anybody can have her profile in this directory
-provided it is related to Complex Systems science and Complexity science. Information are given on a
-voluntary basis and people are responsible for the validity and integrity of their data.
-<li><i>This directory is browsable online on the website of the society :</i> http://csbrowser.cssociety.org
-</ul> 
-
-<p>Contributions and ideas are welcome to improve this directory. Please feedback at :<br/>
-<a href="http://css.csregistry.org/whoswho+feedback">http://css.csregistry.org/whoswho+feedback</a></p>
-<br/>
-<br/>
-<br/>
-</div>
-</div>';
 // liste des chercheurs
-$sql = "SELECT * FROM scholars where country='France' ORDER BY last_name";
-
+$sql = "SELECT * FROM scholars ".$filters.' ORDER BY last_name';
 $scholars = array();
 //$query = "SELECT * FROM scholars";
 foreach ($base->query($sql) as $row) {
@@ -113,13 +91,41 @@ foreach ($base->query($sql) as $row) {
     $info['affiliation_acronym'] = $row['affiliation_acronym'];
     $scholars[$row['unique_id']] = $info;
 }
+
+// liste des labs
+$sql = "SELECT * FROM labs ".$filters.' ORDER BY organization,name';;
+
+$labs = array();
+foreach ($base->query($sql) as $row) {
+    $info = array();
+    $info['unique_id'] = $row['id'];
+    $info['name'] = $row['name'];
+    $info['acronym'] = $row['acronym'];
+    $info['homepage'] = $row['homepage'];
+    $info['keywords'] = $row['keywords'];
+    $info['country'] = $row['country'];
+    $info['address'] = $row['address'];  
+    $info['organization'] = $row['organization'];
+    $info['organization2'] = $row['organization2'];
+    $info['object'] = $row['object'];
+    $info['methods'] = $row['methods'];
+    $info['director'] = $row['director'];
+    $info['admin'] = $row['admin'];
+    $info['phone'] = $row['phone'];
+    $info['fax'] = $row['fax'];
+    $info['login'] = $row['login'];    
+    $labs[$row['id']] = $info;
+}
+
+
+
 $imsize = 150;
 
-
+$content='';
 // ajout des scholars
 foreach ($scholars as $scholar) {
 
-    $content .= '<div class="row">
+    $content.= '<div class="row">
                 <div class="span12">                    
                     <div class="row">           
                         <div class="span9" align="justify">';
@@ -132,9 +138,13 @@ foreach ($scholars as $scholar) {
             ' <small> - ' . $scholar['country'] . '</small></h2>';
 
 
+    if (($scholar['position'] != null)||($scholar['lab'] != null)||($scholar['affiliation'] != null)) {
+       $content .= '<dl>';
+    }
+    
     if ($scholar['position'] != null) {
-        $content .= '<dl>
-<dt>' . $scholar['position'] . '</dt>';
+  
+    $content .= '<dt>' . $scholar['position'] . '</dt>';
     }
     $affiliation = '';
     if ($scholar['lab'] != null) {
@@ -183,9 +193,10 @@ foreach ($scholars as $scholar) {
         $scholar_desc.='<b>CSS Member </b>';
     }
 
-    if ($scholar['position'] != null) {
-        $content .= '</dl>';
+   if (($scholar['position'] != null)||($scholar['lab'] != null)||($scholar['affiliation'] != null)) {
+       $content .= '</dl>';
     }
+    
 
     $content .= '</div>';
 
@@ -235,6 +246,128 @@ $content .= '</div>';
     $content .= '<br/>';
     // fin du profil
 }
+
+///////Ajout des labs
+$content .='<br/>
+<br/> <A NAME="labs"> </A>
+<h1>Labs by alphabetical order</h1>
+<br/>
+<br/>';
+
+
+foreach ($labs as $lab) {
+
+    $content.= '<div class="row">
+                <div class="span12">                    
+                    <div class="row">           
+                        <div class="span9" align="justify">';
+    $content .= '<div>';
+    
+    $content .= '<h2 >' . $lab['name'];
+    if ($lab['acronym'] != null){
+        $content.=' ('.$lab['acronym'].')';
+    } 
+    $content.=' <small> - ' . $lab['country'] . '</small></h2>';
+
+
+    $www = '';
+    if (substr($lab['homepage'], 0, 3) === 'www') {
+        $www.=' <a href=' . trim(str_replace('&', ' and ', 'http://' . $lab['homepage'])) . ' target=blank > ' . trim(str_replace('&', ' and ', 'http://' . $lab['homepage'])) . '  </a ><br/>';
+    } elseif (substr($lab['homepage'], 0, 4) === 'http') {
+        $www.=' <a href=' . trim(str_replace('&', ' and ', $lab['homepage'])) . ' target=blank > ' . trim(str_replace('&', ' and ', $lab['homepage'])) . ' </a ><br/>';
+    }
+
+    if (strcmp($www, '') != 0) {
+        $content .= '<dl><dd><i class="icon-home"></i>' . $www . '</dd></dl> ';
+    }
+    
+    if ($lab['organization'] != null) {
+        $content .= '<dl>
+        <dt>Institutions:</dt>';
+    }
+
+
+    if (($lab['organization'] != null)) {
+        $content .= '<dd>' . $lab['organization'] . '</dd> ';
+    }
+    if (($lab['organization2'] != null)) {
+        $content .= '<dd>' . $lab['organization2'] . '</dd> ';
+    }
+
+    if (($lab['organization2'] != null) || ($lab['organization2'] != null)) {
+        $content .= '<br/>';
+    }
+
+
+
+    if ($lab['organization'] != null) {
+        $content .= '</dl>';
+    }
+
+    $content .= '</div>';
+
+
+    if ((trim($lab['object']) != null) || ($lab['methods'] != null)) {
+        $content .= '<div><p>';
+        if (trim($lab['methods']) != null) {
+            $content .= '<b>Methods: </b> ' . clean_exp($lab['methods']) . '<br/><br/>';
+        }
+
+        if (trim($lab['object']) != null) {
+            $content .= '<b>Objects: </b> ' . clean_exp($lab['object']) . '<br/><br/>';
+        }
+        $content .= '</p></div>';
+    }
+    if ($lab['director'] != null) {
+        $content .= '<div>';
+        $content .= $content .= '<i class="icon-user"></i>  ' . $lab['director'] . '<br/><br/>';
+        $content .= '</div>';
+    }
+    $content .= '</div>';
+
+    if (($lab['keywords'] != null) || ($lab['address'] != null) || ($lab['phone'] != null)) {
+        $content .= '<div class="span3" align="justify">';
+
+        if ($lab['keywords'] != null) {
+
+            $content .= '<i class="icon-tags"></i> ' . $lab['keywords'] . '<br/><br/>';
+        }
+
+
+
+        if ($lab['admin'] != null) {
+            $content .= '<address><i class="icon-info-sign"></i> Administrative contact: ' . ucwords($lab['admin']) . '<br/></address>';
+        }
+        if ($lab['address'] != null) {
+            $content .= '<address><i class="icon-envelope"></i> ' . $lab['address'] . '<br/></address>';
+        }
+
+
+        if (($lab['phone'] != null)||($lab['fax'] != null)) {
+            $content .= '<address><strong>Phone</strong>: '.$lab['phone'] . '<br/>';
+            if ($lab['fax'] != null) {
+                $content .='<strong>Fax</strong>: '.$lab['fax'] . '<br/>';
+            }            
+        }
+
+        $content .= '</div>';
+    }
+
+$content .= '</div>';
+
+    $content .= '</div>';
+    $content .= '</div>';
+    
+    $content .= '
+<center><img src="img/bar.png"></center>';
+    $content .= '<br/>';
+    $content .= '<br/>';
+    // fin du profil
+}
+
+
+
+
 $content .= '</div>';
 $content .= '</div>
             <footer>
@@ -244,5 +377,57 @@ $content .= '</div>
 </body>
 </html>';
 
+//////// Header
+$header = '<div class="row" id="welcome">
+    <div class="span12" align="justify">
+<img src="img/RegistryBanner.png" align="center">
+<br/><br/>
+<h1>Complex Systems Scholars</h1>
+<br/>
+<br/>
+<p>
+This directory presents the profiles of <a href="#scholars">'.  count($scholars).' scholars</a> and <a href="#labs">'.  count($labs).' labs</a> in
+the field of Complex Systems.
+ 
+Its aims are to foster interactions 
+between protagonists in the fields of Complex Systems science and Complexity
+science,   as well as  to increase their visibility at the international scale.
+    
+<ul>
+<li><b><i>This directory is open</i></b>. Anybody can have her profile included
+provided it is related to Complex Systems science and Complexity science. Personal data are given on a
+voluntary basis and people are responsible for the validity and integrity of their data.
+<li><i><b>This directory is browsable online</b> on the website of the complex systems society :</i> http://csbrowser.cssociety.org
+</ul> 
+</p>
+
+<p>
+This directory is edited by the Complex Systems Registry. This initiative is supported by the <i>Complex Systems
+Society</i> (<a href="http://cssociety.org">http://cssociety.org</a>).
+</p>
+<br/>
+<p>Contributions and ideas are welcome to improve this directory. Please feedback at :<br/>
+<a href="http://css.csregistry.org/whoswho+feedback">http://css.csregistry.org/whoswho+feedback</a></p>
+<br/>
+<br/>
+<br/> <A NAME="scholars"> </A>
+<h2>Scholars by alphabetical order</h2>
+<br/>
+<br/>
+</div>
+</div>';
+
+
+echo $meta;
+echo $header;
 echo $content;
+
+function clean_exp($string){
+    // enlève les comma trainantes
+    if (strcmp(substr(trim($string),strlen($string)-1,strlen($string)),',')==0){
+        return substr(trim($string),0,  strlen($string)-1);
+    }else{
+        return $string;
+    }
+}
 ?>
