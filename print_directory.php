@@ -229,7 +229,11 @@ foreach ($base->query($sql) as $row) {
 }
 
 // liste des labs
-$sql = "SELECT * FROM labs where " . " " . $labfilter.' ORDER BY organization,name';;
+if (strlen(trim($labfilter)>0)){
+    $sql = "SELECT * FROM labs where " . " " . $labfilter.' ORDER BY organization,name';
+}else {
+    $sql = "SELECT * FROM labs ORDER BY organization,name";
+}
 $labs = array();
 foreach ($base->query($sql) as $row) {
     $info = array();
