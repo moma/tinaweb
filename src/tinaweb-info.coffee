@@ -169,10 +169,10 @@ InfoDiv =
           else
             labelinnerdiv.append $("<b></b>").text("[...]")  if number_of_label is 5
           @selection.push node.id
-          log "label: " + label
+          #log "label: " + label
           contentinnerdiv.append $("<b></b>").text(label)
           htmlContent = htmlDecode(decodeJSON(node.content))
-          log "  htmlContent: " + htmlContent
+          #log "  htmlContent: " + htmlContent
           contentinnerdiv.append $("<p></p>").html(htmlContent)
           contentinnerdiv.append $("<p></p>").html(@getSearchQueries(label, cat))
       unless @selection.length is 0
@@ -191,8 +191,8 @@ InfoDiv =
     @selection = []
     @updateInfo lastselection
     app.getNeighbourhood "macro", @selection, (data) =>
-      log "received neighbourhood of selection"
-      log data
+      #log "received neighbourhood of selection"
+      #log data
       @updateTagCloud data.nodes, data.neighbours
   
   reset: ->
@@ -215,7 +215,7 @@ InfoDiv =
     app.node_list_cache = {}  if app.node_list_cache is undefined
 
     app.getNodes view, category, (data) =>
-      log "receiving and updating node.list: #{data.nodes.length} nodes"
+      #log "receiving and updating node.list: #{data.nodes.length} nodes"
       return  if category is _this.last_category
       @node_list_cache = {}  if _this.node_list_cache is undefined
       @node_list_cache[category] = alphabeticListSort data.nodes, "label"
