@@ -180,6 +180,18 @@ $(document).ready(function() {
       }
     }
   });
+  ////////////
+  
+    $("#printname").click(function() {
+    return window.open("print_scholar_directory.php?login=David__Chavalarias");
+    
+  });
+      
+  
+  ///////////:
+  
+  
+  
   collectFilters = function(cb) {
     var collect, query;
     collect = function(k) {
