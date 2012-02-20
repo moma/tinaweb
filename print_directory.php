@@ -215,7 +215,8 @@ $header = '<div class="row" id="welcome">
 <br/>
 <br/>
 <p>
-This directory presents the profiles of <a href="#scholars">'.  count($scholars).' scholars</a> and <a href="#labs">'.  count($labs).' labs</a> in
+This directory presents the profiles of <a href="#scholars">'.  count($scholars).' scholars</a>, <a href="#labs">'
+.  count($labs).' labs</a> and <a href="#orga">'.$orga_count.' organizations</a> in
 the field of Complex Systems.
  
 Its aims are to foster interactions 
@@ -259,4 +260,17 @@ function clean_exp($string){
         return $string;
     }
 }
+
+function get_value($cle_value,$table='data',$cle='cle',$valeur='valeur'){    
+// renvoie la valeur correspondant à la clé $cle dans la table data
+   
+$sql = 'SELECT '.$valeur.' from '.$table.' WHERE '.$cle.'="'.trim($cle_value).'"';
+echo $sql;
+$resultat=mysql_query($sql);
+    while ($ligne=mysql_fetch_array($resultat)) {
+        $out=$ligne[$valeur];
+        }
+return $out;
+}
+
 ?>
