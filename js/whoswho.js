@@ -172,6 +172,9 @@ $(document).ready(function() {
       console.log(ui.item);
       if (ui.item != null) {
         console.log("Selected: " + ui.item.firstname + " aka " + ui.item.id);
+        $("#printname").click(function() {
+          return window.open("print_scholar_directory.php?login=" + ui.item.id);
+        });
         hide(".hero-unit");
         return $("#welcome").fadeOut("slow", function() {
           show("#loading", "fast");
@@ -180,18 +183,6 @@ $(document).ready(function() {
       }
     }
   });
-  ////////////
-  
-    $("#printname").click(function() {
-    return window.open("print_scholar_directory.php?login=David__Chavalarias");
-    
-  });
-      
-  
-  ///////////:
-  
-  
-  
   collectFilters = function(cb) {
     var collect, query;
     collect = function(k) {

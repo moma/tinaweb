@@ -15,7 +15,7 @@ default_config =
   search: ""                   # default search query ("" means no search will be run)
   a_node_size: 0.50            # node size for category A
   b_node_size: 0.50            # node size for category B
-  cursor_size: 0.01            # default selection cursor size
+  cursor_size: 0.50            # default selection cursor size
   a_edge_filter_min: 0.0       # initial position of the edge filter for category A (lower-bound)
   a_edge_filter_max: 1.0       # initial position of the edge filter for category A (higher-bound)
   a_node_filter_min: 0.0       # initial position of the edge filter for category A (lower-bound)
@@ -23,7 +23,7 @@ default_config =
   b_edge_filter_min: 0.0       # initial position of the edge filter for category B (lower-bound)
   b_edge_filter_max: 1.0       # initial position of the edge filter for category B (higher-bound)
   b_node_filter_min: 0.0       # initial position of the edge filter for category B (lower-bound)
-  b_node_filter_max: 1.0       # initial position of the edge filter for category B (higher-bound)
+  b_node_filter_max: 0.9       # initial position of the edge filter for category B (higher-bound)
   layout: "tinaforce"          # default layout (note: for the moment, only "tinaforce" is recommended)
   layout_speed: 30             # layout speed (in iterations by seconds)
   antialiasing_threshold: 1500 # max number of edges, before aliasing the scene (pixel aliasing)

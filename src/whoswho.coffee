@@ -143,6 +143,9 @@ $(document).ready ->
       console.log ui.item
       if ui.item?
         console.log "Selected: " + ui.item.firstname + " aka " + ui.item.id
+        $("#printname").click ->
+          window.open "print_scholar_directory.php?login=#{ui.item.id}"
+  
         hide ".hero-unit"
         $("#welcome").fadeOut "slow", ->
           show "#loading", "fast"

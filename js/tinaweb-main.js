@@ -43,7 +43,7 @@ Application = (function(_super) {
     this.infodiv.node_table = $("#node_table > tbody");
     this.infodiv.categories = {
       NGram: "Keywords",
-      Document: "Scholars"
+      Document: "Projects"
     };
     log("Application: resizing here");
     this.resize();
