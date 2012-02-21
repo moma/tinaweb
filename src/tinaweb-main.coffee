@@ -41,7 +41,7 @@ class Application extends Tinaweb
     @infodiv.node_table = $ "#node_table > tbody"
     @infodiv.categories = 
       NGram: "Keywords"
-      Document: "Projects"
+      Document: "Scholars"
 
     log "Application: resizing here"
     @resize()
