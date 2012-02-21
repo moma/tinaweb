@@ -6,48 +6,6 @@ $imsize = 150;
 $content='';
         
 
-// liste des chercheurs
-$scholars = array();
-
-foreach ($scholar_array as $scholar_id){
-$sql = "SELECT * FROM scholars where unique_id='" . $scholar_id. "'";
-
-//$query = "SELECT * FROM scholars";
-foreach ($base->query($sql) as $row) {
-    $info = array();
-    $info['unique_id'] = $row['unique_id'];
-    $info['first_name'] = $row['first_name'];
-    $info['initials'] = $row['initials'];
-    $info['last_name'] = $row['last_name'];
-    $info['nb_keywords'] = $row['nb_keywords'];
-    $info['css_voter'] = $row['css_voter'];
-    $info['css_member'] = $row['css_member'];
-    $info['keywords_ids'] = explode(',', $row['keywords_ids']);
-    $info['keywords'] = $row['keywords'];
-    $info['status'] = $row['status'];
-    $info['country'] = $row['country'];
-    $info['homepage'] = $row['homepage'];
-    $info['lab'] = $row['lab'];
-    $info['affiliation'] = $row['affiliation'];
-    $info['lab2'] = $row['lab2'];
-    $info['affiliation2'] = $row['affiliation2'];
-    $info['homepage'] = $row['homepage'];
-    $info['title'] = $row['title'];
-    $info['position'] = $row['position'];
-    $info['photo_url'] = $row['photo_url'];
-    $info['interests'] = $row['interests'];
-    $info['address'] = $row['address'];
-    $info['city'] = $row['city'];
-    $info['postal_code'] = $row['postal_code'];
-    $info['phone'] = $row['phone'];
-    $info['mobile'] = $row['mobile'];
-    $info['fax'] = $row['fax'];
-    $info['affiliation_acronym'] = $row['affiliation_acronym'];
-    $scholars[$row['unique_id']] = $info;
-}
-    
-}
-
 
 
 $lab_list=array();
