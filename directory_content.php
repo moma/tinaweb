@@ -20,6 +20,9 @@ foreach ($scholars as $scholar) {
     $content .= '<div>';
     if ($scholar['photo_url'] != null) {
         $content .= '<img style="margin: 7px 10px 10px 0px" src="http://main.csregistry.org/' . $scholar['photo_url'] . '" width="' . $imsize . 'px" align="left">';
+    }else{
+        $im_id=floor(rand(0,11));
+        $content .= '<img style="margin: 7px 10px 10px 0px" src="img/' . $im_id . '.png" width="' . $imsize . 'px" align="left">';
     }
 
     $content .= '<h2 >' . $scholar['title'] . ' ' . $scholar['first_name'] . ' ' . $scholar['initials'] . ' ' . $scholar['last_name'] .
