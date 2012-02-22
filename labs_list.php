@@ -9,7 +9,10 @@ $content .='<br/>
 
 
 foreach ($labs as $lab) {
-
+    if ($loop % 100){
+        set_time_limit(20);
+    }
+    $loop+=1;
     $content.= '<div class="row">
                 <div class="span12">                    
                     <div class="row">           

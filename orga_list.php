@@ -11,6 +11,10 @@ $content .='<br/>
 $orga_count = 0;
 foreach ($organiz as $orga) {
 
+    if ($loop % 100){
+        set_time_limit(20);
+    }
+    $loop+=1;
     if ($orga['name'] != null) {
         $orga_count+=1;
         $content.= '<div class="row">

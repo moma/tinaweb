@@ -9,10 +9,15 @@ $content='';
 
 
 $lab_list=array();
-
 $orga_list=array();
+
+$loop=0; //nombre de boucles
 // ajout des scholars
 foreach ($scholars as $scholar) {
+    if ($loop % 100){
+        set_time_limit(20);
+    }
+    $loop+=1;
     $content.= '<div class="row">
                 <div class="span12">                    
                     <div class="row">           
@@ -20,9 +25,11 @@ foreach ($scholars as $scholar) {
     $content .= '<div>';
     if ($scholar['photo_url'] != null) {
         $content .= '<img style="margin: 7px 10px 10px 0px" src="http://main.csregistry.org/' . $scholar['photo_url'] . '" width="' . $imsize . 'px" align="left">';
-    }else{
-        $im_id=floor(rand(0,11));
-        $content .= '<img style="margin: 7px 10px 10px 0px" src="img/' . $im_id . '.png" width="' . $imsize . 'px" align="left">';
+    } else {
+        if (count($scholars) < 2000) {
+            $im_id = floor(rand(0, 11));
+            $content .= '<img style="margin: 7px 10px 10px 0px" src="img/' . $im_id . '.png" width="' . $imsize . 'px" align="left">';
+        }
     }
 
     $content .= '<h2 >' . $scholar['title'] . ' ' . $scholar['first_name'] . ' ' . $scholar['initials'] . ' ' . $scholar['last_name'] .
@@ -87,7 +94,7 @@ foreach ($scholars as $scholar) {
         } else {
             $content .= '<dd><i class="icon-user"></i> CSS Member</dd> ';
         }
-        $scholar_desc.='<b>CSS Member </b>';
+    
     }
 
    if (($scholar['position'] != null)||($scholar['lab'] != null)||($scholar['affiliation'] != null)) {
@@ -142,6 +149,7 @@ $content .= '</div>';
     $content .= '<br/>';
     // fin du profil
 }
+
 
 if (strcmp(substr($lab_query, 0,2),'OR')==0){
     $lab_query=substr($lab_query,2);
