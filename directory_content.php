@@ -52,6 +52,8 @@ foreach ($scholars as $scholar) {
     if ($scholar['affiliation'] != null) {
         $affiliation.=$scholar['affiliation'];
         $orga_list[]=$scholar['affiliation'];
+        
+        //echo $scholar['affiliation'].'<br/>';
 
         //$lab_query.='OR name="'.$scholar['affiliation'].'" ';
     }
@@ -68,6 +70,7 @@ foreach ($scholars as $scholar) {
     if ($scholar['affiliation2'] != null) {
         $affiliation2.=$scholar['affiliation2'];
         $orga_list[]=$scholar['affiliation2'];
+        //echo $scholar['affiliation2'].'<br/>';
     }
     if (($scholar['affiliation2'] != null) | ($scholar['lab2'] != null)) {
         $content .= '<dd><i>Second affiliation: </i>' . $affiliation2 . '</dd>';
@@ -163,30 +166,32 @@ if (strcmp(substr($orga_query, 0,2),'OR')==0){
 // liste des labs ////////
 //////////////////////////
 $labs = array();
-sort($lab_list );
+sort($lab_list);
 foreach ($lab_list as $name) {
-    $sql = "SELECT * FROM labs where name='" . $name. "' OR acronym='".$name."'";
-    foreach ($base->query($sql) as $row) {
-        $info = array();
-        $info['unique_id'] = $row['id'];
-        $info['name'] = $row['name'];
-        $info['acronym'] = $row['acronym'];
-        $info['homepage'] = $row['homepage'];
-        $info['keywords'] = $row['keywords'];
-        $info['country'] = $row['country'];
-        $info['address'] = $row['address'];
-        $info['organization'] = $row['organization'];
-        $info['organization2'] = $row['organization2'];
-        $orga_list[]=$row['organization'];
-        $orga_list[]=$row['organization2'];        
-        $info['object'] = $row['object'];
-        $info['methods'] = $row['methods'];
-        $info['director'] = $row['director'];
-        $info['admin'] = $row['admin'];
-        $info['phone'] = $row['phone'];
-        $info['fax'] = $row['fax'];
-        $info['login'] = $row['login'];
-        $labs[$row['id']] = $info;
+    if ((trim($name)) != NULL) {
+        $sql = "SELECT * FROM labs where name='" . $name . "' OR acronym='" . $name . "'";
+        foreach ($base->query($sql) as $row) {
+            $info = array();
+            $info['unique_id'] = $row['id'];
+            $info['name'] = $row['name'];
+            $info['acronym'] = $row['acronym'];
+            $info['homepage'] = $row['homepage'];
+            $info['keywords'] = $row['keywords'];
+            $info['country'] = $row['country'];
+            $info['address'] = $row['address'];
+            $info['organization'] = $row['organization'];
+            $info['organization2'] = $row['organization2'];
+            $orga_list[] = $row['organization'];
+            $orga_list[] = $row['organization2'];
+            $info['object'] = $row['object'];
+            $info['methods'] = $row['methods'];
+            $info['director'] = $row['director'];
+            $info['admin'] = $row['admin'];
+            $info['phone'] = $row['phone'];
+            $info['fax'] = $row['fax'];
+            $info['login'] = $row['login'];
+            $labs[$row['id']] = $info;
+        }
     }
 }
 
@@ -200,9 +205,9 @@ foreach ($lab_list as $name) {
 $organiz = array();
 sort($orga_list);
 foreach ($orga_list as $name) {
+    if ((trim($name))!=NULL){
     $sql = "SELECT * FROM organizations where name='" . $name. "' OR acronym='".$name."'";
-    //echo $sql;
-    //echo '<br/>';
+
     $temp=true;
     foreach ($base->query($sql) as $row) {
         if ($temp){
@@ -225,7 +230,9 @@ foreach ($orga_list as $name) {
         $organiz[$row['id']] = $info;
         $temp=false;        
         }
+    }        
     }
+
 }
 
 
