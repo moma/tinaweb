@@ -172,15 +172,23 @@ $(document).ready(function() {
       console.log(ui.item);
       if (ui.item != null) {
         console.log("Selected: " + ui.item.firstname + " aka " + ui.item.id);
-        $("#printname").click(function() {
-          return window.open("print_scholar_directory.php?login=" + ui.item.id);
+        delay(100, function() {
+          return $("#searchname").attr("value", ui.item.firstname + " " + ui.item.lastname);
         });
-        hide(".hero-unit");
-        return $("#welcome").fadeOut("slow", function() {
-          show("#loading", "fast");
-          return loadGraph("get_scholar_graph.php?login=" + ui.item.id);
+        $("#searchname").attr("placeholder", "");
+        $("#print2").click(function() {
+          console.log("clicked on print");
+          return window.open("print_scholar_directory.php?query=" + ui.item.id, "Scholar's list");
+        });
+        $("#generate2").click(function() {
+          hide(".hero-unit");
+          return $("#welcome").fadeOut("slow", function() {
+            show("#loading", "fast");
+            return loadGraph("get_scholar_graph.php?login=" + ui.item.id);
+          });
         });
       }
+      return "" + ui.item.firstname + " " + ui.item.lastname;
     }
   });
   collectFilters = function(cb) {
@@ -222,21 +230,19 @@ $(document).ready(function() {
   };
   $("#generate").click(function() {
     hide(".hero-unit");
-    $("#welcome").fadeOut("slow", function() {
+    return $("#welcome").fadeOut("slow", function() {
       show("#loading", "fast");
       return collectFilters(function(query) {
         return loadGraph("getgraph.php?query=" + query);
       });
     });
-    return false;
   });
   $("#print").click(function() {
     console.log("clicked on print");
-    collectFilters(function(query) {
+    return collectFilters(function(query) {
       console.log("collected filters: " + query);
       return window.open("print_directory.php?query=" + query, "Scholar's list");
     });
-    return false;
   });
   hide("#loading");
   cache = {};

@@ -157,6 +157,7 @@ border: 0px solid #ffffff;
 
 input.name {
 	height: 28px;
-	font-size: 26px;
-}
+	font-size: 29px;
+	width: 250px;
+
 }

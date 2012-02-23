@@ -143,14 +143,22 @@ $(document).ready ->
       console.log ui.item
       if ui.item?
         console.log "Selected: " + ui.item.firstname + " aka " + ui.item.id
-        $("#printname").click ->
-          window.open "print_scholar_directory.php?login=#{ui.item.id}"
-  
-        hide ".hero-unit"
-        $("#welcome").fadeOut "slow", ->
-          show "#loading", "fast"
-          loadGraph "get_scholar_graph.php?login=#{ui.item.id}"
-    
+
+        delay 100, ->
+          $("#searchname").attr "value", ui.item.firstname + " " + ui.item.lastname
+                
+        $("#searchname").attr "placeholder", ""
+        
+        $("#print2").click ->
+          console.log "clicked on print"
+          window.open "print_scholar_directory.php?query=#{ui.item.id}", "Scholar's list"
+          
+        $("#generate2").click ->
+          hide ".hero-unit"
+          $("#welcome").fadeOut "slow", ->
+            show "#loading", "fast"
+            loadGraph "get_scholar_graph.php?login=#{ui.item.id}"
+      ""+ui.item.firstname + " " + ui.item.lastname
   
   collectFilters = (cb) ->
     #log "loading"
@@ -190,16 +198,13 @@ $(document).ready ->
       show "#loading", "fast"
       collectFilters (query) ->
         loadGraph "getgraph.php?query=#{query}" 
-    false  
 
   $("#print").click ->
     console.log "clicked on print"
     collectFilters (query) ->
       console.log "collected filters: #{query}"
       window.open "print_directory.php?query=#{query}", "Scholar's list"
- 
-    false  
-    
+
   
   # ACTIONS
   hide "#loading"
