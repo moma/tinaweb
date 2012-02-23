@@ -25,8 +25,11 @@ if ($category == 'country' || $category == 'countries') {
 } elseif ($category == 'keyword' || $category == 'keywords') {
   $cat = "keywords";
   $query = 'LIKE \''.$q.'\'';
+} elseif ($category == 'tag' || $category == 'tags') {
+  $cat = "tags";
+  $query = 'LIKE \''.$q.'\'';
 } elseif ($category == 'labs' || $category == 'laboratories' || $category == 'laboratory') {
-  $cat = "lab";
+  $cat = "labs";
   $query = 'LIKE \''.$q.'\'';
 } else {
   echo ("ERROR");
@@ -46,7 +49,7 @@ $results = array();
 $i = 0;
 foreach ($base->query($req) as $row) {
 	$nb = $row['value'];
-  if ($cat == "keywords") {
+  if ($cat == "keywords" || $cat == "tags") {
   	//echo "in keywords\n";
   	 $words = explode(",", $row["key"]);
   	foreach ($words as $word) {
