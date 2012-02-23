@@ -59,17 +59,15 @@ function is_utf8($string) {
 }
 //phpinfo();
 //echo $_GET['query']."<br/>";
-$login = $_GET['login'];
+$login = $_GET['query'];
 
 
 $base = new PDO("sqlite:" . $dbname);
-
 
 if ($login) {
     if (sizeof($login) > 0) {
 // liste des chercheurs
         $sql = "SELECT keywords_ids,last_name,first_name FROM scholars where unique_id='" . $login . "'";        
-        
         foreach ($base->query($sql) as $row) {
             $keywords_ids = split(',', $row['keywords_ids']);
             $scholar_array = array();

@@ -90,9 +90,30 @@ $countries = $data["countries"];
 $keywords = $data["keywords"];
 $laboratories = $data["laboratories"];
 $organizations = $data["organizations"];
+$tags = $data["tags"];
 
 $f = "";// requête
 $labfilter='';
+if ($tags) {
+	if (sizeof($tags) > 0) {
+		$f .= 'AND ';
+	}
+
+	foreach ($tags as $kw) {
+		$words = explode(',', $kw);
+		$i = 0;
+		foreach ($words as $word) {
+			$word = sanitize_input(trim(strtolower($word)));
+			if ($word == "") continue;
+			if ($i > 0)
+				$f .= " OR ";
+			$f .= 'tags LIKE "%' . $word . '%" ';
+			$i++;
+		}
+	}
+	$f .= "  ";	
+}
+
 if ($keywords) {
 	if (sizeof($keywords) > 0) {
 		$f .= 'AND ';
@@ -172,6 +193,7 @@ $termsMatrix = array(); // liste des termes présents chez les scholars avec leu
 $scholarsMatrix = array(); // liste des scholars avec leurs cooc avec les autres termes
 $scholarsIncluded = 0;
 
+
 // liste des chercheurs
 if (substr($f, 0,3)=='AND'){
     $f=substr($f,3,-1);
@@ -179,7 +201,6 @@ if (substr($f, 0,3)=='AND'){
 if (substr($labfilter, 0,3)=='AND'){
     $labfilter=substr($labfilter,3,-1);
 }
-
 
 $imsize = 150;
 
@@ -190,7 +211,6 @@ $sql = "SELECT * FROM scholars where " . " " . $f.' ORDER BY last_name';
 }else{
     $sql = "SELECT * FROM scholars".' ORDER BY last_name';
 }
-
 
 // liste des chercheurs
 $scholars = array();
@@ -303,7 +323,6 @@ function get_value($cle_value,$table='data',$cle='cle',$valeur='valeur'){
 // renvoie la valeur correspondant à la clé $cle dans la table data
    
 $sql = 'SELECT '.$valeur.' from '.$table.' WHERE '.$cle.'="'.trim($cle_value).'"';
-echo $sql;
 $resultat=mysql_query($sql);
     while ($ligne=mysql_fetch_array($resultat)) {
         $out=$ligne[$valeur];

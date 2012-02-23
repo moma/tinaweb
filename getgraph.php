@@ -71,6 +71,7 @@ $countries = $data["countries"];
 $keywords = $data["keywords"];
 $laboratories = $data["laboratories"];
 $organizations = $data["organizations"];
+$tags = $data["tags"];
 
 $f = "";// requête
 if ($keywords) {
@@ -126,6 +127,26 @@ if ($laboratories) {
 		$i++;
 	}
 	$f .= "  ";
+}
+
+if ($tags) {
+	if (sizeof($tags) > 0) {
+		$f .= 'AND ';
+	}
+
+	foreach ($tags as $kw) {
+		$words = explode(',', $kw);
+		$i = 0;
+		foreach ($words as $word) {
+			$word = sanitize_input(trim(strtolower($word)));
+			if ($word == "") continue;
+			if ($i > 0)
+				$f .= " OR ";
+			$f .= 'tags LIKE "%' . $word . '%" ';
+			$i++;
+		}
+	}
+	$f .= "  ";	
 }
 
 if ($organizations) {
