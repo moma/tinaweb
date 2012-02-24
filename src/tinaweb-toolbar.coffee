@@ -252,17 +252,6 @@ toolbar.init = ->
       log "opposite cat: #{next_cat}"
       app.getView (data) ->
         viewName = data.view
-        log "view name: #{viewName}"
-        if viewName is "macro"
-          if next_cat is "Document"
-            show "#category-A"
-            hide "#category-B"
-          else if next_cat is "NGram"
-            hide "#category-A"
-            show "#category-B"
-        else
-          show "#category-A"
-          show "#category-B"
         neighbours = app.infodiv.neighbours
         app.setCategory next_cat, (data) ->
           log " category should be set now"
@@ -278,6 +267,18 @@ toolbar.init = ->
             else
               app.infodiv.updateNodeList viewName, next_cat
               app.infodiv.display_current_category()
+
+            log "view name: #{viewName}"
+            if viewName is "macro"
+              if next_cat is "Document"
+                show "#category-A"
+                hide "#category-B"
+              else if next_cat is "NGram"
+                hide "#category-A"
+                show "#category-B"
+            else
+              show "#category-A"
+              show "#category-B"
   
   # TODO replace by a smarter JQuery/CSS selector (using children?)
   hide "#export-view"

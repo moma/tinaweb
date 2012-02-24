@@ -334,19 +334,6 @@ toolbar.init = function() {
       return app.getView(function(data) {
         var neighbours, viewName;
         viewName = data.view;
-        log("view name: " + viewName);
-        if (viewName === "macro") {
-          if (next_cat === "Document") {
-            show("#category-A");
-            hide("#category-B");
-          } else if (next_cat === "NGram") {
-            hide("#category-A");
-            show("#category-B");
-          }
-        } else {
-          show("#category-A");
-          show("#category-B");
-        }
         neighbours = app.infodiv.neighbours;
         return app.setCategory(next_cat, function(data) {
           log(" category should be set now");
@@ -357,14 +344,27 @@ toolbar.init = function() {
               for (pos in neighbours) {
                 myArray.push(neighbours[pos]);
               }
-              return app.select(myArray, function() {
+              app.select(myArray, function() {
                 log("selected my array");
                 app.infodiv.updateNodeList(viewName, next_cat);
                 return app.infodiv.display_current_category();
               });
             } else {
               app.infodiv.updateNodeList(viewName, next_cat);
-              return app.infodiv.display_current_category();
+              app.infodiv.display_current_category();
+            }
+            log("view name: " + viewName);
+            if (viewName === "macro") {
+              if (next_cat === "Document") {
+                show("#category-A");
+                return hide("#category-B");
+              } else if (next_cat === "NGram") {
+                hide("#category-A");
+                return show("#category-B");
+              }
+            } else {
+              show("#category-A");
+              return show("#category-B");
             }
           });
         });

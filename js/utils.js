@@ -71,6 +71,20 @@ hide = function(k, speed) {
   return $("" + k).fadeOut(speed);
 };
 
+show = function(k, speed) {
+  var o;
+  if (speed == null) speed = "slow";
+  o = (typeof k) === "string" ? $(k) : k;
+  return o.fadeIn(speed);
+};
+
+hide = function(k, speed) {
+  var o;
+  if (speed == null) speed = "slow";
+  o = (typeof k) === "string" ? $(k) : k;
+  return o.fadeOut(speed);
+};
+
 strToBoolean = function(s) {
   switch (s.toLowerCase()) {
     case "true":
@@ -116,8 +130,12 @@ htmlEncode = function(value) {
   return $("<div/>").text(value).html();
 };
 
-htmlDecode = function(value) {
-  return $("<div/>").html(value).text();
+htmlDecode = function(t) {
+  if (t.indexOf('<br>') > 0 || t.indexOf('<br/>') > 0 || t.indexOf('</a>') > 0 || t.indexOf('</b>') > 0 || t.indexOf('</i>') > 0) {
+    return t;
+  } else {
+    return $("<div/>").html(t).text();
+  }
 };
 
 decodeJSON = function(encvalue) {

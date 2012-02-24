@@ -202,10 +202,8 @@ InfoDiv = {
             }
           }
           _this.selection.push(node.id);
-          log("label: " + label);
           contentinnerdiv.append($("<b></b>").text(label));
           htmlContent = htmlDecode(decodeJSON(node.content));
-          log("  htmlContent: " + htmlContent);
           contentinnerdiv.append($("<p></p>").html(htmlContent));
           contentinnerdiv.append($("<p></p>").html(_this.getSearchQueries(label, cat)));
         }
@@ -230,8 +228,6 @@ InfoDiv = {
     this.selection = [];
     this.updateInfo(lastselection);
     return app.getNeighbourhood("macro", this.selection, function(data) {
-      log("received neighbourhood of selection");
-      log(data);
       return _this.updateTagCloud(data.nodes, data.neighbours);
     });
   },
@@ -256,7 +252,6 @@ InfoDiv = {
     if (app.node_list_cache === void 0) app.node_list_cache = {};
     return app.getNodes(view, category, function(data) {
       var i, node_list, _results;
-      log("receiving and updating node.list: " + data.nodes.length + " nodes");
       if (category === _this.last_category) return;
       if (_this.node_list_cache === void 0) _this.node_list_cache = {};
       _this.node_list_cache[category] = alphabeticListSort(data.nodes, "label");

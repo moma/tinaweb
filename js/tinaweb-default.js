@@ -31,6 +31,7 @@ Tinaweb = (function(_super) {
     this._tinaweb_defaults = {
       elementId: "vizdiv",
       gexf: "sample.gexf.gz",
+      path: "js/tinaviz/",
       view: "macro",
       category: "Document",
       node_id: "",
@@ -48,6 +49,7 @@ Tinaweb = (function(_super) {
       b_node_filter_max: 1.0,
       layout: "tinaforce",
       layout_speed: 30,
+      antialiasing_threshold: 1500,
       pause: false,
       demo: false
     };
@@ -178,7 +180,7 @@ Tinaweb = (function(_super) {
     var _this = this;
     log("Tinaweb: install() -> loading some additionnal default settings");
     this.configure_using(this._tinaweb_defaults);
-    log("Tinaweb: install() -> calling preInstall");
+    log("Tinaweb: install() -> calling preInstall if available");
     if (typeof this.preInstall === "function") this.preInstall();
     log("Tinaweb: install() -> calling @_inject => { ... }");
     return this._inject(function() {
@@ -191,18 +193,14 @@ Tinaweb = (function(_super) {
       $(window).bind("resize", function() {
         return _this.resize;
       });
-      log("Tinaweb: _inject() -> binding blur and focus");
-      $(window).blur(function() {
-        return _this.freeze();
-      });
-      $(window).focus(function() {
-        return _this.unfreeze();
-      });
+      log("Tinaweb: _inject() -> DISABLED binding of mouse enter/leave events");
+      $(window).mouseleave(function() {});
+      $(window).mouseenter(function() {});
       log("Tinaweb: _postInject() -> checking for demo mode");
       if (_this.config.demo != null) _this._demo_possible = true;
       waitTimeBeforeStartingDemo = 6;
       delayBetweenChanges = 10;
-      log("Tinaweb: _postInject() -> sending parameters to the applet");
+      log("Tinaweb: _postInject() -> sending (some) default parameters to the applet");
       _this.set("filter.a.edge.weight", [_this.config.a_edge_filter_min, _this.config.a_edge_filter_max], "Tuple2[Double]");
       _this.set("filter.a.node.weight", [_this.config.a_node_filter_min, _this.config.a_node_filter_max], "Tuple2[Double]");
       _this.set("filter.b.edge.weight", [_this.config.b_edge_filter_min, _this.config.b_edge_filter_max], "Tuple2[Double]");
@@ -214,6 +212,7 @@ Tinaweb = (function(_super) {
       _this.set("layout", _this.config.layout, "String");
       _this.set("layoutSpeed", _this.config.layout_speed, "Double");
       _this.set("pause", _this.config.pause, "Boolean");
+      _this.set("antiAliasingThreshold", "" + _this.config.antialiasing_threshold, "Int");
       log("Tinaweb: _postInject() terminated, calling postInstall() if available");
       return typeof _this.postInstall === "function" ? _this.postInstall() : void 0;
     });
