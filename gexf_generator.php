@@ -1,175 +1,8 @@
 <?php
-//header ("Content-Type:text/xml");  
 
 /*
- * Génère le gexf des scholars à partir de la base sqlite
+ * genère un graph gexf à partir de la requete sql sur la table scholars
  */
-include ("parametres.php");
-include ("normalize.php");
-//include("../common/library/fonctions_php.php");
-
-
-define('_is_utf8_split', 5000);
-
-function is_utf8($string) {
-   
-    // From http://w3.org/International/questions/qa-forms-utf-8.html
-    return preg_match('%^(?:
-          [\x09\x0A\x0D\x20-\x7E]            # ASCII
-        | [\xC2-\xDF][\x80-\xBF]             # non-overlong 2-byte
-        |  \xE0[\xA0-\xBF][\x80-\xBF]        # excluding overlongs
-        | [\xE1-\xEC\xEE\xEF][\x80-\xBF]{2}  # straight 3-byte
-        |  \xED[\x80-\x9F][\x80-\xBF]        # excluding surrogates
-        |  \xF0[\x90-\xBF][\x80-\xBF]{2}     # planes 1-3
-        | [\xF1-\xF3][\x80-\xBF]{3}          # planes 4-15
-        |  \xF4[\x80-\x8F][\x80-\xBF]{2}     # plane 16
-    )*$%xs', $string);
-   
-}
-
-//phpinfo();
-$gexf = '<?xml version="1.0" encoding="UTF-8"?>';
-//echo $_GET['query']."<br/>";
-$data = json_decode($_GET['query']);
-
-function objectToArray($d) {
-		if (is_object($d)) {
-			// Gets the properties of the given object
-			// with get_object_vars function
-			$d = get_object_vars($d);
-		}
- 
-		if (is_array($d)) {
-			/*
-			* Return array converted to object
-			* Using __FUNCTION__ (Magic constant)
-			* for recursive call
-			*/
-			return array_map(__FUNCTION__, $d);
-		}
-		else {
-			// Return array
-			return $d;
-		}
-	}
-
-$data = objectToArray($data);
-
-//echo 'data '.$data;
-
-//echo json_decode('{ countries: [ "France" ]}');
-
-//$json = '{"a":1,"b":2,"c":3,"d":4,"e":5}';
-//pt($json);
-//pt(json_decode($json));
-//exit();
-//$data = json_decode('', true);
-//print_r($data);
-$categorya = $data["categorya"];
-$categoryb = $data["categoryb"];
-$countries = $data["countries"];
-$keywords = $data["keywords"];
-$laboratories = $data["laboratories"];
-$organizations = $data["organizations"];
-$tags = $data["tags"];
-
-$f = "";// requête
-if ($keywords) {
-	if (sizeof($keywords) > 0) {
-		$f .= 'AND ';
-	}
-
-	foreach ($keywords as $kw) {
-		$words = explode(',', $kw);
-		$i = 0;
-		foreach ($words as $word) {
-			$word = sanitize_input(trim(strtolower($word)));
-			if ($word == "") continue;
-			if ($i > 0)
-				$f .= " OR ";
-			$f .= 'keywords LIKE "%' . $word . '%" ';
-			$i++;
-		}
-	}
-	$f .= "  ";
-}
-if ($countries) {
-
-	if (sizeof($countries) > 0) {
-		$f .= 'AND ';
-	}
-
-	$i = 0;
-	foreach ($countries as $country) {
-		//$country = sanitize_input(trim(strtolower($country)));
-                $country = sanitize_input(trim($country ));
-		if ($country == "") continue;
-		if ($i > 0)
-			$f .= " OR ";
-		$f .= 'country = "' . $country . '" ';
-		$i++;
-	}
-	$f .= "  ";
-}
-if ($laboratories) {
-
-	if (sizeof($laboratories) > 0) {
-		$f .= 'AND ';
-	}
-
-	$i = 0;
-	foreach ($laboratories as $lab) {
-		$lab = sanitize_input(trim(strtolower($lab)));
-		if ($lab == "") continue;
-		if ($i > 0)
-			$f .= " OR ";
-		$f .= 'lab LIKE "%' . $lab . '%" ';
-		$i++;
-	}
-	$f .= "  ";
-}
-
-if ($tags) {
-	if (sizeof($tags) > 0) {
-		$f .= 'AND ';
-	}
-
-	foreach ($tags as $kw) {
-		$words = explode(',', $kw);
-		$i = 0;
-		foreach ($words as $word) {
-			$word = sanitize_input(trim(strtolower($word)));
-			if ($word == "") continue;
-			if ($i > 0)
-				$f .= " OR ";
-			$f .= 'tags LIKE "%' . $word . '%" ';
-			$i++;
-		}
-	}
-	$f .= "  ";	
-}
-
-if ($organizations) {
-
-	if (sizeof($organizations) > 0) {
-		$f .= 'AND ';
-	}
-
-	$i = 0;
-	foreach ($organizations as $org) {
-		$org = sanitize_input(trim(strtolower($org)));
-		
-		if ($org == "") continue;
-
-		$f .= 'affiliation LIKE "%' . $org . '%" OR affiliation2 LIKE "%' . $org . '%" ';
-                //'affiliation LIKE "%' . $org . '% OR affiliation2 LIKE "%' . $org . '%"';
-		$i++;
-	}
-	$f .= "  ";
-}
-
-
-$base = new PDO("sqlite:" . $dbname);
 
 $termsMatrix = array();
 // liste des termes présents chez les scholars avec leurs cooc avec les autres termes
@@ -195,27 +28,11 @@ $gexf .= ' <attribute id="6" title="type" type="string"> </attribute>' . "\n";
 $gexf .= "</attributes>" . "\n";
 $gexf .= "<nodes>" . "\n";
 
-
-//echo(substr($f, 0,3));
-// liste des chercheurs
-if (substr($f, 0,3)=='AND'){
-    $f=substr($f,3,-1);
-}
-        
-if (strlen($f)>0){
-$sql = "SELECT * FROM scholars where " . " " . $f;
-}else{
-    $sql = "SELECT * FROM scholars";
-}
-//pt('f:'.$f);
-//pt($sql);
-//exit();
+#echo "login: ".$login.";";
 $scholars = array();
-$scholars_colors = array(); // pour dire s'il y a des jobs postés sur ce scholar
-$terms_colors = array();// pour dire s'il y a des jobs postés sur ce term
-
-//echo $sql . " <br/>";
-//print_r($data);
+#echo $sql . ";<br/>";
+#print_r($data);
+#echo "END;";
 foreach ($base->query($sql) as $row) {
 	$info = array();
 	$info['unique_id'] = $row['unique_id'];
@@ -240,39 +57,38 @@ foreach ($base->query($sql) as $row) {
         $info['photo_url']=$row['Photo'];
 	//print_r($row);
 	$scholars[$row['unique_id']] = $info;
-        
 }
-
 
 foreach ($scholars as $scholar) {
-    // on en profite pour charger le profil sémantique du gars
-    $scholar_keywords = $scholar['keywords_ids'];    
-    // on en profite pour construire le réseau des termes par cooccurrence chez les scholars
-    for ($k = 0; $k < count($scholar_keywords); $k++) {
-        if($scholar_keywords[$k]!=null){
-        if ($termsMatrix[$scholar_keywords[$k]] != null) {
-            $termsMatrix[$scholar_keywords[$k]][occ] = $termsMatrix[$scholar_keywords[$k]][occ] + 1;
-            for ($l = 0; $l < count($scholar_keywords); $l++) {
-                if ($termsMatrix[$scholar_keywords[$k]][cooc][$scholar_keywords[$l]] != null) {
-                    $termsMatrix[$scholar_keywords[$k]][cooc][$scholar_keywords[$l]]+=1;
-                } else {
-                    $termsMatrix[$scholar_keywords[$k]][cooc][$scholar_keywords[$l]] = 1;
-                }
-            }
-        } else {
-            $termsMatrix[$scholar_keywords[$k]][occ] = 1;
-            for ($l = 0; $l < count($scholar_keywords); $l++) {
-                if ($termsMatrix[$scholar_keywords[$k]][cooc][$scholar_keywords[$l]] != null) {
-                    $termsMatrix[$scholar_keywords[$k]][cooc][$scholar_keywords[$l]]+=1;
-                } else {
-                    $termsMatrix[$scholar_keywords[$k]][cooc][$scholar_keywords[$l]] = 1;
-                }
-            }
-        }
-        }
-    }
-            
+	// on en profite pour charger le profil sémantique du gars
+	$scholar_keywords = $scholar['keywords_ids'];
+	// on en profite pour construire le réseau des termes par cooccurrence chez les scholars
+	for ($k = 0; $k < count($scholar_keywords); $k++) {
+		if ($scholar_keywords[$k] != null) {
+			if ($termsMatrix[$scholar_keywords[$k]] != null) {
+				$termsMatrix[$scholar_keywords[$k]]['occ'] = $termsMatrix[$scholar_keywords[$k]][occ] + 1;
+				for ($l = 0; $l < count($scholar_keywords); $l++) {
+					if ($termsMatrix[$scholar_keywords[$k]]['cooc'][$scholar_keywords[$l]] != null) {
+						$termsMatrix[$scholar_keywords[$k]]['cooc'][$scholar_keywords[$l]] += 1;
+					} else {
+						$termsMatrix[$scholar_keywords[$k]]['cooc'][$scholar_keywords[$l]] = 1;
+					}
+				}
+			} else {
+				$termsMatrix[$scholar_keywords[$k]]['occ'] = 1;
+				for ($l = 0; $l < count($scholar_keywords); $l++) {
+					if ($termsMatrix[$scholar_keywords[$k]]['cooc'][$scholar_keywords[$l]] != null) {
+						$termsMatrix[$scholar_keywords[$k]]['cooc'][$scholar_keywords[$l]] += 1;
+					} else {
+						$termsMatrix[$scholar_keywords[$k]]['cooc'][$scholar_keywords[$l]] = 1;
+					}
+				}
+			}
+		}
+	}
+
 }
+
 // liste des termes
 $sql = "SELECT term,id,occurrences FROM terms";
 //pt($query);
@@ -306,7 +122,7 @@ foreach ($terms_array as $term) {
 		$term_scholars[] = $row['scholar'];
 		// ensemble des scholars partageant ce term
     }
-        // on en profite pour construire le réseau des scholars partageant les mêmes termes 
+            // on en profite pour construire le réseau des scholars partageant les mêmes termes 
     for ($k = 0; $k < count($term_scholars); $k++) {
         if ($scholarsMatrix[$term_scholars[$k]] != null) {
             $scholarsMatrix[$term_scholars[$k]]['occ'] = $scholarsMatrix[$term_scholars[$k]]['occ'] + 1;
@@ -361,7 +177,6 @@ foreach ($scholars as $scholar) {
                 if ($scholar['photo_url'] != null) {
 			$content .= '<img src="'.$scholar['photo_url'].'" width=80 float="right">' . '</br>';
 		}
-                
                 
 		$content .= '<b>Country: </b>' . $scholar['country'] . '</br>';
 
@@ -468,12 +283,12 @@ foreach ($terms_array as $term) {
 
 // ecriture des liens entre scholars
 //print_r($terms);
-foreach ($scholars as $scholar){
-    $nodeId1=$scholar['unique_id'];
-    if (!array_key_exists($nodeId1, $scholarsMatrix)) {
+foreach ($scholars as $scholar) {
+	$nodeId1 = $scholar['unique_id'];
+	if (!array_key_exists($nodeId1, $scholarsMatrix)) {
 		continue;
 	}
-    $neighbors=$scholarsMatrix[$nodeId1]['cooc'];   
+	$neighbors=$scholarsMatrix[$nodeId1]['cooc'];   
     foreach ($neighbors as $neigh_id => $cooc) {        
         if ($neigh_id!=$nodeId1) {
             $weight=jaccard($scholarsMatrix[$nodeId1]['occ'],$scholarsMatrix[$neigh_id]['occ'],$cooc);
@@ -494,27 +309,5 @@ $gexf .= '</edges></graph></gexf>';
 //pt(count($termsMatrix).' terms');
 
 echo $gexf;
-
-function pt($string){
-    echo $string.'<br/>';
-}
-
-
-function jaccard($occ1,$occ2,$cooc){   
-    if (($occ1==0)||($occ2==0)){
-        return 0;        
-    }else{
-        return ($cooc*$cooc/($occ1*$occ2));        
-    }
-}
-    
-function scholarlink($term_occurrences,$scholars1_nb_keywords,$scholars2nb_keywords){
-    if (($term_occurrences>0)&&($scholars1_nb_keywords>0)&&($scholars2_nb_keywords>0)){
-        return 1/log($term_occurrences)*1/log($scholars1_nb_keywords)*1/$scholars2_nb_keywords;    
-    }else {
-        return 0;
-    }
-    
-    }                      
 
 ?>
