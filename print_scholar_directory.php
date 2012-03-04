@@ -185,9 +185,14 @@ Contributions and ideas are welcome to improve this directory. Please feedback a
 
 
 echo $meta;
+if (count($scholars)==0){
+echo  '<h2>Sorry, '.$target_name.' did not mentioned any keywords ... we cannot process it\'s network.</h2><br/>
+    If you are '.$target_name.', you can  <a href="http://main.csregistry.org/Whoswhodata"  target="_BLANK">modify your profile</a> and see your 
+        network in few minutes.';
+}else{
 echo $header;
 echo $content;
-
+}
 function clean_exp($string){
     // enlève les comma trainantes
     if (strcmp(substr(trim($string),strlen($string)-1,strlen($string)),',')==0){

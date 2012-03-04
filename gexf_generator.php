@@ -30,6 +30,9 @@ $gexf .= "<nodes>" . "\n";
 
 #echo "login: ".$login.";";
 $scholars = array();
+$scholars_colors = array(); // pour dire s'il y a des jobs postés sur ce scholar
+$terms_colors = array();// pour dire s'il y a des jobs postés sur ce term
+
 #echo $sql . ";<br/>";
 #print_r($data);
 #echo "END;";
@@ -60,7 +63,8 @@ foreach ($base->query($sql) as $row) {
 }
 
 foreach ($scholars as $scholar) {
-	// on en profite pour charger le profil sémantique du gars
+        $scholars_colors[trim($scholar['login'])]=0;
+        // on en profite pour charger le profil sémantique du gars
 	$scholar_keywords = $scholar['keywords_ids'];
 	// on en profite pour construire le réseau des termes par cooccurrence chez les scholars
 	for ($k = 0; $k < count($scholar_keywords); $k++) {
@@ -89,16 +93,22 @@ foreach ($scholars as $scholar) {
 
 }
 
+
+// on établi les couleurs
+$sql='select login from jobs';
+foreach ($base->query($sql) as $row) {
+    $scholars_colors[trim($row['login'])]+=1;
+}        
+
 // liste des termes
 $sql = "SELECT term,id,occurrences FROM terms";
-//pt($query);
 $terms_array = array();
 //$query = "SELECT * FROM scholars";
 foreach ($base->query($sql) as $row) {
-	$id = $row['id'];
+	$id = $row['id'];        
 	if (!array_key_exists($id, $termsMatrix)) {
 		continue;
-	}
+	}        
 	if ($termsMatrix[$id] != null) {// on prend que les termes sont mentionnés par les chercheurs filtrés
 		//echo "OK";
 		$info = array();
@@ -110,6 +120,22 @@ foreach ($base->query($sql) as $row) {
 }
 
 $count = 1;
+
+
+foreach ($terms_array as $term) {
+    $terms_colors[$term['id']]=0;
+}
+$sql='select term_id from jobs2terms';
+foreach ($base->query($sql) as $row) {
+    if (array_key_exists($row['term_id'], $terms_colors)){
+            $terms_colors[trim($row['term_id'])]+=1;
+            //pt($terms_array[$row['term_id']]['term']);
+    }
+
+}
+
+//print_r($terms_colors);
+
 
 foreach ($terms_array as $term) {
 	//echo "TERM";
@@ -152,7 +178,7 @@ foreach ($terms_array as $term) {
 	$nodeLabel = str_replace('&', ' and ', $terms_array[$term['id']]['term']);
 	$nodePositionY = rand(0, 100) / 100;
 	$gexf .= '<node id="' . $nodeId . '" label="' . $nodeLabel . '">' . "\n";
-	$gexf .= '<viz:color b="0" g="0"  r="200"/>' . "\n";
+	$gexf .= '<viz:color b="19" g="'.max(0,150-(50*$terms_colors[$term['id']])).'"  r="244"/>' . "\n";
 	$gexf .= '<viz:position x="' . (rand(0, 100) / 100) . '"    y="' . $nodePositionY . '"  z="0" />' . "\n";
 	$gexf .= '<attvalues> <attvalue for="0" value="NGram"/>' . "\n";
 	$gexf .= '<attvalue for="1" value="' . $terms_array[$term['id']]['occurrences'] . '"/>' . "\n";
@@ -215,8 +241,9 @@ foreach ($scholars as $scholar) {
 		//pt($color);
 		//pt($content);
                 if (is_utf8($nodeLabel)) {
-			$gexf .= '<node id="' . $nodeId . '" label="' . $nodeLabel . '">' . "\n";
-			$gexf .= '<viz:color ' . $color . '/>' . "\n";
+                        $gexf .= '<node id="' . $nodeId . '" label="' . $nodeLabel . '">' . "\n";
+			$gexf .= '<viz:color b="'.min(255,(10*$scholars_colors[$scholar['login']])).'" g="204"  r="200"/>' . "\n";
+			//$gexf .= '<viz:color '.$color.'/>' . "\n";
 			$gexf .= '<viz:position x="' . (rand(0, 100) / 100) . '"    y="' . $nodePositionY . '"  z="0" />' . "\n";
 			$gexf .= '<attvalues> <attvalue for="0" value="Document"/>' . "\n";
 			if (true) {
@@ -307,6 +334,9 @@ $gexf .= '</edges></graph></gexf>';
 //pt(count($scholarsMatrix).' scholars');
 //pt($scholarsIncluded.' scholars included');
 //pt(count($termsMatrix).' terms');
+$handle = fopen('test.gexf', "w", "UTF-8");
+fputs($handle,$gexf);
+fclose($handle);
 
 echo $gexf;
 
