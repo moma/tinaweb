@@ -58,6 +58,7 @@ foreach ($base->query($sql) as $row) {
 	$info['title'] = $row['title'];
 	$info['position'] = $row['position'];
         $info['photo_url']=$row['Photo'];
+        $info['login']=$row['login'];
 	//print_r($row);
 	$scholars[$row['unique_id']] = $info;
 }
@@ -97,7 +98,9 @@ foreach ($scholars as $scholar) {
 // on établi les couleurs
 $sql='select login from jobs';
 foreach ($base->query($sql) as $row) {
+    if (array_key_exists(trim($row['login']), $scholars_colors)){
     $scholars_colors[trim($row['login'])]+=1;
+    }
 }        
 
 // liste des termes
@@ -178,7 +181,7 @@ foreach ($terms_array as $term) {
 	$nodeLabel = str_replace('&', ' and ', $terms_array[$term['id']]['term']);
 	$nodePositionY = rand(0, 100) / 100;
 	$gexf .= '<node id="' . $nodeId . '" label="' . $nodeLabel . '">' . "\n";
-	$gexf .= '<viz:color b="19" g="'.max(0,150-(50*$terms_colors[$term['id']])).'"  r="244"/>' . "\n";
+	$gexf .= '<viz:color b="19" g="'.max(0,180-(100*$terms_colors[$term['id']])).'"  r="244"/>' . "\n";
 	$gexf .= '<viz:position x="' . (rand(0, 100) / 100) . '"    y="' . $nodePositionY . '"  z="0" />' . "\n";
 	$gexf .= '<attvalues> <attvalue for="0" value="NGram"/>' . "\n";
 	$gexf .= '<attvalue for="1" value="' . $terms_array[$term['id']]['occurrences'] . '"/>' . "\n";
@@ -229,21 +232,26 @@ foreach ($scholars as $scholar) {
 		} elseif (substr($scholar['homepage'], 0, 4) === 'http') {
 			$content .= '[ <a href=' . str_replace('&', ' and ', $scholar['homepage']) . ' target=blank > View homepage </a >]<br/>';
 		}
-
-		if ($scholar['css_voter'] === 'Yes') {
-			$color = 'b="19" g="204"  r="244"';
-		} elseif ($scholar['css_member'] === 'Yes') {
+//
+//		if ($scholar['css_voter'] === 'Yes') {
+//			$color = 'b="19" g="204"  r="244"';
+//		} elseif ($scholar['css_member'] === 'Yes') {
+//			$color = 'b="243" g="183"  r="19"';
+//		} else {
+//			$color = 'b="255" g="0"  r="0"';
+//		}
+		if ($scholars_colors[$scholar['login']] >0) {
 			$color = 'b="243" g="183"  r="19"';
 		} else {
-			$color = 'b="255" g="0"  r="0"';
+			$color = 'b="78" g="193"  r="127"';
 		}
 		//pt($scholar['last_name'].','.$scholar['css_voter'].','.$scholar['css_member']);
 		//pt($color);
 		//pt($content);
                 if (is_utf8($nodeLabel)) {
                         $gexf .= '<node id="' . $nodeId . '" label="' . $nodeLabel . '">' . "\n";
-			$gexf .= '<viz:color b="'.min(255,(10*$scholars_colors[$scholar['login']])).'" g="204"  r="200"/>' . "\n";
-			//$gexf .= '<viz:color '.$color.'/>' . "\n";
+			//$gexf .= '<viz:color b="'.(243-min(243,(200*$scholars_colors[$scholar['login']]))).'" g="183"  r="19"/>' . "\n";
+			$gexf .= '<viz:color '.$color.'/>' . "\n";
 			$gexf .= '<viz:position x="' . (rand(0, 100) / 100) . '"    y="' . $nodePositionY . '"  z="0" />' . "\n";
 			$gexf .= '<attvalues> <attvalue for="0" value="Document"/>' . "\n";
 			if (true) {

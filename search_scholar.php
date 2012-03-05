@@ -42,13 +42,18 @@ function filter_word($value) {
   return ! in_array(strtolower($value),$filtered); 
 }
 
-$req = "SELECT unique_id, first_name, last_name FROM scholars WHERE ".$query." GROUP BY unique_id";
+$req = "SELECT unique_id, first_name, last_name,nb_keywords FROM scholars WHERE ".$query." GROUP BY unique_id";
 #echo "req: ".$req.";";
 $results = array();
 $i = 0;
 $res = $base->query($req);
 
 foreach ($res as $row) {
+  if ($row["nb_keywords"]==0){
+      $row["nb_keywords"]=' (no keyword to map)';
+  }  else {
+      $row["nb_keywords"]='';
+  }
   array_push($results,$row);
 }
 
@@ -65,7 +70,7 @@ foreach($results as $row) {
         'id' => $row["unique_id"],
         'term' => $login,
         'firstname' => $row["first_name"],
-        'lastname' => $row["last_name"],
+        'lastname' => $row["last_name"].$row["nb_keywords"],
        'score' => 1,
        
 	   // F*** it, I'll put the meta data here...
