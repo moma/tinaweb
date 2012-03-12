@@ -26,19 +26,17 @@ $meta = '<!DOCTYPE html>
         <script type="text/javascript" src="js/jquery/jquery.highlight-3.js"></script>
         <script type="text/javascript" src="js/misc/json2.js"></script>
         <script type="text/javascript" src="js/utils.js"></script>
+        <script type="text/javascript" src="Highcharts-2.2.0/js/highcharts.js"></script>
+        <script type="text/javascript" src="Highcharts-2.2.0/js/modules/exporting.js"></script>
+
+        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+
         <link href="css/whoswho.css" rel="stylesheet" type="text/css">
         <link rel="shortcut icon" href="images/favicon.ico">
         <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
         <link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png">
         <link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png">
-    </head>
-    <body>
-        <script type="text/javascript" src="js/whoswho.js"></script>
-    <div class="container-fluid">
-        
-        <!-- Main hero unit for a primary marketing message or call to action -->
-        <div class="hero-unit">
-        
+     
             ';
 
 define('_is_utf8_split', 5000);
@@ -211,7 +209,129 @@ $sql = "SELECT * FROM scholars where " . " " . $f.' ORDER BY last_name';
 }else{
     $sql = "SELECT * FROM scholars".' ORDER BY last_name';
 }
-echo $sql;
+
+/// stats
+$base = new PDO('sqlite:' . $dbname);
+include ('stat-prep.php');///
+
+$stats= '<script type="text/javascript">
+var country;
+var position;
+var title;
+$(document).ready(function() {
+	country= new Highcharts.Chart({
+		chart: {
+			renderTo: "country",
+			plotBackgroundColor: null,
+			plotBorderWidth: null,
+			plotShadow: false
+		},
+		title: {
+			text: "Countries"
+		},
+		tooltip: {
+			formatter: function() {
+				return "<b>"+ this.point.name +"</b>: "+ Math.floor(10*this.percentage)/10 +" %";
+			}
+		},
+		plotOptions: {
+			pie: {
+				allowPointSelect: true,
+				cursor: "pointer",
+				dataLabels: {
+					enabled: true,
+					color: "#000000",
+					connectorColor: "#000000",
+					formatter: function() {
+						return "<b>"+ this.point.name +"</b>: "+ Math.floor(10*this.percentage)/10 +" %";
+					}
+				}
+			}
+		},
+		series: [{
+			type: "pie",
+			name: "Browser share",'.	
+                $country_data.
+		'}]
+	});
+
+	position= new Highcharts.Chart({
+		chart: {
+			renderTo: "position",
+			plotBackgroundColor: null,
+			plotBorderWidth: null,
+			plotShadow: false
+		},
+		title: {
+			text: "Position of scholars"
+		},
+		tooltip: {
+			formatter: function() {
+				return "<b>"+ this.point.name +"</b>: "+ Math.floor(10*this.percentage)/10 +" %";
+			}
+		},
+		plotOptions: {
+			pie: {
+				allowPointSelect: true,
+				cursor: "pointer",
+				dataLabels: {
+					enabled: true,
+					color: "#000000",
+					connectorColor: "#000000",
+					formatter: function() {
+						return "<b>"+ this.point.name +"</b>: "+ Math.floor(10*this.percentage)/10 +" %";
+					}
+				}
+			}
+		},
+		series: [{
+			type: "pie",
+			name: "Browser share",'.$position_data.
+		'}]
+	});
+
+titre= new Highcharts.Chart({
+		chart: {
+			renderTo: "title",
+			plotBackgroundColor: null,
+			plotBorderWidth: null,
+			plotShadow: false
+		},
+		title: {
+			text: "Title of scholars"
+		},
+		tooltip: {
+			formatter: function() {
+				return "<b>"+ this.point.name +"</b>: "+ Math.floor(10*this.percentage)/10 +" %";
+			}
+		},
+		plotOptions: {
+			pie: {
+				allowPointSelect: true,
+				cursor: "pointer",
+				dataLabels: {
+					enabled: true,
+					color: "#000000",
+					connectorColor: "#000000",
+					formatter: function() {
+						return "<b>"+ this.point.name +"</b>: "+ Math.floor(10*this.percentage)/10 +" %";
+					}
+				}
+			}
+		},
+		series: [{
+			type: "pie",
+			name: "Browser share",'.$title_data
+		.'}]
+	});
+
+
+
+});
+
+</script>';
+
+
 
 // liste des chercheurs
 $scholars = array();
@@ -298,6 +418,12 @@ Society</i> (<a href="http://cssociety.org">http://cssociety.org</a>).
 <p>Contributions and ideas are welcome to improve this directory. Please feedback at :<br/>
 <a href="http://css.csregistry.org/whoswho+feedback">http://css.csregistry.org/whoswho+feedback</a></p>
 <br/>
+<h2>Global statistics</h2>
+<div id="country" style="width: 800px; height: 400px; margin: 0 auto"></div>
+<div id="title" style="width: 800px; height: 400px; margin: 0 auto"></div>
+<div id="position" style="width: 800px; height: 400px; margin: 0 auto"></div>
+
+
 <br/>
 <br/> <A NAME="scholars"> </A>
 <h2>Scholars by alphabetical order</h2>
@@ -307,7 +433,7 @@ Society</i> (<a href="http://cssociety.org">http://cssociety.org</a>).
 </div>';
 
 
-echo $meta;
+echo $meta.' '.$stats.'</head>';
 echo $header;
 echo $content;
 

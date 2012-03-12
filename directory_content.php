@@ -1,6 +1,18 @@
 <?php
 // calcul les différents profils à partir d'une requete
 // sort un $content 
+
+
+echo '    
+    <body>
+        <script type="text/javascript" src="js/whoswho.js"></script>
+    <div class="container-fluid">
+        
+        <!-- Main hero unit for a primary marketing message or call to action -->
+        <div class="hero-unit">
+   ';
+
+
 $imsize = 150;
 
 $content='';
