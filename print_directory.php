@@ -211,6 +211,7 @@ $sql = "SELECT * FROM scholars where " . " " . $f.' ORDER BY last_name';
 }else{
     $sql = "SELECT * FROM scholars".' ORDER BY last_name';
 }
+echo $sql;
 
 // liste des chercheurs
 $scholars = array();
