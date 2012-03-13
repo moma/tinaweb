@@ -122,7 +122,8 @@ foreach ($position_list as $key => $value) {
         $other_position+=$value;
     }
 }
-$position_data=  substr($position_data,0,-1);
+//$position_data=  substr($position_data,0,-1);
+$position_data.='["Others",' . $other_position . ']';
 $position_data.=']';
 
 // données des title
@@ -134,8 +135,8 @@ foreach ($title_list as $key => $value) {
         $other_title+=$value;
     }
 }
-$title_data=  substr($title_data,0,-1);
-//$title_data.='["Others",' . $other_title . ']';
+//$title_data=  substr($title_data,0,-1);
+$title_data.='["Others",' . $other_title . ']';
 $title_data.=']';
 
 $stats= '<script type="text/javascript">
