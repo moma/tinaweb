@@ -303,9 +303,10 @@ Society</i> (<a href="http://cssociety.org">http://cssociety.org</a>).
 <a href="http://css.csregistry.org/whoswho+feedback">http://css.csregistry.org/whoswho+feedback</a></p>
 <br/>
 <h2>Global statistics</h2>
-<div id="country" style="width: 800px; height: 400px; margin: 0 auto"></div>
-<div id="title" style="width: 800px; height: 400px; margin: 0 auto"></div>
-<div id="position" style="width: 800px; height: 400px; margin: 0 auto"></div>
+<div id="country" style="width: 800px; height: 300px; margin: 0 auto"></div>
+<div id="title" style="width: 800px; height: 300px; margin: 0 auto"></div>
+<div id="position" style="width: 800px; height: 300px; margin: 0 auto"></div>
+<div id="organizations" style="width: 800px; height: 300px; margin: 0 auto"></div>
 
 
 <br/>
@@ -315,7 +316,6 @@ Society</i> (<a href="http://cssociety.org">http://cssociety.org</a>).
 <br/>
 </div>
 </div>';
-
 
 echo $meta.' '.$stats.'</head>';
 echo $header;
