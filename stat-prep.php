@@ -110,7 +110,12 @@ foreach ($country_list as $key => $value) {
         $other_country+=$value;
     }
 }
-$country_data.='["Others",' . $other_country . ']';
+if ($other_country>0){
+    $country_data.='["Others",' . $other_country . ']';
+}else{
+    $country_data=  substr($country_data,0,-1);
+}
+
 $country_data.=']';
 
 // données des position
@@ -122,8 +127,13 @@ foreach ($position_list as $key => $value) {
         $other_position+=$value;
     }
 }
-//$position_data=  substr($position_data,0,-1);
-$position_data.='["Others",' . $other_position . ']';
+//
+if ($other_position>0){
+    $position_data.='["Others",' . $other_position . ']';
+    
+}else{
+    $position_data=  substr($position_data,0,-1);
+}
 $position_data.=']';
 
 // données des title
@@ -135,8 +145,12 @@ foreach ($title_list as $key => $value) {
         $other_title+=$value;
     }
 }
-//$title_data=  substr($title_data,0,-1);
-$title_data.='["Others",' . $other_title . ']';
+if ($other_title>0){
+    $title_data.='["Others",' . $other_title . ']';    
+}else{
+    $title_data=  substr($title_data,0,-1);
+    
+}
 $title_data.=']';
 
 $stats= '<script type="text/javascript">
