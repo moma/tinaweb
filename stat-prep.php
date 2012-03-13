@@ -14,6 +14,10 @@ $other_country = 0;
 $other_title = 0;
 $other_position = 0;
 $other_organization = 0;
+$missing_country = 0;
+$missing_title = 0;
+$missing_position = 0;
+$missing_organization = 0;
 // données des pays
 foreach ($base->query($sql) as $row) {
 
@@ -60,7 +64,7 @@ foreach ($base->query($sql) as $row) {
     }
 
     if (strcmp($position, "") == 0) {
-        $other_position+=1;
+        $missing_position+=1;
     } elseif (array_key_exists($position, $position_list)) {
         $position_list[$position]+=1;
     } else {
@@ -70,7 +74,7 @@ foreach ($base->query($sql) as $row) {
     /// traitement des titles
     $title = trim($row["title"]);
     if (strcmp($title, "") == 0) {
-        $other_title+=1;
+        $missing_title+=1;
     } else {
         if (strcmp(substr($title, -1), ".") != 0) {
             $title.=".";
@@ -97,7 +101,7 @@ foreach ($base->query($sql) as $row) {
     $affiliation = trim($row["affiliation"]);
     
     if (strcmp($affiliation, "") == 0) {
-        $other_affiliation+=1;
+        $missing_affiliation+=1;
     } else {        
 
         if (array_key_exists($affiliation, $organizations_list)) {
@@ -110,7 +114,7 @@ foreach ($base->query($sql) as $row) {
     $affiliation2 = trim($row["affiliation2"]);
     
     if (strcmp($affiliation2, "") == 0) {
-        $other_affiliation+=1;
+        $missing_affiliation+=1;
     } else {        
 
         if (array_key_exists($affiliation2, $organizations_list)) {
@@ -141,6 +145,9 @@ foreach ($country_list as $key => $value) {
     }
 }
 //if (false) {
+if ($missing_country>0){
+    $country_data.='["Missing data",' . $missing_country . '],';
+}
 if ($other_country>0){
     $country_data.='["Others",' . $other_country . ']';
 } else {
@@ -160,6 +167,9 @@ foreach ($position_list as $key => $value) {
 }
 //
 //if (false) {
+if ($missing_position>0){
+    $position_data.='["Missing data",' . $missing_position . '],';
+}
 if ($other_position>0){
     $position_data.='["Others",' . $other_position . ']';
 } else {
@@ -177,6 +187,9 @@ foreach ($title_list as $key => $value) {
     }
 }
 //if (false) {
+if ($missing_title>0){
+    $title_data.='["Missing data",' . $missing_title . '],';
+}
 if ($other_title>0){
     $title_data.='["Others",' . $other_title . ']';
 } else {
