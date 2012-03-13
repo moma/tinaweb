@@ -104,7 +104,7 @@ asort($title_list);
 // données des pays
 $country_data = "data: [";
 foreach ($country_list as $key => $value) {
-    if ($value>9){
+    if ($value>min(9,count($country_list)/10)){
             $country_data.='["' . $key . '",' . $value . '],';
     }else{
         $other_country+=$value;
@@ -116,7 +116,7 @@ $country_data.=']';
 // données des position
 $position_data = "data: [";
 foreach ($position_list as $key => $value) {
-    if ($value>2){
+    if ($value>min(9,count($position_list)/10)){
             $position_data.='["' . $key . '",' . $value . '],';
     }else{
         $other_position+=$value;
