@@ -140,8 +140,8 @@ foreach ($country_list as $key => $value) {
         $other_country+=$value;
     }
 }
-if (false) {
-//if ($other_country>0){
+//if (false) {
+if ($other_country>0){
     $country_data.='["Others",' . $other_country . ']';
 } else {
     $country_data = substr($country_data, 0, -1);
@@ -159,8 +159,8 @@ foreach ($position_list as $key => $value) {
     }
 }
 //
-if (false) {
-//if ($other_position>0){
+//if (false) {
+if ($other_position>0){
     $position_data.='["Others",' . $other_position . ']';
 } else {
     $position_data = substr($position_data, 0, -1);
@@ -176,35 +176,15 @@ foreach ($title_list as $key => $value) {
         $other_title+=$value;
     }
 }
-if (false) {
-//if ($other_title>0){
+//if (false) {
+if ($other_title>0){
     $title_data.='["Others",' . $other_title . ']';
 } else {
     $title_data = substr($title_data, 0, -1);
 }
 $title_data.=']';
 
-// json des organismes
-if (count($country_list)<4){
-    $organizations_data = "data: [";
-foreach ($organizations_list as $key => $value) {
-    if ($value > 1) {
-        $organizations_data.='["' . $key . '",' . $value . '],';
-    } else {
-        $other_organization+=$value;
-    }
-}
-//if (false) {
-if ($other_organization>0){
-    $organizations_data.='["Others",' . $other_organization . ']';
-} else {
-    $organizations_data = substr($organizations_data, 0, -1);
-}
-$organizations_data.=']';
-}else{
-    $organizations_data=''; // 
-}
-$organizations_data=str_replace('&',' and ', $organizations_data);
+
 
 $stats = '<script type="text/javascript">
 var country;

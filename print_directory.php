@@ -306,7 +306,6 @@ Society</i> (<a href="http://cssociety.org">http://cssociety.org</a>).
 <div id="country" style="width: 800px; height: 300px; margin: 0 auto"></div>
 <div id="title" style="width: 800px; height: 300px; margin: 0 auto"></div>
 <div id="position" style="width: 800px; height: 300px; margin: 0 auto"></div>
-<div id="organizations" style="width: 800px; height: 300px; margin: 0 auto"></div>
 
 
 <br/>
