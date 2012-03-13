@@ -137,4 +137,122 @@ foreach ($title_list as $key => $value) {
 $title_data=  substr($title_data,0,-1);
 //$title_data.='["Others",' . $other_title . ']';
 $title_data.=']';
+
+$stats= '<script type="text/javascript">
+var country;
+var position;
+var title;
+$(document).ready(function() {
+	country= new Highcharts.Chart({
+		chart: {
+			renderTo: "country",
+			plotBackgroundColor: null,
+			plotBorderWidth: null,
+			plotShadow: false
+		},
+		title: {
+			text: "Countries"
+		},
+		tooltip: {
+			formatter: function() {
+				return "<b>"+ this.point.name +"</b>: "+ Math.floor(10*this.percentage)/10 +" %";
+			}
+		},
+		plotOptions: {
+			pie: {
+				allowPointSelect: true,
+				cursor: "pointer",
+				dataLabels: {
+					enabled: true,
+					color: "#000000",
+					connectorColor: "#000000",
+					formatter: function() {
+						return "<b>"+ this.point.name +"</b>: "+ Math.floor(10*this.percentage)/10 +" %";
+					}
+				}
+			}
+		},
+		series: [{
+			type: "pie",
+			name: "Browser share",'.	
+                $country_data.
+		'}]
+	});
+
+	position= new Highcharts.Chart({
+		chart: {
+			renderTo: "position",
+			plotBackgroundColor: null,
+			plotBorderWidth: null,
+			plotShadow: false
+		},
+		title: {
+			text: "Position of scholars"
+		},
+		tooltip: {
+			formatter: function() {
+				return "<b>"+ this.point.name +"</b>: "+ Math.floor(10*this.percentage)/10 +" %";
+			}
+		},
+		plotOptions: {
+			pie: {
+				allowPointSelect: true,
+				cursor: "pointer",
+				dataLabels: {
+					enabled: true,
+					color: "#000000",
+					connectorColor: "#000000",
+					formatter: function() {
+						return "<b>"+ this.point.name +"</b>: "+ Math.floor(10*this.percentage)/10 +" %";
+					}
+				}
+			}
+		},
+		series: [{
+			type: "pie",
+			name: "Browser share",'.$position_data.
+		'}]
+	});
+
+titre= new Highcharts.Chart({
+		chart: {
+			renderTo: "title",
+			plotBackgroundColor: null,
+			plotBorderWidth: null,
+			plotShadow: false
+		},
+		title: {
+			text: "Title of scholars"
+		},
+		tooltip: {
+			formatter: function() {
+				return "<b>"+ this.point.name +"</b>: "+ Math.floor(10*this.percentage)/10 +" %";
+			}
+		},
+		plotOptions: {
+			pie: {
+				allowPointSelect: true,
+				cursor: "pointer",
+				dataLabels: {
+					enabled: true,
+					color: "#000000",
+					connectorColor: "#000000",
+					formatter: function() {
+						return "<b>"+ this.point.name +"</b>: "+ Math.floor(10*this.percentage)/10 +" %";
+					}
+				}
+			}
+		},
+		series: [{
+			type: "pie",
+			name: "Browser share",'.$title_data
+		.'}]
+	});
+
+
+
+});
+
+</script>';
+
 ?>
