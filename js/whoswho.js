@@ -148,6 +148,10 @@ $(document).ready(function() {
     prefix = "working";
     return popfilter("" + prefix + " at", "laboratories", []);
   });
+  $("#register").click(function() {
+          console.log("clicked on print");
+          return window.open("http://main.csregistry.org/Whoswhodata");
+        });
   $("#addfilterkeyword").click(function() {
     var prefix;
     prefix = "working";
@@ -179,7 +183,7 @@ $(document).ready(function() {
         $("#print2").click(function() {
           console.log("clicked on print");
           return window.open("print_scholar_directory.php?query=" + ui.item.id, "Scholar's list");
-        });
+        });               
         $("#generate2").click(function() {
           hide(".hero-unit");
           return $("#welcome").fadeOut("slow", function() {
