@@ -1,5 +1,5 @@
 <?php
-
+include ("comex_library.php");
 include ("parametres.php");
 include ("normalize.php");
 //include("../common/library/fonctions_php.php");
@@ -205,12 +205,5 @@ echo  '<h2>Sorry, '.$target_name.' did not mentioned any keywords ... we cannot 
 echo $header;
 echo $content;
 }
-function clean_exp($string){
-    // enlève les comma trainantes
-    if (strcmp(substr(trim($string),strlen($string)-1,strlen($string)),',')==0){
-        return substr(trim($string),0,  strlen($string)-1);
-    }else{
-        return $string;
-    }
-}
+
 ?>

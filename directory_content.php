@@ -58,7 +58,7 @@ foreach ($scholars as $scholar) {
     }
     $affiliation = '';
     if ($scholar['lab'] != null) {
-        $affiliation.=$scholar['lab'] . ',';
+        $affiliation.=$scholar['lab'] . ', ';
         $lab_list[]=$scholar['lab'];
     }
     if ($scholar['affiliation'] != null) {
@@ -70,13 +70,13 @@ foreach ($scholars as $scholar) {
         //$lab_query.='OR name="'.$scholar['affiliation'].'" ';
     }
     if (($scholar['affiliation'] != null) | ($scholar['lab'] != null)) {
-        $content .= '<dd>' . $affiliation . '</dd> ';
+        $content .= '<dd>' . clean_exp($affiliation) . '</dd> ';
     }
 
 
     $affiliation2 = '';
     if ($scholar['lab2'] != null) {
-        $affiliation2.=$scholar['lab2'] . ',';
+        $affiliation2.=$scholar['lab2'] . ', ';
         $lab_list[]=$scholar['lab2'];
     }
     if ($scholar['affiliation2'] != null) {
@@ -85,7 +85,7 @@ foreach ($scholars as $scholar) {
         //echo $scholar['affiliation2'].'<br/>';
     }
     if (($scholar['affiliation2'] != null) | ($scholar['lab2'] != null)) {
-        $content .= '<dd><i>Second affiliation: </i>' . $affiliation2 . '</dd>';
+        $content .= '<dd><i>Second affiliation: </i>' . clean_exp($affiliation2) . '</dd>';
     }
 
     if ((strcmp($affiliation2, '') != 0) | (strcmp($affiliation, '') != 0)) {
@@ -133,7 +133,7 @@ foreach ($scholars as $scholar) {
         $content .= '<div class="span3" align="justify">';
         
         if ($scholar['keywords'] != null){
-                 $content .= '<i class="icon-tags"></i> ' . $scholar['keywords']. '<br/><br/>';
+                 $content .= '<i class="icon-tags"></i> ' . clean_exp($scholar['keywords']). '.<br/><br/>';
         }
             
         if ($scholar['address'] != null) {

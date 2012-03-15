@@ -82,12 +82,16 @@ foreach ($base->query($sql) as $row) {
 
         if (strcmp($title, "Dr.") == 0) {
             $title = "PhD.";
-        } elseif (strcmp($title, "Ph.D.") == 0) {
+        } elseif (strcmp(str_replace (' ','',str_replace ('.','', strtolower($title))), "phd") == 0) {
             $title = "PhD.";
+        } elseif (strcmp(str_replace (' ','',str_replace ('.','', strtolower($title))), "profdr") == 0) {
+            $title = "Prof. Dr.";
+        } elseif (strcmp(str_replace (' ','',str_replace ('.','', strtolower($title))), "drhabil") == 0) {
+            $title = "Dr. Habil.";
         } elseif (strcmp($title, "M.") == 0) {
             $title = "Mr.";
         } elseif (strcmp($title, "Professor.") == 0) {
-            $title = "Prof.";
+            $title = "Prof.";       
         }
 
         if (array_key_exists($title, $title_list)) {
@@ -180,7 +184,7 @@ $position_data.=']';
 // données des title
 $title_data = "data: [";
 foreach ($title_list as $key => $value) {
-    if ($value > 1) {
+    if ($value > 3) {
         $title_data.='["' . $key . '",' . $value . '],';
     } else {
         $other_title+=$value;
