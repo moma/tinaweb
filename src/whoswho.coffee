@@ -129,6 +129,10 @@ $(document).ready ->
   $("#addfiltertag").click ->
     popfilter "tagged", "tags", []
 
+  $("#register").click ->
+    console.log "clicked on print"
+    window.open "http://main.csregistry.org/Whoswhodata"
+
   $("#searchname").scholarcomplete 
     minLength: 2
     source: (request, response) ->
