@@ -2,6 +2,7 @@
 
 include ("parametres.php");
 include ("normalize.php");
+include ("comex_library.php");
 //include("../common/library/fonctions_php.php");
 
 $meta = '<!DOCTYPE html>
@@ -331,24 +332,6 @@ echo $meta.' '.$stats.'</head>';
 echo $header;
 echo $content;
 
-function clean_exp($string){
-    // enlève les comma trainantes
-    if (strcmp(substr(trim($string),strlen($string)-1,strlen($string)),',')==0){
-        return substr(trim($string),0,  strlen($string)-1);
-    }else{
-        return $string;
-    }
-}
 
-function get_value($cle_value,$table='data',$cle='cle',$valeur='valeur'){    
-// renvoie la valeur correspondant à la clé $cle dans la table data
-   
-$sql = 'SELECT '.$valeur.' from '.$table.' WHERE '.$cle.'="'.trim($cle_value).'"';
-$resultat=mysql_query($sql);
-    while ($ligne=mysql_fetch_array($resultat)) {
-        $out=$ligne[$valeur];
-        }
-return $out;
-}
 
 ?>
