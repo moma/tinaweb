@@ -99,9 +99,9 @@ $(document).ready ->
         size = item.size
         total = item.total
         term = item.term
-        firstname = item.firstname
-        lastname = item.lastname
-        fullname = "#{firstname} #{lastname}"
+        firstname = $.trim item.firstname
+        lastname = $.trim item.lastname
+        fullname = $.trim "#{firstname} #{lastname}"
 
         myRender = (a,b) -> 
           $("<li></li>").data("item.autocomplete",b).append($("<a></a>").text(fullname)).appendTo(a)
@@ -173,7 +173,7 @@ $(document).ready ->
         value = $(e).val()
         if value?
           log "got: "+value
-          value = value.replace(/^\s+/g, "").replace(/\s+$/g, "")
+          value = $.trim value
           log "sanitized: "+value
           if value isnt " " or value isnt ""
             log "keeping "+value
@@ -182,14 +182,14 @@ $(document).ready ->
       
     log "reading filters forms.."
     query = 
-      categorya: $("#categorya :selected").text()
-      categoryb: $("#categoryb :selected").text()
-      keywords: collect("keywords")
-      countries: collect("countries")
-      laboratories: collect("laboratories")
+      categorya: $.trim $("#categorya :selected").text()
+      categoryb: $.trim $("#categoryb :selected").text()
+      keywords: collect "keywords"
+      countries: collect "countries"
+      laboratories: collect "laboratories"
       coloredby: []
-      tags: collect("tags")
-      organizations: collect("organizations")
+      tags: collect "tags"
+      organizations: collect "organizations"
       
     log "raw query: "
     log query
