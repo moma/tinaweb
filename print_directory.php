@@ -26,19 +26,17 @@ $meta = '<!DOCTYPE html>
         <script type="text/javascript" src="js/jquery/jquery.highlight-3.js"></script>
         <script type="text/javascript" src="js/misc/json2.js"></script>
         <script type="text/javascript" src="js/utils.js"></script>
+        <script type="text/javascript" src="Highcharts-2.2.0/js/highcharts.js"></script>
+        <script type="text/javascript" src="Highcharts-2.2.0/js/modules/exporting.js"></script>
+
+        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+
         <link href="css/whoswho.css" rel="stylesheet" type="text/css">
         <link rel="shortcut icon" href="images/favicon.ico">
         <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
         <link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png">
         <link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png">
-    </head>
-    <body>
-        <script type="text/javascript" src="js/whoswho.js"></script>
-    <div class="container-fluid">
-        
-        <!-- Main hero unit for a primary marketing message or call to action -->
-        <div class="hero-unit">
-        
+     
             ';
 
 define('_is_utf8_split', 5000);
@@ -212,6 +210,13 @@ $sql = "SELECT * FROM scholars where " . " " . $f.' ORDER BY last_name';
     $sql = "SELECT * FROM scholars".' ORDER BY last_name';
 }
 
+/// stats
+$base = new PDO('sqlite:' . $dbname);
+include ('stat-prep.php');///
+
+
+
+
 // liste des chercheurs
 $scholars = array();
 //$query = "SELECT * FROM scholars";
@@ -297,6 +302,12 @@ Society</i> (<a href="http://cssociety.org">http://cssociety.org</a>).
 <p>Contributions and ideas are welcome to improve this directory. Please feedback at :<br/>
 <a href="http://css.csregistry.org/whoswho+feedback">http://css.csregistry.org/whoswho+feedback</a></p>
 <br/>
+<h2>Global statistics</h2>
+<div id="country" style="width: 800px; height: 300px; margin: 0 auto"></div>
+<div id="title" style="width: 800px; height: 300px; margin: 0 auto"></div>
+<div id="position" style="width: 800px; height: 300px; margin: 0 auto"></div>
+
+
 <br/>
 <br/> <A NAME="scholars"> </A>
 <h2>Scholars by alphabetical order</h2>
@@ -305,8 +316,7 @@ Society</i> (<a href="http://cssociety.org">http://cssociety.org</a>).
 </div>
 </div>';
 
-
-echo $meta;
+echo $meta.' '.$stats.'</head>';
 echo $header;
 echo $content;
 

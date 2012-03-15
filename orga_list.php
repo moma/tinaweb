@@ -47,7 +47,9 @@ foreach ($organiz as $orga) {
 
         if ((trim($orga['fields']) != null)) {
             $content .= '<div><p>';
-            $fields=trim(str_replace('Other','',str_replace('.', ', ', clean_exp($orga['fields']))));
+            //echo $orga['fields'].'<br/>';
+            $fields=trim(str_replace('Other','',clean_exp($orga['fields'])));
+            
             if (strcmp(',', substr($fields,-1,1))==0){
                 $fields=substr($fields,0,-1);
             }
@@ -72,9 +74,10 @@ foreach ($organiz as $orga) {
                 $content .= '<address><i class="icon-info-sign"></i> Administrative contact: ' . ucwords($orga['admin']) . '<br/></address>';
             }
             if (trim($orga['street']) != null) {
-                $address = $orga['street'] . ', ' . $orga['city'] . ', ' . $orga['postal_code'] . ', ' . $orga['state'];
-                $address = str_replace(", , ", ", ", $address);
-                $address = str_replace(", , , ", ", ", $address);
+                $address = $orga['street'] . ', ' . $orga['city'] . ', ' . $orga['postal_code'] 
+                . ', ' . $orga['state']. ', ' . $orga['country'];
+                $address = str_replace(", , , , ", ", ", $address);                
+                $address = str_replace(", , , ", ", ", $address);                
                 $address = str_replace(", , ", ", ", $address);
                 
                 $content .= '<address><i class="icon-envelope"></i> ' . $address . '<br/></address>';
