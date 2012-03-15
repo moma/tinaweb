@@ -18,19 +18,19 @@ $cat = '';
 $query = '';
 if ($category == 'country' || $category == 'countries') {
   $cat = "country";
-  $query = 'LIKE \''.$q.'\'';
+  $query = 'LIKE upper(\''.strtoupper($q).'\')';
 } elseif ($category == 'organization' || $category == 'organizations') {
   $cat = "affiliation";
-  $query = 'LIKE \''.$q.'\'';
+  $query = 'LIKE upper(\''.strtoupper($q).'\')';
 } elseif ($category == 'keyword' || $category == 'keywords') {
   $cat = "keywords";
-  $query = 'LIKE \''.$q.'\'';
+  $query = 'LIKE upper(\''.strtoupper($q).'\')';
 } elseif ($category == 'tag' || $category == 'tags') {
   $cat = "tags";
-  $query = 'LIKE \''.$q.'\'';
+  $query = 'LIKE upper(\''.strtoupper($q).'\')';
 } elseif ($category == 'labs' || $category == 'laboratories' || $category == 'laboratory') {
   $cat = "labs";
-  $query = 'LIKE \''.$q.'\'';
+  $query = 'LIKE upper(\''.strtoupper($q).'\')';
 } else {
   echo ("ERROR");
   exit();
@@ -48,28 +48,28 @@ $req = "SELECT ".$cat." AS key, count(".$cat.") AS value FROM scholars WHERE ".$
 $results = array();
 $i = 0;
 foreach ($base->query($req) as $row) {
-	$nb = $row['value'];
+  $nb = $row['value'];
   if ($cat == "keywords" || $cat == "tags") {
-  	//echo "in keywords\n";
-  	 $words = explode(",", $row["key"]);
-  	foreach ($words as $word) {
+    //echo "in keywords\n";
+     $words = explode(",", $row["key"]);
+    foreach ($words as $word) {
 
-		$pos = strpos($word,$term);
-		if($pos === false) {
-		  continue;
-		}
-		//echo "match found\n";
-        //	echo "(".$value." contains ".$term." ?)";
+    $pos = strpos($word,$term);
+    if($pos === false) {
+      continue;
+    }
+    //echo "match found\n";
+        //  echo "(".$value." contains ".$term." ?)";
         if (filter_word($word)) {
-	        if (array_key_exists($word, $results)) {
-	            $results[ $word ] += intval($nb);
-	        } else {
-	            $results[ $word ] = intval($nb);
-	        }
+          if (array_key_exists($word, $results)) {
+              $results[ $word ] += intval($nb);
+          } else {
+              $results[ $word ] = intval($nb);
+          }
         }
     }
   } else {
-  	$word = $row["key"];
+    $word = $row["key"];
      if ($cat == "country") {
         $word = normalize_country($word);  
     }
@@ -99,7 +99,7 @@ foreach($results as $key => $value) {
        // 'value' => $value,
        'score' => $value,
        
-	   // F*** it, I'll put the meta data here...
+     // F*** it, I'll put the meta data here...
        'category' => $cat,
           "term" => $term,
    "size" => $nbresults2,

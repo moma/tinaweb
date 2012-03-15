@@ -22,13 +22,13 @@ $cat = '';
 $query = '';
 if ($category == 'login') {
   $cat = "unique_id";
-  $query = 'unique_id LIKE \''.$q.'\'';
+  $query = 'unique_id LIKE upper(\''.strtoupper($q).'\')';
 } elseif ($category == 'firstname') {
   $cat = "firstname";
-  $query = 'first_name LIKE \''.$q.'\'';
+  $query = 'first_name LIKE upper(\''.strtoupper($q).'\')';
 } elseif ($category == 'lastname') {
   $cat = "lastname";
-  $query = 'last_name LIKE \''.$q.'\'';
+  $query = 'last_name LIKE upper(\''.strtoupper($q).'\')';
 } else {
   echo ("ERROR");
   exit();
