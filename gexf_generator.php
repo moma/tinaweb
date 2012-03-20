@@ -137,12 +137,9 @@ foreach ($base->query($sql) as $row) {
 
 }
 
-//print_r($terms_colors);
-
 
 foreach ($terms_array as $term) {
-	//echo "TERM";
-	$count += 1;
+        $count += 1;
 	// on en profite pour charger le profil scholar du term
 	$query = "SELECT scholar FROM scholars2terms where term_id='" . $term['id'] . "'";
 
