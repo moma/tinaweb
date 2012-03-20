@@ -146,7 +146,7 @@ $(document).ready(function() {
   $("#addfilterlaboratory").click(function() {
     var prefix;
     prefix = "working";
-    return popfilter("" + prefix + " at", "laboratories", []);
+    return popfilter("" + prefix + " at", "labs", []);
   });
   $("#register").click(function() {
           console.log("clicked on print");
