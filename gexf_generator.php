@@ -282,7 +282,7 @@ foreach ($scholars as $scholar) {
 	}
 
 	$res = $scholarsMatrix[$scholarId]['cooc'];
-	if (count($res) > 1) {
+	if (count($res) >=1) {
 		foreach ($scholar['keywords_ids'] as $keywords)
 			if ($keywords != null) {
 				$edgeid += 1;
