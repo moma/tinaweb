@@ -179,7 +179,7 @@ if ($laboratories) {
 		if ($i > 0)
 			$f .= " OR ";
 		$f .= 'lab LIKE "%' . $lab . '%" ';
-                $query_details.=$word.', '; 
+                $query_details.=$lab.', '; 
 		$i++;
 	}
 	$f .= ")  ";        
@@ -196,7 +196,7 @@ if ($organizations) {
 		$org = sanitize_input(trim(strtolower($org)));
 		
 		if ($org == "") continue;
-                $query_details.=$word.', '; 
+                $query_details.=$org.', '; 
 		$f .= 'affiliation LIKE "%' . $org . '%" OR affiliation2 LIKE "%' . $org . '%" ';                
                 //'affiliation LIKE "%' . $org . '% OR affiliation2 LIKE "%' . $org . '%"';
 		$i++;
@@ -299,11 +299,15 @@ $header = '<div class="row" id="welcome">
 <p>
 This directory presents the profiles of <a href="#scholars">'.  count($scholars).' scholars</a>, <a href="#labs">'
 .  count($labs).' labs</a> and <a href="#orga">'.$orga_count.' organizations</a> in
-the field of Complex Systems: ';
-$header .= $query_details;
-$header .='Its aims are to foster interactions 
+the field of Complex Systems';
+if (strlen(trim($query_details))>3){
+$header .= ': </p>'.$query_details;    
+}else{
+    $header .='.</p> ';
+}
+$header .='<p>Its aims are to foster interactions 
 between protagonists in the fields of Complex Systems science and Complexity
-science,   as well as  to increase their visibility at the international scale.
+science,   as well as  to increase their visibility at the international scale.</p>
     
 <ul>
 <li><b><i>This directory is open</i></b>. Anybody can have her profile included
