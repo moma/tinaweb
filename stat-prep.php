@@ -21,12 +21,13 @@ $missing_organization = 0;
 // données des pays
 foreach ($base->query($sql) as $row) {
 
+    if (strlen(trim($row["country"]))>1){
     if (array_key_exists($row["country"], $country_list)) {
         $country_list[$row["country"]]+=1;
     } else {
         $country_list[$row["country"]] = 1;
     }
-
+    }
     // traitement des postes
     $position = strtolower(trim($row["position"]));
     if (strcmp($position, "prof.") == 0) {
@@ -142,11 +143,13 @@ asort($organizations_list);
 // données des pays
 $country_data = "data: [";
 foreach ($country_list as $key => $value) {
-    if ($value > min(9, count($country_list) / 10)) {
-        $country_data.='["' . $key . '",' . $value . '],';
-    } else {
-        $other_country+=$value;
-    }
+
+        if ($value > min(9, count($country_list) / 10)) {
+            $country_data.='["' . $key . '",' . $value . '],';
+        } else {
+            $other_country+=$value;
+        }
+    
 }
 //if (false) {
 if ($missing_country>0){

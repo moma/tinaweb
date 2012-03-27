@@ -102,13 +102,15 @@ $laboratories = $data["laboratories"];
 $organizations = $data["organizations"];
 $tags = $data["tags"];
 
+$query_details='<ul>';
+
 $f = "";// requête
 $labfilter='';
 if ($tags) {
 	if (sizeof($tags) > 0) {
-		$f .= 'AND ';
+		$f .= 'AND (';
 	}
-
+        $query_details.='<li><strong>Community tags: </strong>';
 	foreach ($tags as $kw) {
 		$words = explode(',', $kw);
 		$i = 0;
@@ -118,37 +120,39 @@ if ($tags) {
 			if ($i > 0)
 				$f .= " OR ";
 			$f .= 'tags LIKE "%' . $word . '%" ';
+                        $query_details.=$word.', '; 
 			$i++;
 		}
 	}
-	$f .= "  ";	
+	$f .= ") ";	
 }
 
 if ($keywords) {
 	if (sizeof($keywords) > 0) {
-		$f .= 'AND ';
+		$f .= 'AND (';
 	}
-
+        $query_details.='<li><strong>Working on: </strong>';
 	foreach ($keywords as $kw) {
 		$words = explode(',', $kw);
 		$i = 0;
 		foreach ($words as $word) {
 			$word = sanitize_input(trim(strtolower($word)));
 			if ($word == "") continue;
-			if ($i > 0)
+                        $query_details.=$word.', ';
+			if ($i > 0)                            
 				$f .= " OR ";
 			$f .= 'keywords LIKE "%' . $word . '%" ';
 			$i++;
 		}
 	}
-	$f .= "  ";	
+	$f .= ")  ";	
 }
 if ($countries) {
 
 	if (sizeof($countries) > 0) {
-		$f .= 'AND ';
+		$f .= 'AND (';
 	}
-
+        $query_details.='<li><strong>In the following country: </strong>';
 	$i = 0;
 	foreach ($countries as $country) {
 		//$country = sanitize_input(trim(strtolower($country)));
@@ -157,16 +161,17 @@ if ($countries) {
 		if ($i > 0)
 			$f .= " OR ";
 		$f .= 'country = "' . $country . '" ';                
+                $query_details.=$country.', '; 
 		$i++;
 	}
-	$f .= "  ";
+	$f .= ")  ";
 }
 if ($laboratories) {
 
 	if (sizeof($laboratories) > 0) {
-		$f .= 'AND ';
+		$f .= 'AND (';
 	}
-
+        $query_details.='<li><strong>In the lab named : </strong>';
 	$i = 0;
 	foreach ($laboratories as $lab) {
 		$lab = sanitize_input(trim(strtolower($lab)));
@@ -174,29 +179,32 @@ if ($laboratories) {
 		if ($i > 0)
 			$f .= " OR ";
 		$f .= 'lab LIKE "%' . $lab . '%" ';
+                $query_details.=$word.', '; 
 		$i++;
 	}
-	$f .= "  ";        
+	$f .= ")  ";        
 }
 
 if ($organizations) {
 
 	if (sizeof($organizations) > 0) {
-		$f .= 'AND ';
+		$f .= 'AND (';
 	}
-
+        $query_details.='<li><strong>In the organization named : </strong>';
 	$i = 0;
 	foreach ($organizations as $org) {
 		$org = sanitize_input(trim(strtolower($org)));
 		
 		if ($org == "") continue;
-
+                $query_details.=$word.', '; 
 		$f .= 'affiliation LIKE "%' . $org . '%" OR affiliation2 LIKE "%' . $org . '%" ';                
                 //'affiliation LIKE "%' . $org . '% OR affiliation2 LIKE "%' . $org . '%"';
 		$i++;
 	}
-	$f .= "  ";	
+	$f .= ")  ";	
 }
+
+$query_details.='</ul>';
 
 $base = new PDO("sqlite:" . $dbname);
 $termsMatrix = array(); // liste des termes présents chez les scholars avec leurs cooc avec les autres termes
@@ -221,7 +229,6 @@ $sql = "SELECT * FROM scholars where " . " " . $f.' ORDER BY last_name';
 }else{
     $sql = "SELECT * FROM scholars".' ORDER BY last_name';
 }
-
 /// stats
 $base = new PDO('sqlite:' . $dbname);
 include ('stat-prep.php');///
@@ -292,9 +299,9 @@ $header = '<div class="row" id="welcome">
 <p>
 This directory presents the profiles of <a href="#scholars">'.  count($scholars).' scholars</a>, <a href="#labs">'
 .  count($labs).' labs</a> and <a href="#orga">'.$orga_count.' organizations</a> in
-the field of Complex Systems.
- 
-Its aims are to foster interactions 
+the field of Complex Systems: ';
+$header .= $query_details;
+$header .='Its aims are to foster interactions 
 between protagonists in the fields of Complex Systems science and Complexity
 science,   as well as  to increase their visibility at the international scale.
     
