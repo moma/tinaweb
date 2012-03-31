@@ -58,6 +58,7 @@ foreach ($base->query($sql) as $row) {
 	$info['title'] = $row['title'];
 	$info['position'] = $row['position'];
         $info['photo_url']=$row['Photo'];
+        $info['job_market']=$row['job_market'];        
         $info['login']=$row['login'];
 	//print_r($row);
 	$scholars[$row['unique_id']] = $info;
@@ -237,9 +238,11 @@ foreach ($scholars as $scholar) {
 //		} else {
 //			$color = 'b="255" g="0"  r="0"';
 //		}
-		if ($scholars_colors[$scholar['login']] >0) {
+		if ($scholars_colors[$scholar['login']] ==1) {
 			$color = 'b="243" g="183"  r="19"';
-		} else {
+		} elseif (strcmp ($scholar['job_market'],'Yes')==0){
+                        $color = 'b="78" g="193"  r="255"';
+                }else{
 			$color = 'b="78" g="193"  r="127"';
 		}
 		//pt($scholar['last_name'].','.$scholar['css_voter'].','.$scholar['css_member']);
