@@ -229,9 +229,6 @@ $sql = "SELECT * FROM scholars where " . " " . $f.' ORDER BY last_name';
 }else{
     $sql = "SELECT * FROM scholars".' ORDER BY last_name';
 }
-/// stats
-$base = new PDO('sqlite:' . $dbname);
-include ('stat-prep.php');///
 
 
 
@@ -271,6 +268,11 @@ foreach ($base->query($sql) as $row) {
     $info['affiliation_acronym'] = $row['affiliation_acronym'];
     $scholars[$row['unique_id']] = $info;
 }
+
+/// stats
+//$base = new PDO('sqlite:' . $dbname);
+include ('stat-prep_from_array.php');///
+
 
 
 include ("directory_content.php");

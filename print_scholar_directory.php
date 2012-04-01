@@ -26,6 +26,11 @@ $meta = '<!DOCTYPE html>
         <script type="text/javascript" src="js/jquery/jquery.highlight-3.js"></script>
         <script type="text/javascript" src="js/misc/json2.js"></script>
         <script type="text/javascript" src="js/utils.js"></script>
+         <script type="text/javascript" src="Highcharts-2.2.0/js/highcharts.js"></script>
+        <script type="text/javascript" src="Highcharts-2.2.0/js/modules/exporting.js"></script>
+
+        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+
         <link href="css/whoswho.css" rel="stylesheet" type="text/css">
         <link rel="shortcut icon" href="images/favicon.ico">
         <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
@@ -43,13 +48,6 @@ $meta = '<!DOCTYPE html>
             var s = document.getElementsByTagName(\'script\')[0]; s.parentNode.insertBefore(ga, s);
           })();
         </script>
-    </head>
-    <body>
-        <script type="text/javascript" src="js/whoswho.js"></script>
-    <div class="container-fluid">
-        
-        <!-- Main hero unit for a primary marketing message or call to action -->
-        <div class="hero-unit">
             ';
 
 define('_is_utf8_split', 5000);
@@ -140,7 +138,7 @@ foreach ($base->query($sql) as $row) {
 }
     
 }
-
+include ('stat-prep_from_array.php');///
 
 include ("directory_content.php");
 
@@ -188,6 +186,13 @@ Contributions and ideas are welcome to improve this directory. Please feedback a
 
 <br/>
 <br/>
+<h2>Global statistics</h2>
+<div id="country" style="width: 800px; height: 300px; margin: 0 auto"></div>
+<div id="title" style="width: 800px; height: 300px; margin: 0 auto"></div>
+<div id="position" style="width: 800px; height: 300px; margin: 0 auto"></div>
+
+
+<br/>
 <br/> <A NAME="scholars"> </A>
 <h2>Scholars by alphabetical order</h2>
 <br/>
@@ -196,7 +201,7 @@ Contributions and ideas are welcome to improve this directory. Please feedback a
 </div>';
 
 
-echo $meta;
+echo $meta.' '.$stats.'</head>';
 if (count($scholars)==0){
 echo  '<h2>Sorry, '.$target_name.' did not mentioned any keywords ... we cannot process it\'s network.</h2><br/>
     If you are '.$target_name.', you can  <a href="http://main.csregistry.org/Whoswhodata"  target="_BLANK">modify your profile</a> and see your 
