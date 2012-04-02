@@ -227,16 +227,17 @@ $content='';
 if (strlen($f)>0){
 $sql = "SELECT * FROM scholars where " . " " . $f.' ORDER BY last_name';
 }else{
-    $sql = "SELECT * FROM scholars".' ORDER BY last_name';
+    $sql = "SELECT * FROM scholars ORDER BY last_name";
 }
 
-
-
+//echo $sql.'<br/>';
 
 // liste des chercheurs
 $scholars = array();
+
 //$query = "SELECT * FROM scholars";
 foreach ($base->query($sql) as $row) {
+
     $info = array();
     $info['unique_id'] = $row['unique_id'];
     $info['first_name'] = $row['first_name'];
@@ -268,7 +269,6 @@ foreach ($base->query($sql) as $row) {
     $info['affiliation_acronym'] = $row['affiliation_acronym'];
     $scholars[$row['unique_id']] = $info;
 }
-
 /// stats
 //$base = new PDO('sqlite:' . $dbname);
 include ('stat-prep_from_array.php');///

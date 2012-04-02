@@ -26,6 +26,7 @@ $orga_list=array();
 
 $loop=0; //nombre de boucles
 // ajout des scholars
+
 foreach ($scholars as $scholar) {
     if ($loop % 100){
         set_time_limit(20);
@@ -153,7 +154,7 @@ foreach ($scholars as $scholar) {
         }
 
         $content .= '</div>';
-    }
+    }   
 $content .= '</div>';
 
     $content .= '</div>';

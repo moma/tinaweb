@@ -241,7 +241,7 @@ foreach ($scholars as $scholar) {
 		if ($scholars_colors[$scholar['login']] ==1) {
 			$color = 'b="243" g="183"  r="19"';
 		} elseif (strcmp ($scholar['job_market'],'Yes')==0){
-                        $color = 'b="78" g="193"  r="255"';
+                        $color = 'b="139" g="28"  r="28"';
                 }else{
 			$color = 'b="78" g="193"  r="127"';
 		}
