@@ -99,15 +99,15 @@ if ($login) {
         
     }     
 }
-     
+ 
         // les scholars sont affichés par ordre de pertinence
         arsort($scholar_array);               
    
-        $scholar_array=array_keys($scholar_array);
+        $scholar_id_array=array_keys($scholar_array);
 // liste des chercheurs
 $scholars = array();
 
-foreach ($scholar_array as $scholar_id){
+foreach ($scholar_id_array as $scholar_id){
 $sql = "SELECT * FROM scholars where unique_id='" . $scholar_id. "'";
 
 //$query = "SELECT * FROM scholars";
@@ -201,7 +201,7 @@ Contributions and ideas are welcome to improve this directory. Please feedback a
 
 <br/>
 <br/> <A NAME="scholars"> </A>
-<h2>Scholars by alphabetical order</h2>
+<h2>Scholars sorted by number of common keywords with '.$target_name.'</h2>
 <br/>
 <br/>
 </div>

@@ -135,7 +135,7 @@ foreach ($scholars as $scholar) {
         $content .= '<div class="span3" align="justify">';
         
         if ($scholar['keywords'] != null){
-                 $content .= '<i class="icon-tags"></i> ' . clean_exp($scholar['keywords']). '.<br/><br/>';
+                 $content .= '<i class="icon-tags"></i> ' . clean_exp($scholar['keywords']). '.<br/><br/>';  
         }
             
         if ($scholar['address'] != null) {
