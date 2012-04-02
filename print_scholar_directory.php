@@ -87,16 +87,23 @@ if ($login) {
                 $sql2 = "SELECT * FROM scholars2terms where term_id=" . trim($keywords_id);
                 #pt($sql2);
                 foreach ($base->query($sql2) as $row) {
-                    $scholar_array[] = $row['scholar'];
+                    if (array_key_exists($row['scholar'], $scholar_array)){
+                        $scholar_array[$row['scholar']] += 1;
+                    }else{
+                        $scholar_array[$row['scholar']] = 1;
+                    }
+                    
                 }
             }
         }        
         
-        sort($scholar_array);               
     }     
 }
-
-
+     
+        // les scholars sont affichés par ordre de pertinence
+        arsort($scholar_array);               
+   
+        $scholar_array=array_keys($scholar_array);
 // liste des chercheurs
 $scholars = array();
 
