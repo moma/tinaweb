@@ -22,6 +22,7 @@
 		<script type="text/javascript" src="js/bootstrap/bootstrap-dropdown-fade.js"></script>
 		<script type="text/javascript" src="js/misc/underscore.min.js"></script>
 		<script type="text/javascript" src="js/jquery/jquery.highlight-3.js"></script>
+                <script type="text/javascript" src="js/jquery.vticker-min.js"></script>
 		<script type="text/javascript" src="js/misc/json2.js"></script>
 		<script type="text/javascript" src="js/utils.js"></script>
 		<link href="css/whoswho.css" rel="stylesheet" type="text/css">
@@ -30,7 +31,21 @@
 		<link rel="apple-touch-icon" href="images/apple-touch-icon.png">
 		<link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png">
 		<link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png">
+		
+                <!-- Pour afficher les news -->
 <script type="text/javascript">
+$(function(){
+	$('#news-container').vTicker({
+		speed: 700,
+		pause: 6000,
+		animation: 'fade',
+		mousePause: false,
+		showItems: 1
+	});
+});
+</script>                
+                
+                <script type="text/javascript">
 
   var _gaq = _gaq || [];
   _gaq.push(['_setAccount', 'UA-30062222-1']);
@@ -203,38 +218,51 @@
 					</address>
 					<br/><br/>
                                       
-                                 </div>  
-                                       <!-- Second column -->
-                                           <div class="span4">
-                                               <iframe src="http://player.vimeo.com/video/38383946" width="300" height="170" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>
+                                         </div>  
+                                         <!-- Second column -->
+                                         <div class="span4">
+                                             <p>New features</p>       
+                                             <div id="news-container">                                                 
+                                                 <ul>
+                                                     <li><a href="jobmarket.html">Job market integration : announce new jobs and find people looking for a job</a></li>
+                                                     <li>Enhanced personnal directory : get stats on your neighboring community, find quicker relevant persons.</li>
+                                                     <li><a href="community_tags.html">Community tags: you organize an events ? Map its community and get its directory.</li>
+                                                 </ul>
+                                             </div>
                                                <br/>
-                                               
-                                               <br/>
-						<i class="icon-user"></i>  <strong>You cannot find yourself</strong> in the database or want to update your data ?
-						<br/><br/>
-                                                <div class="span4 offset1">
+                                             <iframe src="http://player.vimeo.com/video/38383946" width="300" height="170" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>
+                                             <br/>
+                                                   
+                                             <br/>
+                                             <i class="icon-user"></i>  <strong>You cannot find yourself</strong> in the database or want to update your data ?
+                                             <br/><br/>
+                                             <div class="span4 offset1">
                                                  <button id="register" class="btn btn-mini btn-info">
 							Edit you profile !
-						</button>
-                                                    <br/><br/>
-                                                </div><br/>
-                                           </div>
-                                 </div>  
-                                      <a href="https://twitter.com/intent/tweet?button_hashtag=communityexplorer&text=Map%20your%20%23network%2C%20explore%20the%20worldwide%20%23complexsystems%20%23community%20at%20all%20scales.%20%23dataviz" class="twitter-hashtag-button" data-url="http://communityexplorer.org">Tweet #communityexplorer</a>
-					<div class="fb-like" data-href="http://communityexplorer.org" data-send="true" data-layout="button_count" data-width="450" data-show-faces="true" data-font="arial"></div>
-				</div>
-			</div>
-			<footer>
-				<!-- This directory is maintained by the <a href="http://cssociety.org" target="blank">Complex Systems Society</a> and the <a href="http://iscpif.fr" target="blank">Complex Systems Institute of Paris Ile-de-France</a>.<br/>-->
-				<center>
-					<a href="about.html"><i class="icon-question-sign"></i> About</a> - <a href="http://moma.csregistry.org/feedback"  target="BLANK"><i class="icon-repeat"></i> Feedback</a> - <a href="privacy.html"> <i class="icon-list-alt"></i> Privacy</a>
-					<br/>
+                                                 </button>
+                                                 <br/><br/>
+                                             </div><br/>
+                                             
+    
+    
+                                         </div>
+                                    </div>  
+                                    <a href="https://twitter.com/intent/tweet?button_hashtag=communityexplorer&text=Map%20your%20%23network%2C%20explore%20the%20worldwide%20%23complexsystems%20%23community%20at%20all%20scales.%20%23dataviz" class="twitter-hashtag-button" data-url="http://communityexplorer.org">Tweet #communityexplorer</a>
+                                    <div class="fb-like" data-href="http://communityexplorer.org" data-send="true" data-layout="button_count" data-width="450" data-show-faces="true" data-font="arial"></div>
+                                </div>
+                        </div>
+                        <footer>
+                            <!-- This directory is maintained by the <a href="http://cssociety.org" target="blank">Complex Systems Society</a> and the <a href="http://iscpif.fr" target="blank">Complex Systems Institute of Paris Ile-de-France</a>.<br/>-->
+                            <center>
+                                <a href="about.html"><i class="icon-question-sign"></i> About</a> - <a href="http://moma.csregistry.org/feedback"  target="BLANK"><i class="icon-repeat"></i> Feedback</a> - <a href="privacy.html"> <i class="icon-list-alt"></i> Privacy</a>
+                                <br/>
 					Directory maintained by the <a href="http://cssociety.org" target="blank">Complex Systems Society</a> and the <a href="http://iscpif.fr" target="blank">Complex Systems Institute of Paris Ile-de-France</a>.
-					<br/>
-					<a href="http://cssociety.org" target="_BLANK"><img src="img/css.png" alt="http://cssociety.org" style="border: none; margin-bottom : -6px;" title="isc-pif" height="25px" /></a><a href="http://iscpif.fr"><img src="css/branding/iscpif_short.png" alt="iscpif.fr" style="border: none; margin-bottom : -6px;" title="isc-pif" /></a>
-					<a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/3.0/" target="blank"><img alt="Creative Commons License" style="border: none; margin-bottom : -6px;" src="img/cc.png" height="20px"/></a> - <a href="http://moma.csregistry.org" target="_BLANK"> MOMA</a> - <a href="http://iscpif.fr" target="_BLANK">ISC-PIF</a> - <a href="http://www.cnrs.fr/fr/recherche/index.htm" target="_BLANK">CNRS</a>.
-				</center>
-			</footer>
-		</div>
-	</body>
+                                <br/>
+                                <a href="http://cssociety.org" target="_BLANK"><img src="img/css.png" alt="http://cssociety.org" style="border: none; margin-bottom : -6px;" title="isc-pif" height="25px" /></a><a href="http://iscpif.fr"><img src="css/branding/iscpif_short.png" alt="iscpif.fr" style="border: none; margin-bottom : -6px;" title="isc-pif" /></a>
+                                <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/3.0/" target="blank"><img alt="Creative Commons License" style="border: none; margin-bottom : -6px;" src="img/cc.png" height="20px"/></a> - <a href="http://moma.csregistry.org" target="_BLANK"> MOMA</a> - <a href="http://iscpif.fr" target="_BLANK">ISC-PIF</a> - <a href="http://www.cnrs.fr/fr/recherche/index.htm" target="_BLANK">CNRS</a>.
+                            </center>
+                        </footer>
+                </div>
+</body>
 </html>
+    
