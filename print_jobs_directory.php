@@ -222,7 +222,7 @@ foreach ($base->query($sql) as $row) {
     $info['country'] = $row['country'];
     $info['lab'] = $row['lab'];
     $info['organization'] = $row['organization'];
-    $info['keywords'] = $row['keywords'];
+        $info['keywords'] = $row['keywords'];
     $info['url'] = $row['url'];
     $info['deadline'] = $row['deadline'];    
     $info['start_date'] = $row['start_date'];
@@ -233,8 +233,6 @@ foreach ($base->query($sql) as $row) {
 /// stats
 //$base = new PDO('sqlite:' . $dbname);
 include ('jobs_stat-prep_from_array.php');///
-
-
 
 include ("jobs_content.php");
 
@@ -256,11 +254,11 @@ $header = '<div class="row" id="welcome">
     <div class="span12" align="justify">
 <img src="img/RegistryBanner.png" align="center">
 <br/><br/>
-<h1>Complex Systems Scholars</h1>
+<h1>Jobs openings <br/><small>  in complex systems and complexity science</small></h1>
 <br/>
 <br/>
 <p>
-This directory presents the profiles of <a href="#scholars">'.  count($scholars).' scholars</a>, <a href="#labs">'
+This directory presents the <a href="#scholars">'.  count($jobs).' jobs openings</a> in <a href="#labs">'
 .  count($labs).' labs</a> and <a href="#orga">'.$orga_count.' organizations</a> in
 the field of Complex Systems';
 if (strlen(trim($query_details))>3){
@@ -268,25 +266,10 @@ $header .= ': </p>'.$query_details;
 }else{
     $header .='.</p> ';
 }
-$header .='<p>Its aims are to foster interactions 
-between protagonists in the fields of Complex Systems science and Complexity
-science,   as well as  to increase their visibility at the international scale.</p>
-    
-<ul>
-<li><b><i>This directory is open</i></b>. Anybody can have her profile included
-provided it is related to Complex Systems science and Complexity science. Personal data are given on a
-voluntary basis and people are responsible for the validity and integrity of their data.
-<li><i><b>This directory is browsable online</b> on the website of the complex systems society :</i> http://csbrowser.cssociety.org
-</ul> 
-</p>
-
-<p>
-This directory is edited by the Complex Systems Registry. This initiative is supported by the <i>Complex Systems
-Society</i> (<a href="http://cssociety.org">http://cssociety.org</a>).
-</p>
+$header .='
 <br/>
-<p>Contributions and ideas are welcome to improve this directory. Please feedback at :<br/>
-<a href="http://css.csregistry.org/whoswho+feedback">http://css.csregistry.org/whoswho+feedback</a></p>
+<p>You can 
+<a href="http://main.csregistry.org/jobs-submission">submit new job openings</a> on the complex systems registry.</p>
 <br/>
 <h2>Global statistics</h2>
 <div id="country" style="width: 800px; height: 300px; margin: 0 auto"></div>
@@ -295,13 +278,103 @@ Society</i> (<a href="http://cssociety.org">http://cssociety.org</a>).
 
 <br/>
 <br/> <A NAME="scholars"> </A>
-<h2>Scholars by alphabetical order</h2>
+<h2>Jobs sorted by position</h2>
 <br/>
 <br/>
 </div>
 </div>';
 
 echo $meta.' '.$stats.'</head>';
+echo '    
+    <body>';
+
+echo '		
+    <script type="text/javascript" src="js/whoswho.js"/></script>
+    <div class="topbar" data-dropdown="dropdown">
+			<div class="topbar-inner">
+				<div class="container-fluid">
+					 <a class="brand" href="index.html"><i class="icon-home icon-white"></i>  SELECT</a>
+					<ul class="nav">
+						<li id="mapping" style="margin-top:5px;">
+							<span style="color: #fff;"> </span>
+							<select id="categorya" class="small" style="background: rgb(220,255,220, 0.8);">
+								<option selected="true">Keywords</option>
+								<!--<option>Scholars</option>
+								<option>Labs</option>
+								<option>Organizations</option>
+								<option>Countries</option>-->
+							</select>
+							<span style="color: #fff;"> and </span>
+							<select id="categoryb" class="small" style="background: rgb(255,220,220, 0.8);">
+								<option selected="true">Scholars</option>
+								<!--<option>Labs</option>
+								<option>Organizations</option>
+								<option>Countries</option>-->
+							</select>
+						</li>
+						<!--
+						<li class="dropdown">
+						<a class="dropdown-toggle"><strong>working on</strong> Optics, Econometrics</a>
+						<ul class="dropdown-menu">
+						<li>
+						<a href="#">Change filter</a>
+						</li>
+						<li>
+						<a href="#">Delete filter</a>
+						</li>
+						</ul>
+						</li>
+						-->
+						<li id="refine" class="dropdown">
+							<a class="dropdown-toggle">refine</a>
+						<ul class="dropdown-menu">
+								<li>
+								<a id="addfiltercountry" href="#">Filter by country</a>
+								</li>
+								<li>
+								<a id="addfilterorganization" href="#">Filter by organization</a>
+								</li>
+								<li>
+								<a id="addfilterlaboratory" href="#">Filter by laboratory</a>
+								</li>
+								<!--<li>
+                                                        	<a id="addcolor" href="#">Color by</a>
+								</li>-->
+								<li>
+									<a id="addfilterkeyword" href="#">Filter by keyword</a>
+								</li>
+                                                                <li>
+								<a id="addfiltertag" href="#">Filter by community tags</a>
+								</li>
+								
+							</ul>
+						</li>
+						<li style="">
+							<a id="generate" href="#"> <strong>MAP</strong></a>
+						</li>
+                                                <li style="">
+							<a id="OR" href="#"> <strong>OR</strong></a>
+						</li>
+                                                
+                                                <li style="">
+							<a id="print" href="#"> <strong>PRINT</strong></a>
+						</li>
+                                                
+					</ul>
+					<form id="search-form" class="js-search-form pull-right">
+						<span class="glass js-search-action"><i></i></span>
+						<input id="search" class="input-small" type="text" name="q" placeholder="Search">
+						<!--<input type="text" id="search" name="search" placeholder="Scholars">-->
+						<!--
+						<li class="ui-state-default ui-corner-all" title=".ui-icon-search"><span class="ui-icon ui-icon-search"></span></li>
+
+						<button class="btn" type="submit"></button>
+						-->
+					</form>
+				</div>
+			</div>
+		</div>';
+//include ("analytics.php");
 echo $header;
 echo $content;
 

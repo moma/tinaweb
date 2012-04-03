@@ -253,12 +253,19 @@ foreach ($orga_list as $name) {
 
 
 ///////Ajout des labs
+$content .='<br/> <A NAME="labs"> </A>
+<h1>Labs by alphabetical order</h1>
+<p><i>List of labs to which scholars are affiliated</i></p>';
 include('labs_list.php');
 
 
 //////////////////////////
 // liste des orga ////////
 //////////////////////////
+$content .= '<br/> <A NAME="orga"> </A>
+<h1>Organizations by alphabetical order</h1>
+<br/>
+<p><i>List of organizations to which scholars are affiliated</i></p>';
 include('orga_list.php');
 
 /// ajout des organisations

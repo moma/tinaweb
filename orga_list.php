@@ -1,10 +1,7 @@
 <?php
 
 $content .='<br/>
-<br/> <A NAME="orga"> </A>
-<h1>Organizations by alphabetical order</h1>
-<br/>
-<p><i>List of organizations to which scholars are affiliated</i></p>
+
 <br/>
 <br/>';
 

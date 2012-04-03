@@ -1,9 +1,7 @@
 <?php
 
 $content .='<br/>
-<br/> <A NAME="labs"> </A>
-<h1>Labs by alphabetical order</h1>
-<p><i>List of labs to which scholars are affiliated</i></p>
+
 <br/>
 <br/>';
 
