@@ -256,11 +256,11 @@ $header = '<div class="row" id="welcome">
     <div class="span12" align="justify">
 <img src="img/RegistryBanner.png" align="center">
 <br/><br/>
-<h1>Complex Systems Scholars</h1>
+<h1>Jobs openings <br/><small>  in complex systems and complexity science</small></h1>
 <br/>
 <br/>
 <p>
-This directory presents the profiles of <a href="#scholars">'.  count($scholars).' scholars</a>, <a href="#labs">'
+This directory presents the <a href="#scholars">'.  count($jobs).' jobs openings</a> in <a href="#labs">'
 .  count($labs).' labs</a> and <a href="#orga">'.$orga_count.' organizations</a> in
 the field of Complex Systems';
 if (strlen(trim($query_details))>3){
@@ -268,25 +268,10 @@ $header .= ': </p>'.$query_details;
 }else{
     $header .='.</p> ';
 }
-$header .='<p>Its aims are to foster interactions 
-between protagonists in the fields of Complex Systems science and Complexity
-science,   as well as  to increase their visibility at the international scale.</p>
-    
-<ul>
-<li><b><i>This directory is open</i></b>. Anybody can have her profile included
-provided it is related to Complex Systems science and Complexity science. Personal data are given on a
-voluntary basis and people are responsible for the validity and integrity of their data.
-<li><i><b>This directory is browsable online</b> on the website of the complex systems society :</i> http://csbrowser.cssociety.org
-</ul> 
-</p>
-
-<p>
-This directory is edited by the Complex Systems Registry. This initiative is supported by the <i>Complex Systems
-Society</i> (<a href="http://cssociety.org">http://cssociety.org</a>).
-</p>
+$header .='
 <br/>
-<p>Contributions and ideas are welcome to improve this directory. Please feedback at :<br/>
-<a href="http://css.csregistry.org/whoswho+feedback">http://css.csregistry.org/whoswho+feedback</a></p>
+<p>You can 
+<a href="http://main.csregistry.org/jobs-submission">submit new job openings</a> on the complex systems registry.</p>
 <br/>
 <h2>Global statistics</h2>
 <div id="country" style="width: 800px; height: 300px; margin: 0 auto"></div>
@@ -295,7 +280,7 @@ Society</i> (<a href="http://cssociety.org">http://cssociety.org</a>).
 
 <br/>
 <br/> <A NAME="scholars"> </A>
-<h2>Scholars by alphabetical order</h2>
+<h2>Jobs sorted by position</h2>
 <br/>
 <br/>
 </div>
