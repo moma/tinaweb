@@ -270,8 +270,9 @@ $header .= ': </p>'.$query_details;
 }
 $header .='
 <br/>
-<p>You can 
-<a href="http://main.csregistry.org/jobs-submission">submit new job openings</a> on the complex systems registry.</p>
+<p>On the complex systems registry, you can 
+<a href="http://main.csregistry.org/jobs-submission">submit new job openings</a> or <a href="http://main.csregistry.org/jobmarket">announce that you will be looking for a job
+in the next 12 months.</a></p>
 <br/>
 <h2>Global statistics</h2>
 <div id="country" style="width: 800px; height: 300px; margin: 0 auto"></div>
