@@ -186,8 +186,8 @@ voluntary basis and people are responsible for the validity and integrity of the
 <li><i><b>This directory is browsable online</b> on the website of the complex systems society :</i> http://csbrowser.cssociety.org
 <li>This directory is edited by the Complex Systems Registry. This initiative is supported by the <i>Complex Systems
 Society</i> (<a href="http://cssociety.org">http://cssociety.org</a>). 
-Contributions and ideas are welcome to improve this directory. Please feedback at :
-<a href="http://css.csregistry.org/whoswho+feedback">http://css.csregistry.org/whoswho+feedback</a>
+Contributions and ideas are welcome to improve this directory.
+<a href="http://css.csregistry.org/whoswho+feedback">Please feedback</a></p>
 </ul> 
 </p>
 

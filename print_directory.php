@@ -324,8 +324,8 @@ This directory is edited by the Complex Systems Registry. This initiative is sup
 Society</i> (<a href="http://cssociety.org">http://cssociety.org</a>).
 </p>
 <br/>
-<p>Contributions and ideas are welcome to improve this directory. Please feedback at :<br/>
-<a href="http://css.csregistry.org/whoswho+feedback">http://css.csregistry.org/whoswho+feedback</a></p>
+<p>Contributions and ideas are welcome to improve this directory. 
+<a href="http://css.csregistry.org/whoswho+feedback">Please feedback</a></p>
 <br/>
 <h2>Global statistics</h2>
 <div id="country" style="width: 800px; height: 300px; margin: 0 auto"></div>
