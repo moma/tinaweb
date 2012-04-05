@@ -29,7 +29,7 @@ if ($category == 'country' || $category == 'countries') {
   $cat = "tags";
   $query = 'LIKE upper(\''.strtoupper($q).'\')';
 } elseif ($category == 'labs' || $category == 'laboratories' || $category == 'laboratory') {
-  $cat = "labs";
+  $cat = "lab";
   $query = 'LIKE upper(\''.strtoupper($q).'\')';
 } else {
   echo ("ERROR");
