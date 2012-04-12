@@ -23,8 +23,9 @@
 1. Install [Node](http://nodejs.org)
 2. Install [npm](http://npm.org)
 3. Install [Coffee-Script](http://coffeescript.org) globally using npm:
+
     $ sudo npm install coffeescript -g
-4. You are done.
+
 
 ### Building
 
