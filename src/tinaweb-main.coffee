@@ -141,6 +141,7 @@ class Application extends Tinaweb
     height = getScreenHeight() - $("#hd").height() - $("#ft").height()
 
     # back compatibility with legacy operating systems (windows, linux)
+    log "experimental: #{@config.experimental}"
     unless @config.experimental
       width -= (infoDivWidth)
       height -= 60
