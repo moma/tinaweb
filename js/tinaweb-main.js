@@ -163,6 +163,7 @@ Application = (function(_super) {
     infoDivWidth = 390;
     width = getScreenWidth() - 8;
     height = getScreenHeight() - $("#hd").height() - $("#ft").height();
+    log("experimental: " + this.config.experimental);
     if (!this.config.experimental) {
       width -= infoDivWidth;
       height -= 60;
