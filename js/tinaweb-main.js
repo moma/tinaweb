@@ -15,6 +15,8 @@ Application = (function(_super) {
 
     this.selectionChanged = __bind(this.selectionChanged, this);
 
+    this.setView = __bind(this.setView, this);
+
     this.resize = __bind(this.resize, this);
 
     this.graphLoadingProgress = __bind(this.graphLoadingProgress, this);
@@ -36,12 +38,12 @@ Application = (function(_super) {
 
   Application.prototype.postInstall = function() {
     log("Application: postInstall");
+    log("Application: configuring page layout, and info panel's DIV");
     if (this.config.layout === "phyloforce") {
       this.infodiv = PhyloInfoDiv;
     } else {
       this.infodiv = InfoDiv;
     }
-    log("Application: configuring page layout, and info panel's DIV");
     this.infodiv.id = "infodiv";
     this.infodiv.label = $("#node_label");
     this.infodiv.contents = $("#node_contents");
@@ -51,8 +53,8 @@ Application = (function(_super) {
     this.infodiv.unselect_button = $("#toggle-unselect");
     this.infodiv.node_table = $("#node_table > tbody");
     this.infodiv.categories = {
-      NGram: "Keywords",
-      Document: "Projects"
+      NGram: this.config.category_a_label,
+      Document: this.config.category_b_label
     };
     log("Application: resizing here");
     this.resize();
@@ -172,10 +174,11 @@ Application = (function(_super) {
     });
   };
 
-  Application.prototype.setView = function(view, cb) {
+  Application.prototype.setView = function(value, cb) {
     var alias, real;
     alias = "view";
     real = "filter.view";
+    $("#level").button("option", "label", "" + value + " level");
     return this.set(real, value, "String", this.makeWrap(alias, real, cb));
   };
 

@@ -10,6 +10,8 @@ default_config =
   assets: ""                   # use this as a path where are stored some assets (eg. icons)
   embed: no                    # if set to true, the config.getGraph function will be called. else, config.gexf will be called
   view: "macro"                # default view to show the graph
+  category_a_label: "NGram"    # label used to show the type-a category
+  category_b_label: "Document" # // for type-b
   category: "Document"         # default category used to show the graph
   node_id: ""                  # default node to select ("" means no node will be selected)
   search: ""                   # default search query ("" means no search will be run)
@@ -29,3 +31,4 @@ default_config =
   antialiasing_threshold: 1500 # max number of edges, before aliasing the scene (pixel aliasing)
   pause: off                   # should we be paused by default?
   demo: no                     # should we enable the demo mode?
+  experimental: no             # experimental user interface

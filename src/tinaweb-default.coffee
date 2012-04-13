@@ -11,6 +11,8 @@ class Tinaweb extends Tinaviz
       gexf: "sample.gexf.gz"       # gexf file to load by default
       path: "js/tinaviz/"          # default path to tinaviz
       view: "macro"                # default view to show the graph
+      category_a_label: "NGram"    # label used to print nodes of type A
+      category_b_label: "Document" #              //              type B
       category: "Document"         # default category used to show the graph
       node_id: ""                  # default node to select ("" means no node will be selected)
       search: ""                   # default search query ("" means no search will be run)
@@ -68,7 +70,7 @@ class Tinaweb extends Tinaviz
   setPause: (value=true, cb) =>  @set "pause", value, "Boolean", cb
   
   getPause: (cb) => @get "pause", cb
-  
+
   pause: (cb) => @setPause cb
   
   togglePause: (cb) => 

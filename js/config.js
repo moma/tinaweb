@@ -8,6 +8,8 @@ default_config = {
   assets: "",
   embed: false,
   view: "macro",
+  category_a_label: "NGram",
+  category_b_label: "Document",
   category: "Document",
   node_id: "",
   search: "",
