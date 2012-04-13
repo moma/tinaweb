@@ -61,13 +61,12 @@ strToBoolean = (s) ->
 loadURLParamsUsing = (config) ->
   for param in window.location.href.slice(window.location.href.indexOf('?') + 1).split('&')
     [key,value] = param.split '='
-    if key in config
+    if key of config
       current = _ config[key]
       if current.isNumber
-        config[key] = parseFloat value
+        config[key] = (Number) value
       else if current.isBoolean
-        strToBoolean value
-        config[key] = parseBool value
+        config[key] = strToBoolean value
       else if current.isString
         config[key] = "#{value}"
       else
@@ -78,8 +77,14 @@ loadURLParamsUsing = (config) ->
   
 htmlEncode = (value) ->
   $("<div/>").text(value).html()
-htmlDecode = (value) ->
-  $("<div/>").html(value).text()
+htmlDecode = (t) ->
+  # try to detect if its really necessary to decode 
+  # (right I should use a regex to look for HTML tags but I'm very pressé)
+  if t.indexOf('<br>') >0 or t.indexOf('<br/>') >0 or t.indexOf('</a>') >0 or t.indexOf('</b>') >0or t.indexOf('</i>') >0
+    t # avoid too much decoding
+  else
+    $("<div/>").html(t).text()
+
 decodeJSON = (encvalue) ->
   if encvalue?
     jQuery.trim encvalue.replace(/\+/g, " ").replace(/%21/g, "!").replace(/%27/g, "'").replace(/%28/g, "(").replace(/%29/g, ")").replace(/%2A/g, "*").replace(/\"/g, "'")

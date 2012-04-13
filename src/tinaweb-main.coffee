@@ -20,6 +20,7 @@ class Application extends Tinaweb
     @configure_using default_config
     
     # note, however, that URL params will overload them too
+    log "loading config from urls"
     @configure_using @load_url_params()
     
   postInstall: =>
@@ -46,7 +47,9 @@ class Application extends Tinaweb
     log "Application: resizing here"
     @resize()
     
-    $("#infodiv").accordion fillSpace: true
+    $("#infodiv").accordion 
+      collapsible: true
+      fillSpace: true
     @infodiv.reset()
     toolbar.init()
     
@@ -123,7 +126,9 @@ class Application extends Tinaweb
   resize: =>
     log "Application: custom computeSize()"
     infoDivWidth = 390
-    width = getScreenWidth() - infoDivWidth - 55
+
+    # coudln't figure out where the decay come from
+    width = getScreenWidth() - 8 #- infoDivWidth - 55
     height = getScreenHeight() - $("#hd").height() - $("#ft").height() - 60
 
     $("#appletdiv").css "width", width
@@ -133,7 +138,12 @@ class Application extends Tinaweb
     @config.height = height
     
     @_resize {width, height}
-   
+  
+  setView: (view, cb) ->
+    alias = "view"
+    real = "filter.view"
+
+    @set real, value, "String", @makeWrap(alias, real, cb)  
   viewMeso: (id, category) ->
     log "Application: viewMeso(#{id}, #{category})"
     @getCategory (data) =>
