@@ -20,6 +20,7 @@ class Application extends Tinaweb
     @configure_using default_config
     
     # note, however, that URL params will overload them too
+    log "loading config from urls"
     @configure_using @load_url_params()
     
   postInstall: =>
@@ -146,7 +147,12 @@ class Application extends Tinaweb
     @config.height = height
     
     @_resize {width, height}
-   
+  
+  setView: (view, cb) ->
+    alias = "view"
+    real = "filter.view"
+
+    @set real, value, "String", @makeWrap(alias, real, cb)  
   viewMeso: (id, category) ->
     log "Application: viewMeso(#{id}, #{category})"
     @getCategory (data) =>

@@ -32,6 +32,7 @@ Application = (function(_super) {
   Application.prototype.preInstall = function() {
     log("Application: preInstall");
     this.configure_using(default_config);
+    log("loading config from urls");
     return this.configure_using(this.load_url_params());
   };
 
@@ -183,6 +184,13 @@ Application = (function(_super) {
       width: width,
       height: height
     });
+  };
+
+  Application.prototype.setView = function(view, cb) {
+    var alias, real;
+    alias = "view";
+    real = "filter.view";
+    return this.set(real, value, "String", this.makeWrap(alias, real, cb));
   };
 
   Application.prototype.viewMeso = function(id, category) {

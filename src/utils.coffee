@@ -59,13 +59,12 @@ strToBoolean = (s) ->
 loadURLParamsUsing = (config) ->
   for param in window.location.href.slice(window.location.href.indexOf('?') + 1).split('&')
     [key,value] = param.split '='
-    if key in config
+    if key of config
       current = _ config[key]
       if current.isNumber
-        config[key] = parseFloat value
+        config[key] = (Number) value
       else if current.isBoolean
-        strToBoolean value
-        config[key] = parseBool value
+        config[key] = strToBoolean value
       else if current.isString
         config[key] = "#{value}"
       else
