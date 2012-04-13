@@ -31,4 +31,4 @@ default_config =
   antialiasing_threshold: 1500 # max number of edges, before aliasing the scene (pixel aliasing)
   pause: off                   # should we be paused by default?
   demo: no                     # should we enable the demo mode?
-  experimental: no             # experimental user interface
+  experimental: no             # experimental user interface?

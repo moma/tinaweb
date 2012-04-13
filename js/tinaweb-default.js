@@ -74,7 +74,8 @@ Tinaweb = (function(_super) {
       layout_speed: 30,
       antialiasing_threshold: 1500,
       pause: false,
-      demo: false
+      demo: false,
+      experimental: false
     };
     this._status = "done";
     this._demo_running = false;

@@ -32,6 +32,7 @@ class Tinaweb extends Tinaviz
       antialiasing_threshold: 1500 # max number of edges, before aliasing the scene (pixel aliasing)
       pause: false                 # should we be paused by default?
       demo: false                  # should we enable the demo mode?
+      experimental: no             # test experimental features?
       
     @_status = "done"
     @_demo_running = false

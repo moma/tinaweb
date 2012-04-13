@@ -28,5 +28,6 @@ default_config = {
   layout_speed: 30,
   antialiasing_threshold: 1500,
   pause: false,
-  demo: false
+  demo: false,
+  experimental: false
 };

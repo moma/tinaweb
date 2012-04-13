@@ -162,7 +162,11 @@ Application = (function(_super) {
     log("Application: custom computeSize()");
     infoDivWidth = 390;
     width = getScreenWidth() - 8;
-    height = getScreenHeight() - $("#hd").height() - $("#ft").height() - 60;
+    height = getScreenHeight() - $("#hd").height() - $("#ft").height();
+    if (!this.config.experimental) {
+      width -= infoDivWidth;
+      height -= 60;
+    }
     $("#appletdiv").css("width", width);
     $("#infodiv").css("width", infoDivWidth);
     $("#infodivparent").css("height", height);

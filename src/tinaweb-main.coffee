@@ -133,7 +133,7 @@ class Application extends Tinaweb
 
     # back compatibility with legacy operating systems (windows, linux)
     unless @config.experimental
-      width -= infoDivWidth - 47
+      width -= (infoDivWidth)
       height -= 60
 
     $("#appletdiv").css "width", width
