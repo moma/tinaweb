@@ -3,7 +3,7 @@ var default_config;
 
 default_config = {
   elementId: "vizdiv",
-  gexf: "bib.gexf",
+  gexf: "sample.gexf.gz",
   path: "js/tinaviz/",
   assets: "",
   embed: false,
