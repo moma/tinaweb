@@ -19,6 +19,10 @@
 .fg-buttonset-single .fg-button,
 .fg-buttonset-multi .fg-button { margin-right: -1px;}
 
+#htoolbar {
+    opacity: 0.85;
+    box-shadow: 0 0px 10px rgba(0,0,0,.70);
+}
 .fg-toolbar { padding: .5em; }
 
 .fg-toolbar .fg-buttonset { 
@@ -50,6 +54,9 @@ body {
 }
 
 #appletdiv {
+    margin: 0px;
+    padding: 0px;
+    border: 0px;
 	float: left;
 }
 
@@ -57,8 +64,16 @@ body {
     margin: 0px;
     padding: 0px;
     border: 0px;
-    float: right;
+
+  position:absolute;
+  top: 85px;
+  right: 2px;
+     
+    opacity: 0.85;
+
 }
+
+
 
 #node_label {
     font-size: 12pt;
