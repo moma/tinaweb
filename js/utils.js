@@ -98,7 +98,7 @@ hide = function(k, speed) {
 };
 
 strToBoolean = function(s) {
-  switch (s.toLowerCase()) {
+  switch (("" + s).toLowerCase()) {
     case "true":
     case "yes":
     case "on":
@@ -123,11 +123,11 @@ loadURLParamsUsing = function(config) {
     _ref1 = param.split('='), key = _ref1[0], value = _ref1[1];
     if (key in config) {
       current = _(config[key]);
-      if (current.isNumber) {
+      if (current.isNumber()) {
         config[key] = Number(value);
-      } else if (current.isBoolean) {
+      } else if (current.isBoolean()) {
         config[key] = strToBoolean(value);
-      } else if (current.isString) {
+      } else if (current.isString()) {
         config[key] = "" + value;
       } else {
         alert("UTIL cannot overwrite param " + key + " (" + config[key] + ") with " + value);

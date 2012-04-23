@@ -110,21 +110,17 @@ toolbar.runSearchFormNoRepeat = function() {
   txt = $("#search_input").val();
   log("runSearchFormNoRepeat: " + txt);
   app.unselect(function() {
-    var cat, whenDone;
+    var cat;
     app.infodiv.reset();
     cat = app.getCategory();
-    whenDone = function() {
+    return app.selectByPattern(txt, "containsIgnoreCase", function(data) {
       if (txt !== "") {
-        return app.centerOnSelection();
+        app.centerOnSelection();
       } else {
-        return app.recenter();
+        app.recenter();
       }
-    };
-    if (cat === "Document") {
-      return app.selectByPattern(txt, "containsIgnoreCase", whenDone);
-    } else {
-      return app.selectByPattern(txt, "containsIgnoreCase", whenDone);
-    }
+      return app.selectionChanged(data);
+    });
   });
   return false;
 };

@@ -26,12 +26,12 @@ class Application extends Tinaweb
   postInstall: =>
     log "Application: postInstall"
 
+    log "Application: configuring page layout, and info panel's DIV"
     if @config.layout is "phyloforce"
       @infodiv = PhyloInfoDiv
     else
       @infodiv = InfoDiv
           
-    log "Application: configuring page layout, and info panel's DIV"
     @infodiv.id = "infodiv"
     @infodiv.label = $ "#node_label"
     @infodiv.contents = $ "#node_contents"
@@ -41,8 +41,8 @@ class Application extends Tinaweb
     @infodiv.unselect_button = $ "#toggle-unselect"
     @infodiv.node_table = $ "#node_table > tbody"
     @infodiv.categories = 
-      NGram: "Keywords"
-      Document: "Projects"
+      NGram: @config.category_a_label
+      Document: @config.category_b_label
 
     log "Application: resizing here"
     @resize()
@@ -128,8 +128,14 @@ class Application extends Tinaweb
     infoDivWidth = 390
 
     # coudln't figure out where the decay come from
-    width = getScreenWidth() - 8 #- infoDivWidth - 55
-    height = getScreenHeight() - $("#hd").height() - $("#ft").height() - 60
+    width = getScreenWidth() - 8
+    height = getScreenHeight() - $("#hd").height() - $("#ft").height()
+
+    # back compatibility with legacy operating systems (windows, linux)
+    log "experimental: #{@config.experimental}"
+    unless @config.experimental
+      width -= (infoDivWidth)
+      height -= 60
 
     $("#appletdiv").css "width", width
     $("#infodiv").css "width", infoDivWidth
@@ -139,11 +145,12 @@ class Application extends Tinaweb
     
     @_resize {width, height}
   
-  setView: (view, cb) ->
+  setView: (value, cb) =>
     alias = "view"
     real = "filter.view"
-
+    $("#level").button "option", "label", "#{value} level"
     @set real, value, "String", @makeWrap(alias, real, cb)  
+
   viewMeso: (id, category) ->
     log "Application: viewMeso(#{id}, #{category})"
     @getCategory (data) =>

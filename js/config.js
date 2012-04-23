@@ -8,6 +8,8 @@ default_config = {
   assets: "",
   embed: false,
   view: "macro",
+  category_a_label: "NGram",
+  category_b_label: "Document",
   category: "Document",
   node_id: "",
   search: "",
@@ -26,5 +28,6 @@ default_config = {
   layout_speed: 30,
   antialiasing_threshold: 1500,
   pause: false,
-  demo: false
+  demo: false,
+  experimental: false
 };

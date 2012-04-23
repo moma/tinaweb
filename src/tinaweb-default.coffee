@@ -11,6 +11,8 @@ class Tinaweb extends Tinaviz
       gexf: "sample.gexf.gz"       # gexf file to load by default
       path: "js/tinaviz/"          # default path to tinaviz
       view: "macro"                # default view to show the graph
+      category_a_label: "NGram"    # label used to print nodes of type A
+      category_b_label: "Document" #              //              type B
       category: "Document"         # default category used to show the graph
       node_id: ""                  # default node to select ("" means no node will be selected)
       search: ""                   # default search query ("" means no search will be run)
@@ -30,6 +32,7 @@ class Tinaweb extends Tinaviz
       antialiasing_threshold: 1500 # max number of edges, before aliasing the scene (pixel aliasing)
       pause: false                 # should we be paused by default?
       demo: false                  # should we enable the demo mode?
+      experimental: no             # test experimental features?
       
     @_status = "done"
     @_demo_running = false
@@ -68,7 +71,7 @@ class Tinaweb extends Tinaviz
   setPause: (value=true, cb) =>  @set "pause", value, "Boolean", cb
   
   getPause: (cb) => @get "pause", cb
-  
+
   pause: (cb) => @setPause cb
   
   togglePause: (cb) => 

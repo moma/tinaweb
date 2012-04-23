@@ -54,6 +54,8 @@ Tinaweb = (function(_super) {
       gexf: "sample.gexf.gz",
       path: "js/tinaviz/",
       view: "macro",
+      category_a_label: "NGram",
+      category_b_label: "Document",
       category: "Document",
       node_id: "",
       search: "",
@@ -72,7 +74,8 @@ Tinaweb = (function(_super) {
       layout_speed: 30,
       antialiasing_threshold: 1500,
       pause: false,
-      demo: false
+      demo: false,
+      experimental: false
     };
     this._status = "done";
     this._demo_running = false;
