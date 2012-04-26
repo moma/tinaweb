@@ -17,7 +17,7 @@ $meta = '<!DOCTYPE html>
 		<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
 		<![endif]-->
         <!-- Le styles -->
-        <link href="css/bootstrap_directory.css" rel="stylesheet">
+        <link href="css/bootstrap_iscpif.css" rel="stylesheet">
         <link type="text/css" href="css/brownian-motion/jquery-ui-1.8.16.custom.css">
         <link href="http://fonts.googleapis.com/css?family=Ubuntu" rel="stylesheet" type="text/css">
         <script type="text/javascript" src="js/jquery/jquery-1.7.min.js"></script>
@@ -289,9 +289,8 @@ $content .= '</div>
 //////// Header
 $header = '<div class="row" id="welcome">
     <div class="span12" align="justify">
-<a href="http://iscpif.fr" target="blank"><img src="custom/ISCPIF-banner-bgdblue.png" align="center"></a>
+<a href="http://iscpif.fr"><img src="custom/ISCPIF-banner-bgdblue.png" align="center"></a>
 <br/><br/>
-<h1>ISC-PIF Network</h1>
 <br/>
 <br/>
 <p>
