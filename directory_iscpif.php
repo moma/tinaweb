@@ -289,7 +289,7 @@ $content .= '</div>
 //////// Header
 $header = '<div class="row" id="welcome">
     <div class="span12" align="justify">
-<a href="http://iscpif.fr" target="blank"><img src="custom/ISCPIF-banner-bgdblue.png" align="center"></a>
+<a href="http://iscpif.fr"><img src="custom/ISCPIF-banner-bgdblue.png" align="center"></a>
 <br/><br/>
 <br/>
 <br/>
