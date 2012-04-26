@@ -291,7 +291,6 @@ $header = '<div class="row" id="welcome">
     <div class="span12" align="justify">
 <a href="http://iscpif.fr" target="blank"><img src="custom/ISCPIF-banner-bgdblue.png" align="center"></a>
 <br/><br/>
-<h1>ISC-PIF Network</h1>
 <br/>
 <br/>
 <p>
