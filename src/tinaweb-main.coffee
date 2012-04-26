@@ -20,17 +20,18 @@ class Application extends Tinaweb
     @configure_using default_config
     
     # note, however, that URL params will overload them too
+    log "loading config from urls"
     @configure_using @load_url_params()
     
   postInstall: =>
     log "Application: postInstall"
 
+    log "Application: configuring page layout, and info panel's DIV"
     if @config.layout is "phyloforce"
       @infodiv = PhyloInfoDiv
     else
       @infodiv = InfoDiv
           
-    log "Application: configuring page layout, and info panel's DIV"
     @infodiv.id = "infodiv"
     @infodiv.label = $ "#node_label"
     @infodiv.contents = $ "#node_contents"
@@ -40,13 +41,15 @@ class Application extends Tinaweb
     @infodiv.unselect_button = $ "#toggle-unselect"
     @infodiv.node_table = $ "#node_table > tbody"
     @infodiv.categories = 
-      NGram: "Keywords"
-      Document: "Scholars"
+      NGram: @config.category_a_label
+      Document: @config.category_b_label
 
     log "Application: resizing here"
     @resize()
     
-    $("#infodiv").accordion fillSpace: true
+    $("#infodiv").accordion 
+      collapsible: true
+      fillSpace: true
     @infodiv.reset()
     toolbar.init()
     
@@ -132,8 +135,16 @@ class Application extends Tinaweb
   resize: =>
     log "Application: custom computeSize()"
     infoDivWidth = 390
-    width = getScreenWidth() - infoDivWidth - 55
-    height = getScreenHeight() - $("#hd").height() - $("#ft").height() - 60
+
+    # coudln't figure out where the decay come from
+    width = getScreenWidth() - 8
+    height = getScreenHeight() - $("#hd").height() - $("#ft").height()
+
+    # back compatibility with legacy operating systems (windows, linux)
+    log "experimental: #{@config.experimental}"
+    unless @config.experimental
+      width -= (infoDivWidth)
+      height -= 60
 
     $("#appletdiv").css "width", width
     $("#infodiv").css "width", infoDivWidth
@@ -142,7 +153,13 @@ class Application extends Tinaweb
     @config.height = height
     
     @_resize {width, height}
-   
+  
+  setView: (value, cb) =>
+    alias = "view"
+    real = "filter.view"
+    $("#level").button "option", "label", "#{value} level"
+    @set real, value, "String", @makeWrap(alias, real, cb)  
+
   viewMeso: (id, category) ->
     log "Application: viewMeso(#{id}, #{category})"
     @getCategory (data) =>

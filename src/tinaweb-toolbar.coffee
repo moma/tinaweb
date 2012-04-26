@@ -83,17 +83,13 @@ toolbar.runSearchFormNoRepeat = ->
   app.unselect ->
     app.infodiv.reset()
     cat = app.getCategory()
-    whenDone = ->
+    app.selectByPattern txt, "containsIgnoreCase", (data) ->
       if txt isnt ""
         app.centerOnSelection()
       else
         app.recenter()
-    
-    if cat is "Document"
-      app.selectByPattern txt, "containsIgnoreCase", whenDone
-    else
-      app.selectByPattern txt, "containsIgnoreCase", whenDone
-  
+      app.selectionChanged data
+
   false
 
 sliderData = 

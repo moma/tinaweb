@@ -51,7 +51,7 @@ hide = (k, speed="slow") ->
 
 
 strToBoolean = (s) ->
-  switch s.toLowerCase()
+  switch "#{s}".toLowerCase()
     when "true", "yes", "on", "1" then true
     when "false", "no", "off", "0", null then false
     else Boolean s
@@ -59,14 +59,16 @@ strToBoolean = (s) ->
 loadURLParamsUsing = (config) ->
   for param in window.location.href.slice(window.location.href.indexOf('?') + 1).split('&')
     [key,value] = param.split '='
-    if key in config
+    if key of config
       current = _ config[key]
-      if current.isNumber
-        config[key] = parseFloat value
-      else if current.isBoolean
-        strToBoolean value
-        config[key] = parseBool value
-      else if current.isString
+      #console.log "found URL param: key: #{key}  current: #{current}"
+      if current.isNumber()
+        #console.log "number!"
+        config[key] = (Number) value
+      else if current.isBoolean()
+        #console.log "boolean!"
+        config[key] = strToBoolean value
+      else if current.isString()
         config[key] = "#{value}"
       else
         alert "UTIL cannot overwrite param #{key} (#{config[key]}) with #{value}"

@@ -1,87 +1,37 @@
 #**TinaWeb** - *Bi-Partite Visualization Applet*
 
-###Team: 
+## Presentation
+
+### Description
+
+### Team: 
 
  - [Julian Bilcke](http://github.com/jbilcke) (Java,JS) 
  - [David Chavalarias](http://chavalarias.com) (Algorithms & Spec.)
  - [Elias Showk](http://github.com/elishowk) (JS, Python)
 
-###Featured in:
-
+### Featured in:
+- [Community Explorer](http://communityexplorer.org)
 - [FET Open Explorer](http://tina.iscpif.fr/htdocs/fetopen)
 - [Who's Who](http://tina.iscpif.fr/htdocs/whoswho)
 
-##Using Tinaweb
+
+## How-to use and hack Tinaweb
+
+### Prerequisites
+
+1. Install [Node](http://nodejs.org)
+2. Install [npm](http://npm.org)
+3. Install [Coffee-Script](http://coffeescript.org) globally using npm:
+
+    $ sudo npm install coffeescript -g
 
 
-Actually, you have two choices to customize and modify the source code,
-since you can write extensions in both JavaScript or [CoffeeScript](http://coffeescript.org).
+### Building
 
-###Using JavaScript
-
-If you wish not to use CoffeeScript, you can directly edit the .js source files located in the js/ directory,
-
-and skip the next section.  
+  Just type:
   
-
-note to users not familiar with web development:  
-Please be aware that your browser might keep .js files in its cache, which means you 
-may have to empty the browser's cache and reload completely the page
-before seeing any changes.
-
- 
-
-###Using CoffeeScript
-
-You can use CoffeeScript to use, extends and modify the user interface, or Tinaviz.js.  
-  
-
-[CoffeeScript](http://coffeescript.org) is a programming language designed that "compile" to JavaScript.
-It greatly reduce the boilerplate code of most JavaScript usages, like asynchronous function calls and references to "this".
-Its syntax is very similar to Python and Ruby, borrowing idioms from those.  
-
-Some parts of tinaweb are written in CoffeeScript, with notable exception of third-party dependencies,
-which are left untouched (they integrate nicely with the Coffee-generated JavaScript).  
-
-  
-####Installation
-
-to install coffeescript:
-
-1. Install Node.js: go to http://node.org and see installation instructions
-2. Install NPM: go to http:// and read installation instructions
-3. Install Coffee-Script: 
-    $ npm install coffeescript -g
-
-(on some systems, you might need to prefix the command with "sudo", and type your user password)
-
-  
-**Converting JS to CoffeeScript**
-
-Conversion from JavaScript to CoffeeScript is possible. To do it,
-
-first you need to install the "js2coffee" program:
-
-    $ npm install js2coffee -g
-    
-(on some systems, you might need to prefix the command with "sudo", and type your user password) 
-  
-  
-
-
-Then, you can start converting JavaScript .js files to CoffeeScript .coffee using the command:
-
-    $ js2coffee < SCRIPT.js > SCRIPT.coffee
-
-note: the only requirement I see is that you should not have empty blocks after conditions like:
-
-``` javascript
-    condition) {
-       // nothing, or something commented so the condition does nothing
-    }
-```
-
-because they can't be converted otherwise
+    $ npm run-script build
 
 
 ## Architecture Overview
