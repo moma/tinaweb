@@ -7,7 +7,7 @@ echo '
     <body>';
 include ("analytics.php");
 echo '        <script type="text/javascript" src="js/whoswho.js"></script>
-    <div class="container-fluid">
+    <div class="container">
         
         <!-- Main hero unit for a primary marketing message or call to action -->
         <div class="hero-unit">
