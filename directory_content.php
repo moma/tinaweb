@@ -181,10 +181,13 @@ if (strcmp(substr($orga_query, 0,2),'OR')==0){
 //////////////////////////
 $labs = array();
 sort($lab_list);
+
 foreach ($lab_list as $name) {
     if ((trim($name)) != NULL) {
-        $sql = "SELECT * FROM labs where name='" . $name . "' OR acronym='" . $name . "'";
+        $sql = 'SELECT * FROM labs where name="' . $name . '" OR acronym="' . $name . '"';
+        //echo $sql.'<br/>';
         foreach ($base->query($sql) as $row) {
+            //echo 'toto';
             $info = array();
             $info['unique_id'] = $row['id'];
             $info['name'] = $row['name'];
@@ -204,12 +207,13 @@ foreach ($lab_list as $name) {
             $info['phone'] = $row['phone'];
             $info['fax'] = $row['fax'];
             $info['login'] = $row['login'];
+            //print_r($info);
             $labs[$row['id']] = $info;
         }
     }
 }
 
-
+//print_r($labs);
 
 
 
