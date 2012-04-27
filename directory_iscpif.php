@@ -304,7 +304,7 @@ $header .='
 <li><b><i>This directory is open to all scholars working in the field of complex systems in Ile-de-France</i></b>. Anybody can have her profile included
 provided it is related to Complex Systems science and Complexity science. Personal data are given on a
 voluntary basis and people are responsible for the validity and integrity of their data.
-<li>To have you profile in this directory, add the community tag #iscpif in your <a href="http://main.csregistry.org/Whoswhodata" target="blank">complex systems profile</a>.
+<li><strong>Your are not in this directory ?</strong> Add the community tag #iscpif in your <a href="http://main.csregistry.org/Whoswhodata" target="blank">complex systems profile</a>.
 </ul> 
 </p>
 
