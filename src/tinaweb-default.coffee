@@ -35,8 +35,6 @@ class Tinaweb extends Tinaviz
       experimental: no             # test experimental features?
       
     @_status = "done"
-    @_demo_running = false
-    @_demo_possible = false
     log "Tinaweb: end of constructor"
 
   # an utility function that loads URL params as a config

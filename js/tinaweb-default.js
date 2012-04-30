@@ -78,8 +78,6 @@ Tinaweb = (function(_super) {
       experimental: false
     };
     this._status = "done";
-    this._demo_running = false;
-    this._demo_possible = false;
     log("Tinaweb: end of constructor");
   }
 

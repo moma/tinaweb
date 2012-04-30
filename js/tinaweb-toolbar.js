@@ -371,7 +371,8 @@ toolbar.init = function() {
     });
   });
   hide("#export-view");
-  hide("#search  hide ");
+  hide("#search");
+  hide("#export-gexf");
   hide("#level");
   hide("#search_button");
   hide("#toggle-recenter");
