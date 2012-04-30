@@ -3,7 +3,7 @@
 /*
  * genère un graph gexf à partir de la requete sql sur la table scholars
  */
-
+$imsize=80; // tailles des photos dans infodiv
 $termsMatrix = array();
 // liste des termes présents chez les scholars avec leurs cooc avec les autres termes
 $scholarsMatrix = array();
@@ -28,41 +28,6 @@ $gexf .= ' <attribute id="6" title="type" type="string"> </attribute>' . "\n";
 $gexf .= "</attributes>" . "\n";
 $gexf .= "<nodes>" . "\n";
 
-#echo "login: ".$login.";";
-$scholars = array();
-$scholars_colors = array(); // pour dire s'il y a des jobs postés sur ce scholar
-$terms_colors = array();// pour dire s'il y a des jobs postés sur ce term
-
-#echo $sql . ";<br/>";
-#print_r($data);
-#echo "END;";
-foreach ($base->query($sql) as $row) {
-	$info = array();
-	$info['unique_id'] = $row['unique_id'];
-	$info['first_name'] = $row['first_name'];
-	$info['initials'] = $row['initials'];
-	$info['last_name'] = $row['last_name'];
-	$info['nb_keywords'] = $row['nb_keywords'];
-	$info['css_voter'] = $row['css_voter'];
-	$info['css_member'] = $row['css_member'];
-	$info['keywords_ids'] = explode(',', $row['keywords_ids']);
-	$info['keywords'] = $row['keywords'];
-	//$info['status'] =  $row['status'];
-	$info['country'] = $row['country'];
-	$info['homepage'] = $row['homepage'];
-	$info['lab'] = $row['lab'];
-	$info['affiliation'] = $row['affiliation'];
-	$info['lab2'] = $row['lab2'];
-	$info['affiliation2'] = $row['affiliation2'];
-	$info['homepage'] = $row['homepage'];
-	$info['title'] = $row['title'];
-	$info['position'] = $row['position'];
-        $info['photo_url']=$row['Photo'];
-        $info['job_market']=$row['job_market'];        
-        $info['login']=$row['login'];
-	//print_r($row);
-	$scholars[$row['unique_id']] = $info;
-}
 
 foreach ($scholars as $scholar) {
         $scholars_colors[trim($scholar['login'])]=0;
@@ -190,25 +155,29 @@ foreach ($terms_array as $term) {
 
 foreach ($scholars as $scholar) {
 	//pt($scholar['unique_id']. '-'.count($scholarsMatrix[$scholar['unique_id']]['cooc']));
-	$uniqueId = $scholar['unique_id'];
-        if (!array_key_exists($uniqueId, $scholarsMatrix)) {
-		continue;
-	}
-	if (count($scholarsMatrix[$uniqueId]['cooc']) >= $min_num_friends) {
-		$scholarsIncluded += 1;
-		$nodeId = 'D::' . $uniqueId;
-		$nodeLabel = $scholar['title'] . ' ' . $scholar['first_name'] . ' ' . $scholar['initials'] . ' ' . $scholar['last_name'];
-		$nodePositionY = rand(0, 100) / 100;
-		$content = '';
+    $uniqueId = $scholar['unique_id'];
+    if (!array_key_exists($uniqueId, $scholarsMatrix)) {
+        continue;
+    }
+    if (count($scholarsMatrix[$uniqueId]['cooc']) >= $min_num_friends) {
+        $scholarsIncluded += 1;
+        $nodeId = 'D::' . $uniqueId;
+        $nodeLabel = $scholar['title'] . ' ' . $scholar['first_name'] . ' ' . $scholar['initials'] . ' ' . $scholar['last_name'];
+        $nodePositionY = rand(0, 100) / 100;
+        $content = '';        
+        if ($scholar['photo_url'] != null) {
+            $content .= '<img  src=http://main.csregistry.org/' . $scholar['photo_url'] . ' width=' . $imsize . 'px  style=float:left;margin:5px>';
+        } else {
+            if (count($scholars) < 2000) {
+                $im_id = floor(rand(0, 11));
+                $content .= '<img src=http://communityexplorer.csregistry.org/img/' . $im_id . '.png width=' . $imsize . 'px   style=float:left;margin:5px>';
+            }
+        }
 
-                if ($scholar['photo_url'] != null) {
-			$content .= '<img src="'.$scholar['photo_url'].'" width=80 float="right">' . '</br>';
-		}
-                
-		$content .= '<b>Country: </b>' . $scholar['country'] . '</br>';
+        $content .= '<b>Country: </b>' . $scholar['country'] . '</br>';
 
-		if ($scholar['position'] != null) {
-			$content .= '<b>Position: </b>' . str_replace('&', ' and ', $scholar['position']) . '</br>';
+        if ($scholar['position'] != null) {
+            $content .= '<b>Position: </b>' . str_replace('&', ' and ', $scholar['position']) . '</br>';
 		}
 		$affiliation = '';
 		if ($scholar['lab'] != null) {
