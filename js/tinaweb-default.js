@@ -216,7 +216,7 @@ Tinaweb = (function(_super) {
       makeCallback(_this.viewChanged);
       log("Tinaweb: _inject() -> binding automatic resize");
       $(window).resize(function() {
-        return _this.resize;
+        return _this.resize();
       });
       if (_this.config.experimental) {
         log("Tinaweb: _inject() -> binding of mouse enter/leave events");
