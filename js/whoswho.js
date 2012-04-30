@@ -32,7 +32,7 @@ $(document).ready(function() {
     log("url query: " + g);
     log("injecting applet");
     if ($('#frame').length === 0) {
-      return $("#visualization").html("<iframe src=\"tinaframe.html\" class=\"frame\" border=\"0\" frameborder=\"0\" scrolling=\"no\" id=\"frame\" name=\"frame\"></iframe>");
+      return $("#visualization").html("<iframe src=\"tinaframe.html" + (location.search != null ? location.search : '') + "\" class=\"frame\" border=\"0\" frameborder=\"0\" scrolling=\"no\" id=\"frame\" name=\"frame\"></iframe>");
     } else {
       return log("applet already exists");
     }
