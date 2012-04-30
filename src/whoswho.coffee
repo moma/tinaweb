@@ -24,7 +24,7 @@ $(document).ready ->
     log  "url query: "+ g
     log "injecting applet"
     if $('#frame').length is 0
-      $("#visualization").html "<iframe src=\"tinaframe.html\" class=\"frame\" border=\"0\" frameborder=\"0\" scrolling=\"no\" id=\"frame\" name=\"frame\"></iframe>"
+      $("#visualization").html "<iframe src=\"tinaframe.html#{if location.search? then location.search else ''}\" class=\"frame\" border=\"0\" frameborder=\"0\" scrolling=\"no\" id=\"frame\" name=\"frame\"></iframe>"
     else
       log "applet already exists"
         
