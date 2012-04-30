@@ -61,11 +61,10 @@ class Demo
 
         when "macro"
           console.log "demo: in macro actions"
-          #if P 0.25
-          #  $("#toggle-switch").click()
-
-          #else if P 0.20
-          if P 0.20 then @selectRandomNode() else @viewMesoRandomNode()
+          if P 0.25
+            $("#toggle-switch").click()
+          else
+            if P 0.20 then @selectRandomNode() else @viewMesoRandomNode()
 
         when "meso"
           console.log "in meso actions"

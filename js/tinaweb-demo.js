@@ -105,10 +105,14 @@ Demo = (function() {
       switch (data.view) {
         case "macro":
           console.log("demo: in macro actions");
-          if (P(0.20)) {
-            return _this.selectRandomNode();
+          if (P(0.25)) {
+            return $("#toggle-switch").click();
           } else {
-            return _this.viewMesoRandomNode();
+            if (P(0.20)) {
+              return _this.selectRandomNode();
+            } else {
+              return _this.viewMesoRandomNode();
+            }
           }
           break;
         case "meso":
