@@ -27,6 +27,13 @@ function is_utf8($string) {
    
 }
 
+
+$scholars = array();
+$scholars_colors = array(); // pour dire s'il y a des jobs postés sur ce scholar
+$terms_colors = array();// pour dire s'il y a des jobs postés sur ce term
+
+
+
 //phpinfo();
 $gexf = '<?xml version="1.0" encoding="UTF-8"?>';
 //echo $_GET['query']."<br/>";
@@ -50,15 +57,45 @@ if ($login) {
                     $scholar_array[$row['scholar']] = 1;
                 }
             }
-        }        
-        $scholar_list = array_keys($scholar_array);
-        $sql = "SELECT * FROM scholars where unique_id='" . array_pop($scholar_list) . "'";
-        foreach ($scholar_list as $scholar_id) {
-            $sql .= "OR unique_id='" . $scholar_id . "'";
         }
+        $scholar_list = array_keys($scholar_array);
+        foreach ($scholar_list as $scholar_id) {
+            $sql = "SELECT * FROM scholars where unique_id='" . $scholar_id . "'";
+            foreach ($base->query($sql) as $row) {
+                $info = array();
+                $info['unique_id'] = $row['unique_id'];
+                $info['photo_url'] = $row['photo_url'];
+                $info['first_name'] = $row['first_name'];
+                $info['initials'] = $row['initials'];
+                $info['last_name'] = $row['last_name'];
+                $info['nb_keywords'] = $row['nb_keywords'];
+                $info['css_voter'] = $row['css_voter'];
+                $info['css_member'] = $row['css_member'];
+                $info['keywords_ids'] = explode(',', $row['keywords_ids']);
+                $info['keywords'] = $row['keywords'];
+                //$info['status'] =  $row['status'];
+                $info['country'] = $row['country'];
+                $info['homepage'] = $row['homepage'];
+                $info['lab'] = $row['lab'];
+                $info['affiliation'] = $row['affiliation'];
+                $info['lab2'] = $row['lab2'];
+                $info['affiliation2'] = $row['affiliation2'];
+                $info['homepage'] = $row['homepage'];
+                $info['title'] = $row['title'];
+                $info['position'] = $row['position'];
+                $info['job_market'] = $row['job_market'];
+                $info['login'] = $row['login'];
+                //print_r($row);
+                $scholars[$row['unique_id']] = $info;
+            }
+        }                
     }     
 }
 
+
+////////////
+
+///////////////
 
 // génère le gexf
 include('gexf_generator.php');
