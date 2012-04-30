@@ -99,6 +99,10 @@ Application = (function(_super) {
 
     } else if (this.status === "loaded") {
       log("graph loaded");
+      if (this.config.demo != null) {
+        console.log("tinaweb: startng demo");
+        this.demo = new Demo(6, 10);
+      }
       log("update the node list (may fail)");
       this.infodiv.updateNodeList("macro", this.config.category);
       log("displaying current category");
