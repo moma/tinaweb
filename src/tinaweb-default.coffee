@@ -135,8 +135,7 @@ class Tinaweb extends Tinaviz
       makeCallback @viewChanged
       
       log "Tinaweb: _inject() -> binding automatic resize"
-      #$(window).bind "resize", => @resize
-      $(window).resize => @resize
+      $(window).resize => @resize()
 
       if @config.experimental
         log "Tinaweb: _inject() -> binding of mouse enter/leave events"
