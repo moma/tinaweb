@@ -113,8 +113,8 @@ Application = (function(_super) {
 
     } else if (this.status === "loaded") {
       log("graph loaded");
-      if (this.config.demo != null) {
-        console.log("tinaweb: startng demo");
+      if (this.config.demo) {
+        console.log("Demo Mode enabled");
         this.demo = new Demo(6, 10);
       }
       log("update the node list (may fail)");

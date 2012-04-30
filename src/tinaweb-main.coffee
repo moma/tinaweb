@@ -89,8 +89,8 @@ class Application extends Tinaweb
     else if @status is "loaded"
       log "graph loaded"
 
-      if @config.demo?
-        console.log "tinaweb: startng demo"
+      if @config.demo
+        console.log "Demo Mode enabled"
         @demo = new Demo 6, 10
 
       log "update the node list (may fail)"
