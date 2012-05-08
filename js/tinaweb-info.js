@@ -94,7 +94,7 @@ InfoDiv = {
       cat = data.category;
       neighbours = _this.mergeNeighbours(cat, neighbours);
       _this.cloudSearch.empty();
-      Googlerequests = "http://www.google.com/#q=";
+      Googlerequests = "http://http://scholar.google.com/scholar#q=";
       PubMedrequests = "http://www.ncbi.nlm.nih.gov/pubmed?term=";
       requests = "";
       i = 0;
@@ -296,7 +296,7 @@ InfoDiv = {
     assets = app.config.assets;
     SearchQuery = label.replace(RegExp(" ", "g"), "+");
     if (cat === "Document") {
-      return $("<p></p>").html("<a href=\"http://www.google.com/#hl=en&source=hp&q=%20" + SearchQuery.replace(",", "OR") + "%20\" align=middle target=blank height=15 width=15> <img src=\"" + assets + "css/branding/google.png\" height=15 width=15> </a><a href=\"http://en.wikipedia.org/wiki/" + label.replace(RegExp(" ", "g"), "_") + "\" align=middle target=blank height=15 width=15> <img src=\"" + assets + "css/branding/wikipedia.png\" height=15 width=15> </a><a href=\"http://www.flickr.com/search/?w=all&q=" + SearchQuery + "\" align=middle target=blank height=15 width=15> <img src=\"" + assets + "css/branding/flickr.png\" height=15 width=15> </a>");
+      return $("<p></p>").html("<a href=\"http://scholar.google.com/scholar#hl=en&source=hp&q=%20" + SearchQuery.replace(",", "OR") + "%20\" align=middle target=blank height=15 width=15> <img src=\"" + assets + "css/branding/google.png\" height=15 width=15> </a><a href=\"http://en.wikipedia.org/wiki/" + label.replace(RegExp(" ", "g"), "_") + "\" align=middle target=blank height=15 width=15> <img src=\"" + assets + "css/branding/wikipedia.png\" height=15 width=15> </a><a href=\"http://www.flickr.com/search/?w=all&q=" + SearchQuery + "\" align=middle target=blank height=15 width=15> <img src=\"" + assets + "css/branding/flickr.png\" height=15 width=15> </a>");
     } else if (cat === "NGram") {
       return $("<p></p>").html("<a href=\"http://www.google.com/#hl=en&source=hp&q=%20" + SearchQuery.replace(",", "OR") + "%20\" align=middle target=blank height=15 width=15> <img src=\"" + assets + "css/branding/google.png\" height=15 width=15> </a><a href=\"http://en.wikipedia.org/wiki/" + label.replace(RegExp(" ", "g"), "_") + "\" align=middle target=blank height=15 width=15> <img src=\"" + assets + "css/branding/wikipedia.png\" height=15 width=15> </a><a href=\"http://www.flickr.com/search/?w=all&q=" + SearchQuery + "\" align=middle target=blank height=15 width=15> <img src=\"" + assets + "css/branding/flickr.png\" height=15 width=15> </a>");
     } else {
