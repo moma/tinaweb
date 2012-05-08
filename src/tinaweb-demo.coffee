@@ -1,52 +1,71 @@
-checkDemoMode = ->
-  tinaviz.centerOnSelection()
-  tinaviz.getView (data) ->
-    view = data.view
-    if view == "macro"
-      tinaviz.unselect()  if Math.floor(Math.random() * 8) < 2
-      if Math.floor(Math.random() * 5) > 1
-        if Math.floor(Math.random() * 5) > 1
-          tinaviz.getCategory (data) ->
-            cat = data.category
-            nb_nodes = tinaviz.infodiv.node_list_cache[cat].length
-            randomIndex = Math.floor(Math.random() * (nb_nodes))
-            randomNode = tinaviz.infodiv.node_list_cache[cat][randomIndex]
-            if randomNode != undefined or not node?
-              tinaviz.unselect()
-              tinaviz.infodiv.reset()
-              tinaviz.select randomNode.id
+class Demo
+
+  constructor: (@startAfter=6, @repeatEvery=10) ->
+    @looping = no
+    $(document).nap
+      fallAsleep: => @start()
+      wakeUp: => @pause()
+      standByTime: @startAfter
+
+  start: ->
+    console.log "demo: start() called. looping: #{@looping}"
+    return if @looping
+    @looping = yes
+    @_loop()
+
+  pause: -> @looping = no
+
+  _loop: =>
+    return unless @looping
+    @looping = yes
+    @doSomething()
+    delay @repeatEvery * 1000, @_loop
+
+  pickRandomNode: (category) ->
+    arr = app.infodiv.node_list_cache[category]
+    arr[Math.floor Math.random() * arr.length]
+
+  selectRandomNeighbor: ->
+    len = app.infodiv.neighbours.length
+    if len > 0 and P 0.80
+      nei = app.infodiv.neighbours[Math.floor Math.random() * len]
+      nei_size = if nei? then nei.length else 0
+      app.getView (data) ->
+        if data.view is "meso" and nei_size is 0
+          $("#level").click()
         else
-          tinaviz.getCategory (cat) ->
-            nb_nodes = tinaviz.infodiv.node_list_cache[cat].length
-            randomIndex = Math.floor(Math.random() * (nb_nodes))
-            randomNode = tinaviz.infodiv.node_list_cache[cat][randomIndex]
-            tinaviz.viewMeso randomNode.id, cat  if randomNode != undefined or not node?
-      else
-        $("#toggle-switch").click()
-    else
-      if Math.floor(Math.random() * 5) > 1
-        nbNeighbourhoods = tinaviz.infodiv.neighbours.length
-        if nbNeighbourhoods > 0 and Math.floor(Math.random() * 16) < 14
-          randNeighbourhood = Math.floor(Math.random() * nbNeighbourhoods)
-          neighbourhood = tinaviz.infodiv.neighbours[randNeighbourhood]
-          nbNeighbours = 0
-          nbNeighbours = neighbourhood.length  if neighbourhood != undefined & neighbourhood?
-          if nbNeighbours == 0
-            tinaviz.getView (data) ->
-              $("#level").click()  if data.view == "meso"
+          app.unselect ->
+            app.infodiv.reset()
+            node = nei[Math.floor Math.random() * nei_size]
+            app.select node.id
+    else 
+      $("#toggle-switch").click()
+
+  viewMesoRandomNode: ->
+    app.getCategory (data) =>
+      node = @pickRandomNode data.category
+      app.viewMeso node.id, data.category
+
+  selectRandomNode: ->
+    app.getCategory (data) =>
+      app.unselect =>
+        app.infodiv.reset()
+        node = @pickRandomNode data.category
+        app.select node.id
+  
+  doSomething: ->
+    #tinaviz.centerOnSelection()
+    app.getView (data) =>
+      console.log? "demo: doing random action: #{data.view}"
+      switch data.view
+
+        when "macro"
+          console.log "demo: in macro actions"
+          if P 0.25
+            $("#toggle-switch").click()
           else
-            randNeighbour = Math.floor(Math.random() * nbNeighbours)
-            node = neighbourhood[randNeighbour]
-            if node != undefined or not node?
-              tinaviz.getView (view) ->
-                if data.view == "meso"
-                  tinaviz.unselect ->
-                    tinaviz.infodiv.reset()
-                    tinaviz.select node
-                else
-                  tinaviz.infodiv.reset()
-                  tinaviz.select node
-        else
-          $("#toggle-switch").click()
-      else
-        $("#level").click()
+            if P 0.20 then @selectRandomNode() else @viewMesoRandomNode()
+
+        when "meso"
+          console.log "in meso actions"
+          if P 0.20 then @selectRandomNeighbor() else $("#level").click()

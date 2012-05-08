@@ -79,6 +79,11 @@ class Application extends Tinaweb
 
     else if @status is "loaded"
       log "graph loaded"
+
+      if @config.demo
+        console.log "Demo Mode enabled"
+        @demo = new Demo 6, 10
+
       log "update the node list (may fail)"
       @infodiv.updateNodeList "macro", @config.category
       log "displaying current category"
@@ -134,6 +139,7 @@ class Application extends Tinaweb
     # back compatibility with legacy operating systems (windows, linux)
     log "experimental: #{@config.experimental}"
     unless @config.experimental
+      # TODO enable optimized tab switch?
       width -= (infoDivWidth)
       height -= 60
 
