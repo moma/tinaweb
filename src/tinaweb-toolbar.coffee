@@ -278,7 +278,7 @@ toolbar.init = ->
   
   # TODO replace by a smarter JQuery/CSS selector (using children?)
   hide "#export-view"
-  hide "#search
+  hide "#search"
   hide "#export-gexf"
   hide "#level"
   hide "#search_button"

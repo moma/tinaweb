@@ -78,8 +78,6 @@ Tinaweb = (function(_super) {
       experimental: false
     };
     this._status = "done";
-    this._demo_running = false;
-    this._demo_possible = false;
     log("Tinaweb: end of constructor");
   }
 
@@ -212,24 +210,23 @@ Tinaweb = (function(_super) {
     }
     log("Tinaweb: install() -> calling @_inject => { ... }");
     return this._inject(function() {
-      var delayBetweenChanges, waitTimeBeforeStartingDemo;
       log("Tinaweb: _inject() -> creating callbacks");
       makeCallback(_this.graphImported);
       makeCallback(_this.selectionChanged);
       makeCallback(_this.viewChanged);
       log("Tinaweb: _inject() -> binding automatic resize");
       $(window).resize(function() {
-        return _this.resize;
+        return _this.resize();
       });
-      log("Tinaweb: _inject() -> DISABLED binding of mouse enter/leave events");
-      $(window).mouseleave(function() {});
-      $(window).mouseenter(function() {});
-      log("Tinaweb: _postInject() -> checking for demo mode");
-      if (_this.config.demo != null) {
-        _this._demo_possible = true;
+      if (_this.config.experimental) {
+        log("Tinaweb: _inject() -> binding of mouse enter/leave events");
+        $(window).mouseleave(function() {
+          return _this.freeze();
+        });
+        $(window).mouseenter(function() {
+          return _this.unfreeze();
+        });
       }
-      waitTimeBeforeStartingDemo = 6;
-      delayBetweenChanges = 10;
       log("Tinaweb: _postInject() -> sending (some) default parameters to the applet");
       _this.set("filter.a.edge.weight", [_this.config.a_edge_filter_min, _this.config.a_edge_filter_max], "Tuple2[Double]");
       _this.set("filter.a.node.weight", [_this.config.a_node_filter_min, _this.config.a_node_filter_max], "Tuple2[Double]");

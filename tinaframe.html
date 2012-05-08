@@ -43,7 +43,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     <script type="text/javascript" src="js/jquery/jquery.ba-dotimeout.min.js"></script>
     <script type="text/javascript" src="js/jquery/jquery.json-2.2.min.js"></script>
     <script type="text/javascript" src="js/jquery/jquery.qtip.min.js"></script>
-    <script type="text/javascript" src="js/jquery/jquery.nap-1.0.0.js"></script>
 
     <!-- JQUERY UI -->
     <script type="text/javascript" src="js/jquery-ui/jquery-ui-1.8.16.custom.min.js"></script>
@@ -59,6 +58,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     <script type="text/javascript" src="js/misc/underscore.min.js"></script>
     <!-- SOME FUNCTIONS -->
     <script type="text/javascript" src="js/utils.js"></script>
+    <script type="text/javascript" src="js/jquery-nap.js"></script>
+    
     <!-- TINAVIZ -->
     <script type="text/javascript" src="js/tinaviz/tinaviz.js"></script>
     <!-- WE USE TINAWEB UTILS-->
@@ -94,22 +95,22 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     <div id="hd" class="ui-widget">
         <div id="hdb">
             <div id="htoolbar" class="toolbardiv fg-toolbar ui-widget-header ui-corner-all ui-helper-clearfix">
-                <div id="title" class="unselectable toolbar-left" style="width: 550px;">
+                <div id="title" class="unselectable toolbar-left">
                     <button id="toggle-paused" class="fg-button toolbar-left">play</button>
                     <button id="toggle-switch" class="fg-button toolbar-left">switch category</button>
                     <button id="level" class="fg-button toolbar-left">macro</button>
 
-                    <div id="cursor-size-block" class="toolbar-left" style="width: 100px; margin-left: 30px;">
-                            <span class="sliderLabel"> &nbsp;&nbsp;&nbsp;&nbsp;focus area</span>
+                    <div id="cursor-size-block" class="toolbar-left" style="width: 100px; margin-left: 15px; margin-right: 20px;">
+                            <span class="sliderLabel"> &nbsp;&nbsp;&nbsp;&nbsp;cursor size</span>
                             <div id="sliderSelectionZone"></div>
                     </div>
                 </div>
 
 
                 <!-- block for Category A Filter -->
-                <div id="category-A" class="unselectable toolbar-left" style="width: 130px;">
+                <div id="category-A" class="unselectable toolbar-middle" style="width: 120px;">
                     <div>
-                        &nbsp;&nbsp;&nbsp;&nbsp;Scholars
+                        &nbsp;&nbsp;&nbsp;&nbsp;Documents
                     </div>
                     <div style="height: 16px; width: 100px;">
                         <div id="nodeAFilterMinValue"></div><div id="sliderANodeWeight" class="greenstart"></div><div id="nodeAFilterMaxValue"></div>
@@ -123,7 +124,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                 </div>
 
                 <!-- block for Document/NGram label -->
-                <div  id="category-legend" class="unselectable toolbar-left" style="width: 90px;">
+                <div  id="category-legend" class="unselectable toolbar-middle" style="width: 80px;">
                     <div>&nbsp;</div>
                     <div style="height: 16px;">
                         Node Filter
@@ -137,9 +138,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                 </div>
 
                  <!-- block for Category B Filter -->
-                <div id="category-B" class="unselectable toolbar-left" style="width: 130px;">
+                <div id="category-B" class="unselectable toolbar-middle" style="width: 120px;">
                     <div>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Keywords
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;NGrams
                     </div>
                     <div style="height: 16px; width: 100px;">
                         <div id="nodeBFilterMinValue"></div><div id="sliderBNodeWeight" class="redstart"></div><div id="nodeBFilterMaxValue"></div>
@@ -152,14 +153,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                     </div>
                 </div>
 
-                 <div class="toolbar-right" style="width: 430px;">
+                 <div class="toolbar-right">
                     <!--
                     <button id="export-png" class="unselectable fg-button toolbar-right">PNG</button>
                     <button id="export-pdf" class="unselectable fg-button toolbar-right">PDF</button>
                     -->
-                    <button id="export-gexf" class="unselectable fg-button toolbar-right">EXPORT</button>
-                    <button id="toggle-recenter" class="unselectable fg-button toolbar-right">center</button>
-                    <form id="search" action="#" class="toolbar-right">
+                    <button id="export-gexf" class="unselectable fg-button">export</button>
+                    <button id="toggle-recenter" class="unselectable fg-button">center</button>
+                    <form id="search" action="#">
                         <input id="search_input" type="text" value=""/>
                         <button id="search_button" class="unselectable fg-button">search</button>
                         <!--

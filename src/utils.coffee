@@ -4,6 +4,8 @@ delay = (t,f) -> setTimeout f, t
 
 repeat = (t,f) -> setInterval f, t
 
+P = (p=0.5) -> Math.random() < p
+
 log = (msg) ->
   try
     console.log msg 

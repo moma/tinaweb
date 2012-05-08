@@ -35,8 +35,6 @@ class Tinaweb extends Tinaviz
       experimental: no             # test experimental features?
       
     @_status = "done"
-    @_demo_running = false
-    @_demo_possible = false
     log "Tinaweb: end of constructor"
 
   # an utility function that loads URL params as a config
@@ -137,28 +135,12 @@ class Tinaweb extends Tinaviz
       makeCallback @viewChanged
       
       log "Tinaweb: _inject() -> binding automatic resize"
-      #$(window).bind "resize", => @resize
-      $(window).resize => @resize
+      $(window).resize => @resize()
 
-      log "Tinaweb: _inject() -> DISABLED binding of mouse enter/leave events"
-      $(window).mouseleave => #@freeze()
-      $(window).mouseenter => #@unfreeze()
-  
-      log "Tinaweb: _postInject() -> checking for demo mode"
-      @_demo_possible = true if @config.demo?
-        
-      waitTimeBeforeStartingDemo = 6
-      delayBetweenChanges = 10
-      #$.fn.nap.standbyTime = waitTimeBeforeStartingDemo
-      #$(document).nap (->
-      #  $.doTimeout "demo_loop", delayBetweenChanges * 1000, ->
-      #    unless @_demo_running
-      #      false
-      #   else
-      #      @demo()
-      #      true
-      #), ->
-      #  $.doTimeout "demo_loop"
+      if @config.experimental
+        log "Tinaweb: _inject() -> binding of mouse enter/leave events"
+        $(window).mouseleave => @freeze()
+        $(window).mouseenter => @unfreeze()
             
       log "Tinaweb: _postInject() -> sending (some) default parameters to the applet"  
       @set "filter.a.edge.weight", [ @config.a_edge_filter_min, @config.a_edge_filter_max ], "Tuple2[Double]"
