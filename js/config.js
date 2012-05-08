@@ -3,7 +3,7 @@ var default_config;
 
 default_config = {
   elementId: "vizdiv",
-  gexf: "cnrs.gexf",
+  gexf: "../getgraph_iscn.php",
   path: "js/tinaviz/",
   assets: "",
   embed: false,
