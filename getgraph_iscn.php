@@ -66,7 +66,7 @@ $tags = $data["tags"];
 
 $base = new PDO("sqlite:" . $dbname);
 
-$sql = "SELECT * FROM scholars where " . " " . 'tags LIKE upper("%' . strtoupper('#iscpif') . '%") ';
+$sql = "SELECT * FROM scholars where " . " " . 'tags LIKE upper("%' . strtoupper('#iscn') . '%") ';
 
 #echo "login: ".$login.";";
 $scholars = array();
