@@ -107,7 +107,7 @@ InfoDiv =
         if nb_displayed_tag < 20
           nb_displayed_tag++
           tag = neighbours[i]
-          tagspan = $("<span id='" + tag.spanid + "'></span>")
+          tagspan = $("<span id='#{tag.spanid}'></span>")
           tagspan.addClass "ui-widget-content"
           tagspan.addClass "viz_node"
           tagspan.html tag.label
@@ -135,7 +135,9 @@ InfoDiv =
         i++
       @cloud.empty()
       
-      tmp1 = $("<h3>selection related to #{oppositeRealName}: <span class=\"ui-icon ui-icon-help icon-right\" title=\"#{tooltip}\"></span></h3>").hide()
+      tmp1 = $("<h3>selection related to #{oppositeRealName}: 
+        <span class=\"ui-icon ui-icon-help icon-right\" title=\"#{tooltip}\"></span>
+        </h3>").hide()
       @cloud.append tmp1
       show tmp1
       
@@ -144,7 +146,9 @@ InfoDiv =
       show tagcloud
       
       @cloudSearchCopy.empty()
-      tmp2 = $("<h3>global search on #{oppositeRealName}: <span class=\"ui-icon ui-icon-help icon-right\" title=\"#{tooltip}\"></span></h3>").hide()
+      tmp2 = $("<h3>global search on #{oppositeRealName}: 
+        <span class=\"ui-icon ui-icon-help icon-right\" title=\"#{tooltip}\"></span>
+        </h3>").hide()
       @cloudSearchCopy.append tmp2
       show tmp2
       
@@ -185,22 +189,50 @@ InfoDiv =
         @reset()
   
   update: (view, lastselection) ->
-    if Object.size(lastselection) is 0
-      @reset()
-      return
+    return @reset() if Object.size(lastselection) is 0
     @selection = []
     @updateInfo lastselection
     app.getNeighbourhood "macro", @selection, (data) =>
-      #log "received neighbourhood of selection"
-      #log data
       @updateTagCloud data.nodes, data.neighbours
   
   reset: ->
     @unselect_button.hide()
     @contents.empty().append $("<h4></h4>").html("click on a node to begin exploration")
-    assets = app.config.assets
+    imgPath = "#{app.config.assets}css/branding/"
     @label.empty()
-    @contents.empty().append $("<h4></h4>").html("<h2>Navigation tips</h2>" + "<p align='left'>" + "<br/>" + "<i>Basic interactions</i><br/><br/>" + "Click on a node to select/unselect and get its information.  In case of multiple selection, the button <img src='" + assets + "css/branding/unselect.png' alt='unselect' align='top' height=20/>  clears all selections.<br/><br/>The switch button <img src='" + assets + "css/branding/switch.png' alt='switch' align='top' height=20 /> allows to change the view type." + "<br/><br/>" + "<i>Graph manipulation</i><br/><br/>" + "Link and node sizes indicate their strength.<br/><br/> To fold/unfold the graph (keep only strong links or weak links), use the 'edges filter' sliders.<br/><br/> To select a more of less specific area of the graph, use the 'nodes filter' slider.</b><br/><br/>" + "<i>Micro/Macro view</i><br/><br/>To explore the neighborhood of a selection, either double click on the selected nodes, either click on the macro/meso level button. Zoom out in meso view return to macro view.<br/><br/>  " + "Click on the 'all nodes' tab below to view the full clickable list of nodes.<br/><br/>Find additional tips with mouse over the question marks." + "</p>")
+    html = "
+      <h2>Navigation tips</h2>
+      <p align='left'>
+        <br/>
+        <i>Basic interactions</i>
+        <br/><br/>
+        Click on a node to select/unselect and get its information. 
+        In case of multiple selection, the button 
+         <img src='#{imgPath}unselect.png' alt='unselect' align='top' height=20/> 
+        clears all selections.
+        <br/><br/>
+        The switch button
+         <img src='#{imgPath}switch.png' alt='switch' align='top' height=20 /> 
+        allows to change the view type.
+        <br/><br/>
+        <i>Graph manipulation</i>
+        <br/><br/>
+        Link and node sizes indicate their strength.
+        <br/><br/>
+        To fold/unfold the graph (keep only strong links or weak links), use the <b>edges filter</b> sliders.
+        <br/><br/>
+        To select a more of less specific area of the graph, use the <b>nodes filter</b> slider.
+        <br/><br/>
+        <i>Micro/Macro view</i>
+        <br/><br/>
+        To explore the neighborhood of a selection, either double click on the selected nodes, 
+        either click on the macro/meso level button. Zoom out in meso view return to macro view.
+        <br/><br/>
+        Click on the <b>all nodes</b> tab below to view the full clickable list of nodes.
+        <br/><br/>
+        Find additional tips with mouse over the question marks.
+        </p>"
+    @contents.empty().append $("<h4></h4>").html(html)
     @cloudSearchCopy.empty()
     @cloudSearch.empty()
     @cloud.empty()
@@ -211,20 +243,19 @@ InfoDiv =
   
   updateNodeList: (view, category) ->
     @display_current_category()
-    return  if category is @last_category
+    return                    if category is @last_category
     app.node_list_cache = {}  if app.node_list_cache is undefined
 
     app.getNodes view, category, (data) =>
       #log "receiving and updating node.list: #{data.nodes.length} nodes"
-      return  if category is _this.last_category
-      @node_list_cache = {}  if _this.node_list_cache is undefined
+      return                  if category is _this.last_category
+      @node_list_cache = {}   if _this.node_list_cache is undefined
       @node_list_cache[category] = alphabeticListSort data.nodes, "label"
       @.node_table.empty()
       @last_category = category
       node_list = _this.node_list_cache[category]
       if node_list?
         i = 0
-        
         while i < node_list.length
           do ->
             rowLabel = htmlDecode decodeJSON( node_list[i]["label"] )
@@ -234,11 +265,21 @@ InfoDiv =
           i++
     
   getSearchQueries: (label, cat) ->
-    assets = app.config.assets
-    SearchQuery = label.replace(RegExp(" ", "g"), "+")
-    if cat is "Document"
-      $("<p></p>").html "<a href=\"http://www.google.com/#hl=en&source=hp&q=%20" + SearchQuery.replace(",", "OR") + "%20\" align=middle target=blank height=15 width=15> <img src=\"" + assets + "css/branding/google.png\" height=15 width=15> </a><a href=\"http://en.wikipedia.org/wiki/" + label.replace(RegExp(" ", "g"), "_") + "\" align=middle target=blank height=15 width=15> <img src=\"" + assets + "css/branding/wikipedia.png\" height=15 width=15> </a><a href=\"http://www.flickr.com/search/?w=all&q=" + SearchQuery + "\" align=middle target=blank height=15 width=15> <img src=\"" + assets + "css/branding/flickr.png\" height=15 width=15> </a>"
-    else if cat is "NGram"
-      $("<p></p>").html "<a href=\"http://www.google.com/#hl=en&source=hp&q=%20" + SearchQuery.replace(",", "OR") + "%20\" align=middle target=blank height=15 width=15> <img src=\"" + assets + "css/branding/google.png\" height=15 width=15> </a><a href=\"http://en.wikipedia.org/wiki/" + label.replace(RegExp(" ", "g"), "_") + "\" align=middle target=blank height=15 width=15> <img src=\"" + assets + "css/branding/wikipedia.png\" height=15 width=15> </a><a href=\"http://www.flickr.com/search/?w=all&q=" + SearchQuery + "\" align=middle target=blank height=15 width=15> <img src=\"" + assets + "css/branding/flickr.png\" height=15 width=15> </a>"
-    else
-      $ "<p></p>"
+    SearchQuery = label.replace(RegExp(' ', 'g'), '+')
+    queries =
+      google: "http://www.google.com/#hl=en&source=hp&q=%20#{SearchQuery.replace(',', 'OR')}%20"
+      scholars: "http://scholar.google.com/scholar#q=#hl=en&source=hp&q=%20#{SearchQuery.replace(',','OR')}%20"
+      wikipedia: "http://en.wikipedia.org/wiki/#{label.replace(RegExp(' ', 'g'), '_')}"
+      flickr: "http://www.flickr.com/search/?w=all&q=#{SearchQuery}"
+
+    apis = ['google', 'wikipedia', 'flickr']
+
+    # FEATURE when category is a document, we don't search on Google but on Google Scholars
+    #apis[0] = 'scholars' if cat is "Document"
+
+    content = ''
+    for api in apis
+      content += "<a href=\"#{queries[api]}\" align=middle target=blank height=15 width=15> 
+                <img src=\"#{app.config.assets}css/branding/#{api}.png\" height=15 width=15>
+              </a>"
+    $("<p></p>").html content
