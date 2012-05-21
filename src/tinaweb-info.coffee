@@ -1,8 +1,10 @@
 
 displayNodeRow = (label, id, category) ->
-  $("#node_table > tbody").append $("<tr></tr>").append($("<td id='node_list_" + id + "'></td>").text(label).click((eventObject) ->
+  a = $("<td id='node_list_#{id}'></td>").text(label).click (e) ->
     app.viewMeso id, category
-  ))
+  b = $("<tr></tr>").append(a)
+  $("#node_table > tbody").append(b)
+
 InfoDiv = 
   id: null
   selection: []
@@ -26,17 +28,17 @@ InfoDiv =
       view = data.view
       app.getCategory (data) =>
         cat = data.category
-        if view == "macro"
+        if view is "macro"
           $("#toggle-switch").button "option", "label", categories[cat]
         else
-          $("#toggle-switch").button "option", "label", categories[cat] + " neighbours"
+          $("#toggle-switch").button "option", "label", categories[cat] + (if view is macro then '' else " neighbours")
   
   display_current_view: ->
     app.getView (data) =>
       view = data.view
       if view isnt undefined
         level = $ "#level"
-        level.button "option", "label", view + " level"
+        level.button "option", "label", "#{view} level"
         title = $ "#infodiv > h3:first"
         if view is "meso"
           level.addClass "ui-state-highlight"
@@ -51,7 +53,7 @@ InfoDiv =
       for neighb of neighbours[node]
         if neighb of merged
           merged[neighb]["degree"]++
-        else unless neighbours[node][neighb]["category"] == category
+        else unless neighbours[node][neighb]["category"] is category
           merged[neighb] = 
             spanid: neighb
             id: neighbours[node][neighb]["id"]
@@ -64,7 +66,7 @@ InfoDiv =
     merged
   
   updateTagCloud: (node_list, neighbours) ->
-    return  if Object.size(node_list) == 0
+    return  if Object.size(node_list) is 0
     
     app.getCategory (data) =>
       cat = data.category
@@ -76,11 +78,9 @@ InfoDiv =
       i = 0
       
       while i < neighbours.length
-        tag = neighbours[i]
-        tagLabel = tag.label
-        tagLabel = jQuery.trim tagLabel
-        requests = requests + "%22" + tagLabel.replace(" ", "+") + "%22"
-        requests = requests + "+AND+"  if i < neighbours.length - 1
+        tagLabel = jQuery.trim neighbours[i].label
+        requests = "#{requests}%22#{tagLabel.replace(' ', '+')}%22"
+        requests += "+AND+" if i < neighbours.length - 1
         i++
       if cat?
         oppositeRealName = @categories[app.getOppositeCategory(cat)]
@@ -116,8 +116,8 @@ InfoDiv =
             attached_cat = tag.category
             tagspan.click ->
               app.viewMeso attached_id, attached_cat, ->
-          if neighbours.length == 1
-            if tag["category"] == "Document"
+          if neighbours.length is 1
+            if tag["category"] is "Document"
               tagspan.css "font-size", const_doc_tag
             else
               tagspan.css "font-size", Math.floor(sizecoef * (Math.min(20, Math.log(1.5 + tag.weight))))
@@ -127,7 +127,7 @@ InfoDiv =
             tooltip = "click on a label to switch to its meso view - size is proportional to the degree"
           tagcloud.append tagspan
           tagcloud.append ", &nbsp;"  if i != neighbours.length - 1 and neighbours.length > 1
-        else if nb_displayed_tag == 20
+        else if nb_displayed_tag is 20
           tagcloud.append "[...]"
           nb_displayed_tag++
         else
@@ -236,9 +236,9 @@ InfoDiv =
   getSearchQueries: (label, cat) ->
     assets = app.config.assets
     SearchQuery = label.replace(RegExp(" ", "g"), "+")
-    if cat == "Document"
+    if cat is "Document"
       $("<p></p>").html "<a href=\"http://www.google.com/#hl=en&source=hp&q=%20" + SearchQuery.replace(",", "OR") + "%20\" align=middle target=blank height=15 width=15> <img src=\"" + assets + "css/branding/google.png\" height=15 width=15> </a><a href=\"http://en.wikipedia.org/wiki/" + label.replace(RegExp(" ", "g"), "_") + "\" align=middle target=blank height=15 width=15> <img src=\"" + assets + "css/branding/wikipedia.png\" height=15 width=15> </a><a href=\"http://www.flickr.com/search/?w=all&q=" + SearchQuery + "\" align=middle target=blank height=15 width=15> <img src=\"" + assets + "css/branding/flickr.png\" height=15 width=15> </a>"
-    else if cat == "NGram"
+    else if cat is "NGram"
       $("<p></p>").html "<a href=\"http://www.google.com/#hl=en&source=hp&q=%20" + SearchQuery.replace(",", "OR") + "%20\" align=middle target=blank height=15 width=15> <img src=\"" + assets + "css/branding/google.png\" height=15 width=15> </a><a href=\"http://en.wikipedia.org/wiki/" + label.replace(RegExp(" ", "g"), "_") + "\" align=middle target=blank height=15 width=15> <img src=\"" + assets + "css/branding/wikipedia.png\" height=15 width=15> </a><a href=\"http://www.flickr.com/search/?w=all&q=" + SearchQuery + "\" align=middle target=blank height=15 width=15> <img src=\"" + assets + "css/branding/flickr.png\" height=15 width=15> </a>"
     else
       $ "<p></p>"
