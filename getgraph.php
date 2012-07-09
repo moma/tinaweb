@@ -217,6 +217,8 @@ foreach ($base->query($sql) as $row) {
 	$info['position'] = $row['position'];
         $info['job_market']=$row['job_market'];        
         $info['login']=$row['login'];
+        $info['created']=$row['created'];
+        $info['last_modified']=$row['last_modified'];
 	$scholars[$row['unique_id']] = $info;
 }
 // génère le gexf

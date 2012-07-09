@@ -84,7 +84,9 @@ if ($login) {
                 $info['title'] = $row['title'];
                 $info['position'] = $row['position'];
                 $info['job_market'] = $row['job_market'];
-                $info['login'] = $row['login'];
+                $info['login'] = $row['login'];                
+                $info['created']=$row['created'];
+                $info['last_modified']=$row['last_modified'];
                 //print_r($row);
                 $scholars[$row['unique_id']] = $info;
             }

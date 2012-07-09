@@ -14,13 +14,16 @@ $scholarsIncluded = 0;
 $gexf .= '<gexf xmlns="http://www.gexf.net/1.1draft" xmlns:viz="http://www.gephi.org/gexf/viz" version="1.1"> ';
 $gexf .= '<meta lastmodifieddate="20011-11-11">'."\n";
 $gexf .= ' </meta>'."\n";
-$gexf .= '<graph type="static">' . "\n";
+//$gexf .= '<graph type="static">' . "\n";
+$gexf .= '<graph mode="dynamic" defaultedgetype="directed" timeformat="date">' . "\n";
+
 $gexf .= '<attributes class="node" type="static">' . "\n";
 $gexf .= ' <attribute id="0" title="category" type="string">  </attribute>' . "\n";
 $gexf .= ' <attribute id="1" title="occurrences" type="float">    </attribute>' . "\n";
 $gexf .= ' <attribute id="2" title="content" type="string">    </attribute>' . "\n";
 $gexf .= ' <attribute id="3" title="keywords" type="string">   </attribute>' . "\n";
 $gexf .= ' <attribute id="4" title="weight" type="float">   </attribute>' . "\n";
+$gexf .= ' <attribute id="5" title="country" type="string">   </attribute>' . "\n";
 $gexf .= '</attributes>' . "\n";
 $gexf .= '<attributes class="edge" type="float">' . "\n";
 $gexf .= ' <attribute id="5" title="cooc" type="float"> </attribute>' . "\n";
@@ -223,6 +226,7 @@ foreach ($scholars as $scholar) {
 			$gexf .= '<viz:color '.$color.'/>' . "\n";
 			$gexf .= '<viz:position x="' . (rand(0, 100) / 100) . '"    y="' . $nodePositionY . '"  z="0" />' . "\n";
 			$gexf .= '<attvalues> <attvalue for="0" value="Document"/>' . "\n";
+			$gexf .= '<attvalue for="5" value="'.$scholar['country'].'"/>' . "\n";
 			if (true) {
 				$gexf .= '<attvalue for="1" value="12"/>' . "\n";
 				$gexf .= '<attvalue for="4" value="12"/>' . "\n";
@@ -235,7 +239,11 @@ foreach ($scholars as $scholar) {
 			if (is_utf8($content)) {
 				$gexf .= '<attvalue for="2" value="' . htmlspecialchars($content) . '"/>' . "\n";
 			}
-			$gexf .= '</attvalues></node>' . "\n";
+			$gexf .= '</attvalues>
+                        <spells>                       
+                        <spell start="'.$scholar['created'].'"/>
+                        </spells>    
+                        </node>' . "\n";
 		}
 	}
 
