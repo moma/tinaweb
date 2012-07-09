@@ -1,8 +1,10 @@
 
 displayNodeRow = (label, id, category) ->
-  $("#node_table > tbody").append $("<tr></tr>").append($("<td id='node_list_" + id + "'></td>").text(label).click((eventObject) ->
+  a = $("<td id='node_list_#{id}'></td>").text(label).click (e) ->
     app.viewMeso id, category
-  ))
+  b = $("<tr></tr>").append(a)
+  $("#node_table > tbody").append(b)
+
 InfoDiv = 
   id: null
   selection: []
@@ -26,17 +28,17 @@ InfoDiv =
       view = data.view
       app.getCategory (data) =>
         cat = data.category
-        if view == "macro"
+        if view is "macro"
           $("#toggle-switch").button "option", "label", categories[cat]
         else
-          $("#toggle-switch").button "option", "label", categories[cat] + " neighbours"
+          $("#toggle-switch").button "option", "label", categories[cat] + (if view is macro then '' else " neighbours")
   
   display_current_view: ->
     app.getView (data) =>
       view = data.view
       if view isnt undefined
         level = $ "#level"
-        level.button "option", "label", view + " level"
+        level.button "option", "label", "#{view} level"
         title = $ "#infodiv > h3:first"
         if view is "meso"
           level.addClass "ui-state-highlight"
@@ -51,7 +53,7 @@ InfoDiv =
       for neighb of neighbours[node]
         if neighb of merged
           merged[neighb]["degree"]++
-        else unless neighbours[node][neighb]["category"] == category
+        else unless neighbours[node][neighb]["category"] is category
           merged[neighb] = 
             spanid: neighb
             id: neighbours[node][neighb]["id"]
@@ -64,7 +66,7 @@ InfoDiv =
     merged
   
   updateTagCloud: (node_list, neighbours) ->
-    return  if Object.size(node_list) == 0
+    return  if Object.size(node_list) is 0
     
     app.getCategory (data) =>
       cat = data.category
@@ -76,11 +78,9 @@ InfoDiv =
       i = 0
       
       while i < neighbours.length
-        tag = neighbours[i]
-        tagLabel = tag.label
-        tagLabel = jQuery.trim tagLabel
-        requests = requests + "%22" + tagLabel.replace(" ", "+") + "%22"
-        requests = requests + "+AND+"  if i < neighbours.length - 1
+        tagLabel = jQuery.trim neighbours[i].label
+        requests = "#{requests}%22#{tagLabel.replace(' ', '+')}%22"
+        requests += "+AND+" if i < neighbours.length - 1
         i++
       if cat?
         oppositeRealName = @categories[app.getOppositeCategory(cat)]
@@ -107,7 +107,7 @@ InfoDiv =
         if nb_displayed_tag < 20
           nb_displayed_tag++
           tag = neighbours[i]
-          tagspan = $("<span id='" + tag.spanid + "'></span>")
+          tagspan = $("<span id='#{tag.spanid}'></span>")
           tagspan.addClass "ui-widget-content"
           tagspan.addClass "viz_node"
           tagspan.html tag.label
@@ -116,8 +116,8 @@ InfoDiv =
             attached_cat = tag.category
             tagspan.click ->
               app.viewMeso attached_id, attached_cat, ->
-          if neighbours.length == 1
-            if tag["category"] == "Document"
+          if neighbours.length is 1
+            if tag["category"] is "Document"
               tagspan.css "font-size", const_doc_tag
             else
               tagspan.css "font-size", Math.floor(sizecoef * (Math.min(20, Math.log(1.5 + tag.weight))))
@@ -127,7 +127,7 @@ InfoDiv =
             tooltip = "click on a label to switch to its meso view - size is proportional to the degree"
           tagcloud.append tagspan
           tagcloud.append ", &nbsp;"  if i != neighbours.length - 1 and neighbours.length > 1
-        else if nb_displayed_tag == 20
+        else if nb_displayed_tag is 20
           tagcloud.append "[...]"
           nb_displayed_tag++
         else
@@ -135,7 +135,9 @@ InfoDiv =
         i++
       @cloud.empty()
       
-      tmp1 = $("<h3>selection related to #{oppositeRealName}: <span class=\"ui-icon ui-icon-help icon-right\" title=\"#{tooltip}\"></span></h3>").hide()
+      tmp1 = $("<h3>selection related to #{oppositeRealName}: 
+        <span class=\"ui-icon ui-icon-help icon-right\" title=\"#{tooltip}\"></span>
+        </h3>").hide()
       @cloud.append tmp1
       show tmp1
       
@@ -144,7 +146,9 @@ InfoDiv =
       show tagcloud
       
       @cloudSearchCopy.empty()
-      tmp2 = $("<h3>global search on #{oppositeRealName}: <span class=\"ui-icon ui-icon-help icon-right\" title=\"#{tooltip}\"></span></h3>").hide()
+      tmp2 = $("<h3>global search on #{oppositeRealName}: 
+        <span class=\"ui-icon ui-icon-help icon-right\" title=\"#{tooltip}\"></span>
+        </h3>").hide()
       @cloudSearchCopy.append tmp2
       show tmp2
       
@@ -185,22 +189,56 @@ InfoDiv =
         @reset()
   
   update: (view, lastselection) ->
-    if Object.size(lastselection) is 0
-      @reset()
-      return
+    return @reset() if Object.size(lastselection) is 0
     @selection = []
     @updateInfo lastselection
     app.getNeighbourhood "macro", @selection, (data) =>
-      #log "received neighbourhood of selection"
-      #log data
       @updateTagCloud data.nodes, data.neighbours
   
   reset: ->
     @unselect_button.hide()
     @contents.empty().append $("<h4></h4>").html("click on a node to begin exploration")
+<<<<<<< HEAD
     assets = app.config.assets
     @label.empty().append $("<h2></h2>").html("<center><iframe src='http://player.vimeo.com/video/38383946' width='300' height='210' frameborder='0'></iframe><\center>")      
     @contents.empty().append $("<h4></h4>").html("<h2>Navigation tips</h2>" + "<p align='left'>" + "<br/>" + "<i>Basic interactions</i><br/><br/>" + "Click on a node to select/unselect and get its information.  In case of multiple selection, the button <img src='" + assets + "css/branding/unselect.png' alt='unselect' align='top' height=20/>  clears all selections.<br/><br/>The switch button <img src='" + assets + "css/branding/switch.png' alt='switch' align='top' height=20 /> allows to change the view type." + "<br/><br/>" + "<i>Graph manipulation</i><br/><br/>" + "Link and node sizes indicate their strength.<br/><br/> To fold/unfold the graph (keep only strong links or weak links), use the 'edges filter' sliders.<br/><br/> To select a more of less specific area of the graph, use the 'nodes filter' slider.</b><br/><br/>" + "<i>Micro/Macro view</i><br/><br/>To explore the neighborhood of a selection, either double click on the selected nodes, either click on the macro/meso level button. Zoom out in meso view return to macro view.<br/><br/>  " + "Click on the 'all nodes' tab below to view the full clickable list of nodes.<br/><br/>Find additional tips with mouse over the question marks." + "</p>")
+=======
+    imgPath = "#{app.config.assets}css/branding/"
+    @label.empty()
+    html = "
+      <h2>Navigation tips</h2>
+      <p align='left'>
+        <br/>
+        <i>Basic interactions</i>
+        <br/><br/>
+        Click on a node to select/unselect and get its information. 
+        In case of multiple selection, the button 
+         <img src='#{imgPath}unselect.png' alt='unselect' align='top' height=20/> 
+        clears all selections.
+        <br/><br/>
+        The switch button
+         <img src='#{imgPath}switch.png' alt='switch' align='top' height=20 /> 
+        allows to change the view type.
+        <br/><br/>
+        <i>Graph manipulation</i>
+        <br/><br/>
+        Link and node sizes indicate their strength.
+        <br/><br/>
+        To fold/unfold the graph (keep only strong links or weak links), use the <b>edges filter</b> sliders.
+        <br/><br/>
+        To select a more of less specific area of the graph, use the <b>nodes filter</b> slider.
+        <br/><br/>
+        <i>Micro/Macro view</i>
+        <br/><br/>
+        To explore the neighborhood of a selection, either double click on the selected nodes, 
+        either click on the macro/meso level button. Zoom out in meso view return to macro view.
+        <br/><br/>
+        Click on the <b>all nodes</b> tab below to view the full clickable list of nodes.
+        <br/><br/>
+        Find additional tips with mouse over the question marks.
+        </p>"
+    @contents.empty().append $("<h4></h4>").html(html)
+>>>>>>> 824129fc4183c8d6b57ac50cad9bf0d1f73d0453
     @cloudSearchCopy.empty()
     @cloudSearch.empty()
     @cloud.empty()
@@ -211,20 +249,19 @@ InfoDiv =
   
   updateNodeList: (view, category) ->
     @display_current_category()
-    return  if category is @last_category
+    return                    if category is @last_category
     app.node_list_cache = {}  if app.node_list_cache is undefined
 
     app.getNodes view, category, (data) =>
       #log "receiving and updating node.list: #{data.nodes.length} nodes"
-      return  if category is _this.last_category
-      @node_list_cache = {}  if _this.node_list_cache is undefined
+      return                  if category is _this.last_category
+      @node_list_cache = {}   if _this.node_list_cache is undefined
       @node_list_cache[category] = alphabeticListSort data.nodes, "label"
       @.node_table.empty()
       @last_category = category
       node_list = _this.node_list_cache[category]
       if node_list?
         i = 0
-        
         while i < node_list.length
           do ->
             rowLabel = htmlDecode decodeJSON( node_list[i]["label"] )
@@ -234,11 +271,21 @@ InfoDiv =
           i++
     
   getSearchQueries: (label, cat) ->
-    assets = app.config.assets
-    SearchQuery = label.replace(RegExp(" ", "g"), "+")
-    if cat == "Document"
-      $("<p></p>").html "<a href=\"http://www.google.com/#hl=en&source=hp&q=%20" + SearchQuery.replace(",", "OR") + "%20\" align=middle target=blank height=15 width=15> <img src=\"" + assets + "css/branding/google.png\" height=15 width=15> </a><a href=\"http://en.wikipedia.org/wiki/" + label.replace(RegExp(" ", "g"), "_") + "\" align=middle target=blank height=15 width=15> <img src=\"" + assets + "css/branding/wikipedia.png\" height=15 width=15> </a><a href=\"http://www.flickr.com/search/?w=all&q=" + SearchQuery + "\" align=middle target=blank height=15 width=15> <img src=\"" + assets + "css/branding/flickr.png\" height=15 width=15> </a>"
-    else if cat == "NGram"
-      $("<p></p>").html "<a href=\"http://www.google.com/#hl=en&source=hp&q=%20" + SearchQuery.replace(",", "OR") + "%20\" align=middle target=blank height=15 width=15> <img src=\"" + assets + "css/branding/google.png\" height=15 width=15> </a><a href=\"http://en.wikipedia.org/wiki/" + label.replace(RegExp(" ", "g"), "_") + "\" align=middle target=blank height=15 width=15> <img src=\"" + assets + "css/branding/wikipedia.png\" height=15 width=15> </a><a href=\"http://www.flickr.com/search/?w=all&q=" + SearchQuery + "\" align=middle target=blank height=15 width=15> <img src=\"" + assets + "css/branding/flickr.png\" height=15 width=15> </a>"
-    else
-      $ "<p></p>"
+    SearchQuery = label.replace(RegExp(' ', 'g'), '+')
+    queries =
+      google: "http://www.google.com/#hl=en&source=hp&q=%20#{SearchQuery.replace(',', 'OR')}%20"
+      scholars: "http://scholar.google.com/scholar#q=#hl=en&source=hp&q=%20#{SearchQuery.replace(',','OR')}%20"
+      wikipedia: "http://en.wikipedia.org/wiki/#{label.replace(RegExp(' ', 'g'), '_')}"
+      flickr: "http://www.flickr.com/search/?w=all&q=#{SearchQuery}"
+
+    apis = ['google', 'wikipedia', 'flickr']
+
+    # FEATURE when category is a document, we don't search on Google but on Google Scholars
+    #apis[0] = 'scholars' if cat is "Document"
+
+    content = ''
+    for api in apis
+      content += "<a href=\"#{queries[api]}\" align=middle target=blank height=15 width=15> 
+                <img src=\"#{app.config.assets}css/branding/#{api}.png\" height=15 width=15>
+              </a>"
+    $("<p></p>").html content
