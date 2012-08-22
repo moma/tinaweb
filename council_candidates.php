@@ -205,7 +205,7 @@ Society</a> (CSS) for the elections 2012
 .  count($labs).' labs</a> and <a href="#orga">'.$orga_count.' organizations</a>.<br/>
     <br/>
 
-<center><a href="http://main.csregistry.org/vote.php"><img src=http://main.csregistry.org/tiki-download_file.php?fileId=26 target="blank"></a></center>
+<center><a href="http://main.csregistry.org/vote.php"  target="blank"><img src=http://main.csregistry.org/tiki-download_file.php?fileId=26></a></center>
 
 ';
 $header .='
