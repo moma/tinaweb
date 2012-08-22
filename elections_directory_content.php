@@ -104,7 +104,7 @@ foreach ($scholars as $scholar) {
     if (strcmp($www, '') != 0) {
         $content .= '<dd><i class="icon-home"></i>' . $www . '</dd> ';
     }
-
+/*
     if ($scholar['css_member'] === 'Yes') {
         if ($scholar['css_voter'] === 'Yes') {
             $content .= '<dd><i class="icon-user"></i> CSS Voting Member</dd> ';
@@ -113,7 +113,7 @@ foreach ($scholars as $scholar) {
         }
     
     }
-
+*/
    if (($scholar['position'] != null)||($scholar['lab'] != null)||($scholar['affiliation'] != null)) {
        $content .= '</dl>';
     }

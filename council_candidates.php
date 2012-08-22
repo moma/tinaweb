@@ -130,7 +130,6 @@ $sql = "SELECT * FROM scholars where login='".$candidates[$key]['login']."'";
 
 //$query = "SELECT * FROM scholars";
 foreach ($base->query($sql) as $row) {
-
     $info = array();
     $info['profession_faith'] = $candidates[$key]['profession_faith'];
     $info['unique_id'] = $row['unique_id'];
