@@ -1,8 +1,8 @@
 <?php
 // calcul les différents profils à partir d'une requete
 // sort un $content 
-
-
+$images='';
+$imsizeTh='80';
 echo '    
     <body>';
 include ("analytics.php");
@@ -39,10 +39,12 @@ foreach ($scholars as $scholar) {
     $content .= '<div>';
     if ($scholar['photo_url'] != null) {
         $content .= '<img style="margin: 7px 10px 10px 0px" src="http://main.csregistry.org/' . $scholar['photo_url'] . '" width="' . $imsize . 'px" align="left">';
+        $images.='<img style="margin: 7px 10px 10px 0px" src="http://main.csregistry.org/' . $scholar['photo_url'] . '" width="' . $imsizeTh . 'px">';
     } else {
         if (count($scholars) < 2000) {
             $im_id = floor(rand(0, 11));
             $content .= '<img style="margin: 7px 10px 10px 0px" src="img/' . $im_id . '.png" width="' . $imsize . 'px" align="left">';
+            $images.='<img style="margin: 7px 10px 10px 0px" src="img/' . $im_id . '.png" width="' . $imsizeTh . 'px">';
         }
     }
 

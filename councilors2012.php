@@ -201,6 +201,7 @@ Society</a> (CSS). Their mandate will run from Sept. 3 2012 until 8 days before 
 
 <center>
 <h2>Welcome to them ! <br/></h2>
+'.$images.'
 </center>
  <br/>
 <p>
