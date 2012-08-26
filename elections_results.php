@@ -264,7 +264,16 @@ foreach ($orga_list as $name) {
 
 ///////Ajout des labs
 //$content .='<center><a href="http://main.csregistry.org/vote.php"><img src=http://main.csregistry.org/tiki-download_file.php?fileId=26 target="blank"></a></center><br/> <A NAME="labs"> </A>
-$content .=' <A NAME="labs"> </A>
+$content .=' 
+    <A NAME="stats"> </A>
+<h2>Statistics about the new CSS Council members</h2>
+<div id="country" style="width: 800px; height: 300px; margin: 0 auto"></div>
+<div id="title" style="width: 800px; height: 300px; margin: 0 auto"></div>
+<div id="position" style="width: 800px; height: 300px; margin: 0 auto"></div>
+<br/>
+    
+
+<A NAME="labs"> </A>
 <h1>Labs by alphabetical order</h1>
 <p><i>List of labs to which scholars are affiliated</i></p>';
 include('labs_list.php');

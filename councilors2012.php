@@ -204,8 +204,9 @@ Society</a> (CSS). Their mandate will run from Sept. 3 2012 until 8 days before 
 </center>
  <br/>
 <p>
-These new councilors belong to <a href="#labs">'
-.  count($labs).' labs</a> and <a href="#orga">'.$orga_count.' organizations</a>.<br/>
+These new councillors belong to <a href="#labs">'
+.  count($labs).' labs</a> and <a href="#orga">'.$orga_count.' organizations</a>. Statitics about the candidates are
+available <a href="#stats">below</a>. The raw results of the vote are available <a href="http://css.csregistry.org/tiki-index.php?page=Elections2012" target="blank">here</a><br/>
     <br/>
     
 </p>';
@@ -215,11 +216,6 @@ $header .='
     
 </p>
 
-
-<h2>Global statistics</h2>
-<div id="country" style="width: 800px; height: 300px; margin: 0 auto"></div>
-<div id="title" style="width: 800px; height: 300px; margin: 0 auto"></div>
-<div id="position" style="width: 800px; height: 300px; margin: 0 auto"></div>
 
 <br/>
 <br/> <A NAME="scholars"> </A>
