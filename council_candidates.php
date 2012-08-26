@@ -176,7 +176,8 @@ include ("elections_directory_content.php");
 
 
 
-$content .= '<center><a href="http://main.csregistry.org/vote.php"><img src=http://main.csregistry.org/tiki-download_file.php?fileId=26 target="blank"></a></center></div>
+//$content .= '<center><a href="http://main.csregistry.org/vote.php"><img src=http://main.csregistry.org/tiki-download_file.php?fileId=26 target="blank"></a></center></div>
+$content .= '</div>
     
 ';
 $content .= '</div>
@@ -203,10 +204,9 @@ Society</a> (CSS) for the elections 2012
 : <a href="#scholars">'.  count($scholars).' scholars</a> belonging to <a href="#labs">'
 .  count($labs).' labs</a> and <a href="#orga">'.$orga_count.' organizations</a>.<br/>
     <br/>
-
-<center><a href="http://main.csregistry.org/vote.php"  target="blank"><img src=http://main.csregistry.org/tiki-download_file.php?fileId=26></a></center>
-
 ';
+//<center><a href="http://main.csregistry.org/vote.php"  target="blank"><img src=http://main.csregistry.org/tiki-download_file.php?fileId=26></a></center>
+
 $header .='
     
 </p>
