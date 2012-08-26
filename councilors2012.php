@@ -194,7 +194,7 @@ $header = '<div class="row" id="welcome">
 
 <h2><a href="http://main.csregistry.org/tiki-index.php?page=CSSElections"><img src="http://main.csregistry.org/tiki-download_file.php?fileId=20" align="center"></a>
 <br/>
-Results of the ballot</h2>
+Results of the ballot - August 6 2012</h2>
 <p>
 19 scholars have been elected as council members of the <a href="http://cssociety.org" target="blank">Complex Systems
 Society</a> (CSS). Their mandate will run from Sept. 3 2012 until 8 days before ECCS\'14.<br/>
