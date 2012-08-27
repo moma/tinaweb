@@ -39,7 +39,7 @@ foreach ($scholars as $scholar) {
     $content .= '<div>';
     if ($scholar['photo_url'] != null) {
         $content .= '<img style="margin: 7px 10px 10px 0px" src="http://main.csregistry.org/' . $scholar['photo_url'] . '" width="' . $imsize . 'px" align="left">';
-        $images.='<img style="margin: 7px 10px 10px 0px" src="http://main.csregistry.org/' . $scholar['photo_url'] . '" width="' . $imsizeTh . 'px">';
+        $images.='<a href="#'.$scholar['unique_id'].'"><img style="margin: 7px 10px 10px 0px" src="http://main.csregistry.org/' . $scholar['photo_url'] . '" width="' . $imsizeTh . 'px"></a>';
     } else {
         if (count($scholars) < 2000) {
             $im_id = floor(rand(0, 11));
@@ -48,7 +48,7 @@ foreach ($scholars as $scholar) {
         }
     }
 
-    $content .= '<h2 >' . $scholar['title'] . ' ' . $scholar['first_name'] . ' ' . $scholar['initials'] . ' ' . $scholar['last_name'] .
+    $content .= '<A NAME="'.$scholar['unique_id'].'"> </A><h2 >' . $scholar['title'] . ' ' . $scholar['first_name'] . ' ' . $scholar['initials'] . ' ' . $scholar['last_name'] .
             ' <small> - ' . $scholar['country'] . '</small></h2>';
 
 
