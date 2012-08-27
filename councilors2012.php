@@ -200,10 +200,12 @@ Results of the ballot - August 6 2012</h2>
 Society</a> (CSS). Their mandate will run from Sept. 3 2012 until 8 days before ECCS\'14.<br/>
 
 <center>
-<h2>Welcome to them ! <br/></h2>
+<h2>New Councillors 2012 ! </h2><br/>
 '.$images.'
+<h2>Welcome to them ! </h2>
 </center>
- <br/>
+<br/>
+<br/>
 <p>
 These new councillors belong to <a href="#labs">'
 .  count($labs).' labs</a> and <a href="#orga">'.$orga_count.' organizations</a>. Statitics about the candidates are
