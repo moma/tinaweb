@@ -1,8 +1,8 @@
 <?php
 // calcul les différents profils à partir d'une requete
 // sort un $content 
-
-
+$images='';
+$imsizeTh='80';
 echo '    
     <body>';
 include ("analytics.php");
@@ -39,10 +39,14 @@ foreach ($scholars as $scholar) {
     $content .= '<div>';
     if ($scholar['photo_url'] != null) {
         $content .= '<img style="margin: 7px 10px 10px 0px" src="http://main.csregistry.org/' . $scholar['photo_url'] . '" width="' . $imsize . 'px" align="left">';
-    } else {
+        $images.='<a href="#'.$scholar['unique_id'].'"><img style="margin: 7px 10px 10px 0px" src="http://main.csregistry.org/' . $scholar['photo_url'] . '" width="' . $imsizeTh . 'px"></a>';
+
+        } else {
         if (count($scholars) < 2000) {
             $im_id = floor(rand(0, 11));
             $content .= '<img style="margin: 7px 10px 10px 0px" src="img/' . $im_id . '.png" width="' . $imsize . 'px" align="left">';
+            $images.='<img style="margin: 7px 10px 10px 0px" src="img/' . $im_id . '.png" width="' . $imsizeTh . 'px">';
+
         }
     }
 
@@ -263,8 +267,9 @@ foreach ($orga_list as $name) {
 
 
 ///////Ajout des labs
-//$content .='<center><a href="http://main.csregistry.org/vote.php"><img src=http://main.csregistry.org/tiki-download_file.php?fileId=26 target="blank"></a></center><br/> <A NAME="labs"> </A>
-$content .=' <A NAME="labs"> </A>
+//$content .=' <A NAME="labs"> </A>
+
+$content .='<center><a href="http://main.csregistry.org/vote.php"><img src=http://main.csregistry.org/tiki-download_file.php?fileId=26 target="blank"></a></center><br/> <A NAME="labs"> </A>
 <h1>Labs by alphabetical order</h1>
 <p><i>List of labs to which scholars are affiliated</i></p>';
 include('labs_list.php');

@@ -96,7 +96,7 @@ function objectToArray($d) {
 $base = new PDO("sqlite:" . $dbname);
 
 // on récupère les profession of faith
-$electionsdb= new PDO("sqlite:elections.sqlite");
+$electionsdb= new PDO("sqlite:councilorsECCS12.sqlite");
 $candidates=array();
 $sql = "SELECT * FROM candidates";
 $last_name=array();
@@ -174,10 +174,8 @@ include ("elections_directory_content.php");
 
 // liste des chercheurs
 
-
-
-//$content .= '<center><a href="http://main.csregistry.org/vote.php"><img src=http://main.csregistry.org/tiki-download_file.php?fileId=26 target="blank"></a></center></div>
-$content .= '</div>
+//$content .= '</div>
+ $content .= '<center><a href="http://main.csregistry.org/vote.php"><img src=http://main.csregistry.org/tiki-download_file.php?fileId=26 target="blank"></a></center></div>
     
 ';
 $content .= '</div>
@@ -202,10 +200,18 @@ Candidates to the council  of the Complex Systems Society</h2>
 This is the list of candidates to the Council of the <a href="http://cssociety.org" target="blank">Complex Systems
 Society</a> (CSS) for the elections 2012
 : <a href="#scholars">'.  count($scholars).' scholars</a> belonging to <a href="#labs">'
-.  count($labs).' labs</a> and <a href="#orga">'.$orga_count.' organizations</a>.<br/>
-    <br/>
+.  count($labs).' labs</a> and <a href="#orga">'.$orga_count.' organizations</a>. Their mandate will run from Sept. 3 2012 until 8 days before ECCS\'15.<br/>
+<center>
+<h2>CSS Council Candidates 2012 ! </h2><br/>
+'.$images.'
+<h2>Good Luck to them ! </h2>
+</center>
+ <br/>
+<center><a href="http://main.csregistry.org/vote.php"  target="blank"><img src=http://main.csregistry.org/tiki-download_file.php?fileId=26></a></center>
+
 ';
-//<center><a href="http://main.csregistry.org/vote.php"  target="blank"><img src=http://main.csregistry.org/tiki-download_file.php?fileId=26></a></center>
+
+
 
 $header .='
     
