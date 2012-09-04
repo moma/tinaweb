@@ -296,7 +296,9 @@ $header = '<div class="row" id="welcome">
 <p>
 This directory presents the participants to the <a href="http://eccs12.eu" target="blank">European Conference on Complex Systems 2012</a> (ECCS\'12): <a href="#scholars">'.  count($scholars).' scholars</a> belonging to <a href="#labs">'
 .  count($labs).' labs</a> and <a href="#orga">'.$orga_count.' organizations</a> working in
-the field of Complex Systems.';
+the field of Complex Systems. If you attended ECCS\'12, add #eccs12 as a community tag in your 
+<a href="http://main.csregistry.org/Whoswhodata">Complex Systems Profile</a>. You can 
+<a href="http://main.csregistry.org/Whoswhodata">modify your data</a> anytime.';
 $header .='
 </p>
 
