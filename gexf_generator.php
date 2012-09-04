@@ -312,7 +312,7 @@ $gexf .= '</edges></graph></gexf>';
 //pt($scholarsIncluded.' scholars included');
 //pt(count($termsMatrix).' terms');
 $handle = fopen('test.gexf', "w", "UTF-8");
-fputs($handle,$gexf);
+//fputs($handle,$gexf);
 fclose($handle);
 
 echo $gexf;

@@ -3,15 +3,17 @@
 // sort un $content 
 $images='';
 $imsizeTh='80';
-echo '    
-    <body>';
-include ("analytics.php");
-echo '        <script type="text/javascript" src="js/whoswho.js"></script>
+
+//include ("analytics.php");
+$temp= '
+    <body><script type="text/javascript" src="js/whoswho.js"></script>
     <div class="container">
         
         <!-- Main hero unit for a primary marketing message or call to action -->
         <div class="hero-unit">
    ';
+echo $temp;
+fileputs($output,$temp);
 
 
 $imsize = 150;

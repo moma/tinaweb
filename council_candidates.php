@@ -5,6 +5,8 @@ include ("normalize.php");
 include ("comex_library.php");
 //include("../common/library/fonctions_php.php");
 
+//To change to write html
+$output =fopen('council_candidates.html','w');
 $meta = '<!DOCTYPE html>
 <html lang="en">
     <head>
@@ -101,6 +103,7 @@ $candidates=array();
 $sql = "SELECT * FROM candidates";
 $last_name=array();
 foreach ($electionsdb->query($sql) as $row) {
+   
     $info = array();
     $info['first_name'] = $row['first_name'];
     $info['last_name'] = $row['last_name'];
@@ -127,6 +130,8 @@ $scholars = array();
 foreach ($last_name as $key => $value) {
         
 $sql = "SELECT * FROM scholars where login='".$candidates[$key]['login']."'";    
+
+
 
 //$query = "SELECT * FROM scholars";
 foreach ($base->query($sql) as $row) {
@@ -231,5 +236,13 @@ echo $header;
 echo $content;
 
 
+fileputs($output, $meta.' '.$stats.'</head>'.$header.$content);
+fclose($output);
 
-?>
+function fileputs($output,$temp) {
+fputs($output,$temp);
+
+}
+
+
+?>  
