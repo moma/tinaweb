@@ -50,7 +50,7 @@ foreach ($scholars as $scholar) {
         }
     }
 
-    $content .= '<h2 >' . $scholar['title'] . ' ' . $scholar['first_name'] . ' ' . $scholar['initials'] . ' ' . $scholar['last_name'] .
+    $content .= '<A NAME="'.$scholar['unique_id'].'"> </A><h2 >' . $scholar['title'] . ' ' . $scholar['first_name'] . ' ' . $scholar['initials'] . ' ' . $scholar['last_name'] .
             ' <small> - ' . $scholar['country'] . '</small></h2>';
 
 
@@ -108,7 +108,7 @@ foreach ($scholars as $scholar) {
     if (strcmp($www, '') != 0) {
         $content .= '<dd><i class="icon-home"></i>' . $www . '</dd> ';
     }
-/*
+
     if ($scholar['css_member'] === 'Yes') {
         if ($scholar['css_voter'] === 'Yes') {
             $content .= '<dd><i class="icon-user"></i> CSS Voting Member</dd> ';
@@ -117,7 +117,7 @@ foreach ($scholars as $scholar) {
         }
     
     }
-*/
+
    if (($scholar['position'] != null)||($scholar['lab'] != null)||($scholar['affiliation'] != null)) {
        $content .= '</dl>';
     }
@@ -171,7 +171,7 @@ $content .= '</div>';
     $content .= '</div>';
     
     $content .= '
-<center><img src="img/bar.png"></center>';
+<center><a href="#top">Back to top</a><br/><img src="img/bar.png"></center>';
     $content .= '<br/>';
     $content .= '<br/>';
     // fin du profil

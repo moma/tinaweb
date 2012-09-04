@@ -190,19 +190,18 @@ $content .= '</div>
 $header = '<div class="row" id="welcome">
     <div class="span12" align="justify">
 
-<h2><a href="http://main.csregistry.org/tiki-index.php?page=CSSElections"><img src="http://main.csregistry.org/tiki-download_file.php?fileId=20" align="center"></a>
-<br/>
-Candidates to the council  of the Complex Systems Society</h2>
-<br/><br/>
-<br/>
+<h2><a href="http://main.csregistry.org/tiki-index.php?page=CSSElections"><img src="img/css.png" align="left"></a>Candidates to the council  of the Complex Systems Society</h2>
+<h3><font color="grey">Period ECCS\'12-ECCS\'15</font></h3>
+
 <br/>
 <p>
 This is the list of candidates to the Council of the <a href="http://cssociety.org" target="blank">Complex Systems
-Society</a> (CSS) for the elections 2012
+Society</a> (CSS) for the elections at <a href="http://eccs2012.eu">ECCS\'12</a>
 : <a href="#scholars">'.  count($scholars).' scholars</a> belonging to <a href="#labs">'
-.  count($labs).' labs</a> and <a href="#orga">'.$orga_count.' organizations</a>. Their mandate will run from Sept. 3 2012 until 8 days before ECCS\'15.<br/>
+.  count($labs).' labs</a> and <a href="#orga">'.$orga_count.' organizations</a>. They apply for a mandate which will run from Sept. 3 2012 until 8 days before ECCS\'15.<br/>
 <center>
-<h2>CSS Council Candidates 2012 ! </h2><br/>
+<A NAME="top">
+<h2>CSS Council Candidates 2012 </h2><br/></A>
 '.$images.'
 <h2>Good Luck to them ! </h2>
 </center>
