@@ -289,7 +289,7 @@ $content .= '</div>
 //////// Header
 $header = '<div class="row" id="welcome">
     <div class="span12" align="justify">
-<a href="http://iscpif.fr"><img src="http://css.csregistry.org/tiki-download_file.php?fileId=59" align="center"></a>
+<a href="http://eccs2012.eu"><img src="http://css.csregistry.org/tiki-download_file.php?fileId=59" align="center"></a>
 <br/><br/>
 <br/>
 <br/>
