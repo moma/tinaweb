@@ -4,6 +4,8 @@ include ("parametres.php");
 include ("normalize.php");
 include ("comex_library.php");
 //include("../common/library/fonctions_php.php");
+$output =fopen('councillorsECCS12.html','w');
+
 
 $meta = '<!DOCTYPE html>
 <html lang="en">
@@ -197,7 +199,7 @@ $header = '<div class="row" id="welcome">
 
 
 <p>
-19 scholars have been elected as council members of the <a href="http://cssociety.org" target="blank">Complex Systems
+20 scholars have been elected as council members of the <a href="http://cssociety.org" target="blank">Complex Systems
 Society</a> (CSS). Their mandate will run from Sept. 3 2012 until 8 days before ECCS\'15.<br/>
 
 <center>
@@ -210,7 +212,7 @@ Society</a> (CSS). Their mandate will run from Sept. 3 2012 until 8 days before 
 <p>
 These new councillors belong to <a href="#labs">'
 .  count($labs).' labs</a> and <a href="#orga">'.$orga_count.' organizations</a>. Statitics about the candidates are
-available <a href="#stats">below</a>. The raw results of the vote are available <a href="http://css.csregistry.org/tiki-index.php?page=Elections2012" target="blank">here</a><br/>
+available <a href="#stats">below</a>. The raw results of the vote are available <a href="http://css.csregistry.org/tiki-index.php?page=ECCS12Ballot" target="blank">here</a><br/>
     <br/>
     
 </p>';
@@ -233,6 +235,12 @@ echo $meta.' '.$stats.'</head>';
 echo $header;
 echo $content;
 
+fileputs($output, $meta.' '.$stats.'</head>'.$header.$content);
+fclose($output);
 
+function fileputs($output,$temp) {
+fputs($output,$temp);
+
+}
 
 ?>
